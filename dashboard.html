@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#C9A227">
+    <title>Dashboard | Pilgrim's Path</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <!-- Top Bar -->
+    <header class="dash-topbar">
+        <div class="topbar-left">
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a href="index.html" class="dash-logo">
+                <img src="images/logo.png" alt="Pilgrim's Path" class="dash-logo-img">
+            </a>
+        </div>
+        <div class="topbar-right">
+            <button class="topbar-icon" title="Notifications">
+                <i class="fas fa-bell"></i>
+                <span class="notif-dot"></span>
+            </button>
+            <div class="topbar-user" id="userDropdownToggle">
+                <div class="user-avatar">PP</div>
+                <span class="user-name">Pilgrim</span>
+                <i class="fas fa-chevron-down"></i>
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="#"><i class="fas fa-user"></i> Profile</a>
+                    <a href="#"><i class="fas fa-gear"></i> Settings</a>
+                    <hr>
+                    <a href="index.html" class="logout-link"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="dash-sidebar" id="dashSidebar">
+        <div class="sidebar-section">
+            <span class="sidebar-label">Journeys</span>
+            <button class="sidebar-tab active" data-tab="hajj" onclick="switchTab('hajj')">
+                <i class="fas fa-kaaba"></i>
+                <span>Hajj Journey</span>
+            </button>
+            <button class="sidebar-tab" data-tab="umrah" onclick="switchTab('umrah')">
+                <i class="fas fa-mosque"></i>
+                <span>Umrah Journey</span>
+            </button>
+        </div>
+
+        <!-- Progress Panel -->
+        <div class="sidebar-section">
+            <span class="sidebar-label">Your Progress</span>
+            <div class="progress-panel" id="progressPanel">
+                <!-- Hajj progress (shown by default) -->
+                <div class="progress-content" id="hajjProgress">
+                    <div class="progress-circle-wrap">
+                        <svg class="progress-ring" viewBox="0 0 120 120">
+                            <circle class="progress-ring-bg" cx="60" cy="60" r="52" />
+                            <circle class="progress-ring-fill" cx="60" cy="60" r="52" stroke-dasharray="326.73" stroke-dashoffset="228.71" />
+                        </svg>
+                        <div class="progress-percent">30%</div>
+                    </div>
+                    <span class="progress-title">Hajj Completion</span>
+                    <div class="progress-steps-mini">
+                        <div class="mini-step done"><i class="fas fa-check"></i> Ihram</div>
+                        <div class="mini-step done"><i class="fas fa-check"></i> Mina (8th)</div>
+                        <div class="mini-step done"><i class="fas fa-check"></i> Arafah</div>
+                        <div class="mini-step current"><i class="fas fa-circle"></i> Muzdalifah</div>
+                        <div class="mini-step"><i class="fas fa-lock"></i> Rami</div>
+                        <div class="mini-step"><i class="fas fa-lock"></i> Sacrifice</div>
+                        <div class="mini-step"><i class="fas fa-lock"></i> Halq</div>
+                        <div class="mini-step"><i class="fas fa-lock"></i> Tawaf Ifadah</div>
+                        <div class="mini-step"><i class="fas fa-lock"></i> Sa'i</div>
+                        <div class="mini-step"><i class="fas fa-lock"></i> Tawaf Wida</div>
+                    </div>
+                </div>
+                <!-- Umrah progress (hidden by default) -->
+                <div class="progress-content hidden" id="umrahProgress">
+                    <div class="progress-circle-wrap">
+                        <svg class="progress-ring" viewBox="0 0 120 120">
+                            <circle class="progress-ring-bg" cx="60" cy="60" r="52" />
+                            <circle class="progress-ring-fill umrah-ring" cx="60" cy="60" r="52" stroke-dasharray="326.73" stroke-dashoffset="163.37" />
+                        </svg>
+                        <div class="progress-percent">50%</div>
+                    </div>
+                    <span class="progress-title">Umrah Completion</span>
+                    <div class="progress-steps-mini">
+                        <div class="mini-step done"><i class="fas fa-check"></i> Ihram</div>
+                        <div class="mini-step done"><i class="fas fa-check"></i> Tawaf</div>
+                        <div class="mini-step current"><i class="fas fa-circle"></i> Sa'i</div>
+                        <div class="mini-step"><i class="fas fa-lock"></i> Halq/Taqsir</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <span class="sidebar-label">Quick Links</span>
+            <a href="duas.html" class="sidebar-link"><i class="fas fa-book-quran"></i> Duas & Prayers</a>
+            <a href="faq.html" class="sidebar-link"><i class="fas fa-circle-question"></i> FAQ</a>
+            <a href="contact.html" class="sidebar-link"><i class="fas fa-headset"></i> Support</a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dash-main" id="dashMain">
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <div class="welcome-text">
+                <h1>Assalamu Alaikum, <span class="highlight">Pilgrim</span> 👋</h1>
+                <p>Continue your spiritual journey. Pick up where you left off or start a new experience.</p>
+            </div>
+            <div class="welcome-stats">
+                <div class="w-stat">
+                    <span class="w-stat-num">12</span>
+                    <span class="w-stat-label">Sessions</span>
+                </div>
+                <div class="w-stat">
+                    <span class="w-stat-num">4.5h</span>
+                    <span class="w-stat-label">Total Time</span>
+                </div>
+                <div class="w-stat">
+                    <span class="w-stat-num">7</span>
+                    <span class="w-stat-label">Badges</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- =================== HAJJ TAB =================== -->
+        <div class="tab-content active" id="hajjTab">
+            <div class="content-header">
+                <h2><i class="fas fa-kaaba"></i> Hajj Journey</h2>
+                <span class="tab-badge">11 Rituals</span>
+            </div>
+
+            <!-- Continue Card -->
+            <div class="continue-card">
+                <div class="continue-visual">
+                    <div class="continue-icon"><i class="fas fa-campground"></i></div>
+                    <div class="continue-glow"></div>
+                </div>
+                <div class="continue-info">
+                    <span class="continue-label">Continue Where You Left Off</span>
+                    <h3>Night at Muzdalifah</h3>
+                    <p>Collect pebbles under the open sky and pray to Allah. This is one of the most spiritually uplifting moments of Hajj.</p>
+                    <div class="continue-meta">
+                        <span><i class="fas fa-clock"></i> ~20 min</span>
+                        <span><i class="fas fa-calendar"></i> Day 3 of Hajj</span>
+                    </div>
+                </div>
+                <button class="continue-btn" onclick="alert('Launching VR Experience...')">
+                    <i class="fas fa-play"></i>
+                    <span>Continue</span>
+                </button>
+            </div>
+
+            <!-- Ritual Cards Grid -->
+            <div class="rituals-grid">
+                <div class="ritual-card-dash completed">
+                    <div class="ritual-status"><i class="fas fa-check-circle"></i></div>
+                    <div class="ritual-icon"><i class="fas fa-shirt"></i></div>
+                    <h4>1. Ihram</h4>
+                    <p>Enter the sacred state</p>
+                    <span class="ritual-badge done-badge">Completed</span>
+                </div>
+                <div class="ritual-card-dash completed">
+                    <div class="ritual-status"><i class="fas fa-check-circle"></i></div>
+                    <div class="ritual-icon"><i class="fas fa-campground"></i></div>
+                    <h4>2. Mina (8th Dhul Hijjah)</h4>
+                    <p>Stay in Mina & pray</p>
+                    <span class="ritual-badge done-badge">Completed</span>
+                </div>
+                <div class="ritual-card-dash completed">
+                    <div class="ritual-status"><i class="fas fa-check-circle"></i></div>
+                    <div class="ritual-icon"><i class="fas fa-mountain-sun"></i></div>
+                    <h4>3. Day of Arafah</h4>
+                    <p>Stand at Arafah</p>
+                    <span class="ritual-badge done-badge">Completed</span>
+                </div>
+                <div class="ritual-card-dash current">
+                    <div class="ritual-status"><i class="fas fa-play-circle"></i></div>
+                    <div class="ritual-icon"><i class="fas fa-moon"></i></div>
+                    <h4>4. Muzdalifah</h4>
+                    <p>Night under the stars</p>
+                    <span class="ritual-badge current-badge">In Progress</span>
+                </div>
+                <div class="ritual-card-dash locked">
+                    <div class="ritual-status"><i class="fas fa-lock"></i></div>
+                    <div class="ritual-icon"><i class="fas fa-circle-dot"></i></div>
+                    <h4>5. Rami al-Jamarat</h4>
+                    <p>Stone the pillars</p>
+                    <span class="ritual-badge locked-badge">Locked</span>
+                </div>
+                <div class="ritual-card-dash locked">
+                    <div class="ritual-status"><i class="fas fa-lock"></i></div>
+                    <div class="ritual-icon"><i class="fas fa-cow"></i></div>
+                    <h4>6. Animal Sacrifice</h4>
+                    <p>Qurbani / Hady</p>
+                    <span class="ritual-badge locked-badge">Locked</span>
+                </div>
+                <div class="ritual-card-dash locked">
+                    <div class="ritual-status"><i class="fas fa-lock"></i></div>
+                    <div class="ritual-icon"><i class="fas fa-scissors"></i></div>
+                    <h4>7. Halq / Taqsir</h4>
+                    <p>Shave or trim hair</p>
+                    <span class="ritual-badge locked-badge">Locked</span>
+                </div>
+                <div class="ritual-card-dash locked">
+                    <div class="ritual-status"><i class="fas fa-lock"></i></div>
+                    <div class="ritual-icon"><i class="fas fa-kaaba"></i></div>
+                    <h4>8. Tawaf al-Ifadah</h4>
+                    <p>Circle the Kaaba</p>
+                    <span class="ritual-badge locked-badge">Locked</span>
+                </div>
+                <div class="ritual-card-dash locked">
+                    <div class="ritual-status"><i class="fas fa-lock"></i></div>
+                    <div class="ritual-icon"><i class="fas fa-person-walking"></i></div>
+                    <h4>9. Sa'i</h4>
+                    <p>Walk Safa to Marwa</p>
+                    <span class="ritual-badge locked-badge">Locked</span>
+                </div>
+                <div class="ritual-card-dash locked">
+                    <div class="ritual-status"><i class="fas fa-lock"></i></div>
+                    <div class="ritual-icon"><i class="fas fa-campground"></i></div>
+                    <h4>10. Days at Mina</h4>
+                    <p>11th-13th Dhul Hijjah</p>
+                    <span class="ritual-badge locked-badge">Locked</span>
+                </div>
+                <div class="ritual-card-dash locked">
+                    <div class="ritual-status"><i class="fas fa-lock"></i></div>
+                    <div class="ritual-icon"><i class="fas fa-flag-checkered"></i></div>
+                    <h4>11. Tawaf al-Wida</h4>
+                    <p>Farewell Tawaf</p>
+                    <span class="ritual-badge locked-badge">Locked</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- =================== UMRAH TAB =================== -->
+        <div class="tab-content" id="umrahTab">
+            <div class="content-header">
+                <h2><i class="fas fa-mosque"></i> Umrah Journey</h2>
+                <span class="tab-badge">4 Rituals</span>
+            </div>
+
+            <!-- Continue Card -->
+            <div class="continue-card">
+                <div class="continue-visual">
+                    <div class="continue-icon"><i class="fas fa-person-walking"></i></div>
+                    <div class="continue-glow"></div>
+                </div>
+                <div class="continue-info">
+                    <span class="continue-label">Continue Where You Left Off</span>
+                    <h3>Sa'i — Between Safa and Marwa</h3>
+                    <p>Walk 7 laps between Safa and Marwa, retracing the footsteps of Hajar (AS) in her search for water.</p>
+                    <div class="continue-meta">
+                        <span><i class="fas fa-clock"></i> ~15 min</span>
+                        <span><i class="fas fa-shoe-prints"></i> 3.15 km total</span>
+                    </div>
+                </div>
+                <button class="continue-btn" onclick="alert('Launching VR Experience...')">
+                    <i class="fas fa-play"></i>
+                    <span>Continue</span>
+                </button>
+            </div>
+
+            <!-- Ritual Cards Grid -->
+            <div class="rituals-grid umrah-grid">
+                <div class="ritual-card-dash completed">
+                    <div class="ritual-status"><i class="fas fa-check-circle"></i></div>
+                    <div class="ritual-icon"><i class="fas fa-shirt"></i></div>
+                    <h4>1. Ihram</h4>
+                    <p>Enter the sacred state at the Miqat. Perform ghusl, wear Ihram garments, and recite the Talbiyah.</p>
+                    <span class="ritual-badge done-badge">Completed</span>
+                </div>
+                <div class="ritual-card-dash completed">
+                    <div class="ritual-status"><i class="fas fa-check-circle"></i></div>
+                    <div class="ritual-icon"><i class="fas fa-kaaba"></i></div>
+                    <h4>2. Tawaf</h4>
+                    <p>Circle the Kaaba seven times counter-clockwise, starting from the Black Stone.</p>
+                    <span class="ritual-badge done-badge">Completed</span>
+                </div>
+                <div class="ritual-card-dash current">
+                    <div class="ritual-status"><i class="fas fa-play-circle"></i></div>
+                    <div class="ritual-icon"><i class="fas fa-person-walking"></i></div>
+                    <h4>3. Sa'i</h4>
+                    <p>Walk seven times between the hills of Safa and Marwa, commemorating Hajar's search for water.</p>
+                    <span class="ritual-badge current-badge">In Progress</span>
+                </div>
+                <div class="ritual-card-dash locked">
+                    <div class="ritual-status"><i class="fas fa-lock"></i></div>
+                    <div class="ritual-icon"><i class="fas fa-scissors"></i></div>
+                    <h4>4. Halq / Taqsir</h4>
+                    <p>Shave the head or trim the hair to complete the Umrah and exit the state of Ihram.</p>
+                    <span class="ritual-badge locked-badge">Locked</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievements Row -->
+        <div class="achievements-row">
+            <h3><i class="fas fa-trophy"></i> Recent Achievements</h3>
+            <div class="badges-wrap">
+                <div class="badge-item earned">
+                    <div class="badge-icon"><i class="fas fa-star"></i></div>
+                    <span>First Step</span>
+                </div>
+                <div class="badge-item earned">
+                    <div class="badge-icon"><i class="fas fa-book-quran"></i></div>
+                    <span>Dua Learner</span>
+                </div>
+                <div class="badge-item earned">
+                    <div class="badge-icon"><i class="fas fa-kaaba"></i></div>
+                    <span>Tawaf Starter</span>
+                </div>
+                <div class="badge-item earned">
+                    <div class="badge-icon"><i class="fas fa-mountain-sun"></i></div>
+                    <span>Arafah Day</span>
+                </div>
+                <div class="badge-item">
+                    <div class="badge-icon"><i class="fas fa-circle-dot"></i></div>
+                    <span>Rami Master</span>
+                </div>
+                <div class="badge-item">
+                    <div class="badge-icon"><i class="fas fa-flag-checkered"></i></div>
+                    <span>Hajj Complete</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/YOUR_TAWK_PROPERTY_ID/default';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
+
+    <script>
+    // Sidebar toggle
+    const sidebar = document.getElementById('dashSidebar');
+    const main = document.getElementById('dashMain');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+        main.classList.toggle('expanded');
+    });
+
+    // Tab switching
+    function switchTab(tab) {
+        // Update sidebar tabs
+        document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
+        document.querySelector(`.sidebar-tab[data-tab="${tab}"]`).classList.add('active');
+
+        // Update content
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.getElementById(tab + 'Tab').classList.add('active');
+
+        // Update progress
+        document.querySelectorAll('.progress-content').forEach(p => p.classList.add('hidden'));
+        document.getElementById(tab + 'Progress').classList.remove('hidden');
+    }
+
+    // User dropdown
+    const userToggle = document.getElementById('userDropdownToggle');
+    const userDropdown = document.getElementById('userDropdown');
+    userToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        userDropdown.classList.toggle('show');
+    });
+    document.addEventListener('click', () => userDropdown.classList.remove('show'));
+
+    // Mobile sidebar close on outside click
+    document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+            sidebar.classList.add('collapsed');
+        }
+    });
+    </script>
+</body>
+</html>

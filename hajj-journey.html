@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#C9A227">
+    <meta name="description" content="Experience the complete Hajj journey through immersive VR - from Ihram to Tawaf al-Wida.">
+    <title>Hajj Journey | Pilgrim's Path</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Pilgrim's Path" class="logo-img">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="hajj-journey.html" class="active">Hajj</a></li>
+                <li><a href="umrah-journey.html">Umrah</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+            <button class="cta-btn nav-cta" onclick="window.location.href='index.html#registerModal'">
+                <span>Start Free Journey</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="hajj-journey.html">Hajj Journey</a></li>
+            <li><a href="umrah-journey.html">Umrah Journey</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="index.html" class="cta-btn mobile-cta">Start Free Journey</a></li>
+        </ul>
+    </div>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="page-hero-bg"></div>
+        <div class="container">
+            <div class="page-hero-content">
+                <span class="section-tag">Sacred Pilgrimage</span>
+                <h1 class="page-title">The <span class="highlight">Hajj</span> Journey</h1>
+                <p class="page-subtitle">Experience every sacred step of Islam's fifth pillar through immersive virtual reality. From the moment you don Ihram to the final Tawaf, walk the path of millions of pilgrims.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hajj Overview -->
+    <section class="content-section">
+        <div class="container">
+            <div class="intro-block">
+                <div class="intro-icon">
+                    <i class="fas fa-kaaba"></i>
+                </div>
+                <h2>What is Hajj?</h2>
+                <p>Hajj is the annual Islamic pilgrimage to Makkah, Saudi Arabia, and is obligatory for all Muslims who are physically and financially able to undertake the journey at least once in their lifetime. It occurs during the Islamic month of Dhul Hijjah (8th-12th) and is the largest annual gathering of people in the world.</p>
+                <div class="verse-block">
+                    <p class="arabic-text">وَلِلَّهِ عَلَى النَّاسِ حِجُّ الْبَيْتِ مَنِ اسْتَطَاعَ إِلَيْهِ سَبِيلًا</p>
+                    <p class="translation">"And [due] to Allah from the people is a pilgrimage to the House - for whoever is able to find thereto a way."</p>
+                    <span class="reference">— Quran 3:97</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hajj Steps -->
+    <section class="steps-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">The Sacred Rituals</span>
+                <h2 class="section-title">Steps of <span class="highlight">Hajj</span></h2>
+                <p class="section-subtitle">Follow the complete journey through all the essential rituals</p>
+            </div>
+
+            <div class="ritual-timeline">
+                <!-- Day 1: 8th Dhul Hijjah -->
+                <div class="timeline-day">
+                    <div class="day-marker">
+                        <span class="day-number">Day 1</span>
+                        <span class="day-date">8th Dhul Hijjah</span>
+                    </div>
+                </div>
+
+                <div class="ritual-card">
+                    <div class="ritual-number">01</div>
+                    <div class="ritual-image">
+                        <i class="fas fa-shirt"></i>
+                    </div>
+                    <div class="ritual-content">
+                        <h3>Ihram</h3>
+                        <p>Enter the sacred state of Ihram at the designated Miqat. Men wear two white unstitched cloths, symbolizing equality before Allah. Women wear modest clothing. Make the intention (niyyah) for Hajj and recite the Talbiyah.</p>
+                        <div class="dua-box">
+                            <span class="dua-label">Talbiyah:</span>
+                            <p class="arabic-small">لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ</p>
+                            <p class="translation-small">"Here I am, O Allah, here I am. Here I am, You have no partner, here I am."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ritual-card">
+                    <div class="ritual-number">02</div>
+                    <div class="ritual-image">
+                        <i class="fas fa-campground"></i>
+                    </div>
+                    <div class="ritual-content">
+                        <h3>Arrival at Mina</h3>
+                        <p>Travel to Mina, a tent city about 8km from Makkah. Spend the day in prayer, reflection, and preparation for the Day of Arafah. Perform Dhuhr, Asr, Maghrib, Isha, and Fajr prayers.</p>
+                        <div class="info-badge">
+                            <i class="fas fa-location-dot"></i>
+                            <span>5km from Makkah</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 2: 9th Dhul Hijjah -->
+                <div class="timeline-day">
+                    <div class="day-marker">
+                        <span class="day-number">Day 2</span>
+                        <span class="day-date">9th Dhul Hijjah</span>
+                    </div>
+                </div>
+
+                <div class="ritual-card featured">
+                    <div class="ritual-number">03</div>
+                    <div class="ritual-image">
+                        <i class="fas fa-mountain-sun"></i>
+                    </div>
+                    <div class="ritual-content">
+                        <h3>Day of Arafah</h3>
+                        <p>The most important day of Hajj. Stand at the plain of Arafah from noon until sunset, engaging in earnest supplication and seeking Allah's forgiveness. This is where the Prophet ﷺ delivered his Farewell Sermon.</p>
+                        <div class="highlight-box">
+                            <i class="fas fa-star"></i>
+                            <span>The Prophet ﷺ said: "Hajj is Arafah"</span>
+                        </div>
+                        <div class="dua-box">
+                            <span class="dua-label">Best Dua of Arafah:</span>
+                            <p class="arabic-small">لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ritual-card">
+                    <div class="ritual-number">04</div>
+                    <div class="ritual-image">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="ritual-content">
+                        <h3>Night at Muzdalifah</h3>
+                        <p>After sunset, proceed to Muzdalifah. Pray Maghrib and Isha combined, spend the night under the open sky, and collect 49-70 pebbles for the stoning ritual. Depart after Fajr prayer.</p>
+                    </div>
+                </div>
+
+                <!-- Day 3: 10th Dhul Hijjah -->
+                <div class="timeline-day">
+                    <div class="day-marker">
+                        <span class="day-number">Day 3</span>
+                        <span class="day-date">10th Dhul Hijjah - Eid al-Adha</span>
+                    </div>
+                </div>
+
+                <div class="ritual-card">
+                    <div class="ritual-number">05</div>
+                    <div class="ritual-image">
+                        <i class="fas fa-circle-dot"></i>
+                    </div>
+                    <div class="ritual-content">
+                        <h3>Rami al-Jamarat (Stoning)</h3>
+                        <p>Return to Mina and throw seven pebbles at Jamrat al-Aqabah (the largest pillar), commemorating Prophet Ibrahim's rejection of Shaytan's temptations.</p>
+                        <div class="dua-box">
+                            <span class="dua-label">Say with each throw:</span>
+                            <p class="arabic-small">بِسْمِ اللهِ، اللهُ أَكْبَرُ</p>
+                            <p class="translation-small">"In the name of Allah, Allah is the Greatest"</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ritual-card">
+                    <div class="ritual-number">06</div>
+                    <div class="ritual-image">
+                        <i class="fas fa-cow"></i>
+                    </div>
+                    <div class="ritual-content">
+                        <h3>Qurbani (Sacrifice)</h3>
+                        <p>Offer an animal sacrifice (sheep, goat, cow, or camel) following the tradition of Prophet Ibrahim. The meat is distributed to the poor, relatives, and kept for oneself.</p>
+                    </div>
+                </div>
+
+                <div class="ritual-card">
+                    <div class="ritual-number">07</div>
+                    <div class="ritual-image">
+                        <i class="fas fa-scissors"></i>
+                    </div>
+                    <div class="ritual-content">
+                        <h3>Halq or Taqsir</h3>
+                        <p>Men shave their heads (Halq) or trim their hair (Taqsir). Women cut a fingertip's length of hair. This marks partial release from Ihram restrictions.</p>
+                    </div>
+                </div>
+
+                <div class="ritual-card">
+                    <div class="ritual-number">08</div>
+                    <div class="ritual-image">
+                        <i class="fas fa-kaaba"></i>
+                    </div>
+                    <div class="ritual-content">
+                        <h3>Tawaf al-Ifadah</h3>
+                        <p>Return to Makkah and perform Tawaf around the Kaaba seven times counter-clockwise. This is an essential pillar of Hajj and must be completed for Hajj to be valid.</p>
+                    </div>
+                </div>
+
+                <div class="ritual-card">
+                    <div class="ritual-number">09</div>
+                    <div class="ritual-image">
+                        <i class="fas fa-person-walking"></i>
+                    </div>
+                    <div class="ritual-content">
+                        <h3>Sa'i</h3>
+                        <p>Walk seven times between the hills of Safa and Marwa, commemorating Hajar's search for water for her son Ismail. The total distance is approximately 3.15 km.</p>
+                    </div>
+                </div>
+
+                <!-- Days 4-6: 11th-13th Dhul Hijjah -->
+                <div class="timeline-day">
+                    <div class="day-marker">
+                        <span class="day-number">Days 4-6</span>
+                        <span class="day-date">11th-13th Dhul Hijjah</span>
+                    </div>
+                </div>
+
+                <div class="ritual-card">
+                    <div class="ritual-number">10</div>
+                    <div class="ritual-image">
+                        <i class="fas fa-repeat"></i>
+                    </div>
+                    <div class="ritual-content">
+                        <h3>Days of Tashreeq</h3>
+                        <p>Return to Mina and spend these days in worship. Stone all three Jamarat each day (7 pebbles each, starting from the smallest). These are days of eating, drinking, and remembering Allah.</p>
+                        <div class="info-badge">
+                            <i class="fas fa-info-circle"></i>
+                            <span>21 pebbles per day × 3 pillars</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ritual-card final">
+                    <div class="ritual-number">11</div>
+                    <div class="ritual-image">
+                        <i class="fas fa-door-open"></i>
+                    </div>
+                    <div class="ritual-content">
+                        <h3>Tawaf al-Wida (Farewell)</h3>
+                        <p>Before leaving Makkah, perform the Farewell Tawaf. This is the final ritual, bidding farewell to the Sacred House. Your Hajj is now complete, and you return home with sins forgiven.</p>
+                        <div class="highlight-box success">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Hajj Mabroor! May Allah accept your pilgrimage.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VR Experience CTA -->
+    <section class="cta-section">
+        <div class="cta-bg">
+            <div class="cta-pattern"></div>
+            <div class="cta-glow"></div>
+        </div>
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Experience Hajj in Virtual Reality</h2>
+                <p class="cta-text">
+                    Walk through every ritual, visit every sacred site, and prepare your heart for the journey of a lifetime. 
+                    <strong>Completely free</strong> — create your account and begin.
+                </p>
+                <a href="index.html" class="primary-btn large">
+                    <span>Start Your VR Hajj</span>
+                    <i class="fas fa-arrow-right"></i>
+                    <div class="btn-glow"></div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="footer-logo">
+                        <img src="images/logo.png" alt="Pilgrim's Path" class="footer-logo-img">
+                    </a>
+                    <p class="footer-tagline">Bridging technology and spirituality to bring the sacred pilgrimage experience to Muslims worldwide.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Experience</h4>
+                    <ul>
+                        <li><a href="hajj-journey.html">Hajj Journey</a></li>
+                        <li><a href="umrah-journey.html">Umrah Journey</a></li>
+                        <li><a href="vr-features.html">VR Features</a></li>
+                        <li><a href="duas.html">Duas & Prayers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="hajj-guide.html">Hajj Guide</a></li>
+                        <li><a href="duas.html">Duas & Prayers</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="enterprise.html">Enterprise</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Pilgrim's Path. All rights reserved. Made with ❤️ for the Ummah.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Tawk.to Chat Widget -->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/YOUR_TAWK_PROPERTY_ID/default';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>

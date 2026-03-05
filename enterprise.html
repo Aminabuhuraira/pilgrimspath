@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#C9A227">
+    <meta name="description" content="White-label Pilgrim's Path VR Hajj & Umrah platform for your business. Custom branding, API access, and dedicated support for travel agencies, mosques, and Islamic organizations.">
+    <title>Enterprise &amp; White Label | Pilgrim's Path</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== Enterprise-specific styles ===== */
+        .ent-hero {
+            padding: 160px 40px 100px;
+            background: linear-gradient(180deg, #FFFEF7 0%, #FDF6E3 40%, #F4E4BC 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .ent-hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23D4AF37' fill-opacity='0.04'%3E%3Cpath d='M40 0l40 40-40 40L0 40 40 0zm0 10L10 40l30 30 30-30-30-30z'/%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+        .ent-hero .section-tag { margin-bottom: 20px; }
+        .ent-hero h1 {
+            font-family: 'Playfair Display', serif; font-size: 3.2rem;
+            font-weight: 700; margin-bottom: 20px; color: var(--text-primary);
+        }
+        .ent-hero h1 .highlight {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .ent-hero p {
+            max-width: 700px; margin: 0 auto 40px; font-size: 1.1rem;
+            color: var(--text-secondary); line-height: 1.8;
+        }
+        .ent-hero-cta { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .ent-logos {
+            margin-top: 60px; text-align: center;
+        }
+        .ent-logos p { font-size: .85rem; color: var(--text-muted); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
+        .logo-strip {
+            display: flex; gap: 48px; justify-content: center; align-items: center; flex-wrap: wrap; opacity: .45;
+        }
+        .logo-strip i { font-size: 2.2rem; color: var(--text-secondary); }
+
+        /* Value Props */
+        .ent-value { padding: 100px 0; background: var(--soft-white); }
+        .value-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 60px;
+        }
+        .value-card {
+            background: white; padding: 40px 32px; border-radius: 20px;
+            border: 1px solid rgba(212,175,55,.1); transition: var(--transition-smooth);
+            position: relative; overflow: hidden;
+        }
+        .value-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: var(--gradient-gold); transform: scaleX(0); transform-origin: left;
+            transition: transform .4s ease;
+        }
+        .value-card:hover::before { transform: scaleX(1); }
+        .value-card:hover { transform: translateY(-8px); box-shadow: 0 20px 60px rgba(212,175,55,.15); }
+        .value-icon {
+            width: 64px; height: 64px; border-radius: 16px;
+            background: linear-gradient(135deg, rgba(212,175,55,.1), rgba(212,175,55,.05));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; color: var(--primary-gold); margin-bottom: 20px;
+        }
+        .value-card h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 12px; }
+        .value-card p { color: var(--text-secondary); font-size: .95rem; line-height: 1.7; }
+
+        /* How It Works */
+        .ent-how { padding: 100px 0; background: linear-gradient(180deg, #FDF6E3, #F4E4BC); }
+        .how-steps {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-top: 60px;
+            position: relative;
+        }
+        .how-steps::before {
+            content: ''; position: absolute; top: 46px; left: 10%; right: 10%;
+            height: 2px; background: var(--gradient-gold); z-index: 0;
+        }
+        .how-step {
+            text-align: center; position: relative; z-index: 1;
+        }
+        .how-num {
+            width: 56px; height: 56px; border-radius: 50%; margin: 0 auto 20px;
+            background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+            color: white; font-weight: 700; font-size: 1.2rem;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 20px rgba(201,162,39,.3);
+        }
+        .how-step h4 { font-size: 1rem; margin-bottom: 8px; }
+        .how-step p { font-size: .85rem; color: var(--text-secondary); line-height: 1.6; }
+
+        /* Use Cases */
+        .ent-cases { padding: 100px 0; background: var(--soft-white); }
+        .cases-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; margin-top: 60px;
+        }
+        .case-card {
+            background: white; border-radius: 20px; padding: 36px;
+            border: 1px solid rgba(212,175,55,.1);
+            display: flex; gap: 24px; align-items: flex-start;
+            transition: var(--transition-smooth);
+        }
+        .case-card:hover { transform: translateY(-4px); box-shadow: 0 10px 40px rgba(212,175,55,.12); }
+        .case-icon {
+            width: 56px; height: 56px; border-radius: 14px; flex-shrink: 0;
+            background: linear-gradient(135deg, rgba(212,175,55,.12), rgba(212,175,55,.05));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; color: var(--primary-gold);
+        }
+        .case-card h3 { font-size: 1.1rem; margin-bottom: 8px; }
+        .case-card p { font-size: .9rem; color: var(--text-secondary); line-height: 1.7; }
+
+        /* Pricing */
+        .ent-pricing { padding: 100px 0; background: linear-gradient(180deg, #FDF6E3, #F4E4BC); }
+        .pricing-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 60px;
+        }
+        .price-card {
+            background: white; border-radius: 24px; padding: 40px 32px;
+            border: 1px solid rgba(212,175,55,.1); text-align: center;
+            transition: var(--transition-smooth); position: relative;
+        }
+        .price-card.featured {
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 0 1px var(--primary-gold), 0 20px 60px rgba(212,175,55,.2);
+            transform: scale(1.04);
+        }
+        .price-card.featured .pop-tag {
+            position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+            color: white; padding: 6px 24px; border-radius: 50px;
+            font-size: .75rem; font-weight: 600; letter-spacing: 1px;
+        }
+        .price-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(212,175,55,.15); }
+        .price-card.featured:hover { transform: scale(1.04) translateY(-6px); }
+        .price-name { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; color: var(--primary-gold-dark); }
+        .price-amount {
+            font-family: 'Playfair Display', serif; font-size: 2.4rem;
+            font-weight: 700; margin-bottom: 4px;
+        }
+        .price-period { font-size: .85rem; color: var(--text-muted); margin-bottom: 28px; }
+        .price-features { list-style: none; text-align: left; margin-bottom: 32px; }
+        .price-features li {
+            display: flex; align-items: center; gap: 10px; padding: 10px 0;
+            font-size: .9rem; color: var(--text-secondary);
+            border-bottom: 1px solid rgba(0,0,0,.04);
+        }
+        .price-features li i { color: var(--primary-gold); font-size: .8rem; width: 18px; text-align: center; }
+        .price-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 32px; border-radius: 50px; font-family: 'Poppins', sans-serif;
+            font-weight: 600; font-size: .95rem; border: 2px solid var(--primary-gold);
+            background: transparent; color: var(--primary-gold-dark); cursor: pointer;
+            transition: var(--transition-smooth); width: 100%; justify-content: center;
+        }
+        .price-btn:hover { background: var(--primary-gold); color: white; }
+        .price-card.featured .price-btn {
+            background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+            color: white; border-color: transparent;
+            box-shadow: 0 4px 20px rgba(201,162,39,.3);
+        }
+        .price-card.featured .price-btn:hover { box-shadow: 0 8px 30px rgba(201,162,39,.4); }
+
+        /* CTA bottom */
+        .ent-cta-bottom {
+            padding: 80px 0; background: var(--soft-white); text-align: center;
+        }
+        .ent-cta-bottom h2 {
+            font-family: 'Playfair Display', serif; font-size: 2.2rem; margin-bottom: 16px;
+        }
+        .ent-cta-bottom p { color: var(--text-secondary); margin-bottom: 32px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .ent-cta-bottom .contact-row {
+            display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; margin-top: 40px;
+        }
+        .contact-item { display: flex; align-items: center; gap: 10px; font-size: .95rem; color: var(--text-secondary); }
+        .contact-item i { color: var(--primary-gold); font-size: 1.1rem; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .value-grid { grid-template-columns: repeat(2, 1fr); }
+            .how-steps { grid-template-columns: repeat(2, 1fr); }
+            .how-steps::before { display: none; }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 440px; margin-left: auto; margin-right: auto; }
+            .price-card.featured { transform: none; }
+            .price-card.featured:hover { transform: translateY(-6px); }
+        }
+        @media (max-width: 768px) {
+            .ent-hero { padding: 130px 20px 70px; }
+            .ent-hero h1 { font-size: 2rem; }
+            .value-grid, .cases-grid { grid-template-columns: 1fr; }
+            .how-steps { grid-template-columns: 1fr 1fr; gap: 24px; }
+            .case-card { flex-direction: column; }
+        }
+        @media (max-width: 480px) {
+            .how-steps { grid-template-columns: 1fr; }
+            .ent-hero h1 { font-size: 1.7rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Pilgrim's Path" class="logo-img">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="hajj-journey.html">Hajj</a></li>
+                <li><a href="umrah-journey.html">Umrah</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="enterprise.html" class="active">Enterprise</a></li>
+            </ul>
+            <button class="cta-btn nav-cta" onclick="window.location.href='index.html'">
+                <span>Start Free Journey</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="hajj-journey.html">Hajj Journey</a></li>
+            <li><a href="umrah-journey.html">Umrah Journey</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="enterprise.html">Enterprise</a></li>
+            <li><a href="index.html" class="cta-btn mobile-cta">Start Free Journey</a></li>
+        </ul>
+    </div>
+
+    <!-- Hero -->
+    <section class="ent-hero">
+        <span class="section-tag">Enterprise Solutions</span>
+        <h1>White-Label <span class="highlight">Hajj & Umrah</span> VR Platform</h1>
+        <p>Empower your organization with our fully customizable, white-label virtual pilgrimage platform. Your brand, your audience, our technology — transforming spiritual education at scale.</p>
+        <div class="ent-hero-cta">
+            <button class="primary-btn" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">
+                <span>View Plans</span>
+                <i class="fas fa-arrow-right"></i>
+                <div class="btn-glow"></div>
+            </button>
+            <button class="secondary-btn" onclick="window.location.href='contact.html'">
+                <i class="fas fa-envelope"></i>
+                <span>Contact Sales</span>
+            </button>
+        </div>
+        <div class="ent-logos">
+            <p>Trusted by organizations worldwide</p>
+            <div class="logo-strip">
+                <i class="fas fa-mosque"></i>
+                <i class="fas fa-school"></i>
+                <i class="fas fa-plane"></i>
+                <i class="fas fa-building"></i>
+                <i class="fas fa-globe-americas"></i>
+                <i class="fas fa-landmark"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Proposition -->
+    <section class="ent-value">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Why White Label</span>
+                <h2 class="section-title">Your Brand. <span class="highlight">Our Technology.</span></h2>
+                <p class="section-subtitle">Launch a world-class VR pilgrimage platform under your own brand in weeks, not years.</p>
+            </div>
+            <div class="value-grid">
+                <div class="value-card">
+                    <div class="value-icon"><i class="fas fa-palette"></i></div>
+                    <h3>Full Brand Customization</h3>
+                    <p>Your logo, colors, fonts, and domain. Every touchpoint reflects your brand identity — your users will never see ours.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon"><i class="fas fa-code"></i></div>
+                    <h3>Powerful API Access</h3>
+                    <p>RESTful APIs for user management, progress tracking, analytics, and content delivery. Build custom integrations with ease.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Advanced Analytics</h3>
+                    <p>Track engagement, completion rates, user journeys, and learning outcomes with our comprehensive analytics dashboard.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon"><i class="fas fa-language"></i></div>
+                    <h3>Multi-Language Support</h3>
+                    <p>Serve a global audience with built-in support for Arabic, English, Urdu, Malay, Turkish, French, and 20+ languages.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon"><i class="fas fa-user-shield"></i></div>
+                    <h3>Dedicated Support</h3>
+                    <p>Priority technical support, dedicated account manager, custom onboarding, and SLA-backed uptime guarantees.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon"><i class="fas fa-server"></i></div>
+                    <h3>Scalable Infrastructure</h3>
+                    <p>Enterprise-grade cloud hosting that scales automatically. Handle thousands of concurrent users without performance issues.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="ent-how">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Getting Started</span>
+                <h2 class="section-title">Launch in <span class="highlight">Four Simple Steps</span></h2>
+                <p class="section-subtitle">From initial consultation to full deployment, we make onboarding seamless.</p>
+            </div>
+            <div class="how-steps">
+                <div class="how-step">
+                    <div class="how-num">1</div>
+                    <h4>Discovery Call</h4>
+                    <p>We learn about your organization, goals, and audience to tailor the perfect solution.</p>
+                </div>
+                <div class="how-step">
+                    <div class="how-num">2</div>
+                    <h4>Brand Configuration</h4>
+                    <p>Upload your assets, choose content modules, and configure the platform to match your brand.</p>
+                </div>
+                <div class="how-step">
+                    <div class="how-num">3</div>
+                    <h4>Testing & QA</h4>
+                    <p>Thorough testing with your team to ensure everything meets your quality standards.</p>
+                </div>
+                <div class="how-step">
+                    <div class="how-num">4</div>
+                    <h4>Go Live</h4>
+                    <p>Deploy on your domain with ongoing support, updates, and performance monitoring.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="ent-cases">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Who It's For</span>
+                <h2 class="section-title">Built for <span class="highlight">Every Organization</span></h2>
+                <p class="section-subtitle">From travel agencies to educational institutions, our platform adapts to your needs.</p>
+            </div>
+            <div class="cases-grid">
+                <div class="case-card">
+                    <div class="case-icon"><i class="fas fa-plane-departure"></i></div>
+                    <div>
+                        <h3>Hajj & Umrah Travel Agencies</h3>
+                        <p>Differentiate your packages by offering VR pre-trip preparation. Help pilgrims familiarize themselves with rituals before they travel, reducing anxiety and improving the experience.</p>
+                    </div>
+                </div>
+                <div class="case-card">
+                    <div class="case-icon"><i class="fas fa-mosque"></i></div>
+                    <div>
+                        <h3>Mosques & Islamic Centers</h3>
+                        <p>Offer your community an immersive educational tool for Hajj and Umrah classes. Engage youth and new Muslims with interactive, technology-driven learning.</p>
+                    </div>
+                </div>
+                <div class="case-card">
+                    <div class="case-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <div>
+                        <h3>Islamic Schools & Universities</h3>
+                        <p>Integrate virtual pilgrimage modules into your curriculum. Track student progress, assign coursework, and make Islamic studies come alive with VR.</p>
+                    </div>
+                </div>
+                <div class="case-card">
+                    <div class="case-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                    <div>
+                        <h3>Non-Profit Organizations</h3>
+                        <p>Bring the Hajj experience to communities that can't travel — elderly, disabled, and financially disadvantaged Muslims worldwide.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="ent-pricing" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Pricing</span>
+                <h2 class="section-title">Flexible Plans for <span class="highlight">Every Scale</span></h2>
+                <p class="section-subtitle">Transparent pricing with no hidden fees. Custom enterprise plans available on request.</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <div class="price-name">Starter</div>
+                    <div class="price-amount">$499</div>
+                    <div class="price-period">per month</div>
+                    <ul class="price-features">
+                        <li><i class="fas fa-check"></i> Up to 500 users</li>
+                        <li><i class="fas fa-check"></i> Custom logo & colors</li>
+                        <li><i class="fas fa-check"></i> Hajj + Umrah modules</li>
+                        <li><i class="fas fa-check"></i> Basic analytics</li>
+                        <li><i class="fas fa-check"></i> Email support</li>
+                        <li><i class="fas fa-check"></i> Your subdomain</li>
+                    </ul>
+                    <button class="price-btn" onclick="window.location.href='contact.html'">Get Started <i class="fas fa-arrow-right"></i></button>
+                </div>
+                <div class="price-card featured">
+                    <div class="pop-tag">MOST POPULAR</div>
+                    <div class="price-name">Professional</div>
+                    <div class="price-amount">$1,299</div>
+                    <div class="price-period">per month</div>
+                    <ul class="price-features">
+                        <li><i class="fas fa-check"></i> Up to 5,000 users</li>
+                        <li><i class="fas fa-check"></i> Full white-label branding</li>
+                        <li><i class="fas fa-check"></i> Custom domain</li>
+                        <li><i class="fas fa-check"></i> API access</li>
+                        <li><i class="fas fa-check"></i> Advanced analytics</li>
+                        <li><i class="fas fa-check"></i> Priority support</li>
+                        <li><i class="fas fa-check"></i> Multi-language (10+)</li>
+                    </ul>
+                    <button class="price-btn" onclick="window.location.href='contact.html'">Get Started <i class="fas fa-arrow-right"></i></button>
+                </div>
+                <div class="price-card">
+                    <div class="price-name">Enterprise</div>
+                    <div class="price-amount">Custom</div>
+                    <div class="price-period">tailored to your needs</div>
+                    <ul class="price-features">
+                        <li><i class="fas fa-check"></i> Unlimited users</li>
+                        <li><i class="fas fa-check"></i> Dedicated infrastructure</li>
+                        <li><i class="fas fa-check"></i> Custom content creation</li>
+                        <li><i class="fas fa-check"></i> SSO & LMS integration</li>
+                        <li><i class="fas fa-check"></i> Dedicated account manager</li>
+                        <li><i class="fas fa-check"></i> Custom SLA</li>
+                        <li><i class="fas fa-check"></i> On-premise available</li>
+                    </ul>
+                    <button class="price-btn" onclick="window.location.href='contact.html'">Contact Sales <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="ent-cta-bottom">
+        <div class="container">
+            <h2>Ready to Launch Your Platform?</h2>
+            <p>Let's discuss how Pilgrim's Path can transform your organization's Hajj & Umrah offerings. Schedule a free consultation today.</p>
+            <button class="primary-btn large" onclick="window.location.href='contact.html'">
+                <span>Schedule a Demo</span>
+                <i class="fas fa-calendar-check"></i>
+                <div class="btn-glow"></div>
+            </button>
+            <div class="contact-row">
+                <div class="contact-item"><i class="fas fa-envelope"></i> enterprise@pilgrimspath.com</div>
+                <div class="contact-item"><i class="fas fa-phone"></i> +1 (800) 555-HAJJ</div>
+                <div class="contact-item"><i class="fas fa-clock"></i> Response within 24 hours</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="footer-logo">
+                        <img src="images/logo.png" alt="Pilgrim's Path" class="footer-logo-img">
+                    </a>
+                    <p class="footer-tagline">Bridging technology and spirituality to bring the sacred pilgrimage experience to Muslims worldwide.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Experience</h4>
+                    <ul>
+                        <li><a href="hajj-journey.html">Hajj Journey</a></li>
+                        <li><a href="umrah-journey.html">Umrah Journey</a></li>
+                        <li><a href="vr-features.html">VR Features</a></li>
+                        <li><a href="duas.html">Duas & Prayers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="duas.html">Duas & Prayers</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Support</a></li>
+                        <li><a href="enterprise.html">Enterprise</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="enterprise.html">Enterprise</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Pilgrim's Path. All rights reserved. Made with ❤️ for the Ummah.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Tawk.to Chat Widget -->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/YOUR_TAWK_PROPERTY_ID/default';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>

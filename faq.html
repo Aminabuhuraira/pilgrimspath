@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#C9A227">
+    <meta name="description" content="Frequently Asked Questions about Pilgrim's Path VR pilgrimage experience.">
+    <title>FAQ | Pilgrim's Path</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .faq-section {
+            padding: 80px 0;
+        }
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .faq-category {
+            margin-bottom: 50px;
+        }
+        .faq-category-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--deep-brown);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-gold-light);
+        }
+        .faq-item {
+            background: var(--soft-white);
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 1px solid var(--primary-gold-light);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .faq-item:hover {
+            box-shadow: 0 5px 20px rgba(201, 162, 39, 0.15);
+        }
+        .faq-question {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--deep-brown);
+            transition: all 0.3s ease;
+        }
+        .faq-question:hover {
+            color: var(--primary-gold);
+        }
+        .faq-question i {
+            color: var(--primary-gold);
+            transition: transform 0.3s ease;
+        }
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding: 0 25px 20px;
+        }
+        .faq-answer p {
+            color: var(--warm-gray);
+            line-height: 1.7;
+        }
+        .faq-answer ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .faq-answer li {
+            color: var(--warm-gray);
+            margin-bottom: 8px;
+        }
+        .contact-box {
+            background: linear-gradient(135deg, var(--primary-gold-light) 0%, var(--warm-cream) 100%);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .contact-box h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--deep-brown);
+            margin-bottom: 15px;
+        }
+        .contact-box p {
+            color: var(--warm-gray);
+            margin-bottom: 25px;
+        }
+        .contact-methods {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .contact-method {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 25px;
+            background: var(--soft-white);
+            border-radius: 50px;
+            color: var(--deep-brown);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .contact-method:hover {
+            background: var(--primary-gold);
+            color: white;
+        }
+        .contact-method i {
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Pilgrim's Path" class="logo-img">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="hajj-journey.html">Hajj</a></li>
+                <li><a href="umrah-journey.html">Umrah</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="faq.html" class="active">FAQ</a></li>
+            </ul>
+            <button class="cta-btn nav-cta" onclick="window.location.href='index.html'">
+                <span>Start Free Journey</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="hajj-journey.html">Hajj Journey</a></li>
+            <li><a href="umrah-journey.html">Umrah Journey</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="index.html" class="cta-btn mobile-cta">Start Free Journey</a></li>
+        </ul>
+    </div>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="page-hero-bg"></div>
+        <div class="container">
+            <div class="page-hero-content">
+                <span class="section-tag">Got Questions?</span>
+                <h1 class="page-title">Frequently Asked <span class="highlight">Questions</span></h1>
+                <p class="page-subtitle">Find answers to common questions about our VR pilgrimage experience.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <div class="faq-container">
+                
+                <!-- General Questions -->
+                <div class="faq-category">
+                    <h3 class="faq-category-title"><i class="fas fa-circle-question"></i> General Questions</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What is Pilgrim's Path?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Pilgrim's Path is an immersive virtual reality platform designed to help Muslims learn about and experience the sacred pilgrimages of Hajj and Umrah. Using cutting-edge VR technology, we provide an educational and spiritually enriching experience that helps pilgrims prepare for their journey or allows those unable to travel to experience the beauty of these rituals virtually.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Is Pilgrim's Path really free?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes, absolutely! Pilgrim's Path is 100% free and will remain free forever. We believe that knowledge about Islamic worship and pilgrimage should be accessible to everyone. We are funded through donations and grants from Islamic organizations and philanthropists who share our vision.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Is the content authentic and verified?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>All content on Pilgrim's Path is carefully reviewed and verified by qualified Islamic scholars. Our advisory board includes graduates from renowned Islamic institutions including Al-Azhar University, Islamic University of Madinah, and others. We follow authentic Sunnah and mainstream Islamic jurisprudence.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Who is Mufti Menk and why is he involved?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Mufti Ismail Menk is a renowned Islamic scholar from Zimbabwe who has inspired millions of Muslims worldwide through his lectures, social media presence, and compassionate approach to Islamic education. He serves as our brand ambassador, endorsing our mission to make pilgrimage education accessible to all Muslims.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VR Experience -->
+                <div class="faq-category">
+                    <h3 class="faq-category-title"><i class="fas fa-vr-cardboard"></i> VR Experience</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Do I need a VR headset to use Pilgrim's Path?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>No! While we offer the best experience with VR headsets, our platform is designed to work on:</p>
+                            <ul>
+                                <li><strong>Desktop/Laptop:</strong> Full 360° panorama with mouse controls</li>
+                                <li><strong>Mobile devices:</strong> Gyroscope-based viewing and touch controls</li>
+                                <li><strong>VR Headsets:</strong> Full immersive experience (Meta Quest, HTC Vive, etc.)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What VR devices are supported?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>We support all major VR platforms including Meta Quest 2 & 3, HTC Vive, Valve Index, PlayStation VR, and Windows Mixed Reality headsets. Our mobile experience also works with Google Cardboard and similar phone-based VR viewers.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How realistic is the VR experience?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Our VR experience uses high-resolution 360° photography and video from the actual holy sites, combined with 3D modeling for educational walkthroughs. While nothing can replace the spiritual experience of being physically present, our platform provides an authentic visual and educational representation of the pilgrimage.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Religious Questions -->
+                <div class="faq-category">
+                    <h3 class="faq-category-title"><i class="fas fa-moon"></i> Religious Questions</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Does VR Hajj/Umrah count as the real thing?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p><strong>No, absolutely not.</strong> Pilgrim's Path is purely an educational and preparatory tool. Virtual pilgrimage does NOT fulfill the religious obligation of Hajj or Umrah. There is no substitute for the actual physical pilgrimage. Our platform is designed to:</p>
+                            <ul>
+                                <li>Help future pilgrims prepare and learn the rituals</li>
+                                <li>Provide education for those who haven't yet had the opportunity</li>
+                                <li>Allow elderly or disabled individuals to learn about the experience</li>
+                                <li>Refresh knowledge for those who have already performed pilgrimage</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Is it permissible (halal) to use this platform?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes, using educational technology to learn about Islamic practices is permissible. Our platform has been reviewed by qualified scholars who have confirmed that using VR for educational purposes about Hajj and Umrah is not only permissible but praiseworthy when it leads to better understanding and preparation for actual pilgrimage.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Which madhab (school of thought) do you follow?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>We present pilgrimage rituals according to authentic Sunnah with references to all four major Sunni schools of thought (Hanafi, Maliki, Shafi'i, and Hanbali). Where there are differences of opinion, we mention them clearly so users can follow their own madhab or consult their local scholars.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account & Technical -->
+                <div class="faq-category">
+                    <h3 class="faq-category-title"><i class="fas fa-user-gear"></i> Account & Technical</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How do I create an account?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Creating an account is simple and free! Click the "Start Free Journey" or "Create Account" button on our homepage. You'll need to provide your name, email address, and create a password. You can also sign up using your Google account for faster registration.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Is my data safe and private?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes, we take privacy very seriously. We use industry-standard encryption to protect your data. We never sell or share your personal information with third parties. Read our full Privacy Policy for more details.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What are the system requirements?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>For basic access (360° viewing), you only need a modern web browser. For the full VR experience, we recommend:</p>
+                            <ul>
+                                <li><strong>VR Ready PC:</strong> Intel i5/AMD Ryzen 5+, 8GB RAM, GTX 1060+</li>
+                                <li><strong>Standalone VR:</strong> Meta Quest 2 or newer</li>
+                                <li><strong>Mobile:</strong> iOS 14+ or Android 10+</li>
+                                <li><strong>Internet:</strong> 10 Mbps+ for smooth streaming</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Box -->
+                <div class="contact-box">
+                    <h3>Still have questions?</h3>
+                    <p>Our team is here to help you on your spiritual journey.</p>
+                    <div class="contact-methods">
+                        <a href="mailto:support@pilgrimspath.com" class="contact-method">
+                            <i class="fas fa-envelope"></i>
+                            <span>Email Us</span>
+                        </a>
+                        <a href="#" class="contact-method">
+                            <i class="fas fa-comments"></i>
+                            <span>Live Chat</span>
+                        </a>
+                        <a href="#" class="contact-method">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>WhatsApp</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-bg">
+            <div class="cta-pattern"></div>
+            <div class="cta-glow"></div>
+        </div>
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to Begin Your Journey?</h2>
+                <p class="cta-text">
+                    Experience the sacred pilgrimage like never before. 
+                    <strong>Create your free account</strong> and start exploring today.
+                </p>
+                <a href="index.html" class="primary-btn large">
+                    <span>Start Free Journey</span>
+                    <i class="fas fa-arrow-right"></i>
+                    <div class="btn-glow"></div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="footer-logo">
+                        <img src="images/logo.png" alt="Pilgrim's Path" class="footer-logo-img">
+                    </a>
+                    <p class="footer-tagline">Bridging technology and spirituality to bring the sacred pilgrimage experience to Muslims worldwide.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Experience</h4>
+                    <ul>
+                        <li><a href="hajj-journey.html">Hajj Journey</a></li>
+                        <li><a href="umrah-journey.html">Umrah Journey</a></li>
+                        <li><a href="vr-features.html">VR Features</a></li>
+                        <li><a href="duas.html">Duas & Prayers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="hajj-guide.html">Hajj Guide</a></li>
+                        <li><a href="duas.html">Duas & Prayers</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="enterprise.html">Enterprise</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Pilgrim's Path. All rights reserved. Made with ❤️ for the Ummah.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Tawk.to Chat Widget -->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/YOUR_TAWK_PROPERTY_ID/default';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+
+    <script src="script.js"></script>
+    <script>
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                const isActive = item.classList.contains('active');
+                
+                // Close all items
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+                
+                // Open clicked item if it wasn't active
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#C9A227">
+    <meta name="description" content="Discover the VR features of Pilgrim's Path - immersive Hajj and Umrah experience.">
+    <title>VR Features | Pilgrim's Path</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .features-hero {
+            padding: 180px 0 100px;
+            background: linear-gradient(135deg, var(--primary-gold-light) 0%, var(--warm-cream) 50%, var(--pearl) 100%);
+            text-align: center;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 80px 0;
+        }
+        .feature-card-large {
+            background: var(--soft-white);
+            border-radius: 25px;
+            overflow: hidden;
+            border: 1px solid var(--primary-gold-light);
+            transition: all 0.4s ease;
+        }
+        .feature-card-large:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(201, 162, 39, 0.15);
+        }
+        .feature-visual {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary-gold-light) 0%, var(--warm-cream) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--primary-gold);
+        }
+        .feature-content {
+            padding: 30px;
+        }
+        .feature-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--deep-brown);
+            margin-bottom: 15px;
+        }
+        .feature-content p {
+            color: var(--warm-gray);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        .feature-list li {
+            padding: 10px 0;
+            color: var(--warm-gray);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .feature-list li i {
+            color: var(--primary-gold);
+        }
+        .tech-section {
+            background: var(--pearl);
+            padding: 80px 0;
+        }
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-top: 50px;
+        }
+        .tech-card {
+            background: var(--soft-white);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid var(--primary-gold-light);
+        }
+        .tech-card i {
+            font-size: 2.5rem;
+            color: var(--primary-gold);
+            margin-bottom: 15px;
+        }
+        .tech-card h4 {
+            color: var(--deep-brown);
+            margin-bottom: 10px;
+        }
+        .tech-card p {
+            color: var(--warm-gray);
+            font-size: 0.9rem;
+        }
+        .comparison-section {
+            padding: 80px 0;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 40px;
+            background: var(--soft-white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(201, 162, 39, 0.1);
+        }
+        .comparison-table th,
+        .comparison-table td {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--primary-gold-light);
+        }
+        .comparison-table th {
+            background: linear-gradient(135deg, var(--primary-gold) 0%, var(--primary-gold-dark) 100%);
+            color: white;
+            font-weight: 600;
+        }
+        .comparison-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+            color: var(--deep-brown);
+        }
+        .comparison-table tr:hover {
+            background: var(--pearl);
+        }
+        .check {
+            color: #27ae60;
+        }
+        .cross {
+            color: #e74c3c;
+        }
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .comparison-table {
+                font-size: 0.85rem;
+            }
+            .comparison-table th,
+            .comparison-table td {
+                padding: 12px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Pilgrim's Path" class="logo-img">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="hajj-journey.html">Hajj</a></li>
+                <li><a href="umrah-journey.html">Umrah</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+            <button class="cta-btn nav-cta" onclick="window.location.href='index.html'">
+                <span>Start Free Journey</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="page-hero-bg"></div>
+        <div class="container">
+            <div class="page-hero-content">
+                <span class="section-tag">Cutting-Edge Technology</span>
+                <h1 class="page-title">VR <span class="highlight">Features</span></h1>
+                <p class="page-subtitle">Experience the sacred pilgrimage through immersive virtual reality technology designed for spiritual education.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="content-section">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-card-large">
+                    <div class="feature-visual">
+                        <i class="fas fa-vr-cardboard"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>360° Immersive Experience</h3>
+                        <p>Step into the holy sites with stunning 360-degree panoramic views captured directly from Makkah and Madinah.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check-circle"></i> 8K resolution imagery</li>
+                            <li><i class="fas fa-check-circle"></i> Realistic spatial audio</li>
+                            <li><i class="fas fa-check-circle"></i> Day and night cycles</li>
+                            <li><i class="fas fa-check-circle"></i> Seasonal variations</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-card-large">
+                    <div class="feature-visual">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Guided Ritual Walkthroughs</h3>
+                        <p>Follow step-by-step guidance through each ritual with audio narration and visual cues.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check-circle"></i> Interactive checkpoints</li>
+                            <li><i class="fas fa-check-circle"></i> Scholar voice guidance</li>
+                            <li><i class="fas fa-check-circle"></i> Real-time dua prompts</li>
+                            <li><i class="fas fa-check-circle"></i> Progress tracking</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-card-large">
+                    <div class="feature-visual">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Multi-Language Support</h3>
+                        <p>Experience the pilgrimage in your preferred language with authentic Arabic duas.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check-circle"></i> 15+ languages available</li>
+                            <li><i class="fas fa-check-circle"></i> Arabic dua recitations</li>
+                            <li><i class="fas fa-check-circle"></i> Transliterations included</li>
+                            <li><i class="fas fa-check-circle"></i> Cultural adaptations</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-card-large">
+                    <div class="feature-visual">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Gamified Learning</h3>
+                        <p>Engage with interactive quizzes and achievements to reinforce your knowledge.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check-circle"></i> Knowledge quizzes</li>
+                            <li><i class="fas fa-check-circle"></i> Achievement badges</li>
+                            <li><i class="fas fa-check-circle"></i> Progress certificates</li>
+                            <li><i class="fas fa-check-circle"></i> Leaderboards</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-card-large">
+                    <div class="feature-visual">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Cross-Platform Access</h3>
+                        <p>Access from any device — VR headset, desktop, tablet, or mobile phone.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check-circle"></i> VR headsets (Quest, Vive, etc.)</li>
+                            <li><i class="fas fa-check-circle"></i> Web browser access</li>
+                            <li><i class="fas fa-check-circle"></i> iOS & Android apps</li>
+                            <li><i class="fas fa-check-circle"></i> Offline mode available</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-card-large">
+                    <div class="feature-visual">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Social Learning</h3>
+                        <p>Connect with other pilgrims worldwide and learn together.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check-circle"></i> Virtual group sessions</li>
+                            <li><i class="fas fa-check-circle"></i> Discussion forums</li>
+                            <li><i class="fas fa-check-circle"></i> Scholar Q&A sessions</li>
+                            <li><i class="fas fa-check-circle"></i> Family sharing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section class="tech-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Powered By</span>
+                <h2 class="section-title">Our <span class="highlight">Technology</span></h2>
+            </div>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <i class="fas fa-cube"></i>
+                    <h4>WebXR</h4>
+                    <p>Browser-based VR for universal access</p>
+                </div>
+                <div class="tech-card">
+                    <i class="fas fa-cloud"></i>
+                    <h4>Cloud Streaming</h4>
+                    <p>High-quality content without heavy downloads</p>
+                </div>
+                <div class="tech-card">
+                    <i class="fas fa-brain"></i>
+                    <h4>AI Guidance</h4>
+                    <p>Intelligent adaptive learning paths</p>
+                </div>
+                <div class="tech-card">
+                    <i class="fas fa-lock"></i>
+                    <h4>Secure Platform</h4>
+                    <p>Enterprise-grade security & privacy</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="comparison-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Choose Your Experience</span>
+                <h2 class="section-title">Platform <span class="highlight">Comparison</span></h2>
+            </div>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Mobile</th>
+                        <th>Desktop</th>
+                        <th>VR Headset</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>360° Panoramas</td>
+                        <td><i class="fas fa-check check"></i></td>
+                        <td><i class="fas fa-check check"></i></td>
+                        <td><i class="fas fa-check check"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Interactive Tutorials</td>
+                        <td><i class="fas fa-check check"></i></td>
+                        <td><i class="fas fa-check check"></i></td>
+                        <td><i class="fas fa-check check"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Audio Guidance</td>
+                        <td><i class="fas fa-check check"></i></td>
+                        <td><i class="fas fa-check check"></i></td>
+                        <td><i class="fas fa-check check"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Full Immersion</td>
+                        <td><i class="fas fa-times cross"></i></td>
+                        <td><i class="fas fa-times cross"></i></td>
+                        <td><i class="fas fa-check check"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Hand Tracking</td>
+                        <td><i class="fas fa-times cross"></i></td>
+                        <td><i class="fas fa-times cross"></i></td>
+                        <td><i class="fas fa-check check"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Gyroscope Navigation</td>
+                        <td><i class="fas fa-check check"></i></td>
+                        <td><i class="fas fa-times cross"></i></td>
+                        <td><i class="fas fa-check check"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Offline Access</td>
+                        <td><i class="fas fa-check check"></i></td>
+                        <td><i class="fas fa-check check"></i></td>
+                        <td><i class="fas fa-check check"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-bg">
+            <div class="cta-pattern"></div>
+            <div class="cta-glow"></div>
+        </div>
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Experience It Yourself</h2>
+                <p class="cta-text">
+                    The best way to understand our VR experience is to try it. 
+                    <strong>Create your free account</strong> and start exploring now.
+                </p>
+                <a href="index.html" class="primary-btn large">
+                    <span>Try VR Experience Free</span>
+                    <i class="fas fa-arrow-right"></i>
+                    <div class="btn-glow"></div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="footer-logo">
+                        <img src="images/logo.png" alt="Pilgrim's Path" class="footer-logo-img">
+                    </a>
+                    <p class="footer-tagline">Bridging technology and spirituality to bring the sacred pilgrimage experience to Muslims worldwide.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Experience</h4>
+                    <ul>
+                        <li><a href="hajj-journey.html">Hajj Journey</a></li>
+                        <li><a href="umrah-journey.html">Umrah Journey</a></li>
+                        <li><a href="vr-features.html">VR Features</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="duas.html">Duas & Prayers</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Pilgrim's Path. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Tawk.to Chat Widget -->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/YOUR_TAWK_PROPERTY_ID/default';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#C9A227">
+    <meta name="description" content="Experience the blessed Umrah journey through immersive VR - the lesser pilgrimage to Makkah.">
+    <title>Umrah Journey | Pilgrim's Path</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Pilgrim's Path" class="logo-img">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="hajj-journey.html">Hajj</a></li>
+                <li><a href="umrah-journey.html" class="active">Umrah</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+            <button class="cta-btn nav-cta" onclick="window.location.href='index.html'">
+                <span>Start Free Journey</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="hajj-journey.html">Hajj Journey</a></li>
+            <li><a href="umrah-journey.html">Umrah Journey</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="index.html" class="cta-btn mobile-cta">Start Free Journey</a></li>
+        </ul>
+    </div>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="page-hero-bg"></div>
+        <div class="container">
+            <div class="page-hero-content">
+                <span class="section-tag">The Lesser Pilgrimage</span>
+                <h1 class="page-title">The <span class="highlight">Umrah</span> Journey</h1>
+                <p class="page-subtitle">A blessed journey that can be performed at any time of the year. Experience the spiritual renewal of visiting Allah's Sacred House through our immersive VR platform.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Umrah Overview -->
+    <section class="content-section">
+        <div class="container">
+            <div class="intro-block">
+                <div class="intro-icon">
+                    <i class="fas fa-mosque"></i>
+                </div>
+                <h2>What is Umrah?</h2>
+                <p>Umrah is the "lesser pilgrimage" to Makkah that can be performed at any time of the year, unlike Hajj which has specific dates. While not obligatory, Umrah is highly recommended (Sunnah Mu'akkadah) and carries immense spiritual rewards. It is a chance to seek closeness to Allah, seek forgiveness, and renew one's faith.</p>
+                <div class="verse-block">
+                    <p class="arabic-text">وَأَتِمُّوا الْحَجَّ وَالْعُمْرَةَ لِلَّهِ</p>
+                    <p class="translation">"And complete the Hajj and Umrah for Allah."</p>
+                    <span class="reference">— Quran 2:196</span>
+                </div>
+            </div>
+
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-eraser"></i></div>
+                    <h3>Expiation of Sins</h3>
+                    <p>The Prophet ﷺ said: "One Umrah to the next is an expiation for what is between them."</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <h3>Any Time of Year</h3>
+                    <p>Unlike Hajj, Umrah can be performed throughout the year, making it more accessible.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-clock"></i></div>
+                    <h3>Shorter Duration</h3>
+                    <p>Umrah can be completed in a few hours, making it ideal for those with limited time.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-heart"></i></div>
+                    <h3>Spiritual Renewal</h3>
+                    <p>A chance to reconnect with Allah, refresh your iman, and return spiritually recharged.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Umrah Steps -->
+    <section class="steps-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">The Sacred Rituals</span>
+                <h2 class="section-title">Steps of <span class="highlight">Umrah</span></h2>
+                <p class="section-subtitle">Four essential rituals to complete your Umrah</p>
+            </div>
+
+            <div class="ritual-timeline">
+                <div class="ritual-card">
+                    <div class="ritual-number">01</div>
+                    <div class="ritual-image">
+                        <i class="fas fa-shirt"></i>
+                    </div>
+                    <div class="ritual-content">
+                        <h3>Ihram</h3>
+                        <p>Enter the sacred state at the Miqat (designated boundary). Perform ghusl (ritual bath), wear Ihram garments, make your intention, and begin reciting the Talbiyah.</p>
+                        <div class="dua-box">
+                            <span class="dua-label">Intention for Umrah:</span>
+                            <p class="arabic-small">اللَّهُمَّ إِنِّي أُرِيدُ الْعُمْرَةَ فَيَسِّرْهَا لِي وَتَقَبَّلْهَا مِنِّي</p>
+                            <p class="translation-small">"O Allah, I intend to perform Umrah, so make it easy for me and accept it from me."</p>
+                        </div>
+                        <div class="restrictions-box">
+                            <h4>Ihram Restrictions:</h4>
+                            <ul>
+                                <li><i class="fas fa-times"></i> No cutting hair or nails</li>
+                                <li><i class="fas fa-times"></i> No perfume or scented products</li>
+                                <li><i class="fas fa-times"></i> No covering the head (men)</li>
+                                <li><i class="fas fa-times"></i> No hunting or harming animals</li>
+                                <li><i class="fas fa-times"></i> No marital relations</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ritual-card">
+                    <div class="ritual-number">02</div>
+                    <div class="ritual-image">
+                        <i class="fas fa-kaaba"></i>
+                    </div>
+                    <div class="ritual-content">
+                        <h3>Tawaf</h3>
+                        <p>Circle the Kaaba seven times in a counter-clockwise direction, starting from the Black Stone (Hajr al-Aswad). Each circuit is called a "shawt." Men should perform Raml (brisk walking) in the first three circuits.</p>
+                        <div class="dua-box">
+                            <span class="dua-label">At the Black Stone:</span>
+                            <p class="arabic-small">بِسْمِ اللهِ، اللهُ أَكْبَرُ</p>
+                            <p class="translation-small">"In the name of Allah, Allah is the Greatest"</p>
+                        </div>
+                        <div class="dua-box">
+                            <span class="dua-label">Between Rukn Yamani and Black Stone:</span>
+                            <p class="arabic-small">رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ</p>
+                            <p class="translation-small">"Our Lord, give us good in this world and good in the Hereafter, and protect us from the punishment of the Fire."</p>
+                        </div>
+                        <div class="highlight-box">
+                            <i class="fas fa-info-circle"></i>
+                            <span>After Tawaf, pray 2 rakats behind Maqam Ibrahim if possible</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ritual-card">
+                    <div class="ritual-number">03</div>
+                    <div class="ritual-image">
+                        <i class="fas fa-person-walking"></i>
+                    </div>
+                    <div class="ritual-content">
+                        <h3>Sa'i</h3>
+                        <p>Walk seven times between the hills of Safa and Marwa, commemorating Hajar's desperate search for water for her infant son Ismail. Start at Safa and end at Marwa. The total distance is about 3.15 km.</p>
+                        <div class="dua-box">
+                            <span class="dua-label">Upon reaching Safa:</span>
+                            <p class="arabic-small">إِنَّ الصَّفَا وَالْمَرْوَةَ مِنْ شَعَائِرِ اللهِ</p>
+                            <p class="translation-small">"Indeed, Safa and Marwa are among the symbols of Allah."</p>
+                        </div>
+                        <div class="info-badge">
+                            <i class="fas fa-route"></i>
+                            <span>Safa → Marwa = 1 lap | 7 laps total</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ritual-card final">
+                    <div class="ritual-number">04</div>
+                    <div class="ritual-image">
+                        <i class="fas fa-scissors"></i>
+                    </div>
+                    <div class="ritual-content">
+                        <h3>Halq or Taqsir</h3>
+                        <p>Complete your Umrah by shaving the head (Halq - recommended for men) or trimming the hair (Taqsir). Women cut a fingertip's length from the ends of their hair. This releases you from the state of Ihram.</p>
+                        <div class="highlight-box success">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Umrah Maqbool! Your Umrah is now complete. May Allah accept it.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recommended Acts -->
+    <section class="content-section alt-bg">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Enhance Your Experience</span>
+                <h2 class="section-title">Recommended <span class="highlight">Acts</span></h2>
+            </div>
+
+            <div class="acts-grid">
+                <div class="act-card">
+                    <i class="fas fa-droplet"></i>
+                    <h3>Drink Zamzam Water</h3>
+                    <p>Drink from the blessed Zamzam well and make dua. The Prophet ﷺ said: "The water of Zamzam is for whatever purpose it is drunk for."</p>
+                </div>
+                <div class="act-card">
+                    <i class="fas fa-hands-praying"></i>
+                    <h3>Pray at Maqam Ibrahim</h3>
+                    <p>After Tawaf, pray 2 rakats behind Maqam Ibrahim if possible, or anywhere in the Masjid.</p>
+                </div>
+                <div class="act-card">
+                    <i class="fas fa-eye"></i>
+                    <h3>Gaze at the Kaaba</h3>
+                    <p>Looking at the Kaaba is an act of worship. Take moments to simply gaze and make heartfelt dua.</p>
+                </div>
+                <div class="act-card">
+                    <i class="fas fa-book-quran"></i>
+                    <h3>Recite Quran</h3>
+                    <p>Spend time reciting Quran in the sacred Masjid where rewards are multiplied manifold.</p>
+                </div>
+                <div class="act-card">
+                    <i class="fas fa-moon"></i>
+                    <h3>Night Prayers</h3>
+                    <p>Pray Tahajjud and spend the blessed nights in worship at the Sacred Mosque.</p>
+                </div>
+                <div class="act-card">
+                    <i class="fas fa-plane"></i>
+                    <h3>Visit Madinah</h3>
+                    <p>If possible, visit Madinah to pray at Masjid an-Nabawi and send salutations upon the Prophet ﷺ.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-bg">
+            <div class="cta-pattern"></div>
+            <div class="cta-glow"></div>
+        </div>
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Experience Umrah in Virtual Reality</h2>
+                <p class="cta-text">
+                    Practice every step, learn the duas, and prepare your heart for this blessed journey. 
+                    <strong>Completely free</strong> — create your account and begin.
+                </p>
+                <a href="index.html" class="primary-btn large">
+                    <span>Start Your VR Umrah</span>
+                    <i class="fas fa-arrow-right"></i>
+                    <div class="btn-glow"></div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="footer-logo">
+                        <img src="images/logo.png" alt="Pilgrim's Path" class="footer-logo-img">
+                    </a>
+                    <p class="footer-tagline">Bridging technology and spirituality to bring the sacred pilgrimage experience to Muslims worldwide.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Experience</h4>
+                    <ul>
+                        <li><a href="hajj-journey.html">Hajj Journey</a></li>
+                        <li><a href="umrah-journey.html">Umrah Journey</a></li>
+                        <li><a href="vr-features.html">VR Features</a></li>
+                        <li><a href="duas.html">Duas & Prayers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="hajj-guide.html">Hajj Guide</a></li>
+                        <li><a href="duas.html">Duas & Prayers</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="enterprise.html">Enterprise</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Pilgrim's Path. All rights reserved. Made with ❤️ for the Ummah.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Tawk.to Chat Widget -->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/YOUR_TAWK_PROPERTY_ID/default';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>

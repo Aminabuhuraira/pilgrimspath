@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#C9A227">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="Experience the sacred journey of Hajj and Umrah through immersive VR technology. Free access for all Muslims worldwide.">
+    <title>Pilgrim's Path | VR Hajj & Umrah Experience</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Floating Decorative Elements -->
+    <div class="floating-decorations">
+        <span class="deco-star star-1">✦</span>
+        <span class="deco-star star-2">★</span>
+        <span class="deco-star star-3">✧</span>
+        <span class="deco-moon moon-1">☪</span>
+        <span class="deco-star star-4">✦</span>
+        <span class="deco-star star-5">★</span>
+    </div>
+
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-content">
+            <div class="crescent-loader"></div>
+            <p>Preparing Your Journey...</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <img src="images/logo.png" alt="Pilgrim's Path" class="logo-img">
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#panorama">360° View</a></li>
+                <li><a href="#ambassador">Ambassador</a></li>
+                <li><a href="#features">Features</a></li>
+            </ul>
+            <button class="cta-btn nav-cta" onclick="openModal()">
+                <span>Start Free Journey</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-nav-links">
+            <li><a href="#home" onclick="closeMobileMenu()">Home</a></li>
+            <li><a href="#experience" onclick="closeMobileMenu()">Experience</a></li>
+            <li><a href="#panorama" onclick="closeMobileMenu()">360° View</a></li>
+            <li><a href="#ambassador" onclick="closeMobileMenu()">Ambassador</a></li>
+            <li><a href="#features" onclick="closeMobileMenu()">Features</a></li>
+            <li><button class="cta-btn mobile-cta" onclick="openModal(); closeMobileMenu();">Start Free Journey</button></li>
+        </ul>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <div class="floating-particles"></div>
+            <div class="gradient-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge animate-fade-up">
+                <span class="badge-icon">✦</span>
+                <span>Virtual Reality Experience</span>
+            </div>
+            <h1 class="hero-title animate-fade-up delay-1">
+                Experience the Sacred Journey of
+                <span class="highlight">Hajj & Umrah</span>
+                From Anywhere
+            </h1>
+            <p class="hero-subtitle animate-fade-up delay-2">
+                Immerse yourself in the most profound spiritual experience through cutting-edge VR technology. 
+                Walk the path of millions of pilgrims, feel the divine presence, and prepare your soul for the 
+                journey of a lifetime — all from the comfort of your home.
+            </p>
+            <div class="hero-cta animate-fade-up delay-3">
+                <button class="primary-btn" onclick="openModal()">
+                    <span>Begin Your Journey</span>
+                    <div class="btn-glow"></div>
+                </button>
+                <button class="secondary-btn" onclick="scrollToSection('panorama')">
+                    <i class="fas fa-play-circle"></i>
+                    <span>Explore 360° View</span>
+                </button>
+            </div>
+            <div class="hero-stats animate-fade-up delay-4">
+                <div class="stat-item">
+                    <span class="stat-number" data-target="50000">0</span>
+                    <span class="stat-label">Virtual Pilgrims</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" data-target="120">0</span>
+                    <span class="stat-label">Countries Reached</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" data-target="100">0</span>
+                    <span class="stat-label">% Free Access</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual animate-fade-left">
+            <div class="vr-device-container">
+                <div class="vr-glow"></div>
+                <div class="kaaba-3d">
+                    <div class="kaaba-wrapper">
+                        <div class="kaaba-face front"></div>
+                        <div class="kaaba-face back"></div>
+                        <div class="kaaba-face left"></div>
+                        <div class="kaaba-face right"></div>
+                        <div class="kaaba-face top"></div>
+                        <div class="kaaba-band"></div>
+                    </div>
+                </div>
+                <div class="orbit-ring ring-1"></div>
+                <div class="orbit-ring ring-2"></div>
+                <div class="orbit-ring ring-3"></div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+            <span>Scroll to Explore</span>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="experience-section" id="experience">
+        <div class="section-decorations">
+            <span class="corner-ornament top-left">❋</span>
+            <span class="corner-ornament top-right">❋</span>
+            <span class="corner-ornament bottom-left">❋</span>
+            <span class="corner-ornament bottom-right">❋</span>
+        </div>
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Why Choose Us</span>
+                <h2 class="section-title">A Revolutionary Way to <span class="highlight">Experience Pilgrimage</span></h2>
+                <p class="section-subtitle">
+                    Whether you're preparing for your first Hajj, unable to travel, or seeking to deepen your spiritual connection, 
+                    Pilgrim's Path brings the sacred sites to you with unprecedented realism.
+                </p>
+            </div>
+            <div class="experience-grid">
+                <div class="experience-card" data-aos="fade-up">
+                    <div class="card-icon">
+                        <i class="fas fa-vr-cardboard"></i>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <h3>Immersive VR Technology</h3>
+                    <p>Experience every moment of Hajj and Umrah in stunning 360° virtual reality. From Tawaf around the Kaaba to Sa'i between Safa and Marwa.</p>
+                </div>
+                <div class="experience-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card-icon">
+                        <i class="fas fa-gamepad"></i>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <h3>Gamified Learning</h3>
+                    <p>Learn the rituals, duas, and significance of each step through interactive challenges and achievements that make spiritual education engaging.</p>
+                </div>
+                <div class="experience-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card-icon">
+                        <i class="fas fa-book-quran"></i>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <h3>Guided by Scholars</h3>
+                    <p>Audio guides from renowned Islamic scholars including Mufti Menk ensure authenticity and deep spiritual insight throughout your journey.</p>
+                </div>
+                <div class="experience-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <h3>Global Community</h3>
+                    <p>Connect with fellow virtual pilgrims from around the world. Share experiences, learn together, and build lasting spiritual bonds.</p>
+                </div>
+                <div class="experience-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="card-icon">
+                        <i class="fas fa-infinity"></i>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <h3>Unlimited Access</h3>
+                    <p>Practice as many times as you need. Revisit sacred locations, perfect your rituals, and deepen your understanding — forever free.</p>
+                </div>
+                <div class="experience-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="card-icon">
+                        <i class="fas fa-mobile-screen"></i>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <h3>Any Device, Anywhere</h3>
+                    <p>Access on VR headsets, desktop, tablet, or mobile. Your spiritual journey adapts to your lifestyle and available technology.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 360 Panorama Section -->
+    <section class="panorama-section" id="panorama">
+        <div class="container">
+            <div class="section-header light">
+                <span class="section-tag">Immersive Experience</span>
+                <h2 class="section-title">Step Into the <span class="highlight">Sacred Sanctuary</span></h2>
+                <p class="section-subtitle">
+                    Experience the breathtaking beauty of Masjid al-Haram in our interactive 360° panorama. 
+                    Drag to explore or let it guide you through this magnificent view.
+                </p>
+            </div>
+            <div class="panorama-container">
+                <div class="panorama-viewer" id="panoramaViewer">
+                    <div class="panorama-image" id="panoramaImage"></div>
+                    <div class="panorama-overlay">
+                        <div class="panorama-controls">
+                            <button class="control-btn" id="playPauseBtn" onclick="togglePanoramaRotation()">
+                                <i class="fas fa-pause"></i>
+                            </button>
+                            <button class="control-btn" onclick="toggleFullscreen()">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                        <div class="panorama-info">
+                            <div class="location-badge">
+                                <i class="fas fa-location-dot"></i>
+                                <span>Masjid al-Haram, Makkah</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panorama-hotspots">
+                        <div class="hotspot" style="left: 50%; top: 45%;" data-info="The Holy Kaaba - The most sacred site in Islam">
+                            <div class="hotspot-pulse"></div>
+                            <div class="hotspot-tooltip">The Holy Kaaba</div>
+                        </div>
+                        <div class="hotspot" style="left: 30%; top: 50%;" data-info="Maqam Ibrahim - Station of Prophet Ibrahim">
+                            <div class="hotspot-pulse"></div>
+                            <div class="hotspot-tooltip">Maqam Ibrahim</div>
+                        </div>
+                        <div class="hotspot" style="left: 70%; top: 48%;" data-info="Zamzam Well - Blessed water source">
+                            <div class="hotspot-pulse"></div>
+                            <div class="hotspot-tooltip">Zamzam Well</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panorama-thumbnails">
+                    <div class="thumbnail active" data-panorama="kaaba">
+                        <img src="https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=200" alt="Kaaba">
+                        <span>Masjid al-Haram</span>
+                    </div>
+                    <div class="thumbnail" data-panorama="madinah">
+                        <img src="https://images.unsplash.com/photo-1542816417-0983c9c9ad53?w=200" alt="Madinah">
+                        <span>Al-Masjid an-Nabawi</span>
+                    </div>
+                    <div class="thumbnail" data-panorama="mina">
+                        <img src="https://images.unsplash.com/photo-1564769625673-cb690a0d5022?w=200" alt="Mina">
+                        <span>Mina Tents</span>
+                    </div>
+                    <div class="thumbnail" data-panorama="arafat">
+                        <img src="https://images.unsplash.com/photo-1565019001607-0dee94ca6dc2?w=200" alt="Arafat">
+                        <span>Mount Arafat</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panorama-bg-elements">
+            <div class="glow-orb orb-1"></div>
+            <div class="glow-orb orb-2"></div>
+        </div>
+    </section>
+
+    <!-- Ambassador Section -->
+    <section class="ambassador-section" id="ambassador">
+        <div class="container">
+            <div class="ambassador-content">
+                <div class="ambassador-image-container">
+                    <div class="image-frame">
+                        <div class="frame-glow"></div>
+                        <img src="images/mufti-menk.png" alt="Mufti Ismail Menk - Brand Ambassador" class="ambassador-img">
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="floating-badge">
+                        <i class="fas fa-certificate"></i>
+                        <span>Brand Ambassador</span>
+                    </div>
+                    <div class="decorative-elements">
+                        <div class="deco-circle c1"></div>
+                        <div class="deco-circle c2"></div>
+                        <div class="deco-line l1"></div>
+                        <div class="deco-line l2"></div>
+                    </div>
+                </div>
+                <div class="ambassador-text">
+                    <span class="section-tag">Our Ambassador</span>
+                    <h2 class="ambassador-name">Mufti Ismail Menk</h2>
+                    <p class="ambassador-title">Internationally Renowned Islamic Scholar</p>
+                    <blockquote class="ambassador-quote">
+                        <span class="quote-mark">"</span>
+                        Pilgrim's Path represents a beautiful bridge between technology and spirituality. 
+                        For those who dream of walking the sacred grounds but face barriers, this platform 
+                        offers an opportunity to connect with the essence of Hajj and Umrah. It's not a 
+                        replacement for the physical journey, but a powerful tool for preparation, education, 
+                        and spiritual connection that I'm honored to be part of.
+                        <span class="quote-mark">"</span>
+                    </blockquote>
+                    <div class="ambassador-credentials">
+                        <div class="credential">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Grand Mufti of Zimbabwe</span>
+                        </div>
+                        <div class="credential">
+                            <i class="fas fa-globe"></i>
+                            <span>30M+ Social Media Followers</span>
+                        </div>
+                        <div class="credential">
+                            <i class="fas fa-microphone"></i>
+                            <span>World-Renowned Speaker</span>
+                        </div>
+                    </div>
+                    <button class="primary-btn ambassador-cta" onclick="openModal()">
+                        <span>Join Mufti Menk's Journey</span>
+                        <div class="btn-glow"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="ambassador-bg">
+            <div class="pattern-overlay"></div>
+        </div>
+    </section>
+
+    <!-- Journey Steps Section -->
+    <section class="journey-section" id="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Your Journey Awaits</span>
+                <h2 class="section-title">Three Steps to Your <span class="highlight">Spiritual Experience</span></h2>
+                <p class="section-subtitle">
+                    Getting started is simple. No payments, no credit cards, no hidden fees. 
+                    Just pure spiritual connection waiting for you.
+                </p>
+            </div>
+            <div class="journey-steps">
+                <div class="journey-line"></div>
+                <div class="step-card" data-step="1">
+                    <div class="step-number">01</div>
+                    <div class="step-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <h3>Create Your Account</h3>
+                    <p>Sign up in seconds with just your name and email. No credit card required, ever.</p>
+                </div>
+                <div class="step-card" data-step="2">
+                    <div class="step-number">02</div>
+                    <div class="step-icon">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <h3>Choose Your Path</h3>
+                    <p>Select between Hajj or Umrah experience, or explore both. Customize your journey preferences.</p>
+                </div>
+                <div class="step-card" data-step="3">
+                    <div class="step-number">03</div>
+                    <div class="step-icon">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <h3>Begin Your Journey</h3>
+                    <p>Immerse yourself in VR, learn from scholars, and experience the pilgrimage like never before.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Stories of Faith</span>
+                <h2 class="section-title">What Our <span class="highlight">Pilgrims Say</span></h2>
+            </div>
+            <div class="testimonials-slider">
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "As a revert to Islam, I was overwhelmed about learning the rituals of Hajj. 
+                        Pilgrim's Path made it accessible and beautiful. The VR experience brought tears to my eyes."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SA</div>
+                        <div class="author-info">
+                            <span class="author-name">Sarah Ahmed</span>
+                            <span class="author-location">London, UK</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "My elderly mother cannot travel for Hajj due to health reasons. This platform 
+                        allowed her to experience the sacred sites virtually. She prays for the team daily."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MR</div>
+                        <div class="author-info">
+                            <span class="author-name">Mohammed Rahman</span>
+                            <span class="author-location">Toronto, Canada</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "I used Pilgrim's Path to prepare for my actual Hajj trip. When I arrived in Makkah, 
+                        I already knew every step. It made my pilgrimage so much more meaningful."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">FK</div>
+                        <div class="author-info">
+                            <span class="author-name">Fatima Khan</span>
+                            <span class="author-location">Chicago, USA</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-bg">
+            <div class="cta-pattern"></div>
+            <div class="cta-glow"></div>
+        </div>
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Your Sacred Journey Awaits</h2>
+                <p class="cta-text">
+                    Join over 50,000 virtual pilgrims who have transformed their understanding of Hajj and Umrah. 
+                    <strong>Completely free</strong> — just create your account and begin.
+                </p>
+                <div class="cta-features">
+                    <div class="cta-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>No Payment Required</span>
+                    </div>
+                    <div class="cta-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Instant Access</span>
+                    </div>
+                    <div class="cta-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Cancel Anytime</span>
+                    </div>
+                </div>
+                <button class="primary-btn large" onclick="openModal()">
+                    <span>Create Free Account</span>
+                    <i class="fas fa-arrow-right"></i>
+                    <div class="btn-glow"></div>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="footer-logo">
+                        <img src="images/logo.png" alt="Pilgrim's Path" class="footer-logo-img">
+                    </a>
+                    <p class="footer-tagline">
+                        Bridging technology and spirituality to bring the sacred pilgrimage experience to Muslims worldwide.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Experience</h4>
+                    <ul>
+                        <li><a href="hajj-journey.html">Hajj Journey</a></li>
+                        <li><a href="umrah-journey.html">Umrah Journey</a></li>
+                        <li><a href="vr-features.html">VR Features</a></li>
+                        <li><a href="duas.html">Duas & Prayers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="duas.html">Duas & Prayers</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Support</a></li>
+                        <li><a href="enterprise.html">Enterprise</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="enterprise.html">Enterprise</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Pilgrim's Path. All rights reserved. Made with ❤️ for the Ummah.</p>
+                <div class="footer-badges">
+                    <span class="badge"><i class="fas fa-shield-halved"></i> Secure</span>
+                    <span class="badge"><i class="fas fa-lock"></i> Private</span>
+                    <span class="badge"><i class="fas fa-heart"></i> Free Forever</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Registration Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-backdrop" onclick="closeModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-header">
+                <div class="modal-icon">
+                    <span>☪</span>
+                </div>
+                <h2>Begin Your Sacred Journey</h2>
+                <p>Create your free account and step into the world of virtual pilgrimage</p>
+            </div>
+            <form class="registration-form" id="registrationForm" onsubmit="handleRegistration(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" placeholder="Enter your first name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" placeholder="Enter your last name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <select id="country" name="country" required>
+                        <option value="">Select your country</option>
+                        <option value="US">United States</option>
+                        <option value="UK">United Kingdom</option>
+                        <option value="CA">Canada</option>
+                        <option value="AU">Australia</option>
+                        <option value="AE">United Arab Emirates</option>
+                        <option value="SA">Saudi Arabia</option>
+                        <option value="MY">Malaysia</option>
+                        <option value="ID">Indonesia</option>
+                        <option value="PK">Pakistan</option>
+                        <option value="IN">India</option>
+                        <option value="BD">Bangladesh</option>
+                        <option value="EG">Egypt</option>
+                        <option value="TR">Turkey</option>
+                        <option value="NG">Nigeria</option>
+                        <option value="ZA">South Africa</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="experience">Experience Level</label>
+                    <select id="experience" name="experience" required>
+                        <option value="">Select your experience</option>
+                        <option value="never">Never performed Hajj/Umrah</option>
+                        <option value="preparing">Preparing for first pilgrimage</option>
+                        <option value="performed">Performed Hajj/Umrah before</option>
+                        <option value="multiple">Multiple pilgrimages completed</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="password">Create Password</label>
+                    <div class="password-input">
+                        <input type="password" id="password" name="password" placeholder="Create a secure password" required minlength="8">
+                        <button type="button" class="toggle-password" onclick="togglePassword()">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-checkbox">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                </div>
+                <button type="submit" class="submit-btn">
+                    <span>Create Free Account</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+            <div class="modal-footer">
+                <p>Already have an account? <a href="#">Sign In</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-backdrop" onclick="closeSuccessModal()"></div>
+        <div class="modal-content success-content">
+            <div class="success-animation">
+                <div class="success-circle">
+                    <i class="fas fa-check"></i>
+                </div>
+            </div>
+            <h2>Welcome to Pilgrim's Path!</h2>
+            <p>Your account has been created successfully. Check your email for login details and begin your sacred journey.</p>
+            <button class="primary-btn" onclick="window.location.href='dashboard.html'">
+                <span>Go to Dashboard</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Tawk.to Chat Widget -->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/YOUR_TAWK_PROPERTY_ID/default';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>

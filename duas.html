@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#C9A227">
+    <meta name="description" content="Essential duas and prayers for Hajj and Umrah pilgrimage.">
+    <title>Duas & Prayers | Pilgrim's Path</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .duas-section {
+            padding: 80px 0;
+        }
+        .duas-intro {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 60px;
+        }
+        .duas-intro p {
+            color: var(--warm-gray);
+            line-height: 1.8;
+        }
+        .duas-categories {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+        .category-btn {
+            padding: 12px 25px;
+            background: var(--soft-white);
+            border: 1px solid var(--primary-gold-light);
+            border-radius: 50px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            color: var(--deep-brown);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .category-btn:hover,
+        .category-btn.active {
+            background: var(--primary-gold);
+            color: white;
+            border-color: var(--primary-gold);
+        }
+        .dua-card {
+            background: var(--soft-white);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 30px;
+            border: 1px solid var(--primary-gold-light);
+            transition: all 0.3s ease;
+        }
+        .dua-card:hover {
+            box-shadow: 0 15px 40px rgba(201, 162, 39, 0.12);
+        }
+        .dua-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .dua-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--deep-brown);
+        }
+        .dua-occasion {
+            background: var(--primary-gold-light);
+            color: var(--primary-gold-dark);
+            padding: 6px 15px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .arabic-text-large {
+            font-family: 'Amiri', serif;
+            font-size: 2rem;
+            line-height: 2;
+            color: var(--deep-brown);
+            text-align: right;
+            direction: rtl;
+            background: linear-gradient(135deg, var(--warm-cream) 0%, var(--pearl) 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid var(--primary-gold-light);
+        }
+        .transliteration {
+            font-style: italic;
+            color: var(--primary-gold-dark);
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(201, 162, 39, 0.08);
+            border-radius: 10px;
+            border-left: 3px solid var(--primary-gold);
+        }
+        .translation {
+            color: var(--warm-gray);
+            line-height: 1.8;
+            padding: 15px;
+            background: var(--pearl);
+            border-radius: 10px;
+        }
+        .translation strong {
+            color: var(--deep-brown);
+        }
+        .dua-footer {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--primary-gold-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .dua-source {
+            color: var(--warm-gray);
+            font-size: 0.9rem;
+        }
+        .dua-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .action-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--primary-gold-light);
+            background: white;
+            color: var(--primary-gold);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .action-btn:hover {
+            background: var(--primary-gold);
+            color: white;
+        }
+        .featured-dua {
+            background: linear-gradient(135deg, var(--primary-gold-light) 0%, var(--warm-cream) 100%);
+            border: 2px solid var(--primary-gold);
+        }
+        .featured-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--primary-gold);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+        }
+        @media (max-width: 768px) {
+            .arabic-text-large {
+                font-size: 1.5rem;
+                padding: 20px;
+            }
+            .dua-card {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Pilgrim's Path" class="logo-img">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="hajj-journey.html">Hajj</a></li>
+                <li><a href="umrah-journey.html">Umrah</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+            <button class="cta-btn nav-cta" onclick="window.location.href='index.html'">
+                <span>Start Free Journey</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="page-hero-bg"></div>
+        <div class="container">
+            <div class="page-hero-content">
+                <span class="section-tag">Sacred Supplications</span>
+                <h1 class="page-title">Duas & <span class="highlight">Prayers</span></h1>
+                <p class="page-subtitle">Essential supplications for your Hajj and Umrah journey, with Arabic text, transliteration, and translation.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Duas Section -->
+    <section class="duas-section">
+        <div class="container">
+            <div class="duas-intro">
+                <p>Dua (supplication) is the essence of worship. During Hajj and Umrah, there are special occasions when duas are particularly accepted. Learn these sacred prayers to enhance your spiritual journey.</p>
+            </div>
+
+            <div class="duas-categories">
+                <button class="category-btn active" data-category="all">All Duas</button>
+                <button class="category-btn" data-category="talbiyah">Talbiyah</button>
+                <button class="category-btn" data-category="tawaf">Tawaf</button>
+                <button class="category-btn" data-category="sai">Sa'i</button>
+                <button class="category-btn" data-category="arafah">Arafah</button>
+                <button class="category-btn" data-category="general">General</button>
+            </div>
+
+            <!-- Talbiyah -->
+            <div class="dua-card featured-dua" data-category="talbiyah">
+                <div class="featured-badge">
+                    <i class="fas fa-star"></i> Essential
+                </div>
+                <div class="dua-header">
+                    <h3 class="dua-title">The Talbiyah</h3>
+                    <span class="dua-occasion">Throughout Hajj & Umrah</span>
+                </div>
+                <div class="arabic-text-large">
+                    لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لَا شَرِيكَ لَكَ
+                </div>
+                <div class="transliteration">
+                    <strong>Transliteration:</strong> Labbayk Allāhumma labbayk, labbayk lā sharīka laka labbayk, inna al-ḥamda wan-ni'mata laka wal-mulk, lā sharīka lak
+                </div>
+                <div class="translation">
+                    <strong>Translation:</strong> "Here I am, O Allah, here I am. Here I am, You have no partner, here I am. Verily all praise and blessings are Yours, and all sovereignty. You have no partner."
+                </div>
+                <div class="dua-footer">
+                    <span class="dua-source"><i class="fas fa-book"></i> Sahih al-Bukhari</span>
+                    <div class="dua-actions">
+                        <button class="action-btn" title="Copy"><i class="fas fa-copy"></i></button>
+                        <button class="action-btn" title="Bookmark"><i class="fas fa-bookmark"></i></button>
+                        <button class="action-btn" title="Share"><i class="fas fa-share-alt"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- At Black Stone -->
+            <div class="dua-card" data-category="tawaf">
+                <div class="dua-header">
+                    <h3 class="dua-title">At the Black Stone</h3>
+                    <span class="dua-occasion">Beginning of Tawaf</span>
+                </div>
+                <div class="arabic-text-large">
+                    بِسْمِ اللهِ، اللهُ أَكْبَرُ
+                </div>
+                <div class="transliteration">
+                    <strong>Transliteration:</strong> Bismillāh, Allāhu Akbar
+                </div>
+                <div class="translation">
+                    <strong>Translation:</strong> "In the name of Allah, Allah is the Greatest."
+                </div>
+                <div class="dua-footer">
+                    <span class="dua-source"><i class="fas fa-book"></i> Sunnah of the Prophet ﷺ</span>
+                    <div class="dua-actions">
+                        <button class="action-btn" title="Copy"><i class="fas fa-copy"></i></button>
+                        <button class="action-btn" title="Bookmark"><i class="fas fa-bookmark"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Between Rukn Yamani and Black Stone -->
+            <div class="dua-card" data-category="tawaf">
+                <div class="dua-header">
+                    <h3 class="dua-title">Between Rukn Yamani and Black Stone</h3>
+                    <span class="dua-occasion">During Each Circuit</span>
+                </div>
+                <div class="arabic-text-large">
+                    رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ
+                </div>
+                <div class="transliteration">
+                    <strong>Transliteration:</strong> Rabbanā ātinā fid-dunyā ḥasanatan wa fil-ākhirati ḥasanatan wa qinā 'adhāban-nār
+                </div>
+                <div class="translation">
+                    <strong>Translation:</strong> "Our Lord, give us good in this world and good in the Hereafter, and protect us from the punishment of the Fire."
+                </div>
+                <div class="dua-footer">
+                    <span class="dua-source"><i class="fas fa-book"></i> Quran 2:201</span>
+                    <div class="dua-actions">
+                        <button class="action-btn" title="Copy"><i class="fas fa-copy"></i></button>
+                        <button class="action-btn" title="Bookmark"><i class="fas fa-bookmark"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upon Safa -->
+            <div class="dua-card" data-category="sai">
+                <div class="dua-header">
+                    <h3 class="dua-title">Upon Reaching Safa</h3>
+                    <span class="dua-occasion">Sa'i</span>
+                </div>
+                <div class="arabic-text-large">
+                    إِنَّ الصَّفَا وَالْمَرْوَةَ مِنْ شَعَائِرِ اللهِ
+                </div>
+                <div class="transliteration">
+                    <strong>Transliteration:</strong> Innaṣ-ṣafā wal-marwata min sha'ā'irillāh
+                </div>
+                <div class="translation">
+                    <strong>Translation:</strong> "Indeed, Safa and Marwa are among the symbols of Allah."
+                </div>
+                <div class="dua-footer">
+                    <span class="dua-source"><i class="fas fa-book"></i> Quran 2:158</span>
+                    <div class="dua-actions">
+                        <button class="action-btn" title="Copy"><i class="fas fa-copy"></i></button>
+                        <button class="action-btn" title="Bookmark"><i class="fas fa-bookmark"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day of Arafah -->
+            <div class="dua-card featured-dua" data-category="arafah">
+                <div class="featured-badge">
+                    <i class="fas fa-star"></i> Most Important
+                </div>
+                <div class="dua-header">
+                    <h3 class="dua-title">Best Dua of Arafah</h3>
+                    <span class="dua-occasion">Day of Arafah</span>
+                </div>
+                <div class="arabic-text-large">
+                    لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ
+                </div>
+                <div class="transliteration">
+                    <strong>Transliteration:</strong> Lā ilāha illallāhu waḥdahu lā sharīka lah, lahul-mulku wa lahul-ḥamdu wa huwa 'alā kulli shay'in qadīr
+                </div>
+                <div class="translation">
+                    <strong>Translation:</strong> "There is no god but Allah alone, with no partner. His is the dominion and His is the praise, and He has power over all things."
+                </div>
+                <div class="dua-footer">
+                    <span class="dua-source"><i class="fas fa-book"></i> Tirmidhi</span>
+                    <div class="dua-actions">
+                        <button class="action-btn" title="Copy"><i class="fas fa-copy"></i></button>
+                        <button class="action-btn" title="Bookmark"><i class="fas fa-bookmark"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stoning -->
+            <div class="dua-card" data-category="general">
+                <div class="dua-header">
+                    <h3 class="dua-title">During Stoning (Rami)</h3>
+                    <span class="dua-occasion">At Each Pebble</span>
+                </div>
+                <div class="arabic-text-large">
+                    اللهُ أَكْبَرُ
+                </div>
+                <div class="transliteration">
+                    <strong>Transliteration:</strong> Allāhu Akbar
+                </div>
+                <div class="translation">
+                    <strong>Translation:</strong> "Allah is the Greatest." (Said with each pebble thrown)
+                </div>
+                <div class="dua-footer">
+                    <span class="dua-source"><i class="fas fa-book"></i> Sunnah of the Prophet ﷺ</span>
+                    <div class="dua-actions">
+                        <button class="action-btn" title="Copy"><i class="fas fa-copy"></i></button>
+                        <button class="action-btn" title="Bookmark"><i class="fas fa-bookmark"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forgiveness -->
+            <div class="dua-card" data-category="general">
+                <div class="dua-header">
+                    <h3 class="dua-title">Seeking Forgiveness</h3>
+                    <span class="dua-occasion">Anytime</span>
+                </div>
+                <div class="arabic-text-large">
+                    اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي
+                </div>
+                <div class="transliteration">
+                    <strong>Transliteration:</strong> Allāhumma innaka 'afuwwun tuḥibbul-'afwa fa'fu 'annī
+                </div>
+                <div class="translation">
+                    <strong>Translation:</strong> "O Allah, You are Forgiving and love forgiveness, so forgive me."
+                </div>
+                <div class="dua-footer">
+                    <span class="dua-source"><i class="fas fa-book"></i> Tirmidhi</span>
+                    <div class="dua-actions">
+                        <button class="action-btn" title="Copy"><i class="fas fa-copy"></i></button>
+                        <button class="action-btn" title="Bookmark"><i class="fas fa-bookmark"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Drinking Zamzam -->
+            <div class="dua-card" data-category="general">
+                <div class="dua-header">
+                    <h3 class="dua-title">When Drinking Zamzam</h3>
+                    <span class="dua-occasion">At Zamzam Well</span>
+                </div>
+                <div class="arabic-text-large">
+                    اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا وَاسِعًا، وَشِفَاءً مِنْ كُلِّ دَاءٍ
+                </div>
+                <div class="transliteration">
+                    <strong>Transliteration:</strong> Allāhumma innī as'aluka 'ilman nāfi'an, wa rizqan wāsi'an, wa shifā'an min kulli dā'
+                </div>
+                <div class="translation">
+                    <strong>Translation:</strong> "O Allah, I ask You for beneficial knowledge, plentiful provision, and healing from every disease."
+                </div>
+                <div class="dua-footer">
+                    <span class="dua-source"><i class="fas fa-book"></i> Reported Dua</span>
+                    <div class="dua-actions">
+                        <button class="action-btn" title="Copy"><i class="fas fa-copy"></i></button>
+                        <button class="action-btn" title="Bookmark"><i class="fas fa-bookmark"></i></button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-bg">
+            <div class="cta-pattern"></div>
+            <div class="cta-glow"></div>
+        </div>
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Learn Duas in VR</h2>
+                <p class="cta-text">
+                    Practice these supplications in context with our immersive VR experience. 
+                    Hear correct pronunciation and learn when to recite each dua.
+                </p>
+                <a href="index.html" class="primary-btn large">
+                    <span>Start Learning</span>
+                    <i class="fas fa-arrow-right"></i>
+                    <div class="btn-glow"></div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="footer-logo">
+                        <img src="images/logo.png" alt="Pilgrim's Path" class="footer-logo-img">
+                    </a>
+                    <p class="footer-tagline">Bridging technology and spirituality to bring the sacred pilgrimage experience to Muslims worldwide.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Experience</h4>
+                    <ul>
+                        <li><a href="hajj-journey.html">Hajj Journey</a></li>
+                        <li><a href="umrah-journey.html">Umrah Journey</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="duas.html">Duas & Prayers</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Pilgrim's Path. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Tawk.to Chat Widget -->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/YOUR_TAWK_PROPERTY_ID/default';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+
+    <script src="script.js"></script>
+    <script>
+        // Category filtering
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const category = this.dataset.category;
+                
+                // Update active button
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Filter cards
+                document.querySelectorAll('.dua-card').forEach(card => {
+                    if (category === 'all' || card.dataset.category === category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Copy functionality
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            if (btn.title === 'Copy') {
+                btn.addEventListener('click', function() {
+                    const card = this.closest('.dua-card');
+                    const arabic = card.querySelector('.arabic-text-large').textContent;
+                    navigator.clipboard.writeText(arabic);
+                    
+                    const icon = this.querySelector('i');
+                    icon.className = 'fas fa-check';
+                    setTimeout(() => {
+                        icon.className = 'fas fa-copy';
+                    }, 1500);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
