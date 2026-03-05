@@ -140,12 +140,57 @@
             .features-grid {
                 grid-template-columns: 1fr;
             }
+            .features-hero {
+                padding: 140px 20px 60px;
+            }
+            .features-hero h1 {
+                font-size: 2rem;
+            }
             .comparison-table {
                 font-size: 0.85rem;
             }
             .comparison-table th,
             .comparison-table td {
                 padding: 12px 8px;
+            }
+            .tech-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 480px) {
+            .features-hero {
+                padding: 120px 16px 50px;
+            }
+            .features-hero h1 {
+                font-size: 1.6rem;
+            }
+            .features-hero p {
+                font-size: 0.9rem;
+            }
+            .feature-card-large {
+                border-radius: 16px;
+            }
+            .feature-visual {
+                height: 150px;
+            }
+            .feature-content {
+                padding: 20px;
+            }
+            .feature-content h3 {
+                font-size: 1.1rem;
+            }
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+            .tech-card {
+                padding: 20px;
+            }
+            .comparison-table {
+                font-size: 0.75rem;
+            }
+            .comparison-table th,
+            .comparison-table td {
+                padding: 10px 6px;
             }
         }
     </style>

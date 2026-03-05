@@ -46,6 +46,7 @@
 html {
     scroll-behavior: smooth;
     font-size: 16px;
+    overflow-x: hidden;
 }
 
 body {
@@ -2402,6 +2403,621 @@ body {
 }
 
 /* ===================================
+   SUBPAGE SHARED STYLES
+   =================================== */
+
+/* --- Page Hero Banner (all subpages) --- */
+.page-hero {
+    position: relative;
+    padding: 160px 20px 80px;
+    text-align: center;
+    background: linear-gradient(135deg, var(--pearl) 0%, var(--primary-gold-light) 50%, var(--warm-cream) 100%);
+    overflow: hidden;
+}
+
+.page-hero-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 40%, rgba(201,162,39,0.12) 0%, transparent 60%),
+                radial-gradient(circle at 70% 60%, rgba(201,162,39,0.08) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.page-hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: var(--deep-night);
+    margin-bottom: 15px;
+    line-height: 1.2;
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* --- Content Sections --- */
+.content-section {
+    padding: 80px 20px;
+}
+
+.content-section.alt-bg {
+    background: var(--pearl);
+}
+
+/* --- Intro Block --- */
+.intro-block {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.intro-block h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--deep-night);
+    margin-bottom: 20px;
+}
+
+.intro-block p {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    font-size: 1.05rem;
+    margin-bottom: 15px;
+}
+
+.intro-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-gold-light), rgba(201,162,39,0.2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 25px;
+    font-size: 2rem;
+    color: var(--primary-gold);
+}
+
+/* --- Verse / Quote Block --- */
+.verse-block {
+    background: var(--soft-white);
+    border-left: 4px solid var(--primary-gold);
+    border-radius: 0 16px 16px 0;
+    padding: 30px;
+    margin: 30px 0;
+    text-align: left;
+}
+
+.arabic-text {
+    font-family: 'Amiri', serif;
+    font-size: 1.6rem;
+    color: var(--primary-gold-dark);
+    line-height: 2;
+    margin-bottom: 12px;
+    direction: rtl;
+    text-align: right;
+}
+
+.translation {
+    font-style: italic;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 8px;
+}
+
+.reference {
+    font-size: 0.85rem;
+    color: var(--primary-gold);
+    font-weight: 600;
+}
+
+/* --- Steps / Ritual Section --- */
+.steps-section {
+    padding: 80px 20px;
+    background: var(--pearl);
+}
+
+/* --- Ritual Timeline --- */
+.ritual-timeline {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.ritual-timeline::before {
+    content: '';
+    position: absolute;
+    left: 30px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--primary-gold-light), var(--primary-gold), var(--primary-gold-light));
+    border-radius: 3px;
+}
+
+.timeline-day {
+    margin: 40px 0 20px;
+    padding-left: 70px;
+}
+
+.day-marker {
+    display: inline-flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+    color: white;
+    padding: 12px 24px;
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(201,162,39,0.3);
+}
+
+.day-number {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.day-date {
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+/* --- Ritual Card --- */
+.ritual-card {
+    position: relative;
+    background: var(--soft-white);
+    border-radius: 20px;
+    padding: 30px 30px 30px 90px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(201,162,39,0.1);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+.ritual-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(201,162,39,0.15);
+}
+
+.ritual-card.featured {
+    border-color: var(--primary-gold);
+    box-shadow: 0 4px 20px rgba(201,162,39,0.15);
+}
+
+.ritual-card.final {
+    background: linear-gradient(135deg, var(--pearl), var(--primary-gold-light));
+    border-color: var(--primary-gold);
+}
+
+.ritual-number {
+    position: absolute;
+    left: 15px;
+    top: 30px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    box-shadow: 0 3px 12px rgba(201,162,39,0.3);
+}
+
+.ritual-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--primary-gold-light), rgba(201,162,39,0.15));
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    color: var(--primary-gold);
+}
+
+.ritual-content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--deep-night);
+    margin-bottom: 10px;
+}
+
+.ritual-content p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+/* --- Dua Box --- */
+.dua-box {
+    background: rgba(201,162,39,0.06);
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 15px;
+    border: 1px solid rgba(201,162,39,0.1);
+}
+
+.dua-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary-gold);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.arabic-small {
+    font-family: 'Amiri', serif;
+    font-size: 1.2rem;
+    color: var(--primary-gold-dark);
+    direction: rtl;
+    text-align: right;
+    line-height: 1.8;
+    margin-bottom: 8px;
+}
+
+.translation-small {
+    font-style: italic;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* --- Highlight / Info Boxes --- */
+.highlight-box {
+    background: linear-gradient(135deg, var(--primary-gold-light), rgba(201,162,39,0.1));
+    border-radius: 16px;
+    padding: 25px;
+    margin: 20px 0;
+    border-left: 4px solid var(--primary-gold);
+}
+
+.highlight-box h4 {
+    font-family: 'Playfair Display', serif;
+    color: var(--deep-night);
+    margin-bottom: 10px;
+}
+
+.highlight-box p,
+.highlight-box li {
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+.info-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary-gold-light);
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    color: var(--primary-gold-dark);
+    font-weight: 600;
+    margin-top: 12px;
+}
+
+.info-badge i {
+    color: var(--primary-gold);
+}
+
+/* --- Restrictions Box (Umrah) --- */
+.restrictions-box {
+    background: var(--soft-white);
+    border-radius: 16px;
+    padding: 30px;
+    margin: 30px 0;
+    border: 1px solid rgba(201,162,39,0.1);
+}
+
+.restrictions-box h3 {
+    font-family: 'Playfair Display', serif;
+    color: var(--deep-night);
+    margin-bottom: 15px;
+}
+
+.restrictions-box ul {
+    list-style: none;
+    padding: 0;
+}
+
+.restrictions-box li {
+    padding: 8px 0;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.restrictions-box li::before {
+    content: '✗';
+    color: #c0392b;
+    font-weight: 700;
+}
+
+/* --- Benefits Grid (Umrah) --- */
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    margin-top: 30px;
+}
+
+.benefit-card {
+    background: var(--soft-white);
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    border: 1px solid rgba(201,162,39,0.1);
+    transition: all 0.3s ease;
+}
+
+.benefit-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(201,162,39,0.12);
+}
+
+.benefit-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-gold-light), rgba(201,162,39,0.2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    font-size: 1.4rem;
+    color: var(--primary-gold);
+}
+
+.benefit-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--deep-night);
+    margin-bottom: 10px;
+}
+
+.benefit-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* --- Acts Grid (Umrah) --- */
+.acts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 25px;
+}
+
+.act-card {
+    background: var(--soft-white);
+    border-radius: 14px;
+    padding: 24px;
+    text-align: center;
+    border: 1px solid rgba(201,162,39,0.1);
+    transition: all 0.3s ease;
+}
+
+.act-card:hover {
+    box-shadow: 0 5px 20px rgba(201,162,39,0.1);
+}
+
+.act-card i {
+    font-size: 1.5rem;
+    color: var(--primary-gold);
+    margin-bottom: 12px;
+    display: block;
+}
+
+.act-card h4 {
+    font-size: 1rem;
+    color: var(--deep-night);
+    margin-bottom: 8px;
+}
+
+.act-card p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* --- About Page --- */
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.about-content h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--deep-night);
+    margin-bottom: 20px;
+}
+
+.about-content p {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 15px;
+}
+
+.about-image .image-frame {
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+
+.about-image .image-frame img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    max-width: 1100px;
+    margin: 40px auto 0;
+}
+
+.value-card {
+    background: var(--soft-white);
+    border-radius: 20px;
+    padding: 35px 30px;
+    text-align: center;
+    border: 1px solid rgba(201,162,39,0.1);
+    transition: all 0.3s ease;
+}
+
+.value-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 35px rgba(201,162,39,0.12);
+}
+
+.value-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-gold-light), rgba(201,162,39,0.2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 1.6rem;
+    color: var(--primary-gold);
+}
+
+.value-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--deep-night);
+    margin-bottom: 12px;
+}
+
+.value-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.7;
+}
+
+/* --- Stats Section (About) --- */
+.stats-section {
+    padding: 60px 20px;
+    background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.stat-card {
+    color: white;
+}
+
+.stat-card .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.stat-card .stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* --- Team Grid (About) --- */
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 30px;
+    max-width: 1100px;
+    margin: 40px auto 0;
+}
+
+.team-card {
+    background: var(--soft-white);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(201,162,39,0.1);
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.team-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 35px rgba(201,162,39,0.12);
+}
+
+.team-image {
+    height: 200px;
+    background: linear-gradient(135deg, var(--primary-gold-light), var(--warm-cream));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: var(--primary-gold);
+}
+
+.team-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--deep-night);
+    padding: 20px 20px 5px;
+}
+
+.team-role {
+    font-size: 0.85rem;
+    color: var(--primary-gold);
+    font-weight: 500;
+    padding: 0 20px;
+}
+
+.team-card p:last-child {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    padding: 10px 20px 25px;
+    line-height: 1.6;
+}
+
+/* --- Ambassador Feature (About page variation) --- */
+.ambassador-feature {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: center;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* ===================================
    Responsive Design - Enhanced Mobile
    =================================== */
 
@@ -2772,6 +3388,108 @@ body {
     .testimonial-text {
         font-size: 0.95rem;
     }
+
+    /* --- Subpage Responsive (768px) --- */
+    .page-hero {
+        padding: 130px 20px 60px;
+    }
+
+    .page-title {
+        font-size: 2.2rem;
+    }
+
+    .page-subtitle {
+        font-size: 1rem;
+    }
+
+    .content-section {
+        padding: 60px 16px;
+    }
+
+    .intro-block h2 {
+        font-size: 1.6rem;
+    }
+
+    .intro-block p {
+        font-size: 0.95rem;
+    }
+
+    .arabic-text {
+        font-size: 1.3rem;
+    }
+
+    .verse-block {
+        padding: 20px;
+    }
+
+    .steps-section {
+        padding: 60px 16px;
+    }
+
+    .ritual-timeline::before {
+        left: 20px;
+    }
+
+    .ritual-card {
+        padding: 25px 20px 25px 65px;
+    }
+
+    .ritual-number {
+        left: 6px;
+        width: 36px;
+        height: 36px;
+        font-size: 0.8rem;
+    }
+
+    .ritual-content h3 {
+        font-size: 1.1rem;
+    }
+
+    .timeline-day {
+        padding-left: 55px;
+    }
+
+    .day-marker {
+        padding: 10px 18px;
+    }
+
+    .day-number {
+        font-size: 1rem;
+    }
+
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .ambassador-feature {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .values-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .team-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .benefits-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .acts-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
 }
 
 /* Mobile Portrait - Small Phones */
@@ -3113,6 +3831,159 @@ body {
     
     .success-content p {
         font-size: 0.9rem;
+    }
+
+    /* --- Subpage Responsive (480px) --- */
+    .page-hero {
+        padding: 120px 16px 50px;
+    }
+
+    .page-title {
+        font-size: 1.8rem;
+    }
+
+    .page-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .content-section {
+        padding: 50px 16px;
+    }
+
+    .intro-block h2 {
+        font-size: 1.4rem;
+    }
+
+    .intro-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+
+    .arabic-text {
+        font-size: 1.1rem;
+    }
+
+    .verse-block {
+        padding: 16px;
+        margin: 20px 0;
+    }
+
+    .steps-section {
+        padding: 50px 16px;
+    }
+
+    .ritual-timeline::before {
+        left: 16px;
+    }
+
+    .ritual-card {
+        padding: 20px 16px 20px 55px;
+        border-radius: 14px;
+    }
+
+    .ritual-number {
+        left: 3px;
+        width: 32px;
+        height: 32px;
+        font-size: 0.75rem;
+    }
+
+    .ritual-image {
+        width: 48px;
+        height: 48px;
+        font-size: 1.2rem;
+    }
+
+    .ritual-content h3 {
+        font-size: 1rem;
+    }
+
+    .ritual-content p {
+        font-size: 0.85rem;
+    }
+
+    .dua-box {
+        padding: 14px;
+    }
+
+    .arabic-small {
+        font-size: 1rem;
+    }
+
+    .translation-small {
+        font-size: 0.82rem;
+    }
+
+    .timeline-day {
+        padding-left: 45px;
+        margin: 30px 0 15px;
+    }
+
+    .day-marker {
+        padding: 8px 14px;
+    }
+
+    .day-number {
+        font-size: 0.9rem;
+    }
+
+    .day-date {
+        font-size: 0.7rem;
+    }
+
+    .about-grid {
+        gap: 25px;
+    }
+
+    .about-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .value-card {
+        padding: 25px 20px;
+    }
+
+    .value-icon {
+        width: 55px;
+        height: 55px;
+        font-size: 1.3rem;
+    }
+
+    .team-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .team-image {
+        height: 160px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stat-card .stat-number {
+        font-size: 2rem;
+    }
+
+    .acts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .benefits-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .benefit-card {
+        padding: 24px 20px;
+    }
+
+    .highlight-box {
+        padding: 18px;
+    }
+
+    .restrictions-box {
+        padding: 20px;
     }
 }
 
@@ -3639,5 +4510,62 @@ body {
     body {
         background: white;
         color: black;
+    }
+}
+
+/* ===================================
+   MOBILE OVERRIDES (must be last)
+   Ensures glossy styles don't break mobile
+   =================================== */
+@media (max-width: 768px) {
+    .nav-links,
+    .nav-cta {
+        display: none !important;
+    }
+
+    .hamburger {
+        display: flex !important;
+    }
+
+    html, body {
+        overflow-x: hidden;
+        max-width: 100vw;
+    }
+
+    .hero {
+        overflow: hidden;
+    }
+
+    .hero-visual {
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .orbit-ring {
+        display: none;
+    }
+
+    .experience-card:hover,
+    .step-card:hover,
+    .testimonial-card:hover {
+        transform: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-stats {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .hero-cta {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+        width: 100%;
+        justify-content: center;
     }
 }
