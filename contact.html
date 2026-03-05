@@ -216,7 +216,7 @@
                 <li><a href="about.html">About</a></li>
                 <li><a href="faq.html">FAQ</a></li>
             </ul>
-            <button class="cta-btn nav-cta" onclick="window.location.href='index.html'">
+            <button class="cta-btn nav-cta" onclick="window.location.href='login.html?tab=register'">
                 <span>Start Free Journey</span>
                 <i class="fas fa-arrow-right"></i>
             </button>
@@ -411,7 +411,10 @@
     })();
     </script>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
     <script src="script.js"></script>
+    <script>document.addEventListener("DOMContentLoaded", () => updateNavForAuth());</script>
     <script>
         // Contact Form Handling
         document.getElementById('contactForm').addEventListener('submit', function(e) {

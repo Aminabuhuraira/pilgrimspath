@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#C9A227">
+    <meta name="description" content="Sign in to your Pilgrim's Path account.">
+    <title>Login | Pilgrim's Path</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .auth-page {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 20px 60px;
+            background: linear-gradient(135deg, var(--pearl) 0%, var(--primary-gold-light) 50%, var(--warm-cream) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .auth-page::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(201,162,39,0.1) 0%, transparent 60%),
+                        radial-gradient(circle at 70% 60%, rgba(201,162,39,0.06) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .auth-card {
+            position: relative;
+            z-index: 1;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 460px;
+            border: 1px solid rgba(212,175,55,0.1);
+            box-shadow: 0 20px 80px rgba(0,0,0,0.08), 0 0 0 1px rgba(212,175,55,0.05);
+        }
+        .auth-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+        .auth-logo {
+            height: 50px;
+            margin-bottom: 20px;
+        }
+        .auth-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--deep-night);
+            margin-bottom: 8px;
+        }
+        .auth-header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Tabs */
+        .auth-tabs {
+            display: flex;
+            border-radius: 12px;
+            background: var(--pearl);
+            padding: 4px;
+            margin-bottom: 30px;
+        }
+        .auth-tab {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        .auth-tab.active {
+            background: white;
+            color: var(--primary-gold-dark);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+        /* Forms */
+        .auth-form {
+            display: none;
+        }
+        .auth-form.active {
+            display: block;
+        }
+        .auth-form .form-group {
+            margin-bottom: 20px;
+        }
+        .auth-form label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--deep-night);
+            margin-bottom: 6px;
+        }
+        .auth-form input,
+        .auth-form select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid rgba(201,162,39,0.2);
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            color: var(--deep-night);
+            background: white;
+            transition: all 0.3s ease;
+        }
+        .auth-form input:focus,
+        .auth-form select:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 0 4px rgba(212,175,55,0.08);
+        }
+        .auth-form input::placeholder {
+            color: #bbb;
+        }
+        .password-wrap {
+            position: relative;
+        }
+        .password-wrap input {
+            padding-right: 48px;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+        }
+        .form-options label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+        .form-options a {
+            color: var(--primary-gold);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .form-options a:hover {
+            text-decoration: underline;
+        }
+
+        /* Submit */
+        .auth-submit {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary-gold) 0%, var(--primary-gold-dark) 100%);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .auth-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(201,162,39,0.35);
+        }
+        .auth-submit:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Divider */
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 24px 0;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(201,162,39,0.15);
+        }
+
+        /* Google Button */
+        .google-btn {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid rgba(201,162,39,0.15);
+            border-radius: 12px;
+            background: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--deep-night);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .google-btn:hover {
+            background: var(--pearl);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+        .google-btn img {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Message */
+        .auth-message {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .auth-message.error {
+            display: block;
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+        .auth-message.success {
+            display: block;
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        /* Footer link */
+        .auth-footer {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .auth-footer a {
+            color: var(--primary-gold);
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .auth-page {
+                padding: 100px 16px 40px;
+            }
+            .auth-card {
+                padding: 35px 24px;
+                border-radius: 20px;
+            }
+            .auth-header h1 {
+                font-size: 1.5rem;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Reset modal */
+        .reset-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(44,24,16,0.5);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .reset-overlay.active {
+            display: flex;
+        }
+        .reset-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+        }
+        .reset-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        .reset-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        .reset-card input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid rgba(201,162,39,0.2);
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+        .reset-card input:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+        }
+        .reset-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .reset-actions button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .reset-cancel {
+            background: var(--pearl);
+            border: none;
+            color: var(--text-secondary);
+        }
+        .reset-send {
+            background: var(--primary-gold);
+            border: none;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Pilgrim's Path" class="logo-img">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="hajj-journey.html">Hajj</a></li>
+                <li><a href="umrah-journey.html">Umrah</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+            <button class="cta-btn nav-cta" onclick="window.location.href='index.html'">
+                <span>Start Free Journey</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="hajj-journey.html">Hajj Journey</a></li>
+            <li><a href="umrah-journey.html">Umrah Journey</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="index.html" class="cta-btn mobile-cta">Start Free Journey</a></li>
+        </ul>
+    </div>
+
+    <!-- Auth Page -->
+    <section class="auth-page">
+        <div class="auth-card">
+            <div class="auth-header">
+                <img src="images/logo.png" alt="Pilgrim's Path" class="auth-logo">
+                <h1 id="authTitle">Welcome Back</h1>
+                <p id="authSubtitle">Sign in to continue your sacred journey</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
+                <button class="auth-tab" onclick="switchAuthTab('register')">Create Account</button>
+            </div>
+
+            <!-- Error / Success Message -->
+            <div class="auth-message" id="authMessage"></div>
+
+            <!-- Login Form -->
+            <form class="auth-form active" id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <div class="password-wrap">
+                        <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                        <button type="button" class="password-toggle" onclick="togglePass('loginPassword', this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-options">
+                    <label>
+                        <input type="checkbox" id="rememberMe"> Remember me
+                    </label>
+                    <a href="#" onclick="openResetModal(); return false;">Forgot password?</a>
+                </div>
+                <button type="submit" class="auth-submit" id="loginBtn">
+                    <span>Sign In</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+
+                <div class="auth-divider">or</div>
+
+                <button type="button" class="google-btn" onclick="handleGoogleLogin()">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
+                    Continue with Google
+                </button>
+            </form>
+
+            <!-- Register Form -->
+            <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="regFirstName">First Name</label>
+                        <input type="text" id="regFirstName" placeholder="First name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regLastName">Last Name</label>
+                        <input type="text" id="regLastName" placeholder="Last name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">Email Address</label>
+                    <input type="email" id="regEmail" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="regCountry">Country</label>
+                    <select id="regCountry" required>
+                        <option value="">Select your country</option>
+                        <option value="US">United States</option>
+                        <option value="UK">United Kingdom</option>
+                        <option value="CA">Canada</option>
+                        <option value="AU">Australia</option>
+                        <option value="AE">United Arab Emirates</option>
+                        <option value="SA">Saudi Arabia</option>
+                        <option value="MY">Malaysia</option>
+                        <option value="ID">Indonesia</option>
+                        <option value="PK">Pakistan</option>
+                        <option value="IN">India</option>
+                        <option value="BD">Bangladesh</option>
+                        <option value="EG">Egypt</option>
+                        <option value="TR">Turkey</option>
+                        <option value="NG">Nigeria</option>
+                        <option value="ZA">South Africa</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="regExperience">Experience Level</label>
+                    <select id="regExperience" required>
+                        <option value="">Select your experience</option>
+                        <option value="never">Never performed Hajj/Umrah</option>
+                        <option value="preparing">Preparing for first pilgrimage</option>
+                        <option value="performed">Performed Hajj/Umrah before</option>
+                        <option value="multiple">Multiple pilgrimages completed</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Create Password</label>
+                    <div class="password-wrap">
+                        <input type="password" id="regPassword" placeholder="Min 8 characters" required minlength="8">
+                        <button type="button" class="password-toggle" onclick="togglePass('regPassword', this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 8px;">
+                    <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="agreeTerms" required style="width: auto; margin-top: 4px;">
+                        <span style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 400;">
+                            I agree to the <a href="terms.html" style="color: var(--primary-gold);">Terms of Service</a> and <a href="privacy.html" style="color: var(--primary-gold);">Privacy Policy</a>
+                        </span>
+                    </label>
+                </div>
+                <button type="submit" class="auth-submit" id="registerBtn">
+                    <span>Create Free Account</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+
+                <div class="auth-divider">or</div>
+
+                <button type="button" class="google-btn" onclick="handleGoogleLogin()">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
+                    Sign up with Google
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Password Reset Modal -->
+    <div class="reset-overlay" id="resetOverlay">
+        <div class="reset-card">
+            <h3>Reset Password</h3>
+            <p>Enter your email and we'll send you a link to reset your password.</p>
+            <div class="auth-message" id="resetMessage"></div>
+            <input type="email" id="resetEmail" placeholder="your@email.com">
+            <div class="reset-actions">
+                <button class="reset-cancel" onclick="closeResetModal()">Cancel</button>
+                <button class="reset-send" onclick="handleResetPassword()">Send Link</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supabase JS SDK (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
+
+    <script>
+    // ===== Tab Switching =====
+    function switchAuthTab(tab) {
+        document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+        clearMessage();
+
+        if (tab === 'login') {
+            document.querySelectorAll('.auth-tab')[0].classList.add('active');
+            document.getElementById('loginForm').classList.add('active');
+            document.getElementById('authTitle').textContent = 'Welcome Back';
+            document.getElementById('authSubtitle').textContent = 'Sign in to continue your sacred journey';
+        } else {
+            document.querySelectorAll('.auth-tab')[1].classList.add('active');
+            document.getElementById('registerForm').classList.add('active');
+            document.getElementById('authTitle').textContent = 'Begin Your Journey';
+            document.getElementById('authSubtitle').textContent = 'Create your free account to explore Hajj & Umrah';
+        }
+    }
+
+    // ===== Messages =====
+    function showMessage(text, type = 'error') {
+        const msg = document.getElementById('authMessage');
+        msg.textContent = text;
+        msg.className = 'auth-message ' + type;
+    }
+
+    function clearMessage() {
+        const msg = document.getElementById('authMessage');
+        msg.className = 'auth-message';
+        msg.textContent = '';
+    }
+
+    // ===== Toggle Password =====
+    function togglePass(inputId, btn) {
+        const input = document.getElementById(inputId);
+        const icon = btn.querySelector('i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+    }
+
+    // ===== Login =====
+    async function handleLogin(e) {
+        e.preventDefault();
+        const btn = document.getElementById('loginBtn');
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        
+        clearMessage();
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+
+        try {
+            await signIn(email, password);
+            showMessage('Login successful! Redirecting...', 'success');
+            
+            const redirect = sessionStorage.getItem('redirectAfterLogin') || 'dashboard.html';
+            sessionStorage.removeItem('redirectAfterLogin');
+            setTimeout(() => { window.location.href = redirect; }, 800);
+        } catch (err) {
+            showMessage(err.message || 'Invalid email or password.');
+            btn.disabled = false;
+            btn.innerHTML = '<span>Sign In</span><i class="fas fa-arrow-right"></i>';
+        }
+    }
+
+    // ===== Register =====
+    async function handleRegister(e) {
+        e.preventDefault();
+        const btn = document.getElementById('registerBtn');
+        
+        const email = document.getElementById('regEmail').value.trim();
+        const password = document.getElementById('regPassword').value;
+        const firstName = document.getElementById('regFirstName').value.trim();
+        const lastName = document.getElementById('regLastName').value.trim();
+        const country = document.getElementById('regCountry').value;
+        const experience = document.getElementById('regExperience').value;
+        
+        clearMessage();
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating account...';
+
+        try {
+            await signUp(email, password, { firstName, lastName, country, experience });
+            showMessage('Account created! Check your email to confirm, then sign in.', 'success');
+            
+            // Switch to login tab after short delay
+            setTimeout(() => {
+                switchAuthTab('login');
+                document.getElementById('loginEmail').value = email;
+            }, 2000);
+        } catch (err) {
+            showMessage(err.message || 'Could not create account. Try again.');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<span>Create Free Account</span><i class="fas fa-arrow-right"></i>';
+        }
+    }
+
+    // ===== Google =====
+    async function handleGoogleLogin() {
+        try {
+            await signInWithGoogle();
+        } catch (err) {
+            showMessage(err.message || 'Google sign-in failed.');
+        }
+    }
+
+    // ===== Password Reset =====
+    function openResetModal() {
+        document.getElementById('resetOverlay').classList.add('active');
+    }
+
+    function closeResetModal() {
+        document.getElementById('resetOverlay').classList.remove('active');
+        document.getElementById('resetMessage').className = 'auth-message';
+    }
+
+    async function handleResetPassword() {
+        const email = document.getElementById('resetEmail').value.trim();
+        const msg = document.getElementById('resetMessage');
+
+        if (!email) {
+            msg.textContent = 'Please enter your email.';
+            msg.className = 'auth-message error';
+            return;
+        }
+
+        try {
+            await resetPassword(email);
+            msg.textContent = 'Reset link sent! Check your inbox.';
+            msg.className = 'auth-message success';
+            setTimeout(closeResetModal, 2500);
+        } catch (err) {
+            msg.textContent = err.message || 'Could not send reset email.';
+            msg.className = 'auth-message error';
+        }
+    }
+
+    // ===== On Load — redirect if already logged in =====
+    document.addEventListener('DOMContentLoaded', () => {
+        redirectIfLoggedIn();
+    });
+
+    // ===== Mobile Menu (simplified for this page) =====
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    let menuOpen = false;
+
+    hamburger.addEventListener('click', () => {
+        menuOpen = !menuOpen;
+        hamburger.classList.toggle('active');
+        mobileMenu.classList.toggle('active');
+        document.body.style.overflow = menuOpen ? 'hidden' : '';
+        const spans = hamburger.querySelectorAll('span');
+        if (menuOpen) {
+            spans[0].style.transform = 'rotate(45deg) translate(6px, 6px)';
+            spans[1].style.opacity = '0';
+            spans[2].style.transform = 'rotate(-45deg) translate(6px, -6px)';
+        } else {
+            spans[0].style.transform = '';
+            spans[1].style.opacity = '1';
+            spans[2].style.transform = '';
+        }
+    });
+
+    // Check for tab param (?tab=register)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('tab') === 'register') {
+        switchAuthTab('register');
+    }
+    </script>
+</body>
+</html>

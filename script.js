@@ -237,33 +237,37 @@ function togglePassword() {
     }
 }
 
-// Form submission
-function handleRegistration(event) {
+// Form submission — Supabase sign-up
+async function handleRegistration(event) {
     event.preventDefault();
     
     const form = event.target;
-    const formData = new FormData(form);
-    
-    // Simulate form submission
     const submitBtn = form.querySelector('.submit-btn');
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
     submitBtn.disabled = true;
-    
-    setTimeout(() => {
-        // Reset button
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const country = document.getElementById('country').value;
+    const experience = document.getElementById('experience').value;
+
+    try {
+        if (typeof signUp === 'function') {
+            await signUp(email, password, { firstName, lastName, country, experience });
+        }
         submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
-        
-        // Close registration modal and show success
         closeModal();
-        setTimeout(() => {
-            openSuccessModal();
-        }, 300);
-        
-        // Reset form
+        setTimeout(() => openSuccessModal(), 300);
         form.reset();
-    }, 2000);
+    } catch (err) {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        alert(err.message || 'Registration failed. Please try again.');
+    }
 }
 
 // Scroll animations

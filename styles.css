@@ -4386,6 +4386,52 @@ body {
 }
 
 /* ===================================
+   Nav Logged-In User Button
+   =================================== */
+.nav-user-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 16px 6px 6px;
+    background: linear-gradient(135deg, var(--primary-gold-light), rgba(201,162,39,0.15));
+    border-radius: 50px;
+    text-decoration: none;
+    color: var(--deep-night);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(201,162,39,0.15);
+}
+
+.nav-user-btn:hover {
+    background: linear-gradient(135deg, var(--primary-gold-light), rgba(201,162,39,0.25));
+    box-shadow: 0 4px 16px rgba(201,162,39,0.15);
+    transform: translateY(-1px);
+}
+
+.nav-user-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-user-name {
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .nav-user-btn {
+        display: none;
+    }
+}
+
+/* ===================================
    Beautiful Islamic Arabesque Borders
    =================================== */
 .arabesque-border {

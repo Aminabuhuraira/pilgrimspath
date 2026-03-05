@@ -33,7 +33,7 @@
                     <a href="#"><i class="fas fa-user"></i> Profile</a>
                     <a href="#"><i class="fas fa-gear"></i> Settings</a>
                     <hr>
-                    <a href="index.html" class="logout-link"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+                    <a href="#" onclick="signOut(); return false;" class="logout-link"><i class="fas fa-sign-out-alt"></i> Log Out</a>
                 </div>
             </div>
         </div>
@@ -348,6 +348,28 @@
     })();
     </script>
     <!--End of Tawk.to Script-->
+
+    <!-- Supabase Auth -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
+    <script>
+    // Auth guard — redirect to login if not signed in
+    (async () => {
+        const user = await requireAuth();
+        if (user) {
+            // Update user name & avatar
+            const nameEl = document.querySelector('.user-name');
+            const avatarEl = document.querySelector('.user-avatar');
+            const welcomeEl = document.querySelector('.welcome-text h1');
+            const name = getUserDisplayName(user);
+            const initials = getUserInitials(user);
+
+            if (nameEl) nameEl.textContent = name.split(' ')[0];
+            if (avatarEl) avatarEl.textContent = initials;
+            if (welcomeEl) welcomeEl.innerHTML = 'Assalamu Alaikum, <span class="highlight">' + name.split(' ')[0] + '</span> ☪';
+        }
+    })();
+    </script>
 
     <script>
     // Sidebar toggle
