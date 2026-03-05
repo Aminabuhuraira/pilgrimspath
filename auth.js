@@ -2,10 +2,9 @@
 // Pilgrim's Path — Supabase Auth Module
 // ===================================
 
-// ⚠️ IMPORTANT: Replace these with your actual Supabase project credentials
-// Get them from: https://supabase.com/dashboard → Project Settings → API
-const SUPABASE_URL = 'YOUR_SUPABASE_URL';       // e.g. https://abcdefg.supabase.co
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'; // e.g. eyJhbGciOiJIUzI1NiIs...
+// Supabase project credentials (public — safe for frontend)
+const SUPABASE_URL = 'https://giftctxrqvlfekhzpcaa.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpZnRjdHhycXZsZmVraHpwY2FhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3MTg0NjQsImV4cCI6MjA4ODI5NDQ2NH0.Dm4tb6lvLMf9CDLo04qA9msYVLjBT-Web48pgk0BOYc';
 
 // Initialize Supabase client
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
