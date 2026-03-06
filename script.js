@@ -252,11 +252,10 @@ async function handleRegistration(event) {
     const firstName = document.getElementById('firstName').value.trim();
     const lastName = document.getElementById('lastName').value.trim();
     const country = document.getElementById('country').value;
-    const experience = document.getElementById('experience').value;
 
     try {
         if (typeof signUp === 'function') {
-            await signUp(email, password, { firstName, lastName, country, experience });
+            await signUp(email, password, { firstName, lastName, country });
         }
         submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;

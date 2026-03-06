@@ -7,7 +7,9 @@ const SUPABASE_URL = 'https://giftctxrqvlfekhzpcaa.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpZnRjdHhycXZsZmVraHpwY2FhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3MTg0NjQsImV4cCI6MjA4ODI5NDQ2NH0.Dm4tb6lvLMf9CDLo04qA9msYVLjBT-Web48pgk0BOYc';
 
 // Initialize Supabase client
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// NOTE: the CDN UMD bundle declares `var supabase` globally, so we use a
+// different name here to avoid a SyntaxError from redeclaring with const.
+const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ===== AUTH FUNCTIONS =====
 
@@ -15,7 +17,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
  * Register a new user with email/password + profile metadata
  */
 async function signUp(email, password, metadata = {}) {
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await _sb.auth.signUp({
         email,
         password,
         options: {
@@ -23,7 +25,6 @@ async function signUp(email, password, metadata = {}) {
                 first_name: metadata.firstName || '',
                 last_name: metadata.lastName || '',
                 country: metadata.country || '',
-                experience: metadata.experience || '',
                 display_name: `${metadata.firstName || ''} ${metadata.lastName || ''}`.trim()
             }
         }
@@ -37,7 +38,7 @@ async function signUp(email, password, metadata = {}) {
  * Sign in with email/password
  */
 async function signIn(email, password) {
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await _sb.auth.signInWithPassword({
         email,
         password
     });
@@ -50,7 +51,7 @@ async function signIn(email, password) {
  * Sign out the current user
  */
 async function signOut() {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await _sb.auth.signOut();
     if (error) throw error;
     window.location.href = 'index.html';
 }
@@ -59,7 +60,7 @@ async function signOut() {
  * Get the currently logged-in user (null if not logged in)
  */
 async function getCurrentUser() {
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user } } = await _sb.auth.getUser();
     return user;
 }
 
@@ -67,7 +68,7 @@ async function getCurrentUser() {
  * Get the current session
  */
 async function getSession() {
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await _sb.auth.getSession();
     return session;
 }
 
@@ -75,7 +76,7 @@ async function getSession() {
  * Send password reset email
  */
 async function resetPassword(email) {
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+    const { data, error } = await _sb.auth.resetPasswordForEmail(email, {
         redirectTo: window.location.origin + '/login.html'
     });
 
@@ -87,7 +88,7 @@ async function resetPassword(email) {
  * Sign in with Google OAuth
  */
 async function signInWithGoogle() {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const { data, error } = await _sb.auth.signInWithOAuth({
         provider: 'google',
         options: {
             redirectTo: window.location.origin + '/dashboard.html'
@@ -104,9 +105,16 @@ async function signInWithGoogle() {
  * Listen for auth state changes (login, logout, token refresh)
  */
 function onAuthStateChange(callback) {
-    supabase.auth.onAuthStateChange((event, session) => {
+    _sb.auth.onAuthStateChange((event, session) => {
         callback(event, session);
     });
+}
+
+/**
+ * Expose the Supabase client for admin/advanced use
+ */
+function getSupabaseClient() {
+    return _sb;
 }
 
 /**

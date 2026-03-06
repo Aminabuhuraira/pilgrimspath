@@ -500,16 +500,7 @@
                         <option value="OTHER">Other</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="regExperience">Experience Level</label>
-                    <select id="regExperience" required>
-                        <option value="">Select your experience</option>
-                        <option value="never">Never performed Hajj/Umrah</option>
-                        <option value="preparing">Preparing for first pilgrimage</option>
-                        <option value="performed">Performed Hajj/Umrah before</option>
-                        <option value="multiple">Multiple pilgrimages completed</option>
-                    </select>
-                </div>
+
                 <div class="form-group">
                     <label for="regPassword">Create Password</label>
                     <div class="password-wrap">
@@ -641,14 +632,13 @@
         const firstName = document.getElementById('regFirstName').value.trim();
         const lastName = document.getElementById('regLastName').value.trim();
         const country = document.getElementById('regCountry').value;
-        const experience = document.getElementById('regExperience').value;
         
         clearMessage();
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating account...';
 
         try {
-            await signUp(email, password, { firstName, lastName, country, experience });
+            await signUp(email, password, { firstName, lastName, country });
             showMessage('Account created! Check your email to confirm, then sign in.', 'success');
             
             // Switch to login tab after short delay
@@ -736,6 +726,8 @@
     if (urlParams.get('tab') === 'register') {
         switchAuthTab('register');
     }
+    // Session & visit tracking for admin analytics
+    (function(){try{var st=Date.now();window.addEventListener('beforeunload',function(){var d=Math.floor((Date.now()-st)/1000);var s=JSON.parse(localStorage.getItem('pp_sessions')||'[]');s.push(d);if(s.length>100)s.splice(0,s.length-100);localStorage.setItem('pp_sessions',JSON.stringify(s));});var v=JSON.parse(localStorage.getItem('pp_visits')||'[]');v.push({time:new Date().toISOString(),referrer:document.referrer||'direct',page:location.pathname});if(v.length>500)v.splice(0,v.length-500);localStorage.setItem('pp_visits',JSON.stringify(v));}catch(e){}})();
     </script>
 </body>
 </html>

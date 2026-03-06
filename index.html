@@ -601,16 +601,7 @@
                         <option value="OTHER">Other</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="experience">Experience Level</label>
-                    <select id="experience" name="experience" required>
-                        <option value="">Select your experience</option>
-                        <option value="never">Never performed Hajj/Umrah</option>
-                        <option value="preparing">Preparing for first pilgrimage</option>
-                        <option value="performed">Performed Hajj/Umrah before</option>
-                        <option value="multiple">Multiple pilgrimages completed</option>
-                    </select>
-                </div>
+
                 <div class="form-group">
                     <label for="password">Create Password</label>
                     <div class="password-input">
@@ -669,6 +660,24 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="auth.js"></script>
     <script src="script.js"></script>
-    <script>document.addEventListener('DOMContentLoaded', () => updateNavForAuth());</script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => updateNavForAuth());
+    // Session & visit tracking for admin analytics
+    (function(){
+        try {
+            var st = Date.now();
+            window.addEventListener('beforeunload', function(){
+                var d = Math.floor((Date.now()-st)/1000);
+                var s = JSON.parse(localStorage.getItem('pp_sessions')||'[]');
+                s.push(d); if(s.length>100) s.splice(0,s.length-100);
+                localStorage.setItem('pp_sessions',JSON.stringify(s));
+            });
+            var v = JSON.parse(localStorage.getItem('pp_visits')||'[]');
+            v.push({time:new Date().toISOString(),referrer:document.referrer||'direct',page:location.pathname});
+            if(v.length>500) v.splice(0,v.length-500);
+            localStorage.setItem('pp_visits',JSON.stringify(v));
+        } catch(e){}
+    })();
+    </script>
 </body>
 </html>
