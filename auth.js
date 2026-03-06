@@ -31,6 +31,10 @@ async function signUp(email, password, metadata = {}) {
     });
 
     if (error) throw error;
+
+    // Best-effort: save profile to profiles table for admin dashboard
+    if (data.user) upsertProfile(data.user);
+
     return data;
 }
 
@@ -44,6 +48,10 @@ async function signIn(email, password) {
     });
 
     if (error) throw error;
+
+    // Best-effort: update profile for admin dashboard
+    if (data.user) upsertProfile(data.user);
+
     return data;
 }
 
@@ -115,6 +123,31 @@ function onAuthStateChange(callback) {
  */
 function getSupabaseClient() {
     return _sb;
+}
+
+/**
+ * Upsert user profile into the profiles table (best-effort, silent fail).
+ * Called after sign-in / sign-up so the admin dashboard always has data
+ * even before the SQL trigger is set up.
+ */
+async function upsertProfile(user) {
+    if (!user) return;
+    try {
+        const meta = user.user_metadata || {};
+        await _sb.from('profiles').upsert({
+            id: user.id,
+            email: user.email,
+            first_name: meta.first_name || '',
+            last_name: meta.last_name || '',
+            display_name: meta.display_name || '',
+            country: meta.country || '',
+            created_at: user.created_at,
+            last_sign_in_at: user.last_sign_in_at || new Date().toISOString(),
+            updated_at: new Date().toISOString()
+        }, { onConflict: 'id' });
+    } catch(e) {
+        // Profiles table may not exist yet — that's fine
+    }
 }
 
 /**

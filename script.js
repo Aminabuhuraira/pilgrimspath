@@ -254,14 +254,37 @@ async function handleRegistration(event) {
     const country = document.getElementById('country').value;
 
     try {
+        let result = null;
         if (typeof signUp === 'function') {
-            await signUp(email, password, { firstName, lastName, country });
+            result = await signUp(email, password, { firstName, lastName, country });
         }
         submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
         closeModal();
-        setTimeout(() => openSuccessModal(), 300);
         form.reset();
+
+        // Update success modal based on whether we have a session
+        const successModal = document.getElementById('successModal');
+        if (successModal) {
+            const msgEl = successModal.querySelector('p');
+            const btnEl = successModal.querySelector('.primary-btn');
+            if (result && result.session) {
+                // Email confirmation disabled — logged in immediately
+                if (msgEl) msgEl.textContent = 'Your account has been created successfully. Welcome aboard!';
+                if (btnEl) {
+                    btnEl.setAttribute('onclick', "window.location.href='dashboard.html'");
+                    btnEl.querySelector('span').textContent = 'Go to Dashboard';
+                }
+            } else {
+                // Email confirmation required — don't send to dashboard
+                if (msgEl) msgEl.textContent = 'Your account has been created! Please check your email to confirm your account, then sign in.';
+                if (btnEl) {
+                    btnEl.setAttribute('onclick', "window.location.href='login.html'");
+                    btnEl.querySelector('span').textContent = 'Go to Sign In';
+                }
+            }
+        }
+        setTimeout(() => openSuccessModal(), 300);
     } catch (err) {
         submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;

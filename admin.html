@@ -1156,31 +1156,28 @@
     // ===== LOAD ALL ADMIN DATA =====
     async function loadAdminData() {
         const sb = getSupabaseClient();
-
-        // Fetch all users from Supabase Auth (using the admin-friendly approach)
-        // Note: With the anon key, we can query the auth.users via a Supabase Edge Function
-        // or use the profiles approach. For now, we'll use the session-based approach.
         let users = [];
+        let profilesTableExists = false;
 
         try {
-            // Try to fetch users list - this works if you have a profiles table
-            // or use Supabase's admin API via edge function
+            // Query the profiles table (created via supabase-setup.sql)
             const { data: profiles, error } = await sb
                 .from('profiles')
                 .select('*')
                 .order('created_at', { ascending: false });
 
-            if (!error && profiles) {
+            if (!error && profiles && profiles.length > 0) {
                 users = profiles;
+                profilesTableExists = true;
+            } else if (error) {
+                console.warn('Profiles table query error:', error.message);
             }
         } catch(e) {
-            console.log('Profiles table not available, using auth metadata approach');
+            console.log('Profiles table not available');
         }
 
-        // If no profiles table, we'll use the current user session to display demo data
-        // In production, you'd set up a profiles table or edge function
+        // Fallback: show current admin user if profiles table doesn't exist yet
         if (users.length === 0) {
-            // Get current user at minimum
             const currentUser = await getCurrentUser();
             if (currentUser) {
                 users = [{
@@ -1192,6 +1189,26 @@
                     created_at: currentUser.created_at,
                     last_sign_in_at: currentUser.last_sign_in_at
                 }];
+            }
+
+            // Show setup notice if profiles table doesn't exist
+            if (!profilesTableExists) {
+                const header = document.querySelector('.admin-header');
+                if (header && !document.getElementById('setupNotice')) {
+                    header.insertAdjacentHTML('afterend', `
+                        <div id="setupNotice" style="background:#FEF3C7; border:1px solid #F59E0B; border-radius:12px; padding:16px 20px; margin-bottom:24px; display:flex; align-items:center; gap:12px;">
+                            <i class="fas fa-exclamation-triangle" style="color:#F59E0B; font-size:1.2rem;"></i>
+                            <div style="flex:1;">
+                                <strong style="font-size:0.9rem;">Profiles table not set up yet</strong>
+                                <p style="font-size:0.82rem; color:#92400E; margin-top:2px;">
+                                    Run the SQL in <code>supabase-setup.sql</code> in your 
+                                    <a href="https://supabase.com/dashboard/project/giftctxrqvlfekhzpcaa/sql/new" target="_blank" style="color:#B45309; font-weight:600;">Supabase SQL Editor</a> 
+                                    to enable full user tracking. Currently showing only your account.
+                                </p>
+                            </div>
+                        </div>
+                    `);
+                }
             }
         }
 
