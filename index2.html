@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#C9A227">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="description" content="Experience the sacred journey of Hajj and Umrah through immersive VR technology. Free access for all Muslims worldwide.">
+    <title>Pilgrim's Path | VR Hajj & Umrah Experience — v2</title>
+    <link rel="stylesheet" href="styles2.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="nav2" id="nav2">
+        <div class="nav2-inner">
+            <a href="#">
+                <img src="images/logo.png" alt="Pilgrim's Path" class="logo-img">
+            </a>
+            <ul class="nav2-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#panorama">360° View</a></li>
+                <li><a href="#ambassador">Ambassador</a></li>
+                <li><a href="#steps">How It Works</a></li>
+            </ul>
+            <button class="nav2-cta" onclick="window.location.href='login.html?tab=register'">
+                Start Free Journey <i class="fas fa-arrow-right"></i>
+            </button>
+            <button class="hamburger2" id="hamburger2" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile overlay -->
+    <div class="mobile-overlay2" id="mobileOverlay2"></div>
+    <!-- Mobile menu -->
+    <div class="mobile-menu2" id="mobileMenu2">
+        <ul>
+            <li><a href="#home" onclick="closeMobile2()">Home</a></li>
+            <li><a href="#features" onclick="closeMobile2()">Features</a></li>
+            <li><a href="#panorama" onclick="closeMobile2()">360° View</a></li>
+            <li><a href="#ambassador" onclick="closeMobile2()">Ambassador</a></li>
+            <li><a href="#steps" onclick="closeMobile2()">How It Works</a></li>
+        </ul>
+        <a href="login.html?tab=register" class="mobile-cta2">Start Free Journey</a>
+    </div>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="hero2" id="home">
+        <div class="hero2-bg">
+            <div class="hero2-particles">
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="hero2-content">
+            <div class="hero2-text">
+                <div class="hero2-badge">
+                    <span class="dot"></span>
+                    Virtual Reality Experience
+                </div>
+                <h1 class="hero2-title">
+                    Walk the Sacred Path of
+                    <span class="gold">Hajj & Umrah</span>
+                    — <span class="em">From Anywhere</span>
+                </h1>
+                <p class="hero2-desc">
+                    Immerse yourself in a breathtaking VR pilgrimage guided by renowned scholars,
+                    interactive rituals, and the spirit of millions who walked before you.
+                    Completely free, forever.
+                </p>
+                <div class="hero2-actions">
+                    <button class="btn-primary2" onclick="openModal2()">
+                        Begin Your Journey <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="btn-outline2" onclick="document.getElementById('panorama').scrollIntoView({behavior:'smooth'})">
+                        <i class="fas fa-play-circle"></i> Explore 360° View
+                    </button>
+                </div>
+                <div class="hero2-stats">
+                    <div class="hero2-stat">
+                        <span class="hero2-stat-num" data-target="50000">0+</span>
+                        <span class="hero2-stat-label">Virtual Pilgrims</span>
+                    </div>
+                    <div class="hero2-stat">
+                        <span class="hero2-stat-num" data-target="120">0+</span>
+                        <span class="hero2-stat-label">Countries</span>
+                    </div>
+                    <div class="hero2-stat">
+                        <span class="hero2-stat-num" data-target="100">0%</span>
+                        <span class="hero2-stat-label">Free Access</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero2-visual">
+                <div class="hero2-card">
+                    <img src="https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=800&q=80" alt="Masjid al-Haram">
+                    <div class="hero2-card-overlay">
+                        <span class="hero2-card-tag"><i class="fas fa-vr-cardboard"></i> VR Ready</span>
+                        <h3 class="hero2-card-title">Masjid al-Haram</h3>
+                        <p class="hero2-card-sub">Experience Tawaf in stunning 360°</p>
+                    </div>
+                </div>
+                <div class="hero2-deco hero2-deco-1"></div>
+                <div class="hero2-deco hero2-deco-2"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== TRUST STRIP ==================== -->
+    <div class="trust-strip">
+        <div class="trust-strip-inner">
+            <span class="trust-item"><i class="fas fa-shield-halved"></i> Scholar-Verified Content</span>
+            <span class="trust-item"><i class="fas fa-vr-cardboard"></i> Immersive VR Technology</span>
+            <span class="trust-item"><i class="fas fa-globe"></i> 120+ Countries</span>
+            <span class="trust-item"><i class="fas fa-heart"></i> Free Forever</span>
+            <span class="trust-item"><i class="fas fa-gamepad"></i> Gamified Learning</span>
+            <span class="trust-item"><i class="fas fa-book-quran"></i> Authentic Duas & Guides</span>
+            <span class="trust-item"><i class="fas fa-mobile-screen"></i> Any Device</span>
+            <span class="trust-item"><i class="fas fa-users"></i> Global Community</span>
+            <!-- Duplicate for seamless loop -->
+            <span class="trust-item"><i class="fas fa-shield-halved"></i> Scholar-Verified Content</span>
+            <span class="trust-item"><i class="fas fa-vr-cardboard"></i> Immersive VR Technology</span>
+            <span class="trust-item"><i class="fas fa-globe"></i> 120+ Countries</span>
+            <span class="trust-item"><i class="fas fa-heart"></i> Free Forever</span>
+            <span class="trust-item"><i class="fas fa-gamepad"></i> Gamified Learning</span>
+            <span class="trust-item"><i class="fas fa-book-quran"></i> Authentic Duas & Guides</span>
+            <span class="trust-item"><i class="fas fa-mobile-screen"></i> Any Device</span>
+            <span class="trust-item"><i class="fas fa-users"></i> Global Community</span>
+        </div>
+    </div>
+
+    <!-- ==================== FEATURES — Bento Grid ==================== -->
+    <section class="section2" id="features">
+        <div class="container2">
+            <div class="section2-header">
+                <div class="section2-tag">Why Pilgrim's Path</div>
+                <h2 class="section2-title">A New Way to <span class="gold">Experience Pilgrimage</span></h2>
+                <p class="section2-sub">
+                    Whether you're preparing for your first Hajj, unable to travel, or deepening your spiritual connection —
+                    we bring the sacred sites to you.
+                </p>
+            </div>
+            <div class="bento-grid">
+                <!-- Featured card spanning 2 cols -->
+                <div class="bento-card featured">
+                    <div>
+                        <div class="bento-icon"><i class="fas fa-vr-cardboard"></i></div>
+                        <h3>Immersive VR Technology</h3>
+                        <p>
+                            Experience every moment of Hajj and Umrah in stunning 360° virtual reality. 
+                            From Tawaf around the Kaaba to Sa'i between Safa and Marwa — feel the 
+                            presence, hear the prayers, and walk the sacred path.
+                        </p>
+                    </div>
+                    <div class="bento-visual">
+                        <div class="vr-preview">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- Gamified -->
+                <div class="bento-card">
+                    <div class="bento-icon"><i class="fas fa-gamepad"></i></div>
+                    <h3>Gamified Learning</h3>
+                    <p>Learn rituals, duas, and the significance of each step through interactive challenges and achievements.</p>
+                </div>
+                <!-- Scholars -->
+                <div class="bento-card">
+                    <div class="bento-icon"><i class="fas fa-book-quran"></i></div>
+                    <h3>Guided by Scholars</h3>
+                    <p>Audio guides from renowned Islamic scholars ensure authenticity and deep spiritual insight.</p>
+                </div>
+                <!-- Community -->
+                <div class="bento-card">
+                    <div class="bento-icon"><i class="fas fa-users"></i></div>
+                    <h3>Global Community</h3>
+                    <p>Connect with fellow virtual pilgrims worldwide. Share experiences and build spiritual bonds.</p>
+                </div>
+                <!-- Unlimited -->
+                <div class="bento-card">
+                    <div class="bento-icon"><i class="fas fa-infinity"></i></div>
+                    <h3>Unlimited Access</h3>
+                    <p>Practice as many times as you need. Revisit sacred locations and perfect your rituals — forever free.</p>
+                </div>
+                <!-- Devices -->
+                <div class="bento-card">
+                    <div class="bento-icon"><i class="fas fa-mobile-screen"></i></div>
+                    <h3>Any Device, Anywhere</h3>
+                    <p>VR headsets, desktop, tablet, or mobile. Your spiritual journey adapts to your technology.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 360 PANORAMA ==================== -->
+    <section class="section2 panorama2" id="panorama">
+        <div class="container2">
+            <div class="section2-header">
+                <div class="section2-tag">Immersive Experience</div>
+                <h2 class="section2-title">Step Into the <span class="gold">Sacred Sanctuary</span></h2>
+                <p class="section2-sub">
+                    Explore the breathtaking beauty of Islam's holiest sites in interactive 360° panoramas.
+                </p>
+            </div>
+            <div class="panorama2-grid">
+                <div class="panorama2-viewer">
+                    <img src="https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=900&q=80" alt="Masjid al-Haram panoramic">
+                    <div class="panorama2-badge">
+                        <i class="fas fa-location-dot"></i> Masjid al-Haram, Makkah
+                    </div>
+                </div>
+                <div class="panorama2-locations">
+                    <div class="panorama2-loc">
+                        <div class="panorama2-loc-icon"><i class="fas fa-kaaba"></i></div>
+                        <div class="panorama2-loc-text">
+                            <h4>The Holy Kaaba</h4>
+                            <p>The most sacred site in Islam — experience Tawaf virtually</p>
+                        </div>
+                    </div>
+                    <div class="panorama2-loc">
+                        <div class="panorama2-loc-icon"><i class="fas fa-mosque"></i></div>
+                        <div class="panorama2-loc-text">
+                            <h4>Al-Masjid an-Nabawi</h4>
+                            <p>The Prophet's Mosque in the radiant city of Madinah</p>
+                        </div>
+                    </div>
+                    <div class="panorama2-loc">
+                        <div class="panorama2-loc-icon"><i class="fas fa-mountain"></i></div>
+                        <div class="panorama2-loc-text">
+                            <h4>Mount Arafat</h4>
+                            <p>The peak of Hajj — the Day of Standing in prayer</p>
+                        </div>
+                    </div>
+                    <div class="panorama2-loc">
+                        <div class="panorama2-loc-icon"><i class="fas fa-campground"></i></div>
+                        <div class="panorama2-loc-text">
+                            <h4>Mina Tents</h4>
+                            <p>Where millions gather during the days of Hajj</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== AMBASSADOR ==================== -->
+    <section class="section2 ambassador2" id="ambassador">
+        <div class="container2">
+            <div class="ambassador2-grid">
+                <div class="ambassador2-img-wrap">
+                    <img src="images/mufti-menk.png" alt="Mufti Ismail Menk">
+                    <div class="ambassador2-float-badge">
+                        <i class="fas fa-certificate"></i> Brand Ambassador
+                    </div>
+                </div>
+                <div class="ambassador2-text">
+                    <div class="section2-tag">Our Ambassador</div>
+                    <h2 class="ambassador2-name">Mufti Ismail Menk</h2>
+                    <p class="ambassador2-role">Internationally Renowned Islamic Scholar</p>
+                    <blockquote class="ambassador2-quote">
+                        "Pilgrim's Path represents a beautiful bridge between technology and spirituality.
+                        For those who dream of walking the sacred grounds but face barriers, this platform
+                        offers an opportunity to connect with the essence of Hajj and Umrah."
+                    </blockquote>
+                    <div class="ambassador2-creds">
+                        <span class="ambassador2-cred"><i class="fas fa-graduation-cap"></i> Grand Mufti of Zimbabwe</span>
+                        <span class="ambassador2-cred"><i class="fas fa-globe"></i> 30M+ Followers</span>
+                        <span class="ambassador2-cred"><i class="fas fa-microphone"></i> World-Renowned Speaker</span>
+                    </div>
+                    <button class="btn-primary2" onclick="openModal2()">
+                        Join Mufti Menk's Journey <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== HOW IT WORKS ==================== -->
+    <section class="section2" id="steps">
+        <div class="container2">
+            <div class="section2-header">
+                <div class="section2-tag">Your Journey Awaits</div>
+                <h2 class="section2-title">Three Steps to <span class="gold">Spiritual Experience</span></h2>
+                <p class="section2-sub">
+                    No payments, no credit cards, no hidden fees. Just pure spiritual connection.
+                </p>
+            </div>
+            <div class="steps2-grid">
+                <div class="step2-card">
+                    <div class="step2-num">01</div>
+                    <h3>Create Your Account</h3>
+                    <p>Sign up in seconds with just your name and email. No credit card required, ever.</p>
+                </div>
+                <div class="step2-card">
+                    <div class="step2-num">02</div>
+                    <h3>Choose Your Path</h3>
+                    <p>Select between Hajj or Umrah, or explore both. Customize your journey preferences.</p>
+                </div>
+                <div class="step2-card">
+                    <div class="step2-num">03</div>
+                    <h3>Begin Your Journey</h3>
+                    <p>Immerse yourself in VR, learn from scholars, and experience pilgrimage like never before.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== TESTIMONIALS ==================== -->
+    <section class="section2 testimonials2">
+        <div class="container2">
+            <div class="section2-header">
+                <div class="section2-tag">Stories of Faith</div>
+                <h2 class="section2-title">What Our <span class="gold">Pilgrims Say</span></h2>
+            </div>
+            <div class="testimonials2-grid">
+                <div class="testi2-card">
+                    <div class="testi2-stars">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="testi2-text">
+                        "As a revert to Islam, I was overwhelmed about learning the rituals of Hajj. 
+                        Pilgrim's Path made it accessible and beautiful. The VR experience brought tears to my eyes."
+                    </p>
+                    <div class="testi2-author">
+                        <div class="testi2-avatar">SA</div>
+                        <div class="testi2-info">
+                            <strong>Sarah Ahmed</strong>
+                            <span>London, UK</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testi2-card">
+                    <div class="testi2-stars">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="testi2-text">
+                        "My elderly mother cannot travel for Hajj due to health reasons. This platform 
+                        allowed her to experience the sacred sites virtually. She prays for the team daily."
+                    </p>
+                    <div class="testi2-author">
+                        <div class="testi2-avatar">MR</div>
+                        <div class="testi2-info">
+                            <strong>Mohammed Rahman</strong>
+                            <span>Toronto, Canada</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testi2-card">
+                    <div class="testi2-stars">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="testi2-text">
+                        "I used Pilgrim's Path to prepare for my actual Hajj trip. When I arrived in Makkah,
+                        I already knew every step. It made my pilgrimage so much more meaningful."
+                    </p>
+                    <div class="testi2-author">
+                        <div class="testi2-avatar">FK</div>
+                        <div class="testi2-info">
+                            <strong>Fatima Khan</strong>
+                            <span>Chicago, USA</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CTA ==================== -->
+    <section class="section2 cta2">
+        <div class="container2">
+            <div class="cta2-content">
+                <h2 class="cta2-title">Your Sacred Journey Awaits</h2>
+                <p class="cta2-desc">
+                    Join over 50,000 virtual pilgrims who have transformed their understanding of Hajj and Umrah.
+                    <strong style="color:#fff;">Completely free</strong> — just create your account and begin.
+                </p>
+                <div class="cta2-pills">
+                    <span class="cta2-pill"><i class="fas fa-check-circle"></i> No Payment Required</span>
+                    <span class="cta2-pill"><i class="fas fa-check-circle"></i> Instant Access</span>
+                    <span class="cta2-pill"><i class="fas fa-check-circle"></i> Cancel Anytime</span>
+                </div>
+                <button class="btn-primary2" onclick="openModal2()">
+                    Create Free Account <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer2">
+        <div class="container2">
+            <div class="footer2-top">
+                <div class="footer2-brand">
+                    <img src="images/logo.png" alt="Pilgrim's Path" class="logo-img">
+                    <p>Bridging technology and spirituality to bring the sacred pilgrimage experience to Muslims worldwide.</p>
+                    <div class="footer2-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer2-col">
+                    <h4>Experience</h4>
+                    <ul>
+                        <li><a href="hajj-journey.html">Hajj Journey</a></li>
+                        <li><a href="umrah-journey.html">Umrah Journey</a></li>
+                        <li><a href="vr-features.html">VR Features</a></li>
+                        <li><a href="duas.html">Duas & Prayers</a></li>
+                    </ul>
+                </div>
+                <div class="footer2-col">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Support</a></li>
+                        <li><a href="enterprise.html">Enterprise</a></li>
+                    </ul>
+                </div>
+                <div class="footer2-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer2-bottom">
+                <p>&copy; 2026 Pilgrim's Path. All rights reserved. Made with ❤️ for the Ummah.</p>
+                <div class="footer2-badges">
+                    <span><i class="fas fa-shield-halved"></i> Secure</span>
+                    <span><i class="fas fa-lock"></i> Private</span>
+                    <span><i class="fas fa-heart"></i> Free Forever</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== REGISTRATION MODAL ==================== -->
+    <div class="modal2" id="registerModal2">
+        <div class="modal2-backdrop" onclick="closeModal2()"></div>
+        <div class="modal2-box">
+            <button class="modal2-close" onclick="closeModal2()"><i class="fas fa-times"></i></button>
+            <div class="modal2-header">
+                <div class="icon">☪</div>
+                <h2>Begin Your Sacred Journey</h2>
+                <p>Create your free account and step into virtual pilgrimage</p>
+            </div>
+            <form class="form2" id="registrationForm2" onsubmit="handleRegistration2(event)">
+                <div class="form2-row">
+                    <div class="form2-group">
+                        <label for="firstName2">First Name</label>
+                        <input type="text" id="firstName2" placeholder="First name" required>
+                    </div>
+                    <div class="form2-group">
+                        <label for="lastName2">Last Name</label>
+                        <input type="text" id="lastName2" placeholder="Last name" required>
+                    </div>
+                </div>
+                <div class="form2-group">
+                    <label for="email2">Email Address</label>
+                    <input type="email" id="email2" placeholder="your@email.com" required>
+                </div>
+                <div class="form2-group">
+                    <label for="country2">Country</label>
+                    <select id="country2" required>
+                        <option value="">Select your country</option>
+                        <option value="US">United States</option>
+                        <option value="UK">United Kingdom</option>
+                        <option value="CA">Canada</option>
+                        <option value="AU">Australia</option>
+                        <option value="AE">United Arab Emirates</option>
+                        <option value="SA">Saudi Arabia</option>
+                        <option value="MY">Malaysia</option>
+                        <option value="ID">Indonesia</option>
+                        <option value="PK">Pakistan</option>
+                        <option value="IN">India</option>
+                        <option value="BD">Bangladesh</option>
+                        <option value="EG">Egypt</option>
+                        <option value="TR">Turkey</option>
+                        <option value="NG">Nigeria</option>
+                        <option value="ZA">South Africa</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+                </div>
+                <div class="form2-group">
+                    <label for="password2">Create Password</label>
+                    <div class="pw-wrap">
+                        <input type="password" id="password2" placeholder="Min. 8 characters" required minlength="8">
+                        <button type="button" class="pw-toggle" onclick="togglePw2()"><i class="fas fa-eye" id="pwIcon2"></i></button>
+                    </div>
+                </div>
+                <div class="form2-check">
+                    <input type="checkbox" id="terms2" required>
+                    <label for="terms2">I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a></label>
+                </div>
+                <button type="submit" class="form2-submit">
+                    Create Free Account <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+            <div class="modal2-footer">
+                Already have an account? <a href="login.html">Sign In</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal2" id="successModal2">
+        <div class="modal2-backdrop" onclick="closeSuccessModal2()"></div>
+        <div class="modal2-box success2-content">
+            <div class="success2-circle"><i class="fas fa-check"></i></div>
+            <h2>Welcome to Pilgrim's Path!</h2>
+            <p id="successMsg2">Your account has been created successfully.</p>
+            <button class="btn-primary2" id="successBtn2" onclick="window.location.href='dashboard.html'" style="margin:24px auto 0;display:inline-flex;">
+                Go to Dashboard <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
+    <script>
+    /* ---- Navbar scroll ---- */
+    const nav = document.getElementById('nav2');
+    window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    /* ---- Mobile menu ---- */
+    const hamburger = document.getElementById('hamburger2');
+    const mobileMenu = document.getElementById('mobileMenu2');
+    const overlay = document.getElementById('mobileOverlay2');
+
+    function openMobile2() {
+        hamburger.classList.add('active');
+        mobileMenu.classList.add('open');
+        overlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeMobile2() {
+        hamburger.classList.remove('active');
+        mobileMenu.classList.remove('open');
+        overlay.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+    hamburger.addEventListener('click', () => {
+        mobileMenu.classList.contains('open') ? closeMobile2() : openMobile2();
+    });
+    overlay.addEventListener('click', closeMobile2);
+
+    /* ---- Counter animation ---- */
+    function animateCounters() {
+        document.querySelectorAll('.hero2-stat-num[data-target]').forEach(el => {
+            const target = +el.dataset.target;
+            const suffix = el.textContent.replace(/[0-9]/g, '');
+            let current = 0;
+            const step = Math.ceil(target / 60);
+            const interval = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(interval);
+                }
+                el.textContent = current.toLocaleString() + suffix;
+            }, 30);
+        });
+    }
+    // trigger once hero is visible
+    const heroObs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { animateCounters(); heroObs.disconnect(); } });
+    }, { threshold: 0.3 });
+    heroObs.observe(document.querySelector('.hero2'));
+
+    /* ---- Scroll-reveal for sections ---- */
+    const revealObs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.style.opacity = '1';
+                e.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.bento-card, .step2-card, .testi2-card, .panorama2-loc').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity .6s ease, transform .6s ease';
+        revealObs.observe(el);
+    });
+
+    /* ---- Modals ---- */
+    function openModal2() {
+        document.getElementById('registerModal2').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeModal2() {
+        document.getElementById('registerModal2').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    function closeSuccessModal2() {
+        document.getElementById('successModal2').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    /* ---- Password toggle ---- */
+    function togglePw2() {
+        const pw = document.getElementById('password2');
+        const icon = document.getElementById('pwIcon2');
+        if (pw.type === 'password') { pw.type = 'text'; icon.className = 'fas fa-eye-slash'; }
+        else { pw.type = 'password'; icon.className = 'fas fa-eye'; }
+    }
+
+    /* ---- Registration ---- */
+    async function handleRegistration2(e) {
+        e.preventDefault();
+        const btn = e.target.querySelector('.form2-submit');
+        const original = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+        btn.disabled = true;
+
+        try {
+            const result = await signUp(
+                document.getElementById('email2').value,
+                document.getElementById('password2').value,
+                {
+                    firstName: document.getElementById('firstName2').value,
+                    lastName: document.getElementById('lastName2').value,
+                    country: document.getElementById('country2').value
+                }
+            );
+
+            // Close registration modal, show success
+            closeModal2();
+            const hasSession = result && result.session;
+            const msgEl = document.getElementById('successMsg2');
+            const btnEl = document.getElementById('successBtn2');
+
+            if (hasSession) {
+                msgEl.textContent = 'Your account is ready. Welcome aboard!';
+                btnEl.textContent = 'Go to Dashboard ';
+                btnEl.innerHTML = 'Go to Dashboard <i class="fas fa-arrow-right"></i>';
+                btnEl.onclick = () => { window.location.href = 'dashboard.html'; };
+            } else {
+                msgEl.textContent = 'Please check your email to confirm your account, then sign in.';
+                btnEl.innerHTML = 'Go to Sign In <i class="fas fa-arrow-right"></i>';
+                btnEl.onclick = () => { window.location.href = 'login.html'; };
+            }
+
+            document.getElementById('successModal2').classList.add('active');
+        } catch (err) {
+            alert(err.message || 'Registration failed. Please try again.');
+        } finally {
+            btn.innerHTML = original;
+            btn.disabled = false;
+        }
+    }
+
+    /* ---- Auth-aware nav ---- */
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const user = await getCurrentUser();
+            const ctaBtn = document.querySelector('.nav2-cta');
+            if (user && ctaBtn) {
+                const name = getUserDisplayName(user);
+                const initials = getUserInitials(user);
+                ctaBtn.outerHTML = `
+                    <a href="dashboard.html" class="nav2-user-btn" title="Go to Dashboard">
+                        <span class="nav2-user-avatar">${initials}</span>
+                        <span class="nav2-user-name">${name.split(' ')[0]}</span>
+                    </a>`;
+            }
+            const mobileCta = document.querySelector('.mobile-cta2');
+            if (user && mobileCta) {
+                mobileCta.textContent = 'My Dashboard';
+                mobileCta.href = 'dashboard.html';
+            }
+        } catch(e) {}
+    });
+
+    /* ---- Session & visit tracking ---- */
+    (function(){
+        try {
+            var st = Date.now();
+            window.addEventListener('beforeunload', function(){
+                var d = Math.floor((Date.now()-st)/1000);
+                var s = JSON.parse(localStorage.getItem('pp_sessions')||'[]');
+                s.push(d); if(s.length>100) s.splice(0,s.length-100);
+                localStorage.setItem('pp_sessions',JSON.stringify(s));
+            });
+            var v = JSON.parse(localStorage.getItem('pp_visits')||'[]');
+            v.push({time:new Date().toISOString(),referrer:document.referrer||'direct',page:location.pathname});
+            if(v.length>500) v.splice(0,v.length-500);
+            localStorage.setItem('pp_visits',JSON.stringify(v));
+        } catch(e){}
+    })();
+    </script>
+</body>
+</html>
