@@ -1,0 +1,45 @@
+# Pilgrim's Path
+
+> Immersive VR Hajj and Umrah experience platform for Muslims worldwide.
+
+Pilgrim's Path uses virtual reality and 360° technology to help Muslims prepare for, learn about, and spiritually connect with the sacred pilgrimages of Hajj and Umrah. Free access for all Muslims.
+
+## What We Offer
+
+- **Virtual Hajj Experience**: Walk through every ritual of Hajj in immersive VR — from Ihram to Tawaf al-Wida
+- **Virtual Umrah Experience**: Practice all four steps of Umrah (Ihram, Tawaf, Sa'i, Halq) in 360°
+- **360° Tours of Makkah & Madinah**: Explore Masjid al-Haram, the Kaaba, Masjid al-Nabawi, and sacred landmarks
+- **Duas & Prayers Library**: Essential supplications for Hajj and Umrah with Arabic, transliteration, and translation
+- **VR Tawaf Practice**: Learn the sacred circumambulation with step-by-step guidance and landmark identification
+- **Enterprise & White-Label**: Custom VR pilgrimage solutions for mosques, travel agencies, and Islamic organizations
+
+## Key Pages
+
+- Homepage: https://www.pilgrimspath.io/
+- Hajj Journey: https://www.pilgrimspath.io/hajj-journey.html
+- Umrah Journey: https://www.pilgrimspath.io/umrah-journey.html
+- VR Features: https://www.pilgrimspath.io/vr-features.html
+- Duas & Prayers: https://www.pilgrimspath.io/duas.html
+- Articles & Guides: https://www.pilgrimspath.io/articles.html
+- About Us: https://www.pilgrimspath.io/about.html
+- FAQ: https://www.pilgrimspath.io/faq.html
+- Enterprise: https://www.pilgrimspath.io/enterprise.html
+- Contact: https://www.pilgrimspath.io/contact.html
+
+## Articles
+
+- [The Complete Guide to Virtual Hajj Experience](https://www.pilgrimspath.io/articles/virtual-hajj-experience.html)
+- [360° Umrah Tour Guide: Walk Every Step in VR](https://www.pilgrimspath.io/articles/360-umrah-tour-guide.html)
+- [Virtual Kaaba Tawaf Guide: Learn the Sacred Ritual in VR](https://www.pilgrimspath.io/articles/vr-kaaba-tawaf-guide.html)
+- [Hajj Step-by-Step: Every Ritual Day by Day](https://www.pilgrimspath.io/articles/hajj-step-by-step-guide.html)
+- [How to Prepare for Umrah Virtually: VR Training Guide](https://www.pilgrimspath.io/articles/prepare-for-umrah-virtually.html)
+- [Virtual Tour of Makkah & Madinah: 360° Holy Cities Guide](https://www.pilgrimspath.io/articles/virtual-tour-makkah-madinah.html)
+- [Can You Do Hajj Virtually? What Islam Says](https://www.pilgrimspath.io/articles/can-you-do-hajj-virtually.html)
+- [Best Hajj Duas for Each Day: Complete Supplication Guide](https://www.pilgrimspath.io/articles/best-hajj-duas-for-each-day.html)
+- [First Time Umrah Tips: What I Wish I Knew Before Going](https://www.pilgrimspath.io/articles/first-time-umrah-tips.html)
+- [Difference Between Hajj and Umrah: Complete Comparison](https://www.pilgrimspath.io/articles/difference-between-hajj-and-umrah.html)
+
+## Contact
+
+- Website: https://www.pilgrimspath.io
+- Support: https://www.pilgrimspath.io/contact.html

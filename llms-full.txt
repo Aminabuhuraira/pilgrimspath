@@ -1,0 +1,166 @@
+# Pilgrim's Path — Complete Information
+
+> Immersive VR Hajj and Umrah experience platform for Muslims worldwide. Free access for the entire Ummah.
+
+## About Pilgrim's Path
+
+Pilgrim's Path is a technology platform that bridges spirituality and innovation, using virtual reality (VR) and immersive 360° technology to bring the sacred pilgrimage experiences of Hajj and Umrah to Muslims everywhere. Whether you are preparing for your first journey, unable to travel due to health or financial constraints, a teacher educating students, or simply seeking spiritual connection — Pilgrim's Path provides an authentic, scholar-guided virtual experience.
+
+### Mission
+To make the sacred pilgrimage experience accessible to every Muslim worldwide through immersive technology, while maintaining the highest standards of Islamic authenticity and scholarly guidance.
+
+### Key Features
+- **Immersive 360° Environments**: True-to-scale recreations of Masjid al-Haram, the Kaaba, Mina, Arafat, Muzdalifah, and Masjid al-Nabawi
+- **Scholar-Guided Audio**: Expert narration at every ritual step with proper pronunciation of duas
+- **Multi-Device Support**: Works on VR headsets (Quest, Vision Pro), smartphones, tablets, and desktop browsers via WebXR
+- **Gamified Learning**: Achievement system, progress tracking, and interactive quizzes
+- **Duas Library**: Complete collection of Hajj and Umrah supplications with Arabic text, transliteration, and English translation
+- **Free Access**: No paywall — available to all Muslims worldwide
+
+---
+
+## Hajj Virtual Experience
+
+### What is Hajj?
+Hajj is the annual Islamic pilgrimage to Makkah, one of the five pillars of Islam. It is obligatory for every Muslim who is physically and financially able to perform it at least once in their lifetime. Hajj takes place during the 8th–12th (or 13th) of Dhul Hijjah.
+
+### Hajj Rituals Covered in VR
+1. **Ihram**: Entering the sacred state at the Miqat boundary
+2. **Day 1 (8th Dhul Hijjah)**: Journey to Mina, prayers in the tent city
+3. **Day 2 (9th Dhul Hijjah)**: Standing at Arafat (Wuquf) — the peak of Hajj
+4. **Night of 9th/10th**: Stay at Muzdalifah, collect pebbles
+5. **Day 3 (10th Dhul Hijjah)**: Stoning of Jamarat al-Aqabah, animal sacrifice, Halq/Taqsir, Tawaf al-Ifadah
+6. **Days 4–5 (11th–12th)**: Ayyam al-Tashreeq, stoning all three pillars
+7. **Farewell**: Tawaf al-Wida (Farewell Tawaf)
+
+### Who Benefits
+- First-time pilgrims preparing for the real journey
+- Muslims who cannot yet travel (health, finances, visa restrictions)
+- Islamic schools and educators
+- Hajj travel agencies training their clients
+- Elderly Muslims reliving the experience
+- New Muslims learning about the pilgrimage
+
+---
+
+## Umrah Virtual Experience
+
+### What is Umrah?
+Umrah is the lesser pilgrimage to Makkah that can be performed at any time of the year. Unlike Hajj, it is not obligatory but is highly recommended (Sunnah Mu'akkadah).
+
+### Umrah Steps Covered in VR
+1. **Ihram**: Entering the sacred state, making intention, reciting Talbiyah
+2. **Tawaf**: Seven counter-clockwise circuits around the Kaaba
+3. **Sa'i**: Walking seven times between the hills of Safa and Marwah
+4. **Halq/Taqsir**: Shaving or trimming the hair to complete Umrah
+
+---
+
+## Sacred Sites in Virtual Tours
+
+### Makkah
+- **Masjid al-Haram**: The Sacred Mosque, largest in the world (capacity 1.5M+)
+- **The Kaaba**: The cube-shaped structure draped in the Kiswah, the Qiblah for all Muslims
+- **Hajar al-Aswad (Black Stone)**: Set in the eastern corner of the Kaaba
+- **Maqam Ibrahim**: The golden enclosure with the footprints of Prophet Ibrahim (AS)
+- **Hijr Ismail**: Semi-circular wall on the northwest side of the Kaaba
+- **Zamzam Well**: Sacred water source within Masjid al-Haram
+- **Safa and Marwah**: The two hills between which pilgrims perform Sa'i
+- **Mina**: The tent city where pilgrims stay during Hajj
+- **Arafat**: The plain where pilgrims stand on 9th Dhul Hijjah
+- **Muzdalifah**: Open plain between Arafat and Mina
+- **Jamarat Bridge**: Where the stoning ritual is performed
+- **Jabal al-Nour**: Mountain containing the Cave of Hira (first revelation)
+- **Jabal Thawr**: Mountain with the cave of the Hijra
+
+### Madinah
+- **Masjid al-Nabawi**: The Prophet's Mosque, second-holiest in Islam
+- **The Rawdah**: Area between the Prophet's tomb and his Minbar — "a garden from the gardens of Paradise"
+- **The Green Dome**: Iconic dome above the Prophet's resting place
+- **Jannat al-Baqi**: Ancient cemetery with companions and scholars
+- **Masjid Quba**: The first mosque ever built in Islam
+
+---
+
+## Duas & Prayers Library
+
+Complete collection includes:
+- Talbiyah (recited from Ihram until Tawaf)
+- Dua at the Black Stone
+- Dua between Yemeni Corner and Black Stone (Rabbana atina...)
+- Duas for each of the seven Tawaf circuits
+- Dua at Maqam Ibrahim
+- Dua at Safa and Marwah
+- Dua at Arafat
+- Dua at Muzdalifah
+- Dua when stoning the Jamarat
+- General Hajj and Umrah supplications
+
+All duas provided in Arabic script, transliteration, and English translation.
+
+---
+
+## Enterprise & White-Label Solutions
+
+Pilgrim's Path offers white-label VR pilgrimage solutions for:
+- **Hajj & Umrah Travel Agencies**: Pre-trip training for clients
+- **Mosques & Islamic Centers**: Educational programs and community engagement
+- **Islamic Schools & Universities**: Curriculum-integrated VR learning
+- **Hospitals & Care Homes**: Spiritual experiences for those unable to travel
+- **Government Tourism Boards**: Digital tourism initiatives
+
+Features include custom branding, API access, analytics dashboard, dedicated support, and multi-language options.
+
+---
+
+## Articles & Guides
+
+### The Complete Guide to Virtual Hajj Experience
+URL: https://www.pilgrimspath.io/articles/virtual-hajj-experience.html
+Comprehensive guide explaining what virtual Hajj is, how the technology works, what you experience in VR, who benefits, the spiritual value, and how to get started.
+
+### 360° Umrah Tour Guide
+URL: https://www.pilgrimspath.io/articles/360-umrah-tour-guide.html
+Step-by-step walkthrough of every Umrah station from a 360° perspective — Ihram, Tawaf, Sa'i, and Halq — with tips for VR preparation.
+
+### Virtual Kaaba Tawaf Guide
+URL: https://www.pilgrimspath.io/articles/vr-kaaba-tawaf-guide.html
+Detailed guide to performing Tawaf including types of Tawaf, step-by-step instructions, duas for each circuit, sacred landmarks, and common mistakes to avoid.
+
+### Hajj Step-by-Step: Every Ritual Day by Day
+URL: https://www.pilgrimspath.io/articles/hajj-step-by-step-guide.html
+Day-by-day Hajj guide from preparation and Ihram through all five days including Mina, Arafat, Muzdalifah, Eid al-Adha rituals, Ayyam al-Tashreeq, and Farewell Tawaf.
+
+### How to Prepare for Umrah Virtually
+URL: https://www.pilgrimspath.io/articles/prepare-for-umrah-virtually.html
+Guide on using VR technology to prepare for real Umrah — covers traditional vs VR preparation, practicing each step virtually, and essential duas to memorize.
+
+### Virtual Tour of Makkah & Madinah
+URL: https://www.pilgrimspath.io/articles/virtual-tour-makkah-madinah.html
+Comprehensive 360° tour guide covering Masjid al-Haram, the Kaaba, Makkah landmarks, Madinah, Masjid al-Nabawi, the Rawdah, and more.
+
+### Can You Do Hajj Virtually? What Islam Says
+URL: https://www.pilgrimspath.io/articles/can-you-do-hajj-virtually.html
+FAQ-style article addressing the Islamic ruling on virtual Hajj, who is exempt from physical Hajj, what scholars say about VR for education, and how virtual preparation helps real pilgrims.
+
+### Best Hajj Duas for Each Day
+URL: https://www.pilgrimspath.io/articles/best-hajj-duas-for-each-day.html
+Complete supplication guide organized by ritual and day — Talbiyah, Tawaf duas, Sa'i duas, Arafat supplications, Muzdalifah, stoning duas. Each dua in Arabic, transliteration, and English.
+
+### First Time Umrah Tips: What I Wish I Knew
+URL: https://www.pilgrimspath.io/articles/first-time-umrah-tips.html
+Practical tips for first-time Umrah pilgrims — packing list, best time to go, navigation tips at Masjid al-Haram, 10 common mistakes, money-saving advice, women-specific tips, and how VR preparation changes the experience.
+
+### Difference Between Hajj and Umrah
+URL: https://www.pilgrimspath.io/articles/difference-between-hajj-and-umrah.html
+Complete side-by-side comparison of Hajj vs Umrah — rituals, timing, cost, duration, obligation, 3 types of Hajj, spiritual rewards, and FAQs. Includes comparison table.
+
+---
+
+## Contact & Links
+
+- Website: https://www.pilgrimspath.io
+- Articles: https://www.pilgrimspath.io/articles.html
+- Support: https://www.pilgrimspath.io/contact.html
+- Privacy Policy: https://www.pilgrimspath.io/privacy.html
+- Terms of Service: https://www.pilgrimspath.io/terms.html
