@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://pilgrimspath.io/sitemap.xml
+Sitemap: https://www.pilgrimspath.io/sitemap.xml
