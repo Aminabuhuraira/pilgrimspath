@@ -1,8 +1,5 @@
 User-agent: *
 Allow: /
-Disallow: /admin.html
-Disallow: /dashboard.html
-Disallow: /index2.html
 
 # Sitemaps
 Sitemap: https://www.pilgrimspath.io/sitemap.xml
