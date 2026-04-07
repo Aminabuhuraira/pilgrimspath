@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#1a0f0a">
+    <title>Begin Your Hajj Journey | Pilgrim's Path VR</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+        :root {
+            --gold: #C9A227;
+            --gold-light: #F4E4BC;
+            --gold-glow: rgba(201,162,39,0.35);
+            --deep: #1a0f0a;
+            --deep-mid: #2C1810;
+            --cream: #FDF6E3;
+            --emerald: #1D5C4A;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--deep);
+            color: var(--cream);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── Stars background ── */
+        .stars {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background:
+                radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,.7) 50%, transparent 100%),
+                radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,.5) 50%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 55% 15%, rgba(255,255,255,.8) 50%, transparent 100%),
+                radial-gradient(1px 1px at 70% 45%, rgba(255,255,255,.4) 50%, transparent 100%),
+                radial-gradient(1px 1px at 85% 75%, rgba(255,255,255,.6) 50%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 20% 80%, rgba(255,255,255,.7) 50%, transparent 100%),
+                radial-gradient(1px 1px at 45% 90%, rgba(255,255,255,.5) 50%, transparent 100%),
+                radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,.6) 50%, transparent 100%);
+        }
+
+        /* ── Screens system ── */
+        .screen {
+            display: none;
+            min-height: 100vh;
+            position: relative; z-index: 1;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        .screen.active { display: flex; }
+
+        .screen-inner {
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* ── Logo & Branding ── */
+        .brand-logo {
+            width: 80px; height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--gold);
+            box-shadow: 0 0 30px var(--gold-glow);
+        }
+        .brand-logo img { width:100%; height:100%; object-fit:cover; }
+
+        .screen-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--gold);
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+        .screen-tag i { font-size: 0.6rem; }
+
+        /* ── Typography ── */
+        h1, h2 {
+            font-family: 'Playfair Display', serif;
+            line-height: 1.2;
+        }
+        h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 12px; }
+        h2 { font-size: clamp(1.6rem, 4vw, 2.4rem); margin-bottom: 12px; }
+
+        .gold { color: var(--gold); }
+
+        .subtitle {
+            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+            color: rgba(253,246,227,0.75);
+            line-height: 1.8;
+            max-width: 560px;
+            margin: 0 auto 32px;
+        }
+
+        /* ── Buttons ── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 36px;
+            border-radius: 60px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #D4AF37, #C9A227, #B8941F);
+            color: var(--deep);
+            box-shadow: 0 4px 25px var(--gold-glow);
+        }
+        .btn-gold:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(201,162,39,0.5);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--gold);
+            border: 2px solid var(--gold);
+        }
+        .btn-outline:hover {
+            background: var(--gold);
+            color: var(--deep);
+        }
+
+        .btn-ghost {
+            background: rgba(255,255,255,0.05);
+            color: var(--cream);
+            border: 1px solid rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+        }
+        .btn-ghost:hover {
+            background: rgba(255,255,255,0.12);
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        /* ── Language Grid ── */
+        .lang-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 14px;
+            margin: 32px auto;
+            max-width: 520px;
+        }
+
+        .lang-card {
+            position: relative;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 22px 16px;
+            cursor: pointer;
+            transition: all 0.35s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .lang-card:hover {
+            background: rgba(201,162,39,0.08);
+            border-color: var(--gold);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(201,162,39,0.15);
+        }
+        .lang-card.selected {
+            background: rgba(201,162,39,0.12);
+            border-color: var(--gold);
+            box-shadow: 0 0 20px var(--gold-glow);
+        }
+        .lang-card.selected::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 8px; right: 10px;
+            font-size: 0.7rem;
+            color: var(--gold);
+            background: rgba(201,162,39,0.2);
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .lang-flag { font-size: 2rem; line-height: 1; }
+        .lang-name { font-weight: 600; font-size: 0.9rem; }
+        .lang-native { font-size: 0.75rem; color: rgba(253,246,227,0.5); }
+
+        /* ── Decorative divider ── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 36px auto;
+            max-width: 300px;
+        }
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        .divider-icon { color: var(--gold); font-size: 0.9rem; }
+
+        /* ── Welcome bismillah ── */
+        .bismillah {
+            font-family: 'Amiri', serif;
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            color: var(--gold);
+            margin-bottom: 28px;
+            direction: rtl;
+            line-height: 1.6;
+        }
+
+        .welcome-text {
+            font-size: clamp(1rem, 2.5vw, 1.15rem);
+            color: rgba(253,246,227,0.8);
+            line-height: 1.9;
+            max-width: 580px;
+            margin: 0 auto 20px;
+        }
+
+        .verse-box {
+            background: rgba(201,162,39,0.06);
+            border: 1px solid rgba(201,162,39,0.2);
+            border-radius: 16px;
+            padding: 24px 28px;
+            margin: 28px auto;
+            max-width: 540px;
+        }
+        .verse-arabic {
+            font-family: 'Amiri', serif;
+            font-size: 1.4rem;
+            color: var(--gold);
+            direction: rtl;
+            line-height: 2;
+            margin-bottom: 8px;
+        }
+        .verse-translation {
+            font-size: 0.85rem;
+            color: rgba(253,246,227,0.6);
+            font-style: italic;
+        }
+
+        /* ── Ihram Section ── */
+        .ihram-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 0;
+            margin: 28px auto;
+            max-width: 600px;
+            overflow: hidden;
+            text-align: left;
+        }
+
+        .ihram-visual {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #2C1810, #3D2415);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .ihram-visual i {
+            font-size: 4rem;
+            color: var(--gold);
+            opacity: 0.6;
+        }
+        .ihram-visual-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, transparent 40%, rgba(26,15,10,0.9));
+        }
+        .ihram-visual-label {
+            position: absolute;
+            bottom: 16px; left: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .ihram-body { padding: 28px; }
+        .ihram-body h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            margin-bottom: 16px;
+        }
+
+        .step-list { list-style: none; padding: 0; }
+        .step-list li {
+            display: flex;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            align-items: flex-start;
+        }
+        .step-list li:last-child { border-bottom: none; }
+
+        .step-num {
+            flex-shrink: 0;
+            width: 32px; height: 32px;
+            background: linear-gradient(135deg, var(--gold), #B8941F);
+            color: var(--deep);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .step-content { flex: 1; }
+        .step-content strong {
+            display: block;
+            font-size: 0.95rem;
+            margin-bottom: 3px;
+        }
+        .step-content span {
+            font-size: 0.85rem;
+            color: rgba(253,246,227,0.6);
+            line-height: 1.6;
+        }
+
+        /* ── Gender toggle for ihram ── */
+        .gender-toggle {
+            display: flex;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50px;
+            padding: 4px;
+            margin: 0 auto 24px;
+            max-width: 260px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .gender-btn {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 46px;
+            border: none;
+            background: transparent;
+            color: rgba(253,246,227,0.5);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .gender-btn.active {
+            background: var(--gold);
+            color: var(--deep);
+        }
+
+        /* ── Talbiyah callout ── */
+        .talbiyah-box {
+            background: linear-gradient(135deg, rgba(29,92,74,0.2), rgba(29,92,74,0.05));
+            border: 1px solid rgba(29,92,74,0.3);
+            border-radius: 16px;
+            padding: 24px;
+            margin: 24px auto;
+            max-width: 540px;
+        }
+        .talbiyah-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--emerald);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .talbiyah-arabic {
+            font-family: 'Amiri', serif;
+            font-size: 1.3rem;
+            color: var(--gold);
+            direction: rtl;
+            line-height: 2;
+            margin-bottom: 10px;
+        }
+        .talbiyah-translit {
+            font-size: 0.9rem;
+            color: var(--cream);
+            font-style: italic;
+            margin-bottom: 6px;
+            line-height: 1.7;
+        }
+        .talbiyah-meaning {
+            font-size: 0.8rem;
+            color: rgba(253,246,227,0.5);
+            line-height: 1.6;
+        }
+
+        /* ── Progress dots ── */
+        .progress {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        .progress-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            transition: all 0.4s ease;
+        }
+        .progress-dot.active {
+            background: var(--gold);
+            box-shadow: 0 0 12px var(--gold-glow);
+            width: 28px;
+            border-radius: 5px;
+        }
+        .progress-dot.done {
+            background: var(--gold);
+            opacity: 0.5;
+        }
+
+        /* ── Buttons row ── */
+        .btn-row {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 28px;
+        }
+
+        /* ── Loading screen ── */
+        .loading-overlay {
+            position: fixed; inset: 0; z-index: 100;
+            background: var(--deep);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+        }
+        .loading-overlay.active { display: flex; }
+
+        .spinner {
+            width: 48px; height: 48px;
+            border: 3px solid rgba(201,162,39,0.2);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-text {
+            font-size: 0.9rem;
+            color: rgba(253,246,227,0.6);
+            letter-spacing: 1px;
+        }
+
+        /* ── Animations ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .anim { animation: fadeUp 0.7s cubic-bezier(0.4,0,0.2,1) forwards; opacity: 0; }
+        .anim-d1 { animation-delay: 0.1s; }
+        .anim-d2 { animation-delay: 0.25s; }
+        .anim-d3 { animation-delay: 0.4s; }
+        .anim-d4 { animation-delay: 0.55s; }
+        .anim-d5 { animation-delay: 0.7s; }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            .lang-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+            .lang-card { padding: 16px 10px; }
+            .lang-flag { font-size: 1.6rem; }
+            .ihram-body { padding: 20px; }
+            .screen { padding: 30px 16px; }
+            .btn { padding: 14px 28px; font-size: 0.9rem; }
+        }
+
+        /* ── VR iframe container ── */
+        .vr-container {
+            position: fixed; inset: 0; z-index: 200;
+            display: none;
+        }
+        .vr-container.active { display: block; }
+        .vr-container iframe {
+            width: 100%; height: 100%; border: none;
+        }
+        .vr-back-btn {
+            position: fixed;
+            top: 16px; left: 16px; z-index: 210;
+            background: rgba(0,0,0,0.7);
+            color: var(--cream);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .vr-back-btn:hover { background: rgba(201,162,39,0.3); border-color: var(--gold); }
+        .vr-back-btn.active { display: flex; }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+
+    <!-- ═══════════════════════════════════════
+         SCREEN 1: Language Selection
+         ═══════════════════════════════════════ -->
+    <div class="screen active" id="screenLang">
+        <div class="screen-inner">
+            <div class="brand-logo anim">
+                <img src="images/logo.png" alt="Pilgrim's Path">
+            </div>
+            <div class="screen-tag anim anim-d1">
+                <i class="fas fa-circle"></i> Pilgrim's Path VR
+            </div>
+            <h1 class="anim anim-d2">Choose Your <span class="gold">Language</span></h1>
+            <p class="subtitle anim anim-d3">Select the language for your immersive Hajj experience. All guidance, duas, and narration will be presented in your chosen language.</p>
+
+            <div class="lang-grid anim anim-d3">
+                <div class="lang-card selected" data-lang="en" onclick="selectLang(this)">
+                    <span class="lang-flag">🇬🇧</span>
+                    <span class="lang-name">English</span>
+                </div>
+                <div class="lang-card" data-lang="ar" onclick="selectLang(this)">
+                    <span class="lang-flag">🇸🇦</span>
+                    <span class="lang-name">العربية</span>
+                    <span class="lang-native">Arabic</span>
+                </div>
+                <div class="lang-card" data-lang="fr" onclick="selectLang(this)">
+                    <span class="lang-flag">🇫🇷</span>
+                    <span class="lang-name">Français</span>
+                    <span class="lang-native">French</span>
+                </div>
+                <div class="lang-card" data-lang="ur" onclick="selectLang(this)">
+                    <span class="lang-flag">🇵🇰</span>
+                    <span class="lang-name">اردو</span>
+                    <span class="lang-native">Urdu</span>
+                </div>
+                <div class="lang-card" data-lang="tr" onclick="selectLang(this)">
+                    <span class="lang-flag">🇹🇷</span>
+                    <span class="lang-name">Türkçe</span>
+                    <span class="lang-native">Turkish</span>
+                </div>
+                <div class="lang-card" data-lang="ms" onclick="selectLang(this)">
+                    <span class="lang-flag">🇲🇾</span>
+                    <span class="lang-name">Melayu</span>
+                    <span class="lang-native">Malay</span>
+                </div>
+            </div>
+
+            <button class="btn btn-gold anim anim-d4" onclick="goToScreen('screenWelcome')">
+                <span>Continue</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+
+            <div class="progress anim anim-d5">
+                <div class="progress-dot active"></div>
+                <div class="progress-dot"></div>
+                <div class="progress-dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════
+         SCREEN 2: Welcome
+         ═══════════════════════════════════════ -->
+    <div class="screen" id="screenWelcome">
+        <div class="screen-inner">
+            <div class="bismillah anim">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+
+            <div class="screen-tag anim anim-d1">
+                <i class="fas fa-kaaba"></i> The Sacred Pilgrimage
+            </div>
+
+            <h1 class="anim anim-d2">Welcome, <span class="gold">Pilgrim</span></h1>
+
+            <p class="welcome-text anim anim-d3">Welcome to this immersive Hajj experience, a journey of faith, devotion, and unity. Together, we will explore the sacred rites, duas, and profound meanings of Hajj, bringing you closer to the essence of Hajj.</p>
+
+            <div class="verse-box anim anim-d3">
+                <div class="verse-arabic">وَأَذِّن فِي النَّاسِ بِالْحَجِّ يَأْتُوكَ رِجَالًا وَعَلَىٰ كُلِّ ضَامِرٍ يَأْتِينَ مِن كُلِّ فَجٍّ عَمِيقٍ</div>
+                <div class="verse-translation">"And proclaim to the people the Hajj; they will come to you on foot and on every lean camel; they will come from every distant pass." — Quran 22:27</div>
+            </div>
+
+            <div class="divider anim anim-d4">
+                <div class="divider-line"></div>
+                <div class="divider-icon">✦</div>
+                <div class="divider-line"></div>
+            </div>
+
+            <div class="btn-row anim anim-d4">
+                <button class="btn btn-ghost" onclick="goToScreen('screenLang')">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back</span>
+                </button>
+                <button class="btn btn-gold" onclick="goToScreen('screenIhram')">
+                    <span>Prepare for Ihram</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <div class="progress anim anim-d5">
+                <div class="progress-dot done"></div>
+                <div class="progress-dot active"></div>
+                <div class="progress-dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════
+         SCREEN 3: Ihram Guide
+         ═══════════════════════════════════════ -->
+    <div class="screen" id="screenIhram">
+        <div class="screen-inner">
+            <div class="screen-tag anim">
+                <i class="fas fa-user"></i> Entering the Sacred State
+            </div>
+
+            <h2 class="anim anim-d1">How to Tie Your <span class="gold">Ihram</span></h2>
+            <p class="subtitle anim anim-d2">Before beginning Hajj, every pilgrim must enter the state of Ihram — a state of spiritual purity and intention.</p>
+
+            <div class="gender-toggle anim anim-d2">
+                <button class="gender-btn active" onclick="switchGender('men', this)">
+                    <i class="fas fa-mars"></i> Men
+                </button>
+                <button class="gender-btn" onclick="switchGender('women', this)">
+                    <i class="fas fa-venus"></i> Women
+                </button>
+            </div>
+
+            <div class="ihram-card anim anim-d3">
+                <div class="ihram-visual">
+                    <i class="fas fa-person-praying"></i>
+                    <div class="ihram-visual-overlay"></div>
+                    <div class="ihram-visual-label">Ihram Guide</div>
+                </div>
+
+                <div class="ihram-body" id="ihramMen">
+                    <h3>Ihram for Men</h3>
+                    <ol class="step-list">
+                        <li>
+                            <div class="step-num">1</div>
+                            <div class="step-content">
+                                <strong>Perform Ghusl (Full Ablution)</strong>
+                                <span>Take a full ritual bath with the intention of entering Ihram. Trim your nails and remove unwanted hair before this.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="step-num">2</div>
+                            <div class="step-content">
+                                <strong>Wrap the Izar (Lower Garment)</strong>
+                                <span>Take the larger white cloth and wrap it around your waist, covering from the navel to below the knees. Tuck or secure with a belt — no pins or stitching.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="step-num">3</div>
+                            <div class="step-content">
+                                <strong>Drape the Rida (Upper Garment)</strong>
+                                <span>Place the second white cloth over your left shoulder, bringing it under your right arm. The right shoulder is initially covered, but exposed during Tawaf (Idtiba').</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="step-num">4</div>
+                            <div class="step-content">
+                                <strong>Wear Sandals</strong>
+                                <span>Wear open sandals that do not cover the ankles or the top of the feet. No socks, shoes, or closed footwear.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="step-num">5</div>
+                            <div class="step-content">
+                                <strong>Make Your Niyyah (Intention)</strong>
+                                <span>At the Miqat, declare your intention for Hajj: "Labbayk Allahumma Hajjan" — and begin reciting the Talbiyah.</span>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="ihram-body" id="ihramWomen" style="display:none;">
+                    <h3>Ihram for Women</h3>
+                    <ol class="step-list">
+                        <li>
+                            <div class="step-num">1</div>
+                            <div class="step-content">
+                                <strong>Perform Ghusl (Full Ablution)</strong>
+                                <span>Take a full ritual bath. Trim nails and remove unwanted hair before beginning.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="step-num">2</div>
+                            <div class="step-content">
+                                <strong>Wear Any Modest Clothing</strong>
+                                <span>Women do not wear the two white cloths — wear any loose, modest clothing that covers the body. Avoid bright colours and adornments. An abaya and hijab are suitable.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="step-num">3</div>
+                            <div class="step-content">
+                                <strong>Uncover the Face and Hands</strong>
+                                <span>During Ihram, do not wear a niqab (face veil) or gloves. Your face and hands should remain uncovered. A visor or loose fabric hanging from the head (without touching the face) is permitted.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="step-num">4</div>
+                            <div class="step-content">
+                                <strong>Wear Comfortable Footwear</strong>
+                                <span>Women may wear any closed or open footwear — there is no restriction on socks or shoes for women in Ihram.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="step-num">5</div>
+                            <div class="step-content">
+                                <strong>Make Your Niyyah (Intention)</strong>
+                                <span>At the Miqat, declare your intention for Hajj: "Labbayk Allahumma Hajjan" — and begin reciting the Talbiyah.</span>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="talbiyah-box anim anim-d4">
+                <div class="talbiyah-label"><i class="fas fa-volume-high"></i> The Talbiyah</div>
+                <div class="talbiyah-arabic">لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ ، لَا شَرِيكَ لَكَ</div>
+                <div class="talbiyah-translit">"Labbayk Allahumma labbayk. Labbayk la shareeka laka labbayk. Innal hamda wan-ni'mata laka wal-mulk. La shareeka lak."</div>
+                <div class="talbiyah-meaning">"Here I am, O Allah, here I am. Here I am, You have no partner, here I am. Verily all praise, grace, and sovereignty belong to You. You have no partner."</div>
+            </div>
+
+            <div class="btn-row anim anim-d5">
+                <button class="btn btn-ghost" onclick="goToScreen('screenWelcome')">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back</span>
+                </button>
+                <button class="btn btn-gold" onclick="launchVR()">
+                    <i class="fas fa-vr-cardboard"></i>
+                    <span>Begin Virtual Tour</span>
+                </button>
+            </div>
+
+            <div class="progress anim anim-d5">
+                <div class="progress-dot done"></div>
+                <div class="progress-dot done"></div>
+                <div class="progress-dot active"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════
+         Loading overlay
+         ═══════════════════════════════════════ -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Preparing your sacred journey...</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════
+         VR Tour container
+         ═══════════════════════════════════════ -->
+    <div class="vr-container" id="vrContainer">
+        <iframe id="vrFrame" src="" allow="gyroscope; accelerometer; xr-spatial-tracking; fullscreen"></iframe>
+    </div>
+    <button class="vr-back-btn" id="vrBackBtn" onclick="exitVR()">
+        <i class="fas fa-arrow-left"></i> Back to Guide
+    </button>
+
+    <script>
+        // ── State ──
+        let selectedLang = 'en';
+
+        // ── Language selection ──
+        function selectLang(el) {
+            document.querySelectorAll('.lang-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedLang = el.dataset.lang;
+        }
+
+        // ── Screen navigation ──
+        function goToScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => {
+                s.classList.remove('active');
+            });
+            const target = document.getElementById(id);
+            target.classList.add('active');
+            // Re-trigger animations
+            target.querySelectorAll('.anim').forEach(el => {
+                el.style.animation = 'none';
+                el.offsetHeight; // force reflow
+                el.style.animation = '';
+            });
+            window.scrollTo(0, 0);
+        }
+
+        // ── Gender toggle for Ihram ──
+        function switchGender(gender, btn) {
+            document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('ihramMen').style.display = gender === 'men' ? 'block' : 'none';
+            document.getElementById('ihramWomen').style.display = gender === 'women' ? 'block' : 'none';
+        }
+
+        // ── Launch VR tour ──
+        function launchVR() {
+            const loader = document.getElementById('loadingOverlay');
+            loader.classList.add('active');
+
+            setTimeout(() => {
+                const frame = document.getElementById('vrFrame');
+                frame.src = 'pilgrimspath%20vr/index.htm';
+
+                frame.onload = function() {
+                    loader.classList.remove('active');
+                    document.getElementById('vrContainer').classList.add('active');
+                    document.getElementById('vrBackBtn').classList.add('active');
+                    // Hide all screens
+                    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                };
+
+                // Fallback if onload doesn't fire quickly
+                setTimeout(() => {
+                    loader.classList.remove('active');
+                    document.getElementById('vrContainer').classList.add('active');
+                    document.getElementById('vrBackBtn').classList.add('active');
+                    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                }, 5000);
+            }, 1500);
+        }
+
+        // ── Exit VR ──
+        function exitVR() {
+            document.getElementById('vrContainer').classList.remove('active');
+            document.getElementById('vrBackBtn').classList.remove('active');
+            document.getElementById('vrFrame').src = '';
+            goToScreen('screenIhram');
+        }
+    </script>
+</body>
+</html>
