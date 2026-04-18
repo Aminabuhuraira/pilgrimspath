@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1199634958501931');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1199634958501931&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#C9A227">
+    <title>Donate | Support Pilgrim's Path</title>
+    <meta name="description" content="Support the Pilgrim's Path mission. Your donation helps us bring free VR Hajj and Umrah preparation to Muslims worldwide.">
+    <link rel="canonical" href="https://www.pilgrimspath.io/donate.html">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .donate-hero {
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 140px 20px 60px;
+            background: linear-gradient(180deg, #FFFEF7 0%, #FDF6E3 50%, #F4E4BC 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .donate-hero::before {
+            content: '☪';
+            position: absolute;
+            top: 15%;
+            right: 10%;
+            font-size: 80px;
+            color: #C9A227;
+            opacity: 0.15;
+        }
+        .donate-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            color: #2A2A3C;
+            margin-bottom: 16px;
+        }
+        .donate-hero h1 span { color: #C9A227; }
+        .donate-hero p {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .donate-section {
+            padding: 60px 20px 80px;
+            background: #FAFAFA;
+        }
+        .donate-container {
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        /* Preset amounts */
+        .amount-presets {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .amount-btn {
+            padding: 18px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 14px;
+            background: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2A2A3C;
+            cursor: pointer;
+            transition: all .3s;
+            text-align: center;
+        }
+        .amount-btn:hover {
+            border-color: #C9A227;
+            background: rgba(201,162,39,0.05);
+        }
+        .amount-btn.active {
+            border-color: #C9A227;
+            background: rgba(201,162,39,0.1);
+            color: #8B7355;
+            box-shadow: 0 4px 20px rgba(201,162,39,0.15);
+        }
+        .amount-btn small {
+            display: block;
+            font-size: .7rem;
+            font-weight: 400;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        /* Custom amount */
+        .custom-amount-wrap {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .custom-amount-wrap span.currency {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #999;
+        }
+        .custom-amount-wrap input {
+            width: 100%;
+            padding: 18px 18px 18px 38px;
+            border: 2px solid #e0e0e0;
+            border-radius: 14px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2A2A3C;
+            outline: none;
+            transition: border .3s;
+            box-sizing: border-box;
+        }
+        .custom-amount-wrap input:focus {
+            border-color: #C9A227;
+        }
+        .custom-amount-wrap input::placeholder {
+            font-weight: 400;
+            color: #ccc;
+        }
+
+        /* Email */
+        .email-wrap {
+            margin-bottom: 24px;
+        }
+        .email-wrap label {
+            display: block;
+            font-size: .85rem;
+            font-weight: 500;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        .email-wrap input {
+            width: 100%;
+            padding: 16px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 14px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            color: #2A2A3C;
+            outline: none;
+            transition: border .3s;
+            box-sizing: border-box;
+        }
+        .email-wrap input:focus { border-color: #C9A227; }
+
+        /* Submit */
+        .donate-submit {
+            width: 100%;
+            padding: 18px 32px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #C9A227, #8B7355);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(201,162,39,0.3);
+            transition: all .3s;
+        }
+        .donate-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(201,162,39,0.4);
+        }
+        .donate-submit:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .donate-trust {
+            text-align: center;
+            margin-top: 16px;
+            font-size: .8rem;
+            color: #bbb;
+        }
+        .donate-trust i { margin-right: 4px; }
+
+        /* Impact cards */
+        .impact-section {
+            padding: 60px 20px;
+            background: white;
+        }
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 800px;
+            margin: 32px auto 0;
+        }
+        .impact-card {
+            text-align: center;
+            padding: 28px 20px;
+            border-radius: 16px;
+            background: #FFFEF7;
+            border: 1px solid rgba(201,162,39,0.1);
+        }
+        .impact-card .icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+        .impact-card h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            color: #2A2A3C;
+        }
+        .impact-card p {
+            font-size: .8rem;
+            color: #888;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .donate-hero h1 { font-size: 2rem; }
+            .amount-presets { grid-template-columns: repeat(2, 1fr); }
+            .impact-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .donate-hero { padding: 120px 16px 40px; }
+            .donate-hero h1 { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Pilgrim's Path" class="logo-img">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="hajj-journey.html">Hajj</a></li>
+                <li><a href="umrah-journey.html">Umrah</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="articles.html">Articles</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+            <button class="cta-btn nav-cta" onclick="window.location.href='login.html?tab=register'">
+                <span>Start Free Journey</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <a href="donate.html" class="nav-donate" style="display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:50px;border:1.5px solid rgba(201,162,39,0.3);color:#C9A227;font-size:.85rem;font-weight:500;text-decoration:none;transition:all .3s;">Donate <i class="fas fa-hand-holding-heart"></i></a>
+            <div class="hamburger" id="hamburger">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="hajj-journey.html">Hajj Journey</a></li>
+            <li><a href="umrah-journey.html">Umrah Journey</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="articles.html">Articles</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="login.html?tab=register" class="cta-btn mobile-cta">Start Free Journey</a></li>
+            <li><a href="donate.html" style="display:inline-flex;align-items:center;gap:8px;color:#C9A227;"><i class="fas fa-hand-holding-heart"></i> Donate</a></li>
+        </ul>
+    </div>
+
+    <!-- Hero -->
+    <section class="donate-hero">
+        <div>
+            <div style="font-size:3rem;margin-bottom:16px;">🕋</div>
+            <h1>Support the <span>Ummah's</span> Journey</h1>
+            <p>Your sadaqah helps us bring free VR Hajj and Umrah preparation to Muslims who dream of the sacred pilgrimage. Every dollar brings someone closer to Makkah.</p>
+        </div>
+    </section>
+
+    <!-- Donate Form -->
+    <section class="donate-section" id="donate">
+        <div class="donate-container">
+            <div class="amount-presets">
+                <button class="amount-btn" data-amount="5">$5<small>A dua book</small></button>
+                <button class="amount-btn" data-amount="10">$10<small>VR access for 1</small></button>
+                <button class="amount-btn active" data-amount="25">$25<small>Sponsor a pilgrim</small></button>
+                <button class="amount-btn" data-amount="50">$50<small>Classroom license</small></button>
+                <button class="amount-btn" data-amount="100">$100<small>Mosque package</small></button>
+                <button class="amount-btn" data-amount="250">$250<small>Community sponsor</small></button>
+            </div>
+
+            <div class="custom-amount-wrap">
+                <span class="currency">$</span>
+                <input type="number" id="customAmount" min="1" step="1" placeholder="Enter custom amount">
+            </div>
+
+            <div class="email-wrap">
+                <label for="donorEmail">Email (for your receipt)</label>
+                <input type="email" id="donorEmail" placeholder="your@email.com" required>
+            </div>
+
+            <button class="donate-submit" id="donateBtn" onclick="processDonation()">
+                <i class="fas fa-hand-holding-heart"></i>
+                <span>Donate $25</span>
+            </button>
+
+            <p class="donate-trust">
+                <i class="fas fa-shield-halved"></i> Secure payment via Paystack · Tax receipt sent to your email
+            </p>
+        </div>
+    </section>
+
+    <!-- Impact -->
+    <section class="impact-section">
+        <div style="text-align:center;">
+            <h2 style="font-family:'Playfair Display',serif;font-size:1.8rem;color:#2A2A3C;">Where Your Donation Goes</h2>
+            <p style="color:#888;max-width:500px;margin:8px auto 0;">100% of donations fund platform access and content for underserved communities.</p>
+        </div>
+        <div class="impact-grid">
+            <div class="impact-card">
+                <div class="icon">🕌</div>
+                <h4>Free Mosque Access</h4>
+                <p>Provide VR Hajj training to mosques and Islamic centers that serve low-income communities.</p>
+            </div>
+            <div class="impact-card">
+                <div class="icon">🌍</div>
+                <h4>Global Reach</h4>
+                <p>Translate content into more languages and bring the experience to Muslims in underserved regions.</p>
+            </div>
+            <div class="impact-card">
+                <div class="icon">📚</div>
+                <h4>Scholar Content</h4>
+                <p>Fund new scholar-guided audio content, duas recordings, and educational materials.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="footer-logo"><img src="images/logo.png" alt="Pilgrim's Path" class="footer-logo-img"></a>
+                    <p class="footer-tagline">Bridging technology and spirituality to bring the sacred pilgrimage experience to Muslims worldwide.</p>
+                </div>
+                <div class="footer-links"><h4>Experience</h4><ul><li><a href="hajj-journey.html">Hajj Journey</a></li><li><a href="umrah-journey.html">Umrah Journey</a></li><li><a href="vr-features.html">VR Features</a></li><li><a href="duas.html">Duas & Prayers</a></li></ul></div>
+                <div class="footer-links"><h4>Resources</h4><ul><li><a href="articles.html">Articles & Guides</a></li><li><a href="faq.html">FAQ</a></li><li><a href="contact.html">Support</a></li><li><a href="enterprise.html">Enterprise</a></li></ul></div>
+                <div class="footer-links"><h4>Company</h4><ul><li><a href="about.html">About Us</a></li><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms of Service</a></li></ul></div>
+            </div>
+            <div class="footer-bottom"><p>&copy; 2026 Pilgrim's Path. All rights reserved. Made with ❤️ for the Ummah.</p></div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => updateNavForAuth());
+    </script>
+    <script src="https://js.paystack.co/v2/inline.js"></script>
+    <script>
+    let selectedAmount = 25;
+
+    // Preset buttons
+    document.querySelectorAll('.amount-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedAmount = parseInt(btn.dataset.amount);
+            document.getElementById('customAmount').value = '';
+            updateButton();
+        });
+    });
+
+    // Custom amount
+    document.getElementById('customAmount').addEventListener('input', function() {
+        if (this.value) {
+            document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+            selectedAmount = parseInt(this.value) || 0;
+        }
+        updateButton();
+    });
+
+    function updateButton() {
+        const btn = document.getElementById('donateBtn');
+        btn.querySelector('span').textContent = selectedAmount > 0 ? 'Donate $' + selectedAmount : 'Enter amount';
+    }
+
+    function processDonation() {
+        const email = document.getElementById('donorEmail').value.trim();
+        if (!email) { document.getElementById('donorEmail').focus(); return; }
+        if (selectedAmount < 1) { document.getElementById('customAmount').focus(); return; }
+
+        const btn = document.getElementById('donateBtn');
+        btn.disabled = true;
+        btn.querySelector('span').textContent = 'Processing...';
+
+        // Use Paystack inline popup
+        const paystack = new PaystackPop();
+        paystack.newTransaction({
+            key: 'pk_live_f6c116780096d1e89eb6b9e27347606cc4fa1a97',
+            email: email,
+            amount: selectedAmount * 100,
+            currency: 'USD',
+            metadata: {
+                custom_fields: [
+                    { display_name: 'Type', variable_name: 'type', value: 'Donation' },
+                    { display_name: 'Amount', variable_name: 'amount', value: '$' + selectedAmount }
+                ]
+            },
+            onSuccess: function(transaction) {
+                // Fire Meta events
+                if (typeof fbq !== 'undefined') {
+                    fbq('track', 'Donate', { value: selectedAmount, currency: 'USD' });
+                }
+                if (typeof MetaCAPI !== 'undefined') {
+                    MetaCAPI.purchase({ value: selectedAmount, currency: 'USD', content_name: 'Donation' }, { em: email });
+                }
+                // Show thank you
+                document.querySelector('.donate-container').innerHTML =
+                    '<div style="text-align:center;padding:60px 20px;">' +
+                        '<div style="font-size:3rem;margin-bottom:16px;">💚</div>' +
+                        '<h2 style="font-family:\'Playfair Display\',serif;font-size:1.8rem;color:#2A2A3C;margin-bottom:12px;">JazakAllahu Khairan!</h2>' +
+                        '<p style="color:#666;font-size:1rem;line-height:1.8;max-width:400px;margin:0 auto 24px;">Your $' + selectedAmount + ' donation has been received. May Allah reward you abundantly and accept your good deeds.</p>' +
+                        '<p style="color:#999;font-size:.85rem;">Receipt: ' + transaction.reference + '</p>' +
+                        '<a href="index.html" style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;padding:14px 28px;border-radius:50px;background:linear-gradient(135deg,#C9A227,#8B7355);color:white;text-decoration:none;font-weight:600;">Return Home <i class="fas fa-arrow-right"></i></a>' +
+                    '</div>';
+            },
+            onCancel: function() {
+                btn.disabled = false;
+                btn.querySelector('span').textContent = 'Donate $' + selectedAmount;
+            }
+        });
+    }
+    </script>
+    <script src="lead-capture.js" defer></script>
+    <script src="meta-capi.js" defer></script>
+</body>
+</html>

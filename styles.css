@@ -712,8 +712,7 @@ body {
 .hero-visual {
     position: absolute;
     right: 5%;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 120px;
     z-index: 2;
 }
 
@@ -722,8 +721,9 @@ body {
     width: 500px;
     height: 500px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    padding-top: 60px;
 }
 
 .vr-glow {
@@ -742,9 +742,9 @@ body {
 
 /* 3D Kaaba */
 .kaaba-3d {
-    width: 150px;
-    height: 180px;
-    perspective: 1000px;
+    width: 160px;
+    height: 190px;
+    perspective: 800px;
     position: relative;
 }
 
@@ -753,43 +753,68 @@ body {
     height: 100%;
     position: relative;
     transform-style: preserve-3d;
-    animation: rotateKaaba 20s linear infinite;
+    animation: rotateKaaba 25s linear infinite;
 }
 
 @keyframes rotateKaaba {
-    from { transform: rotateY(0deg); }
-    to { transform: rotateY(360deg); }
+    from { transform: rotateX(-8deg) rotateY(0deg); }
+    to { transform: rotateX(-8deg) rotateY(360deg); }
 }
 
 .kaaba-face {
     position: absolute;
-    width: 150px;
-    height: 180px;
-    background: linear-gradient(180deg, #2C1810 0%, #1a0f0a 100%);
-    border: 3px solid var(--primary-gold);
-    box-shadow: inset 0 0 30px rgba(212, 175, 55, 0.2), 0 0 40px rgba(212, 175, 55, 0.3);
+    width: 160px;
+    height: 190px;
+    background: linear-gradient(180deg, #1a1a1a 0%, #111 40%, #0d0d0d 100%);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    box-shadow: inset 0 60px 40px -30px rgba(212, 175, 55, 0.06);
 }
 
-.kaaba-face.front { transform: translateZ(75px); }
-.kaaba-face.back { transform: rotateY(180deg) translateZ(75px); }
-.kaaba-face.left { transform: rotateY(-90deg) translateZ(75px); }
-.kaaba-face.right { transform: rotateY(90deg) translateZ(75px); }
-.kaaba-face.top { 
-    width: 150px; 
-    height: 150px; 
-    transform: rotateX(90deg) translateZ(90px);
-    background: #0a0a0a;
+/* Gold band (Hizam) on each face */
+.kaaba-face::before {
+    content: '';
+    position: absolute;
+    top: 55px;
+    left: 0;
+    width: 100%;
+    height: 32px;
+    background: linear-gradient(180deg, #B8960C 0%, #C9A227 40%, #D4AF37 60%, #B8960C 100%);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
 }
+
+/* Calligraphy suggestion on band */
+.kaaba-face::after {
+    content: '◆ ◇ ◆ ◇ ◆';
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .55rem;
+    color: rgba(26, 15, 10, 0.5);
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+.kaaba-face.front { transform: translateZ(80px); }
+.kaaba-face.back { transform: rotateY(180deg) translateZ(80px); }
+.kaaba-face.left { transform: rotateY(-90deg) translateZ(80px); }
+.kaaba-face.right { transform: rotateY(90deg) translateZ(80px); }
+.kaaba-face.top { 
+    width: 160px; 
+    height: 160px; 
+    transform: rotateX(90deg) translateZ(95px);
+    background: #0a0a0a;
+    border: 1px solid rgba(212, 175, 55, 0.08);
+}
+.kaaba-face.top::before,
+.kaaba-face.top::after { display: none; }
 
 .kaaba-band {
-    position: absolute;
-    width: 160px;
-    height: 40px;
-    top: 50px;
-    left: -5px;
-    background: var(--gradient-gold);
-    transform-style: preserve-3d;
-    animation: rotateKaaba 20s linear infinite;
+    display: none;
 }
 
 /* Orbit Rings */
