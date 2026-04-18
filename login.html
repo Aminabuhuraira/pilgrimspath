@@ -2,11 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1199634958501931');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1199634958501931&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="theme-color" content="#C9A227">
     <meta name="robots" content="noindex, follow">
     <meta name="description" content="Sign in or create your free Pilgrim's Path account to access VR Hajj and Umrah experiences.">
-    <meta name="keywords" content="pilgrim's path login, VR hajj sign in, create account, virtual pilgrimage login">
+    <meta name="keywords" content="pilgrim's path login, VR hajj sign in, create account, virtual pilgrimage login, pilgrimspath account, register pilgrimspath, sign up hajj VR, hajj VR dashboard access, pilgrimspath member login, VR pilgrimage account">
     <title>Login | Pilgrim's Path</title>
     <link rel="canonical" href="https://www.pilgrimspath.io/login.html">
     <meta property="og:type" content="website">
@@ -623,6 +640,11 @@
             await signIn(email, password);
             showMessage('Login successful! Redirecting...', 'success');
             
+            // CAPI: Lead event on successful login
+            if (typeof MetaCAPI !== 'undefined') {
+                MetaCAPI.lead({ content_name: 'User Login', content_category: 'Authentication' }, { em: email });
+            }
+            
             const redirect = sessionStorage.getItem('redirectAfterLogin') || 'dashboard.html';
             sessionStorage.removeItem('redirectAfterLogin');
             setTimeout(() => { window.location.href = redirect; }, 800);
@@ -650,6 +672,14 @@
 
         try {
             const result = await signUp(email, password, { firstName, lastName, country });
+            
+            // CAPI: CompleteRegistration event on successful signup
+            if (typeof MetaCAPI !== 'undefined') {
+                MetaCAPI.completeRegistration(
+                    { content_name: 'New Account', content_category: 'Registration', status: true },
+                    { em: email, fn: firstName, ln: lastName, country: country }
+                );
+            }
             
             if (result.session) {
                 // Email confirmation disabled — user is logged in immediately
@@ -750,5 +780,9 @@
     // Session & visit tracking for admin analytics
     (function(){try{var st=Date.now();window.addEventListener('beforeunload',function(){var d=Math.floor((Date.now()-st)/1000);var s=JSON.parse(localStorage.getItem('pp_sessions')||'[]');s.push(d);if(s.length>100)s.splice(0,s.length-100);localStorage.setItem('pp_sessions',JSON.stringify(s));});var v=JSON.parse(localStorage.getItem('pp_visits')||'[]');v.push({time:new Date().toISOString(),referrer:document.referrer||'direct',page:location.pathname});if(v.length>500)v.splice(0,v.length-500);localStorage.setItem('pp_visits',JSON.stringify(v));}catch(e){}})();
     </script>
+
+<!-- Meta Pixel Conversion Event -->
+<script>fbq('track', 'CompleteRegistration', {content_name: 'Login Page'});</script>
+<script src="meta-capi.js" defer></script>
 </body>
 </html>

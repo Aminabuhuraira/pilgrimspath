@@ -1,1 +1,7 @@
 .vercel
+.DS_Store
+node_modules/
+capi-server.py
+images/Tawaf area/
+pilgrimspath vr/
+netlify/

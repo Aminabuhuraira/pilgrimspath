@@ -2,10 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1199634958501931');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1199634958501931&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#C9A227">
     <meta name="description" content="Contact Pilgrim's Path — get support for our VR Hajj and Umrah pilgrimage platform. Reach our team via email, chat, or phone.">
-    <meta name="keywords" content="pilgrim's path contact, VR hajj support, virtual pilgrimage help, hajj VR customer service">
+    <meta name="keywords" content="pilgrim's path contact, VR hajj support, virtual pilgrimage help, hajj VR customer service, contact pilgrimspath, pilgrimspath email, pilgrimspath support, hajj VR feedback, report VR hajj issue, VR pilgrimage partnership, enterprise VR hajj inquiry, media inquiry pilgrimspath, pilgrimspath business contact, hajj VR collaboration">
     <title>Contact Us — Support | Pilgrim's Path</title>
     <link rel="canonical" href="https://www.pilgrimspath.io/contact.html">
     <meta property="og:type" content="website">
@@ -443,6 +460,21 @@
                 btn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
                 btn.style.background = 'linear-gradient(135deg, #27ae60 0%, #219a52 100%)';
                 
+                // Fire CAPI Contact + Lead events
+                if (typeof MetaCAPI !== 'undefined') {
+                    var formEmail = document.getElementById('email').value.trim();
+                    var formName = document.getElementById('name').value.trim();
+                    var nameParts = formName.split(' ');
+                    MetaCAPI.contact(
+                        { content_name: 'Contact Form', content_category: 'Support' },
+                        { em: formEmail, fn: nameParts[0] || '', ln: nameParts.slice(1).join(' ') || '' }
+                    );
+                    MetaCAPI.lead(
+                        { content_name: 'Contact Form Lead', content_category: 'Support' },
+                        { em: formEmail, fn: nameParts[0] || '', ln: nameParts.slice(1).join(' ') || '' }
+                    );
+                }
+                
                 setTimeout(() => {
                     this.reset();
                     btn.innerHTML = originalText;
@@ -460,5 +492,9 @@
     document.addEventListener('DOMContentLoaded', () => updateNavForAuth());
     (function(){try{var st=Date.now();window.addEventListener('beforeunload',function(){var d=Math.floor((Date.now()-st)/1000);var s=JSON.parse(localStorage.getItem('pp_sessions')||'[]');s.push(d);if(s.length>100)s.splice(0,s.length-100);localStorage.setItem('pp_sessions',JSON.stringify(s));});var v=JSON.parse(localStorage.getItem('pp_visits')||'[]');v.push({time:new Date().toISOString(),referrer:document.referrer||'direct',page:location.pathname});if(v.length>500)v.splice(0,v.length-500);localStorage.setItem('pp_visits',JSON.stringify(v));}catch(e){}})();
     </script>
+
+<!-- Meta Pixel Conversion Event -->
+<script>fbq('track', 'Contact', {content_name: 'Contact Form'});</script>
+<script src="meta-capi.js" defer></script>
 </body>
 </html>

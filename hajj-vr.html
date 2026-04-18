@@ -2,8 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1199634958501931');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1199634958501931&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="theme-color" content="#1a0f0a">
+    <meta name="description" content="Launch the immersive VR Hajj experience. Walk through every ritual from Ihram to Tawaf al-Wida in virtual reality.">
+    <meta name="keywords" content="hajj VR experience, virtual reality hajj, immersive hajj VR, hajj 360 VR, launch VR hajj, start hajj VR tour, hajj virtual reality experience, VR hajj walkthrough, interactive hajj VR, hajj VR free, hajj VR online, browser hajj VR, WebXR hajj experience, hajj VR no download, VR hajj makkah, 3DVista hajj tour, panoramic hajj VR, hajj VR all devices, mobile hajj VR experience, desktop hajj VR">
     <title>Begin Your Hajj Journey | Pilgrim's Path VR</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,35 +32,101 @@
         :root {
             --gold: #C9A227;
             --gold-light: #F4E4BC;
-            --gold-glow: rgba(201,162,39,0.35);
-            --deep: #1a0f0a;
-            --deep-mid: #2C1810;
+            --gold-glow: rgba(201,162,39,0.25);
+            --deep: #111118;
+            --deep-mid: #1a1a24;
             --cream: #FDF6E3;
             --emerald: #1D5C4A;
+            --silver: #C0C0C0;
+            --silver-light: #E8E8F0;
+            --portal-bg: #F0F0F8;
+            --portal-white: #FAFAFE;
+            --text-dark: #2A2A3C;
+            --text-mid: #5A5A72;
         }
 
         html { scroll-behavior: smooth; }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: var(--deep);
-            color: var(--cream);
+            background: var(--portal-bg);
+            color: var(--text-dark);
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* ── Stars background ── */
+        /* ── Portal background ── */
         .stars {
             position: fixed; inset: 0; z-index: 0; pointer-events: none;
             background:
-                radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,.7) 50%, transparent 100%),
-                radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,.5) 50%, transparent 100%),
-                radial-gradient(1.5px 1.5px at 55% 15%, rgba(255,255,255,.8) 50%, transparent 100%),
-                radial-gradient(1px 1px at 70% 45%, rgba(255,255,255,.4) 50%, transparent 100%),
-                radial-gradient(1px 1px at 85% 75%, rgba(255,255,255,.6) 50%, transparent 100%),
-                radial-gradient(1.5px 1.5px at 20% 80%, rgba(255,255,255,.7) 50%, transparent 100%),
-                radial-gradient(1px 1px at 45% 90%, rgba(255,255,255,.5) 50%, transparent 100%),
-                radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,.6) 50%, transparent 100%);
+                radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,162,39,0.06), transparent),
+                radial-gradient(ellipse 60% 50% at 30% 70%, rgba(192,192,192,0.12), transparent),
+                radial-gradient(ellipse 50% 40% at 70% 30%, rgba(192,192,192,0.1), transparent),
+                radial-gradient(1px 1px at 15% 25%, rgba(192,192,192,.5) 50%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 55% 15%, rgba(201,162,39,.35) 50%, transparent 100%),
+                radial-gradient(1px 1px at 75% 55%, rgba(192,192,192,.4) 50%, transparent 100%),
+                radial-gradient(1px 1px at 85% 80%, rgba(192,192,192,.35) 50%, transparent 100%),
+                radial-gradient(1px 1px at 40% 85%, rgba(201,162,39,.25) 50%, transparent 100%);
+        }
+
+        /* ── Portal glow ring ── */
+        .stars::after {
+            content: '';
+            position: fixed;
+            top: 50%; left: 50%;
+            width: 600px; height: 600px;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(201,162,39,0.04) 0%, rgba(192,192,192,0.06) 40%, transparent 70%);
+            animation: portalPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes portalPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+        }
+
+        /* ── Floating icons layer ── */
+        .floating-icons {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+        }
+        .fl-icon {
+            position: absolute;
+            opacity: 0;
+            animation: floatDrift linear infinite;
+        }
+        .fl-icon svg { width: 100%; height: 100%; }
+
+        /* Moon icons */
+        .fl-moon { color: var(--silver); }
+        .fl-moon-1 { width:22px; height:22px; top:8%; left:5%; opacity:0.12; animation-duration:18s; animation-delay:0s; }
+        .fl-moon-2 { width:16px; height:16px; top:15%; right:12%; opacity:0.08; animation-duration:22s; animation-delay:3s; }
+        .fl-moon-3 { width:28px; height:28px; top:55%; left:8%; opacity:0.1; animation-duration:20s; animation-delay:6s; }
+        .fl-moon-4 { width:14px; height:14px; top:70%; right:6%; opacity:0.09; animation-duration:25s; animation-delay:1s; }
+        .fl-moon-5 { width:20px; height:20px; top:35%; right:4%; opacity:0.11; animation-duration:19s; animation-delay:8s; }
+        .fl-moon-6 { width:18px; height:18px; top:85%; left:15%; opacity:0.07; animation-duration:24s; animation-delay:4s; }
+
+        /* Kaaba icons */
+        .fl-kaaba { color: var(--silver); }
+        .fl-kaaba-1 { width:26px; height:26px; top:20%; left:3%; opacity:0.09; animation-duration:24s; animation-delay:2s; }
+        .fl-kaaba-2 { width:18px; height:18px; top:45%; right:7%; opacity:0.07; animation-duration:20s; animation-delay:5s; }
+        .fl-kaaba-3 { width:22px; height:22px; top:75%; left:12%; opacity:0.08; animation-duration:22s; animation-delay:9s; }
+        .fl-kaaba-4 { width:20px; height:20px; top:10%; right:20%; opacity:0.06; animation-duration:26s; animation-delay:7s; }
+        .fl-kaaba-5 { width:16px; height:16px; top:60%; right:15%; opacity:0.1; animation-duration:18s; animation-delay:0s; }
+
+        /* Star sparkles */
+        .fl-star { color: rgba(201,162,39,0.5); }
+        .fl-star-1 { width:8px; height:8px; top:12%; left:25%; opacity:0.15; animation-duration:15s; animation-delay:1s; }
+        .fl-star-2 { width:6px; height:6px; top:40%; right:22%; opacity:0.12; animation-duration:17s; animation-delay:4s; }
+        .fl-star-3 { width:10px; height:10px; top:65%; left:30%; opacity:0.1; animation-duration:14s; animation-delay:7s; }
+        .fl-star-4 { width:7px; height:7px; top:80%; right:28%; opacity:0.13; animation-duration:16s; animation-delay:2s; }
+
+        @keyframes floatDrift {
+            0%   { opacity: 0; transform: translateY(0) translateX(0) rotate(0deg) scale(0.8); }
+            10%  { opacity: var(--fl-peak-opacity, 0.1); }
+            50%  { transform: translateY(-40px) translateX(20px) rotate(15deg) scale(1); }
+            90%  { opacity: var(--fl-peak-opacity, 0.1); }
+            100% { opacity: 0; transform: translateY(-80px) translateX(-15px) rotate(-10deg) scale(0.8); }
         }
 
         /* ── Screens system ── */
@@ -98,7 +183,7 @@
 
         .subtitle {
             font-size: clamp(0.95rem, 2.5vw, 1.1rem);
-            color: rgba(253,246,227,0.75);
+            color: var(--text-mid);
             line-height: 1.8;
             max-width: 560px;
             margin: 0 auto 32px;
@@ -122,7 +207,7 @@
 
         .btn-gold {
             background: linear-gradient(135deg, #D4AF37, #C9A227, #B8941F);
-            color: var(--deep);
+            color: #fff;
             box-shadow: 0 4px 25px var(--gold-glow);
         }
         .btn-gold:hover {
@@ -141,13 +226,13 @@
         }
 
         .btn-ghost {
-            background: rgba(255,255,255,0.05);
-            color: var(--cream);
-            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.7);
+            color: var(--text-dark);
+            border: 1px solid rgba(192,192,192,0.4);
             backdrop-filter: blur(10px);
         }
         .btn-ghost:hover {
-            background: rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.95);
             border-color: var(--gold);
             color: var(--gold);
         }
@@ -163,8 +248,8 @@
 
         .lang-card {
             position: relative;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.75);
+            border: 1px solid rgba(192,192,192,0.3);
             border-radius: 16px;
             padding: 22px 16px;
             cursor: pointer;
@@ -173,17 +258,18 @@
             flex-direction: column;
             align-items: center;
             gap: 10px;
+            backdrop-filter: blur(10px);
         }
         .lang-card:hover {
-            background: rgba(201,162,39,0.08);
+            background: rgba(255,255,255,0.95);
             border-color: var(--gold);
             transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(201,162,39,0.15);
+            box-shadow: 0 8px 30px rgba(201,162,39,0.12);
         }
         .lang-card.selected {
-            background: rgba(201,162,39,0.12);
+            background: rgba(255,255,255,0.95);
             border-color: var(--gold);
-            box-shadow: 0 0 20px var(--gold-glow);
+            box-shadow: 0 0 20px rgba(201,162,39,0.18);
         }
         .lang-card.selected::after {
             content: '\f00c';
@@ -200,7 +286,8 @@
         }
         .lang-flag { font-size: 2rem; line-height: 1; }
         .lang-name { font-weight: 600; font-size: 0.9rem; }
-        .lang-native { font-size: 0.75rem; color: rgba(253,246,227,0.5); }
+        .lang-name { color: var(--text-dark); }
+        .lang-native { font-size: 0.75rem; color: var(--text-mid); }
 
         /* ── Decorative divider ── */
         .divider {
@@ -227,21 +314,123 @@
             line-height: 1.6;
         }
 
+        /* ── Golden Mosaic Banner ── */
+        .mosaic-banner {
+            position: relative;
+            max-width: 620px;
+            margin: 0 auto 28px;
+            padding: 36px 32px;
+            border-radius: 20px;
+            background:
+                repeating-linear-gradient(
+                    45deg,
+                    rgba(201,162,39,0.03) 0px,
+                    rgba(201,162,39,0.03) 10px,
+                    rgba(201,162,39,0.06) 10px,
+                    rgba(201,162,39,0.06) 20px
+                ),
+                linear-gradient(135deg, rgba(255,255,255,0.92), rgba(248,248,252,0.95));
+            border: 1px solid rgba(201,162,39,0.25);
+            box-shadow:
+                0 10px 50px rgba(192,192,192,0.25),
+                0 0 40px rgba(201,162,39,0.06),
+                inset 0 1px 0 rgba(255,255,255,0.8);
+            animation: bannerSway 6s ease-in-out infinite;
+            transform-origin: top center;
+            backdrop-filter: blur(20px);
+        }
+
+        /* Mosaic pattern overlay */
+        .mosaic-banner::before {
+            content: '';
+            position: absolute; inset: 0;
+            border-radius: 20px;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(201,162,39,0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(192,192,192,0.08) 0%, transparent 50%),
+                repeating-conic-gradient(
+                    from 0deg at 50% 50%,
+                    rgba(192,192,192,0.03) 0deg 45deg,
+                    transparent 45deg 90deg
+                );
+            pointer-events: none;
+        }
+
+        /* Ornamental gold corner accents */
+        .mosaic-banner::after {
+            content: '◆ ◇ ◆';
+            position: absolute;
+            bottom: -14px; left: 50%; transform: translateX(-50%);
+            font-size: 0.6rem;
+            letter-spacing: 6px;
+            color: var(--gold);
+            opacity: 0.5;
+        }
+
+        /* Top ornament */
+        .mosaic-top-ornament {
+            position: absolute;
+            top: -12px; left: 50%; transform: translateX(-50%);
+            font-size: 0.6rem;
+            letter-spacing: 6px;
+            color: var(--gold);
+            opacity: 0.5;
+        }
+
+        /* Gold border lines on sides */
+        .mosaic-border-left, .mosaic-border-right {
+            position: absolute;
+            top: 20px; bottom: 20px; width: 2px;
+            background: linear-gradient(to bottom, transparent, rgba(201,162,39,0.2), transparent);
+        }
+        .mosaic-border-left { left: 12px; }
+        .mosaic-border-right { right: 12px; }
+
+        .mosaic-banner .welcome-text {
+            position: relative; z-index: 1;
+            margin-bottom: 0;
+        }
+
+        @keyframes bannerSway {
+            0%   { transform: rotate(0deg) translateX(0); }
+            25%  { transform: rotate(0.4deg) translateX(3px) translateY(-2px); }
+            50%  { transform: rotate(0deg) translateX(0); }
+            75%  { transform: rotate(-0.4deg) translateX(-3px) translateY(-2px); }
+            100% { transform: rotate(0deg) translateX(0); }
+        }
+
+        /* ── Suspended thread lines (visual) ── */
+        .thread-lines {
+            position: relative;
+            height: 40px;
+            margin: 0 auto;
+            width: 200px;
+        }
+        .thread-lines::before, .thread-lines::after {
+            content: '';
+            position: absolute;
+            top: 0; width: 1px; height: 100%;
+            background: linear-gradient(to bottom, var(--silver), rgba(192,192,192,0.2));
+        }
+        .thread-lines::before { left: 30%; }
+        .thread-lines::after { right: 30%; }
+
         .welcome-text {
             font-size: clamp(1rem, 2.5vw, 1.15rem);
-            color: rgba(253,246,227,0.8);
+            color: var(--text-mid);
             line-height: 1.9;
             max-width: 580px;
             margin: 0 auto 20px;
         }
 
         .verse-box {
-            background: rgba(201,162,39,0.06);
-            border: 1px solid rgba(201,162,39,0.2);
+            background: rgba(255,255,255,0.7);
+            border: 1px solid rgba(201,162,39,0.15);
             border-radius: 16px;
             padding: 24px 28px;
             margin: 28px auto;
             max-width: 540px;
+            backdrop-filter: blur(10px);
         }
         .verse-arabic {
             font-family: 'Amiri', serif;
@@ -253,15 +442,16 @@
         }
         .verse-translation {
             font-size: 0.85rem;
-            color: rgba(253,246,227,0.6);
+            color: var(--text-mid);
             font-style: italic;
         }
 
         /* ── Ihram Section ── */
         .ihram-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.75);
+            border: 1px solid rgba(192,192,192,0.25);
             border-radius: 20px;
+            backdrop-filter: blur(10px);
             padding: 0;
             margin: 28px auto;
             max-width: 600px;
@@ -272,7 +462,7 @@
         .ihram-visual {
             width: 100%;
             aspect-ratio: 16/9;
-            background: linear-gradient(135deg, #2C1810, #3D2415);
+            background: linear-gradient(135deg, #E8E4E0, #D8D4D0);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -286,7 +476,7 @@
         }
         .ihram-visual-overlay {
             position: absolute; inset: 0;
-            background: linear-gradient(to bottom, transparent 40%, rgba(26,15,10,0.9));
+            background: linear-gradient(to bottom, transparent 40%, rgba(255,255,255,0.85));
         }
         .ihram-visual-label {
             position: absolute;
@@ -310,7 +500,7 @@
             display: flex;
             gap: 14px;
             padding: 14px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(192,192,192,0.15);
             align-items: flex-start;
         }
         .step-list li:last-child { border-bottom: none; }
@@ -319,7 +509,7 @@
             flex-shrink: 0;
             width: 32px; height: 32px;
             background: linear-gradient(135deg, var(--gold), #B8941F);
-            color: var(--deep);
+            color: #fff;
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             font-size: 0.8rem;
@@ -334,19 +524,19 @@
         }
         .step-content span {
             font-size: 0.85rem;
-            color: rgba(253,246,227,0.6);
+            color: var(--text-mid);
             line-height: 1.6;
         }
 
         /* ── Gender toggle for ihram ── */
         .gender-toggle {
             display: flex;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.6);
             border-radius: 50px;
             padding: 4px;
             margin: 0 auto 24px;
             max-width: 260px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid rgba(192,192,192,0.3);
         }
         .gender-btn {
             flex: 1;
@@ -354,7 +544,7 @@
             border-radius: 46px;
             border: none;
             background: transparent;
-            color: rgba(253,246,227,0.5);
+            color: var(--text-mid);
             font-family: 'Poppins', sans-serif;
             font-size: 0.85rem;
             font-weight: 600;
@@ -363,17 +553,18 @@
         }
         .gender-btn.active {
             background: var(--gold);
-            color: var(--deep);
+            color: #fff;
         }
 
         /* ── Talbiyah callout ── */
         .talbiyah-box {
-            background: linear-gradient(135deg, rgba(29,92,74,0.2), rgba(29,92,74,0.05));
-            border: 1px solid rgba(29,92,74,0.3);
+            background: linear-gradient(135deg, rgba(29,92,74,0.08), rgba(29,92,74,0.03));
+            border: 1px solid rgba(29,92,74,0.2);
             border-radius: 16px;
             padding: 24px;
             margin: 24px auto;
             max-width: 540px;
+            backdrop-filter: blur(10px);
         }
         .talbiyah-label {
             font-size: 0.7rem;
@@ -393,14 +584,14 @@
         }
         .talbiyah-translit {
             font-size: 0.9rem;
-            color: var(--cream);
+            color: var(--text-dark);
             font-style: italic;
             margin-bottom: 6px;
             line-height: 1.7;
         }
         .talbiyah-meaning {
             font-size: 0.8rem;
-            color: rgba(253,246,227,0.5);
+            color: var(--text-mid);
             line-height: 1.6;
         }
 
@@ -414,7 +605,7 @@
         .progress-dot {
             width: 10px; height: 10px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.15);
+            background: rgba(192,192,192,0.3);
             transition: all 0.4s ease;
         }
         .progress-dot.active {
@@ -440,7 +631,7 @@
         /* ── Loading screen ── */
         .loading-overlay {
             position: fixed; inset: 0; z-index: 100;
-            background: var(--deep);
+            background: var(--portal-bg);
             display: none;
             flex-direction: column;
             align-items: center;
@@ -460,7 +651,7 @@
 
         .loading-text {
             font-size: 0.9rem;
-            color: rgba(253,246,227,0.6);
+            color: var(--text-mid);
             letter-spacing: 1px;
         }
 
@@ -484,41 +675,35 @@
             .ihram-body { padding: 20px; }
             .screen { padding: 30px 16px; }
             .btn { padding: 14px 28px; font-size: 0.9rem; }
+            .mosaic-banner { padding: 28px 20px; margin-left: 8px; margin-right: 8px; }
+            .thread-lines { height: 28px; }
         }
-
-        /* ── VR iframe container ── */
-        .vr-container {
-            position: fixed; inset: 0; z-index: 200;
-            display: none;
-        }
-        .vr-container.active { display: block; }
-        .vr-container iframe {
-            width: 100%; height: 100%; border: none;
-        }
-        .vr-back-btn {
-            position: fixed;
-            top: 16px; left: 16px; z-index: 210;
-            background: rgba(0,0,0,0.7);
-            color: var(--cream);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 50px;
-            padding: 10px 20px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: none;
-            align-items: center;
-            gap: 8px;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-        .vr-back-btn:hover { background: rgba(201,162,39,0.3); border-color: var(--gold); }
-        .vr-back-btn.active { display: flex; }
     </style>
 </head>
 <body>
     <div class="stars"></div>
+
+    <!-- ── Floating moons, Kaaba & stars background layer ── -->
+    <div class="floating-icons">
+        <!-- Moons -->
+        <div class="fl-icon fl-moon fl-moon-1" style="--fl-peak-opacity:0.12"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></div>
+        <div class="fl-icon fl-moon fl-moon-2" style="--fl-peak-opacity:0.08"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></div>
+        <div class="fl-icon fl-moon fl-moon-3" style="--fl-peak-opacity:0.1"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></div>
+        <div class="fl-icon fl-moon fl-moon-4" style="--fl-peak-opacity:0.09"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></div>
+        <div class="fl-icon fl-moon fl-moon-5" style="--fl-peak-opacity:0.11"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></div>
+        <div class="fl-icon fl-moon fl-moon-6" style="--fl-peak-opacity:0.07"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></div>
+        <!-- Kaaba -->
+        <div class="fl-icon fl-kaaba fl-kaaba-1" style="--fl-peak-opacity:0.09"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L3 7v10l9 5 9-5V7l-9-5zm0 2.18L18.39 7.5 12 10.82 5.61 7.5 12 4.18zM5 8.82l6 3.32V19.1l-6-3.33V8.82zm8 10.28V12.14l6-3.32v7.07l-6 3.21z"/></svg></div>
+        <div class="fl-icon fl-kaaba fl-kaaba-2" style="--fl-peak-opacity:0.07"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L3 7v10l9 5 9-5V7l-9-5zm0 2.18L18.39 7.5 12 10.82 5.61 7.5 12 4.18zM5 8.82l6 3.32V19.1l-6-3.33V8.82zm8 10.28V12.14l6-3.32v7.07l-6 3.21z"/></svg></div>
+        <div class="fl-icon fl-kaaba fl-kaaba-3" style="--fl-peak-opacity:0.08"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L3 7v10l9 5 9-5V7l-9-5zm0 2.18L18.39 7.5 12 10.82 5.61 7.5 12 4.18zM5 8.82l6 3.32V19.1l-6-3.33V8.82zm8 10.28V12.14l6-3.32v7.07l-6 3.21z"/></svg></div>
+        <div class="fl-icon fl-kaaba fl-kaaba-4" style="--fl-peak-opacity:0.06"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L3 7v10l9 5 9-5V7l-9-5zm0 2.18L18.39 7.5 12 10.82 5.61 7.5 12 4.18zM5 8.82l6 3.32V19.1l-6-3.33V8.82zm8 10.28V12.14l6-3.32v7.07l-6 3.21z"/></svg></div>
+        <div class="fl-icon fl-kaaba fl-kaaba-5" style="--fl-peak-opacity:0.1"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L3 7v10l9 5 9-5V7l-9-5zm0 2.18L18.39 7.5 12 10.82 5.61 7.5 12 4.18zM5 8.82l6 3.32V19.1l-6-3.33V8.82zm8 10.28V12.14l6-3.32v7.07l-6 3.21z"/></svg></div>
+        <!-- Stars -->
+        <div class="fl-icon fl-star fl-star-1" style="--fl-peak-opacity:0.15"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg></div>
+        <div class="fl-icon fl-star fl-star-2" style="--fl-peak-opacity:0.12"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg></div>
+        <div class="fl-icon fl-star fl-star-3" style="--fl-peak-opacity:0.1"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg></div>
+        <div class="fl-icon fl-star fl-star-4" style="--fl-peak-opacity:0.13"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg></div>
+    </div>
 
     <!-- ═══════════════════════════════════════
          SCREEN 1: Language Selection
@@ -592,7 +777,16 @@
 
             <h1 class="anim anim-d2">Welcome, <span class="gold">Pilgrim</span></h1>
 
-            <p class="welcome-text anim anim-d3">Welcome to this immersive Hajj experience, a journey of faith, devotion, and unity. Together, we will explore the sacred rites, duas, and profound meanings of Hajj, bringing you closer to the essence of Hajj.</p>
+            <!-- Suspended thread lines -->
+            <div class="thread-lines anim anim-d2"></div>
+
+            <!-- Golden Mosaic Banner (swaying) -->
+            <div class="mosaic-banner anim anim-d3">
+                <span class="mosaic-top-ornament">◆ ◇ ◆</span>
+                <div class="mosaic-border-left"></div>
+                <div class="mosaic-border-right"></div>
+                <p class="welcome-text">Welcome to this immersive Hajj experience, a journey of faith, devotion, and unity. Together, we will explore the sacred rites, duas, and profound meanings of Hajj, bringing you closer to the essence of Hajj.</p>
+            </div>
 
             <div class="verse-box anim anim-d3">
                 <div class="verse-arabic">وَأَذِّن فِي النَّاسِ بِالْحَجِّ يَأْتُوكَ رِجَالًا وَعَلَىٰ كُلِّ ضَامِرٍ يَأْتِينَ مِن كُلِّ فَجٍّ عَمِيقٍ</div>
@@ -769,16 +963,6 @@
         <div class="loading-text">Preparing your sacred journey...</div>
     </div>
 
-    <!-- ═══════════════════════════════════════
-         VR Tour container
-         ═══════════════════════════════════════ -->
-    <div class="vr-container" id="vrContainer">
-        <iframe id="vrFrame" src="" allow="gyroscope; accelerometer; xr-spatial-tracking; fullscreen"></iframe>
-    </div>
-    <button class="vr-back-btn" id="vrBackBtn" onclick="exitVR()">
-        <i class="fas fa-arrow-left"></i> Back to Guide
-    </button>
-
     <script>
         // ── State ──
         let selectedLang = 'en';
@@ -819,35 +1003,20 @@
             const loader = document.getElementById('loadingOverlay');
             loader.classList.add('active');
 
+            // Navigate directly to the VR tour page for best compatibility
             setTimeout(() => {
-                const frame = document.getElementById('vrFrame');
-                frame.src = 'pilgrimspath%20vr/index.htm';
-
-                frame.onload = function() {
-                    loader.classList.remove('active');
-                    document.getElementById('vrContainer').classList.add('active');
-                    document.getElementById('vrBackBtn').classList.add('active');
-                    // Hide all screens
-                    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-                };
-
-                // Fallback if onload doesn't fire quickly
-                setTimeout(() => {
-                    loader.classList.remove('active');
-                    document.getElementById('vrContainer').classList.add('active');
-                    document.getElementById('vrBackBtn').classList.add('active');
-                    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-                }, 5000);
+                window.location.href = 'pilgrimspath%20vr/index.htm';
             }, 1500);
         }
 
-        // ── Exit VR ──
+        // ── Exit VR (unused — VR page handles its own navigation) ──
         function exitVR() {
-            document.getElementById('vrContainer').classList.remove('active');
-            document.getElementById('vrBackBtn').classList.remove('active');
-            document.getElementById('vrFrame').src = '';
-            goToScreen('screenIhram');
+            window.location.href = 'hajj-vr.html';
         }
     </script>
+
+<!-- Meta Pixel Conversion Event -->
+<script>fbq('track', 'ViewContent', {content_name: 'Hajj VR Experience', content_type: 'product', content_ids: ['hajj-vr']});</script>
+<script src="meta-capi.js" defer></script>
 </body>
 </html>

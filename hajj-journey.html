@@ -2,10 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1199634958501931');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1199634958501931&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="theme-color" content="#C9A227">
     <meta name="description" content="Experience the complete Hajj journey through immersive VR - from Ihram to Tawaf al-Wida. Step-by-step virtual Hajj pilgrimage.">
-    <meta name="keywords" content="hajj journey, VR hajj experience, virtual hajj tour, hajj steps VR, hajj pilgrimage virtual, immersive hajj, hajj from ihram to tawaf, 360 hajj experience, online hajj journey">
+    <meta name="keywords" content="hajj journey, VR hajj experience, virtual hajj tour, hajj steps VR, hajj pilgrimage virtual, immersive hajj, hajj from ihram to tawaf, 360 hajj experience, online hajj journey, complete hajj walkthrough, hajj day by day VR, hajj rituals explained, ihram preparation VR, tawaf practice virtual, sai between safa marwa VR, arafat day VR, muzdalifah VR experience, mina VR tour, rami jamarat VR, hajj farewell tawaf, hajj al-ifrad, hajj al-qiran, hajj al-tamattu, five days of hajj, hajj timeline, hajj obligations VR, wuquf arafat virtual, stoning pillars VR, qurbani hajj, halq taqsir VR, hajj for first timers, hajj preparation course, learn hajj rituals online, hajj training simulator, pilgrimage steps VR, sacred hajj journey, makkah hajj experience, hajj rites immersive, hajj season preparation, how to perform hajj VR">
     <title>Hajj Journey — Virtual Hajj Experience | Pilgrim's Path</title>
     <link rel="canonical" href="https://www.pilgrimspath.io/hajj-journey.html">
     <meta property="og:type" content="website">
@@ -19,6 +36,9 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Course","name":"Virtual Hajj Journey","description":"Walk through every ritual of Hajj in immersive VR — from Ihram preparation through all 5 days including Tawaf, Mina, Arafat, Muzdalifah, Rami Jamarat, Qurbani, and Farewell Tawaf.","provider":{"@type":"Organization","name":"Pilgrim's Path","url":"https://www.pilgrimspath.io"},"url":"https://www.pilgrimspath.io/hajj-journey.html","isAccessibleForFree":true,"inLanguage":"en","about":["Hajj","Islamic Pilgrimage","Hajj Rituals","Makkah","Virtual Reality"]}
+    </script>
 </head>
 <body>
     <!-- Navigation -->
@@ -299,7 +319,7 @@
                     Walk through every ritual, visit every sacred site, and prepare your heart for the journey of a lifetime. 
                     <strong>Completely free</strong> — create your account and begin.
                 </p>
-                <a href="index.html" class="primary-btn large">
+                <a href="index.html" class="primary-btn large" onclick="if(typeof MetaCAPI!=='undefined'){MetaCAPI.addToCart({content_name:'VR Hajj Experience',content_ids:['hajj-vr'],content_type:'product'});}">
                     <span>Start Your VR Hajj</span>
                     <i class="fas fa-arrow-right"></i>
                     <div class="btn-glow"></div>
@@ -379,5 +399,9 @@
     document.addEventListener('DOMContentLoaded', () => updateNavForAuth());
     (function(){try{var st=Date.now();window.addEventListener('beforeunload',function(){var d=Math.floor((Date.now()-st)/1000);var s=JSON.parse(localStorage.getItem('pp_sessions')||'[]');s.push(d);if(s.length>100)s.splice(0,s.length-100);localStorage.setItem('pp_sessions',JSON.stringify(s));});var v=JSON.parse(localStorage.getItem('pp_visits')||'[]');v.push({time:new Date().toISOString(),referrer:document.referrer||'direct',page:location.pathname});if(v.length>500)v.splice(0,v.length-500);localStorage.setItem('pp_visits',JSON.stringify(v));}catch(e){}})();
     </script>
+
+<!-- Meta Pixel Conversion Event -->
+<script>fbq('track', 'ViewContent', {content_name: 'Hajj Journey', content_type: 'product', content_ids: ['hajj-journey']});</script>
+<script src="meta-capi.js" defer></script>
 </body>
 </html>

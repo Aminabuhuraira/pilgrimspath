@@ -2,10 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1199634958501931');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1199634958501931&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="theme-color" content="#C9A227">
     <meta name="description" content="Experience the blessed Umrah journey through immersive VR — the lesser pilgrimage to Makkah. Practice Tawaf, Sa'i, and all Umrah steps in 360°.">
-    <meta name="keywords" content="umrah journey, virtual umrah, VR umrah experience, 360 umrah tour, umrah pilgrimage VR, umrah steps virtual, online umrah, umrah tawaf VR, umrah sai practice">
+    <meta name="keywords" content="umrah journey, virtual umrah, VR umrah experience, 360 umrah tour, umrah pilgrimage VR, umrah steps virtual, online umrah, umrah tawaf VR, umrah sai practice, umrah ihram preparation, four steps of umrah, umrah guide VR, umrah practice online, learn umrah rituals, umrah for beginners VR, umrah walkthrough, virtual umrah tour makkah, umrah tawaf practice, sai safa marwa VR, umrah halq taqsir, umrah dua guide, minor pilgrimage VR, umrah anytime VR, umrah preparation training, umrah training simulator, umrah rituals step by step, umrah from home, practice umrah online free, umrah experience virtual reality, immersive umrah, umrah 360 degree, masjid al haram umrah VR, virtual kaaba umrah, umrah planning tool, umrah rehearsal VR, first umrah VR practice">
     <title>Umrah Journey — Virtual Umrah Experience | Pilgrim's Path</title>
     <link rel="canonical" href="https://www.pilgrimspath.io/umrah-journey.html">
     <meta property="og:type" content="website">
@@ -19,6 +36,9 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Course","name":"Virtual Umrah Journey","description":"Practice all four steps of Umrah in immersive 360° VR — Ihram, Tawaf around the Kaaba, Sa'i between Safa and Marwah, and Halq/Taqsir.","provider":{"@type":"Organization","name":"Pilgrim's Path","url":"https://www.pilgrimspath.io"},"url":"https://www.pilgrimspath.io/umrah-journey.html","isAccessibleForFree":true,"inLanguage":"en","about":["Umrah","Islamic Pilgrimage","Umrah Rituals","Makkah","Virtual Reality"]}
+    </script>
 </head>
 <body>
     <!-- Navigation -->
@@ -268,7 +288,7 @@
                     Practice every step, learn the duas, and prepare your heart for this blessed journey. 
                     <strong>Completely free</strong> — create your account and begin.
                 </p>
-                <a href="index.html" class="primary-btn large">
+                <a href="index.html" class="primary-btn large" onclick="if(typeof MetaCAPI!=='undefined'){MetaCAPI.addToCart({content_name:'VR Umrah Experience',content_ids:['umrah-vr'],content_type:'product'});}">
                     <span>Start Your VR Umrah</span>
                     <i class="fas fa-arrow-right"></i>
                     <div class="btn-glow"></div>
@@ -348,5 +368,9 @@
     document.addEventListener('DOMContentLoaded', () => updateNavForAuth());
     (function(){try{var st=Date.now();window.addEventListener('beforeunload',function(){var d=Math.floor((Date.now()-st)/1000);var s=JSON.parse(localStorage.getItem('pp_sessions')||'[]');s.push(d);if(s.length>100)s.splice(0,s.length-100);localStorage.setItem('pp_sessions',JSON.stringify(s));});var v=JSON.parse(localStorage.getItem('pp_visits')||'[]');v.push({time:new Date().toISOString(),referrer:document.referrer||'direct',page:location.pathname});if(v.length>500)v.splice(0,v.length-500);localStorage.setItem('pp_visits',JSON.stringify(v));}catch(e){}})();
     </script>
+
+<!-- Meta Pixel Conversion Event -->
+<script>fbq('track', 'ViewContent', {content_name: 'Umrah Journey', content_type: 'product', content_ids: ['umrah-journey']});</script>
+<script src="meta-capi.js" defer></script>
 </body>
 </html>
