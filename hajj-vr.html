@@ -1017,6 +1017,103 @@
 
 <!-- Meta Pixel Conversion Event -->
 <script>fbq('track', 'ViewContent', {content_name: 'Hajj VR Experience', content_type: 'product', content_ids: ['hajj-vr']});</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="meta-capi.js" defer></script>
+
+<!-- Email Gate Modal -->
+<div id="emailGate" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);align-items:center;justify-content:center;">
+    <div style="background:white;border-radius:24px;padding:48px 36px;max-width:440px;width:90%;text-align:center;position:relative;box-shadow:0 30px 80px rgba(0,0,0,0.3);">
+        <div style="width:64px;height:64px;margin:0 auto 20px;border-radius:50%;background:linear-gradient(135deg,rgba(201,162,39,0.15),rgba(201,162,39,0.05));display:flex;align-items:center;justify-content:center;">
+            <i class="fas fa-kaaba" style="font-size:1.5rem;color:#C9A227;"></i>
+        </div>
+        <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:8px;color:#2A2A3C;">Your Free VR Preview is Ready</h2>
+        <p style="color:#666;font-size:0.9rem;margin-bottom:24px;line-height:1.7;">Enter your email to start exploring 2 sacred sites in 360° — plus get a free Hajj preparation checklist.</p>
+        <form id="leadForm" onsubmit="captureLead(event)" style="text-align:left;">
+            <input type="email" id="leadEmail" required placeholder="your@email.com" style="width:100%;padding:14px 18px;border:2px solid #e0e0e0;border-radius:12px;font-size:1rem;font-family:'Poppins',sans-serif;margin-bottom:12px;outline:none;transition:border .3s;" onfocus="this.style.borderColor='#C9A227'" onblur="this.style.borderColor='#e0e0e0'">
+            <input type="text" id="leadName" placeholder="First name (optional)" style="width:100%;padding:14px 18px;border:2px solid #e0e0e0;border-radius:12px;font-size:1rem;font-family:'Poppins',sans-serif;margin-bottom:16px;outline:none;transition:border .3s;" onfocus="this.style.borderColor='#C9A227'" onblur="this.style.borderColor='#e0e0e0'">
+            <button type="submit" id="leadBtn" style="width:100%;padding:16px;border:none;border-radius:12px;background:linear-gradient(135deg,#C9A227,#8B7355);color:white;font-family:'Poppins',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+                <span>Start Free Preview</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+        <p style="font-size:0.75rem;color:#999;margin-top:14px;"><i class="fas fa-lock" style="margin-right:4px;"></i> No spam. Unsubscribe anytime. We respect your privacy.</p>
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid #f0f0f0;">
+            <p style="font-size:0.8rem;color:#888;">Already have an account? <a href="login.html" style="color:#C9A227;font-weight:600;text-decoration:none;">Sign in</a></p>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    // Check if user already gave email or is logged in
+    var hasAccess = localStorage.getItem('pp_lead_email');
+    
+    // Also check if Supabase user is logged in
+    var sb = window.supabase ? window.supabase.createClient(
+        'https://giftctxrqvlfekhzpcaa.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpZnRjdHhycXZsZmVraHpwY2FhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3MTg0NjQsImV4cCI6MjA4ODI5NDQ2NH0.Dm4tb6lvLMf9CDLo04qA9msYVLjBT-Web48pgk0BOYc'
+    ) : null;
+
+    if (sb) {
+        sb.auth.getUser().then(function(res) {
+            if (res.data && res.data.user) {
+                // Already logged in — skip gate
+                hasAccess = true;
+                localStorage.setItem('pp_lead_email', res.data.user.email);
+            }
+            showGateIfNeeded();
+        }).catch(function() { showGateIfNeeded(); });
+    } else {
+        showGateIfNeeded();
+    }
+
+    function showGateIfNeeded() {
+        if (!hasAccess) {
+            var gate = document.getElementById('emailGate');
+            gate.style.display = 'flex';
+        }
+    }
+
+    window.captureLead = function(e) {
+        e.preventDefault();
+        var email = document.getElementById('leadEmail').value.trim();
+        var name = document.getElementById('leadName').value.trim();
+        var btn = document.getElementById('leadBtn');
+
+        if (!email) return;
+
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+        btn.disabled = true;
+
+        // Store in Supabase leads table
+        if (sb) {
+            sb.from('leads').insert({
+                email: email,
+                first_name: name || null,
+                source: 'free-preview',
+                page: window.location.pathname,
+                created_at: new Date().toISOString()
+            }).then(function() {}).catch(function() {});
+        }
+
+        // Store locally so they don't see the gate again
+        localStorage.setItem('pp_lead_email', email);
+        if (name) localStorage.setItem('pp_lead_name', name);
+
+        // Fire Meta events
+        if (typeof MetaCAPI !== 'undefined') {
+            MetaCAPI.lead({ content_name: 'Free VR Preview', content_category: 'Lead Capture' }, { em: email, fn: name });
+        }
+        if (typeof fbq !== 'undefined') {
+            fbq('track', 'Lead', { content_name: 'Free VR Preview' });
+        }
+
+        // Close gate and let them through
+        setTimeout(function() {
+            document.getElementById('emailGate').style.display = 'none';
+        }, 400);
+    };
+})();
+</script>
 </body>
 </html>

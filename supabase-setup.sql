@@ -108,3 +108,47 @@ ON CONFLICT (id) DO NOTHING;
 -- Every login will update the last_sign_in_at timestamp.
 -- The admin dashboard will automatically pick up this data.
 -- =============================================================
+
+
+-- =============================================================
+-- Pilgrim's Path — Leads Table (Email Capture / Funnel)
+-- =============================================================
+-- Captures emails from the free VR preview gate, article CTAs,
+-- and other lead magnets. Used for nurture email sequences.
+-- =============================================================
+
+CREATE TABLE IF NOT EXISTS public.leads (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    email TEXT NOT NULL,
+    first_name TEXT,
+    source TEXT DEFAULT 'free-preview',
+    page TEXT,
+    converted BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Index for fast email lookups and deduplication
+CREATE UNIQUE INDEX IF NOT EXISTS leads_email_idx ON public.leads (email);
+
+-- Enable RLS
+ALTER TABLE public.leads ENABLE ROW LEVEL SECURITY;
+
+-- Allow anonymous inserts (the email gate runs before login)
+CREATE POLICY "Anyone can insert leads"
+    ON public.leads FOR INSERT
+    WITH CHECK (true);
+
+-- Only authenticated users can read leads (admin dashboard)
+CREATE POLICY "Authenticated users can read leads"
+    ON public.leads FOR SELECT
+    USING (auth.role() = 'authenticated');
+
+-- Allow update for marking converted
+CREATE POLICY "Authenticated users can update leads"
+    ON public.leads FOR UPDATE
+    USING (auth.role() = 'authenticated');
+
+-- =============================================================
+-- ✅ Leads table ready.
+-- Run this in Supabase Dashboard → SQL Editor.
+-- =============================================================

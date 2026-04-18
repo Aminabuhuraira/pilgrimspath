@@ -254,11 +254,17 @@
                     Be part of a global community preparing for the journey of a lifetime. 
                     <strong>Create your free account</strong> and begin your spiritual preparation today.
                 </p>
-                <a href="index.html" class="primary-btn large">
-                    <span>Start Your Journey</span>
-                    <i class="fas fa-arrow-right"></i>
-                    <div class="btn-glow"></div>
-                </a>
+                <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+                    <a href="index.html" class="primary-btn large">
+                        <span>Start Your Journey</span>
+                        <i class="fas fa-arrow-right"></i>
+                        <div class="btn-glow"></div>
+                    </a>
+                    <a href="contact.html#donate" class="secondary-btn" style="padding:16px 32px;border-radius:50px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        <span>Donate</span>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -334,6 +340,7 @@
     document.addEventListener('DOMContentLoaded', () => updateNavForAuth());
     (function(){try{var st=Date.now();window.addEventListener('beforeunload',function(){var d=Math.floor((Date.now()-st)/1000);var s=JSON.parse(localStorage.getItem('pp_sessions')||'[]');s.push(d);if(s.length>100)s.splice(0,s.length-100);localStorage.setItem('pp_sessions',JSON.stringify(s));});var v=JSON.parse(localStorage.getItem('pp_visits')||'[]');v.push({time:new Date().toISOString(),referrer:document.referrer||'direct',page:location.pathname});if(v.length>500)v.splice(0,v.length-500);localStorage.setItem('pp_visits',JSON.stringify(v));}catch(e){}})();
     </script>
+<script src="lead-capture.js" defer></script>
 <script src="meta-capi.js" defer></script>
 </body>
 </html>
