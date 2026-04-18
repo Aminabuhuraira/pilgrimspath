@@ -106,6 +106,7 @@ const statsObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             const target = parseInt(entry.target.dataset.target);
+            if (isNaN(target)) { statsObserver.unobserve(entry.target); return; }
             animateCounter(entry.target, target);
             statsObserver.unobserve(entry.target);
         }

@@ -3133,7 +3133,8 @@ body {
     }
     
     .nav-links,
-    .nav-cta {
+    .nav-cta,
+    .nav-donate {
         display: none;
     }
     
