@@ -5,9 +5,11 @@
 
 // Preloader - faster on mobile
 window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    if (!preloader) return;
     const isMobile = window.innerWidth <= 768;
     setTimeout(() => {
-        document.getElementById('preloader').classList.add('hidden');
+        preloader.classList.add('hidden');
     }, isMobile ? 1000 : 2000);
 });
 
