@@ -1,0 +1,121 @@
+PILGRIM'S PATH — REMAINING SEO ARTICLES (16 of 40)
+====================================================
+24 articles completed. 16 remaining below.
+Target: 40 deep articles ranking before Hajj 2026 season.
+
+COMPLETED (24):
+ 1. 360-umrah-tour-guide.html
+ 2. best-hajj-duas-for-each-day.html
+ 3. can-you-do-hajj-virtually.html
+ 4. complete-umrah-step-by-step-guide.html
+ 5. day-of-arafah-guide.html
+ 6. difference-between-hajj-and-umrah.html
+ 7. first-time-umrah-tips.html
+ 8. hajj-2026-dates-schedule.html
+ 9. hajj-cost-guide-budget.html
+10. hajj-duas-prayers-guide.html
+11. hajj-health-fitness-tips.html
+12. hajj-step-by-step-guide.html
+13. how-to-perform-hajj-complete-guide.html
+14. ihram-guide-men-women.html
+15. mina-muzdalifah-guide.html
+16. prepare-for-umrah-virtually.html
+17. sai-between-safa-marwa.html
+18. stoning-jamarat-guide.html
+19. tawaf-guide-how-to-perform.html
+20. virtual-hajj-experience.html
+21. virtual-tour-makkah-madinah.html
+22. vr-kaaba-tawaf-guide.html
+23. what-to-pack-for-hajj.html
+24. women-hajj-guide.html
+
+REMAINING TO CREATE (16):
+=========================
+
+25. umrah-visa-requirements-2026.html
+    Title: "Umrah Visa Requirements 2026: Complete Application Guide"
+    Keywords: umrah visa, umrah visa requirements, saudi visa umrah, umrah visa 2026
+    Search Volume: ~60K/mo (spikes 400%+ pre-season)
+
+26. zamzam-water-history-benefits.html
+    Title: "Zamzam Water: History, Spiritual Significance & Scientific Facts"
+    Keywords: zamzam water, zamzam well, zamzam water benefits, history of zamzam
+    Search Volume: ~49K/mo
+
+27. masjid-al-haram-guide.html
+    Title: "Masjid al-Haram Complete Guide: Layout, Gates, Prayer Areas & Tips"
+    Keywords: masjid al haram, grand mosque makkah, haram sharif, kaaba mosque
+    Search Volume: ~40K/mo
+
+28. madinah-ziyarat-guide.html
+    Title: "Madinah Ziyarat Guide: Must-Visit Sacred Sites & Etiquette"
+    Keywords: madinah ziyarat, places to visit madinah, masjid nabawi, prophet mosque
+    Search Volume: ~27K/mo
+
+29. hajj-mistakes-to-avoid.html
+    Title: "15 Common Hajj Mistakes That Invalidate Your Rituals (And How to Avoid Them)"
+    Keywords: hajj mistakes, common errors hajj, hajj rules violations, hajj do and don'ts
+    Search Volume: ~14K/mo
+
+30. elderly-disabled-hajj-guide.html
+    Title: "Hajj for Elderly & Disabled: Complete Accessibility Guide 2026"
+    Keywords: hajj elderly, hajj disabled, wheelchair hajj, hajj accessibility
+    Search Volume: ~8K/mo
+
+31. hajj-with-children-family-guide.html
+    Title: "Hajj with Children: A Family Preparation & Survival Guide"
+    Keywords: hajj with kids, children hajj, family hajj, hajj baby toddler
+    Search Volume: ~6K/mo
+
+32. hajj-food-nutrition-guide.html
+    Title: "What to Eat During Hajj: Nutrition, Hydration & Food Safety Guide"
+    Keywords: hajj food, eating during hajj, hajj nutrition, makkah food guide
+    Search Volume: ~9K/mo
+
+33. hajj-weather-climate-guide.html
+    Title: "Hajj Weather 2026: Makkah Climate, Heat Safety & What to Expect"
+    Keywords: makkah weather hajj, hajj temperature, hajj heat, saudi weather hajj season
+    Search Volume: ~22K/mo
+
+34. spiritual-preparation-hajj.html
+    Title: "Spiritual Preparation for Hajj: A 60-Day Heart & Mind Guide"
+    Keywords: spiritual preparation hajj, hajj preparation spiritual, hajj intention niyyah
+    Search Volume: ~12K/mo
+
+35. hajj-accommodation-hotels-guide.html
+    Title: "Hajj Hotels & Accommodation 2026: Makkah & Madinah Booking Guide"
+    Keywords: hajj hotels, makkah hotels hajj, hajj accommodation, hotels near haram
+    Search Volume: ~18K/mo
+
+36. hajj-transportation-guide.html
+    Title: "Hajj Transportation Guide: Buses, Trains & Getting Around Makkah"
+    Keywords: hajj transport, makkah bus, haramain train, hajj transportation
+    Search Volume: ~8K/mo
+
+37. talbiyah-meaning-guide.html
+    Title: "Talbiyah: Complete Guide to Meaning, Pronunciation & When to Recite"
+    Keywords: talbiyah, labbaik allahumma labbaik, talbiyah meaning, hajj chant
+    Search Volume: ~27K/mo
+
+38. qurbani-sacrifice-hajj-guide.html
+    Title: "Qurbani During Hajj: Rules, Process & Spiritual Significance"
+    Keywords: qurbani hajj, hajj sacrifice, dam hajj, udhiyah rules
+    Search Volume: ~33K/mo
+
+39. hajj-phone-apps-essentials.html
+    Title: "12 Best Hajj Apps 2026: Navigation, Duas, Crowd Tracking & More"
+    Keywords: hajj apps, best apps hajj, umrah apps, makkah navigation app
+    Search Volume: ~11K/mo
+
+40. post-hajj-life-maintaining-spirituality.html
+    Title: "Life After Hajj: How to Maintain Your Spiritual Transformation"
+    Keywords: after hajj, post hajj, maintaining spirituality after hajj, hajj mabroor
+    Search Volume: ~7K/mo
+
+NOTES:
+- Each article should be 2000-3000 words
+- Include FAQPage + Speakable JSON-LD schema
+- 5-10 internal backlinks to other articles
+- Meta Pixel + CAPI tracking
+- CTA to VR experience
+- Match existing article template structure

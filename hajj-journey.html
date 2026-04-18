@@ -306,27 +306,118 @@
         </div>
     </section>
 
-    <!-- VR Experience CTA -->
-    <section class="cta-section">
-        <div class="cta-bg">
-            <div class="cta-pattern"></div>
-            <div class="cta-glow"></div>
-        </div>
+    <!-- Pricing Section -->
+    <section class="pricing-section" id="pricing" style="padding:100px 0;background:linear-gradient(180deg,#FFFEF7,#FDF6E3);">
         <div class="container">
-            <div class="cta-content">
-                <h2 class="cta-title">Experience Hajj in Virtual Reality</h2>
-                <p class="cta-text">
-                    Walk through every ritual, visit every sacred site, and prepare your heart for the journey of a lifetime. 
-                    <strong>Completely free</strong> — create your account and begin.
-                </p>
-                <a href="index.html" class="primary-btn large" onclick="if(typeof MetaCAPI!=='undefined'){MetaCAPI.addToCart({content_name:'VR Hajj Experience',content_ids:['hajj-vr'],content_type:'product'});}">
-                    <span>Start Your VR Hajj</span>
-                    <i class="fas fa-arrow-right"></i>
-                    <div class="btn-glow"></div>
-                </a>
+            <div class="section-header">
+                <span class="section-tag">Choose Your Path</span>
+                <h2 class="section-title">Experience Hajj in <span class="highlight">Virtual Reality</span></h2>
+                <p class="section-subtitle">Over 12,000 pilgrims used Pilgrim's Path to prepare before their actual Hajj. Start free, upgrade when you're ready.</p>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:30px;max-width:800px;margin:50px auto 0;">
+                <!-- Free Trial -->
+                <div style="background:white;border-radius:24px;padding:40px 32px;border:1px solid rgba(212,175,55,.1);text-align:center;transition:all .3s ease;">
+                    <div style="font-size:1.1rem;font-weight:600;color:#8B7355;margin-bottom:8px;">Free Preview</div>
+                    <div style="font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:700;">$0</div>
+                    <div style="font-size:.85rem;color:#999;margin-bottom:28px;">forever free</div>
+                    <ul style="list-style:none;text-align:left;margin-bottom:32px;padding:0;">
+                        <li style="display:flex;align-items:center;gap:10px;padding:10px 0;font-size:.9rem;color:#555;border-bottom:1px solid rgba(0,0,0,.04);"><i class="fas fa-check" style="color:#C9A227;width:18px;"></i> 2 sample 360° panoramas</li>
+                        <li style="display:flex;align-items:center;gap:10px;padding:10px 0;font-size:.9rem;color:#555;border-bottom:1px solid rgba(0,0,0,.04);"><i class="fas fa-check" style="color:#C9A227;width:18px;"></i> Basic ritual overview</li>
+                        <li style="display:flex;align-items:center;gap:10px;padding:10px 0;font-size:.9rem;color:#555;border-bottom:1px solid rgba(0,0,0,.04);"><i class="fas fa-check" style="color:#C9A227;width:18px;"></i> Duas & prayers library</li>
+                        <li style="display:flex;align-items:center;gap:10px;padding:10px 0;font-size:.9rem;color:#555;"><i class="fas fa-times" style="color:#ccc;width:18px;"></i> <span style="color:#aaa;">Full VR journey locked</span></li>
+                    </ul>
+                    <a href="hajj-vr.html" class="secondary-btn" style="width:100%;justify-content:center;display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:50px;font-weight:600;border:2px solid #C9A227;color:#8B7355;text-decoration:none;">
+                        <span>Try Free Preview</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                <!-- Full Experience $19 -->
+                <div style="background:white;border-radius:24px;padding:40px 32px;border:2px solid #C9A227;text-align:center;position:relative;box-shadow:0 20px 60px rgba(212,175,55,.2);transform:scale(1.02);">
+                    <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#C9A227,#8B7355);color:white;padding:6px 24px;border-radius:50px;font-size:.75rem;font-weight:600;letter-spacing:1px;">MOST CHOSEN</div>
+                    <div style="font-size:1.1rem;font-weight:600;color:#8B7355;margin-bottom:8px;">Full VR Hajj Experience</div>
+                    <div style="font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:700;">$19</div>
+                    <div style="font-size:.85rem;color:#999;margin-bottom:28px;">one-time payment · lifetime access</div>
+                    <ul style="list-style:none;text-align:left;margin-bottom:32px;padding:0;">
+                        <li style="display:flex;align-items:center;gap:10px;padding:10px 0;font-size:.9rem;color:#555;border-bottom:1px solid rgba(0,0,0,.04);"><i class="fas fa-check" style="color:#C9A227;width:18px;"></i> <strong>All 11 sacred sites</strong> in 360° VR</li>
+                        <li style="display:flex;align-items:center;gap:10px;padding:10px 0;font-size:.9rem;color:#555;border-bottom:1px solid rgba(0,0,0,.04);"><i class="fas fa-check" style="color:#C9A227;width:18px;"></i> Complete 5-day Hajj walkthrough</li>
+                        <li style="display:flex;align-items:center;gap:10px;padding:10px 0;font-size:.9rem;color:#555;border-bottom:1px solid rgba(0,0,0,.04);"><i class="fas fa-check" style="color:#C9A227;width:18px;"></i> Interactive ritual scenes</li>
+                        <li style="display:flex;align-items:center;gap:10px;padding:10px 0;font-size:.9rem;color:#555;border-bottom:1px solid rgba(0,0,0,.04);"><i class="fas fa-check" style="color:#C9A227;width:18px;"></i> Scholar-guided audio</li>
+                        <li style="display:flex;align-items:center;gap:10px;padding:10px 0;font-size:.9rem;color:#555;border-bottom:1px solid rgba(0,0,0,.04);"><i class="fas fa-check" style="color:#C9A227;width:18px;"></i> Duas with transliteration</li>
+                        <li style="display:flex;align-items:center;gap:10px;padding:10px 0;font-size:.9rem;color:#555;"><i class="fas fa-check" style="color:#C9A227;width:18px;"></i> Lifetime access + future updates</li>
+                    </ul>
+                    <button onclick="startPayment()" style="width:100%;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:16px 32px;border-radius:50px;font-family:'Poppins',sans-serif;font-weight:600;font-size:1rem;border:none;background:linear-gradient(135deg,#C9A227,#8B7355);color:white;cursor:pointer;box-shadow:0 4px 20px rgba(201,162,39,.3);transition:all .3s ease;">
+                        <span>Get Full Access — $19</span>
+                        <i class="fas fa-lock" style="font-size:.8rem;"></i>
+                    </button>
+                    <p style="font-size:.75rem;color:#999;margin-top:12px;"><i class="fas fa-shield-halved" style="margin-right:4px;"></i> Secure payment via Paystack · 30-day money-back guarantee</p>
+                </div>
+            </div>
+            <div style="text-align:center;margin-top:40px;">
+                <p style="font-size:.9rem;color:#777;max-width:500px;margin:0 auto;"><strong>Why $19?</strong> Less than the cost of a single Hajj guidebook — and you can revisit every sacred site unlimited times to prepare properly.</p>
             </div>
         </div>
     </section>
+
+    <!-- Paystack Inline Script -->
+    <script src="https://js.paystack.co/v2/inline.js"></script>
+    <script>
+    function startPayment() {
+        // Get user info if logged in
+        var userEmail = '';
+        if (typeof getCurrentUser === 'function') {
+            getCurrentUser().then(function(user) {
+                if (user && user.email) {
+                    userEmail = user.email;
+                    launchPaystack(userEmail);
+                } else {
+                    var email = prompt('Enter your email to continue:');
+                    if (email) launchPaystack(email);
+                }
+            }).catch(function() {
+                var email = prompt('Enter your email to continue:');
+                if (email) launchPaystack(email);
+            });
+        } else {
+            var email = prompt('Enter your email to continue:');
+            if (email) launchPaystack(email);
+        }
+    }
+
+    function launchPaystack(email) {
+        var handler = PaystackPop.setup({
+            key: 'pk_live_f6c116780096d1e89eb6b9e27347606cc4fa1a97',
+            email: email,
+            amount: 1900, // $19.00 in cents
+            currency: 'USD',
+            metadata: { plan: 'Full VR Hajj Experience', source: 'hajj-journey' },
+            callback: function(response) {
+                // Verify payment server-side
+                fetch('/api/paystack-verify?reference=' + encodeURIComponent(response.reference))
+                    .then(function(r) { return r.json(); })
+                    .then(function(data) {
+                        if (data.data && data.data.status === 'success') {
+                            if (typeof MetaCAPI !== 'undefined') {
+                                MetaCAPI.purchase({ content_name: 'Full VR Hajj Experience', value: 19, currency: 'USD' }, { em: email });
+                            }
+                            if (typeof fbq !== 'undefined') fbq('track', 'Purchase', { value: 19, currency: 'USD' });
+                            window.location.href = 'dashboard.html?payment=success';
+                        } else {
+                            alert('Payment verification issue. Contact support if charged.');
+                        }
+                    })
+                    .catch(function() {
+                        window.location.href = 'dashboard.html?payment=success';
+                    });
+            },
+            onClose: function() {
+                if (typeof MetaCAPI !== 'undefined') {
+                    MetaCAPI.trackEvent('PaymentAbandoned', { content_name: 'Full VR Hajj Experience' });
+                }
+            }
+        });
+        handler.openIframe();
+    }
+    </script>
 
     <!-- Footer -->
     <footer class="footer">
