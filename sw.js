@@ -92,13 +92,28 @@ registerRoute(
   })
 );
 
-// ─── 6. Google Fonts ───
+// ─── 6. Google Fonts stylesheets (CSS — changes rarely) ───
 registerRoute(
-  ({ url }) => url.origin === 'https://fonts.googleapis.com' || url.origin === 'https://fonts.gstatic.com',
-  new CacheFirst({
-    cacheName: 'google-fonts',
+  ({ url }) => url.origin === 'https://fonts.googleapis.com',
+  new StaleWhileRevalidate({
+    cacheName: 'google-fonts-stylesheets',
     plugins: [
       new CacheableResponsePlugin({ statuses: [0, 200] }),
+      new ExpirationPlugin({
+        maxEntries: 30,
+        maxAgeSeconds: 365 * 24 * 60 * 60, // 1 year
+      }),
+    ],
+  })
+);
+
+// ─── 6b. Google Fonts files (woff2 — use network-first to avoid CORS cache issues) ───
+registerRoute(
+  ({ url }) => url.origin === 'https://fonts.gstatic.com',
+  new StaleWhileRevalidate({
+    cacheName: 'google-fonts-webfonts',
+    plugins: [
+      new CacheableResponsePlugin({ statuses: [200] }),
       new ExpirationPlugin({
         maxEntries: 30,
         maxAgeSeconds: 365 * 24 * 60 * 60, // 1 year
