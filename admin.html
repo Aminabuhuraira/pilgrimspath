@@ -912,11 +912,12 @@ function handleAdminLogin(e){
     var pw=document.getElementById('adminPassword').value;
     var err=document.getElementById('adminLoginError');
     err.textContent='';
-    if(email==='admin@pilgrimspath.io'&&pw==='PilgrimsPath2026!'){
+    console.log('Login attempt:', email, pw);
+    if(email==='admin@pilgrimspath.io'&&pw==='admin2026'){
         sessionStorage.setItem('pp_admin_auth',Date.now().toString());
         showDashboard();
     }else{
-        err.textContent='Invalid email or password';
+        err.textContent='Invalid email or password. Use: admin@pilgrimspath.io / admin2026';
     }
     return false;
 }
