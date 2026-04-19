@@ -1,1598 +1,888 @@
-0<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- Meta Pixel Code -->
-    <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1199634958501931');
-    fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=1199634958501931&ev=PageView&noscript=1"
-    /></noscript>
-    <!-- End Meta Pixel Code -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <meta name="theme-color" content="#C9A227">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#0A0F1E">
     <title>Admin Dashboard | Pilgrim's Path</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-gold: #C9A227;
-            --primary-gold-dark: #B8941F;
-            --primary-gold-light: #F5ECD7;
-            --deep-night: #1A1A2E;
-            --pearl: #FDF6E3;
-            --warm-cream: #FFFEF7;
-            --text-secondary: #6B7280;
-            --sidebar-bg: #111827;
-            --card-bg: #ffffff;
-            --border-color: #E5E7EB;
-            --success: #10B981;
-            --warning: #F59E0B;
-            --danger: #EF4444;
-            --info: #3B82F6;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: #F3F4F6;
-            color: var(--deep-night);
-            min-height: 100vh;
-        }
-
-        /* ===== TOP BAR ===== */
-        .admin-topbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 64px;
-            background: white;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 24px;
-            z-index: 100;
-        }
-
-        .topbar-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .sidebar-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-            color: var(--deep-night);
-            padding: 8px;
-        }
-
-        .admin-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
-
-        .admin-logo img {
-            height: 36px;
-        }
-
-        .admin-logo span {
-            font-weight: 700;
-            font-size: 1rem;
-            color: var(--deep-night);
-        }
-
-        .admin-badge {
-            background: var(--primary-gold);
-            color: white;
-            font-size: 0.65rem;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .topbar-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .topbar-btn {
-            background: none;
-            border: none;
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
-            transition: all 0.2s;
-        }
-
-        .topbar-btn:hover {
-            background: var(--pearl);
-            color: var(--primary-gold);
-        }
-
-        .admin-user {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-
-        .admin-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 0.85rem;
-        }
-
-        .admin-name {
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        /* ===== SIDEBAR ===== */
-        .admin-sidebar {
-            position: fixed;
-            top: 64px;
-            left: 0;
-            bottom: 0;
-            width: 260px;
-            background: var(--sidebar-bg);
-            overflow-y: auto;
-            z-index: 90;
-            transition: transform 0.3s ease;
-        }
-
-        .sidebar-nav {
-            padding: 20px 12px;
-        }
-
-        .sidebar-label {
-            display: block;
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            color: rgba(255,255,255,0.35);
-            padding: 16px 16px 8px;
-        }
-
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            color: rgba(255,255,255,0.65);
-            text-decoration: none;
-            font-size: 0.88rem;
-            font-weight: 500;
-            border-radius: 10px;
-            transition: all 0.2s;
-            margin-bottom: 2px;
-        }
-
-        .sidebar-link:hover {
-            background: rgba(255,255,255,0.06);
-            color: white;
-        }
-
-        .sidebar-link.active {
-            background: rgba(201,162,39,0.15);
-            color: var(--primary-gold);
-        }
-
-        .sidebar-link i {
-            width: 20px;
-            text-align: center;
-            font-size: 0.95rem;
-        }
-
-        .sidebar-divider {
-            height: 1px;
-            background: rgba(255,255,255,0.08);
-            margin: 12px 16px;
-        }
-
-        /* ===== MAIN CONTENT ===== */
-        .admin-main {
-            margin-left: 260px;
-            margin-top: 64px;
-            padding: 32px;
-            min-height: calc(100vh - 64px);
-        }
-
-        .admin-header {
-            margin-bottom: 32px;
-        }
-
-        .admin-header h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            color: var(--deep-night);
-            margin-bottom: 4px;
-        }
-
-        .admin-header p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* ===== STATS GRID ===== */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 32px;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            border: 1px solid var(--border-color);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 80px;
-            height: 80px;
-            border-radius: 0 0 0 80px;
-            opacity: 0.08;
-        }
-
-        .stat-card.gold::after { background: var(--primary-gold); }
-        .stat-card.blue::after { background: var(--info); }
-        .stat-card.green::after { background: var(--success); }
-        .stat-card.orange::after { background: var(--warning); }
-
-        .stat-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            margin-bottom: 16px;
-        }
-
-        .stat-card.gold .stat-icon { background: rgba(201,162,39,0.12); color: var(--primary-gold); }
-        .stat-card.blue .stat-icon { background: rgba(59,130,246,0.12); color: var(--info); }
-        .stat-card.green .stat-icon { background: rgba(16,185,129,0.12); color: var(--success); }
-        .stat-card.orange .stat-icon { background: rgba(245,158,11,0.12); color: var(--warning); }
-
-        .stat-label {
-            font-size: 0.82rem;
-            color: var(--text-secondary);
-            font-weight: 500;
-            margin-bottom: 4px;
-        }
-
-        .stat-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--deep-night);
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-
-        .stat-trend {
-            font-size: 0.78rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .stat-trend.up { color: var(--success); }
-        .stat-trend.down { color: var(--danger); }
-
-        /* ===== CONTENT GRID ===== */
-        .content-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 24px;
-            margin-bottom: 32px;
-        }
-
-        .admin-card {
-            background: white;
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .card-header h3 {
-            font-size: 1rem;
-            font-weight: 700;
-        }
-
-        .card-header .card-action {
-            font-size: 0.82rem;
-            color: var(--primary-gold);
-            text-decoration: none;
-            font-weight: 600;
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .card-body {
-            padding: 24px;
-        }
-
-        /* ===== USERS TABLE ===== */
-        .users-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .users-table thead th {
-            text-align: left;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: var(--text-secondary);
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .users-table tbody td {
-            padding: 14px 16px;
-            border-bottom: 1px solid #F3F4F6;
-            font-size: 0.88rem;
-        }
-
-        .users-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        .users-table tbody tr:hover {
-            background: #FAFAFA;
-        }
-
-        .user-cell {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .user-cell-avatar {
-            width: 34px;
-            height: 34px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 0.75rem;
-            flex-shrink: 0;
-        }
-
-        .user-cell-name {
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        .user-cell-email {
-            font-size: 0.78rem;
-            color: var(--text-secondary);
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .status-badge.active {
-            background: rgba(16,185,129,0.1);
-            color: #059669;
-        }
-
-        .status-badge.inactive {
-            background: rgba(107,114,128,0.1);
-            color: #6B7280;
-        }
-
-        .status-badge.new {
-            background: rgba(59,130,246,0.1);
-            color: #2563EB;
-        }
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: currentColor;
-        }
-
-        /* ===== TRAFFIC SOURCES ===== */
-        .traffic-list {
-            list-style: none;
-        }
-
-        .traffic-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 0;
-            border-bottom: 1px solid #F3F4F6;
-        }
-
-        .traffic-item:last-child {
-            border-bottom: none;
-        }
-
-        .traffic-source {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .traffic-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-        }
-
-        .traffic-icon.google { background: rgba(234,67,53,0.1); color: #EA4335; }
-        .traffic-icon.direct { background: rgba(59,130,246,0.1); color: #3B82F6; }
-        .traffic-icon.social { background: rgba(99,102,241,0.1); color: #6366F1; }
-        .traffic-icon.referral { background: rgba(16,185,129,0.1); color: #10B981; }
-        .traffic-icon.email { background: rgba(245,158,11,0.1); color: #F59E0B; }
-
-        .traffic-name {
-            font-weight: 600;
-            font-size: 0.88rem;
-        }
-
-        .traffic-url {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        .traffic-stats {
-            text-align: right;
-        }
-
-        .traffic-count {
-            font-weight: 700;
-            font-size: 0.95rem;
-        }
-
-        .traffic-pct {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        /* ===== ACTIVITY / TIME CHART ===== */
-        .chart-placeholder {
-            height: 240px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--pearl) 0%, var(--primary-gold-light) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .chart-bars {
-            display: flex;
-            align-items: flex-end;
-            gap: 8px;
-            height: 180px;
-            padding: 0 20px;
-            width: 100%;
-        }
-
-        .chart-bar-group {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .chart-bar {
-            width: 100%;
-            max-width: 40px;
-            border-radius: 6px 6px 0 0;
-            background: linear-gradient(180deg, var(--primary-gold) 0%, var(--primary-gold-dark) 100%);
-            transition: height 0.5s ease;
-            position: relative;
-        }
-
-        .chart-bar.secondary {
-            background: linear-gradient(180deg, rgba(201,162,39,0.3) 0%, rgba(201,162,39,0.15) 100%);
-        }
-
-        .chart-bar-label {
-            font-size: 0.65rem;
-            color: var(--text-secondary);
-            font-weight: 600;
-        }
-
-        /* ===== RECENT ACTIVITY ===== */
-        .activity-feed {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .activity-item {
-            display: flex;
-            gap: 14px;
-            padding: 16px 0;
-            border-bottom: 1px solid #F3F4F6;
-        }
-
-        .activity-item:last-child {
-            border-bottom: none;
-        }
-
-        .activity-icon-wrap {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            flex-shrink: 0;
-        }
-
-        .activity-icon-wrap.signup { background: rgba(59,130,246,0.1); color: var(--info); }
-        .activity-icon-wrap.login { background: rgba(16,185,129,0.1); color: var(--success); }
-        .activity-icon-wrap.journey { background: rgba(201,162,39,0.1); color: var(--primary-gold); }
-        .activity-icon-wrap.achievement { background: rgba(168,85,247,0.1); color: #A855F7; }
-
-        .activity-text {
-            font-size: 0.85rem;
-            line-height: 1.5;
-        }
-
-        .activity-text strong {
-            font-weight: 600;
-        }
-
-        .activity-time {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-top: 2px;
-        }
-
-        /* ===== COUNTRY MAP PLACEHOLDER ===== */
-        .country-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .country-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 14px;
-            background: #FAFAFA;
-            border-radius: 10px;
-        }
-
-        .country-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .country-flag {
-            font-size: 1.3rem;
-        }
-
-        .country-name {
-            font-weight: 600;
-            font-size: 0.82rem;
-        }
-
-        .country-count {
-            font-weight: 700;
-            font-size: 0.88rem;
-            color: var(--primary-gold);
-        }
-
-        /* ===== PROGRESS BAR ===== */
-        .progress-bar-wrap {
-            margin-top: 8px;
-        }
-
-        .progress-bar-bg {
-            height: 6px;
-            background: #E5E7EB;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            border-radius: 3px;
-            transition: width 0.5s ease;
-        }
-
-        .progress-bar-fill.gold { background: var(--primary-gold); }
-        .progress-bar-fill.blue { background: var(--info); }
-        .progress-bar-fill.green { background: var(--success); }
-        .progress-bar-fill.purple { background: #A855F7; }
-
-        /* ===== LOADING STATE ===== */
-        .loading-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(255,255,255,0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .loading-spinner {
-            text-align: center;
-        }
-
-        .loading-spinner i {
-            font-size: 2rem;
-            color: var(--primary-gold);
-            animation: spin 1s linear infinite;
-        }
-
-        .loading-spinner p {
-            margin-top: 12px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* ===== EMPTY STATE ===== */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-secondary);
-        }
-
-        .empty-state i {
-            font-size: 2.5rem;
-            color: #D1D5DB;
-            margin-bottom: 16px;
-        }
-
-        .empty-state p {
-            font-size: 0.9rem;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 1200px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .sidebar-toggle {
-                display: block;
-            }
-
-            .admin-sidebar {
-                transform: translateX(-100%);
-            }
-
-            .admin-sidebar.open {
-                transform: translateX(0);
-            }
-
-            .admin-main {
-                margin-left: 0;
-                padding: 20px 16px;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 12px;
-            }
-
-            .stat-card {
-                padding: 18px;
-            }
-
-            .stat-value {
-                font-size: 1.4rem;
-            }
-
-            .admin-header h1 {
-                font-size: 1.4rem;
-            }
-
-            .country-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .users-table-wrap {
-                overflow-x: auto;
-            }
-
-            .admin-name {
-                display: none;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="admin-dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner">
-            <i class="fas fa-spinner fa-spin"></i>
-            <p>Loading admin dashboard...</p>
+
+<!-- ===== TOP BAR ===== -->
+<header class="admin-topbar">
+    <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+        <a href="index.html" class="admin-logo">
+            <div class="admin-logo-icon"><i class="fas fa-kaaba"></i></div>
+            <span class="admin-logo-text">Pilgrim's Path</span>
+            <span class="admin-badge">Admin</span>
+        </a>
+    </div>
+    <div class="topbar-center">
+        <div class="topbar-search">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search modules, users, campaigns..." id="globalSearch">
+        </div>
+    </div>
+    <div class="topbar-right">
+        <div class="demo-toggle" id="demoToggle" onclick="toggleDemoMode()">
+            <span>Demo</span>
+            <div class="demo-switch"></div>
+        </div>
+        <button class="topbar-btn" title="Notifications" onclick="switchModule('notifications')">
+            <i class="fas fa-bell"></i><span class="badge"></span>
+        </button>
+        <button class="topbar-btn" title="Settings" onclick="switchModule('settings')">
+            <i class="fas fa-gear"></i>
+        </button>
+        <div class="admin-user">
+            <div class="admin-avatar">AB</div>
+            <span class="admin-name">Admin</span>
+        </div>
+    </div>
+</header>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="admin-sidebar" id="adminSidebar">
+    <nav class="sidebar-nav">
+        <span class="sidebar-label">Core</span>
+        <button class="sidebar-link active" data-module="overview" onclick="switchModule('overview')">
+            <i class="fas fa-chart-line"></i> Analytics Overview
+        </button>
+        <button class="sidebar-link" data-module="users" onclick="switchModule('users')">
+            <i class="fas fa-users"></i> User Management
+        </button>
+        <button class="sidebar-link" data-module="revenue" onclick="switchModule('revenue')">
+            <i class="fas fa-dollar-sign"></i> Revenue & Subs
+        </button>
+
+        <span class="sidebar-label">Marketing AI</span>
+        <button class="sidebar-link" data-module="ai-hub" onclick="switchModule('ai-hub')">
+            <i class="fas fa-robot"></i> AI Marketing Hub
+            <span class="link-badge" style="background:var(--gold);color:var(--bg-primary)">AI</span>
+        </button>
+        <button class="sidebar-link" data-module="ab-testing" onclick="switchModule('ab-testing')">
+            <i class="fas fa-flask"></i> A/B Testing
+        </button>
+        <button class="sidebar-link" data-module="calendar" onclick="switchModule('calendar')">
+            <i class="fas fa-calendar-alt"></i> Content Calendar
+        </button>
+
+        <span class="sidebar-label">Content & CRM</span>
+        <button class="sidebar-link" data-module="content" onclick="switchModule('content')">
+            <i class="fas fa-photo-video"></i> Content Performance
+        </button>
+        <button class="sidebar-link" data-module="crm" onclick="switchModule('crm')">
+            <i class="fas fa-handshake"></i> Agency CRM
+        </button>
+
+        <div class="sidebar-divider"></div>
+        <button class="sidebar-link" data-module="notifications" onclick="switchModule('notifications')">
+            <i class="fas fa-bell"></i> Notifications
+            <span class="link-badge">3</span>
+        </button>
+        <button class="sidebar-link" data-module="settings" onclick="switchModule('settings')">
+            <i class="fas fa-cog"></i> Settings
+        </button>
+
+        <div class="sidebar-divider"></div>
+        <a href="index.html" class="sidebar-link">
+            <i class="fas fa-external-link-alt"></i> View Site
+        </a>
+    </nav>
+</aside>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="admin-main">
+
+<!-- ============================================ -->
+<!-- MODULE 1: ANALYTICS OVERVIEW                 -->
+<!-- ============================================ -->
+<section class="module-section active" id="mod-overview">
+    <div class="section-header">
+        <h1>Analytics Overview</h1>
+        <p>Real-time platform metrics and performance insights</p>
+    </div>
+
+    <div class="stats-grid" id="overviewStats">
+        <div class="stat-card gold">
+            <div class="stat-icon"><i class="fas fa-users"></i></div>
+            <div class="stat-label">Total Users</div>
+            <div class="stat-value" id="statTotalUsers">—</div>
+            <div class="stat-trend up"><i class="fas fa-arrow-up"></i> <span id="statUsersTrend">0%</span> this month</div>
+        </div>
+        <div class="stat-card blue">
+            <div class="stat-icon"><i class="fas fa-vr-cardboard"></i></div>
+            <div class="stat-label">VR Sessions</div>
+            <div class="stat-value" id="statVRSessions">—</div>
+            <div class="stat-trend up"><i class="fas fa-arrow-up"></i> <span id="statVRTrend">0%</span> this week</div>
+        </div>
+        <div class="stat-card green">
+            <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+            <div class="stat-label">Revenue (MTD)</div>
+            <div class="stat-value" id="statRevenue">—</div>
+            <div class="stat-trend up"><i class="fas fa-arrow-up"></i> <span id="statRevTrend">0%</span> vs last month</div>
+        </div>
+        <div class="stat-card orange">
+            <div class="stat-icon"><i class="fas fa-envelope-open"></i></div>
+            <div class="stat-label">Email Leads</div>
+            <div class="stat-value" id="statLeads">—</div>
+            <div class="stat-trend up"><i class="fas fa-arrow-up"></i> <span id="statLeadsTrend">0%</span> this week</div>
         </div>
     </div>
 
-    <!-- Top Bar -->
-    <header class="admin-topbar">
-        <div class="topbar-left">
-            <button class="sidebar-toggle" id="sidebarToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <a href="index.html" class="admin-logo">
-                <img src="images/logo.png" alt="Pilgrim's Path">
-                <span>Pilgrim's Path</span>
-                <span class="admin-badge">Admin</span>
-            </a>
-        </div>
-        <div class="topbar-right">
-            <button class="topbar-btn" title="Refresh Data" onclick="loadAdminData()">
-                <i class="fas fa-sync-alt"></i>
-            </button>
-            <button class="topbar-btn" title="Back to Site" onclick="window.location.href='index.html'">
-                <i class="fas fa-external-link-alt"></i>
-            </button>
-            <div class="admin-user">
-                <div class="admin-avatar" id="adminAvatar">AD</div>
-                <span class="admin-name" id="adminName">Admin</span>
-            </div>
-        </div>
-    </header>
-
-    <!-- Sidebar -->
-    <aside class="admin-sidebar" id="adminSidebar">
-        <nav class="sidebar-nav">
-            <span class="sidebar-label">Analytics</span>
-            <a href="#" class="sidebar-link active" data-section="overview">
-                <i class="fas fa-chart-pie"></i>
-                <span>Overview</span>
-            </a>
-            <a href="#" class="sidebar-link" data-section="users">
-                <i class="fas fa-users"></i>
-                <span>Users</span>
-            </a>
-            <a href="#" class="sidebar-link" data-section="activity">
-                <i class="fas fa-wave-square"></i>
-                <span>Activity</span>
-            </a>
-
-            <div class="sidebar-divider"></div>
-
-            <span class="sidebar-label">Manage</span>
-            <a href="dashboard.html" class="sidebar-link">
-                <i class="fas fa-tachometer-alt"></i>
-                <span>User Dashboard</span>
-            </a>
-            <a href="index.html" class="sidebar-link">
-                <i class="fas fa-home"></i>
-                <span>View Site</span>
-            </a>
-
-            <div class="sidebar-divider"></div>
-
-            <a href="#" class="sidebar-link" onclick="signOut(); return false;" style="color: rgba(239,68,68,0.7);">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Log Out</span>
-            </a>
-        </nav>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="admin-main">
-        <!-- Header -->
-        <div class="admin-header">
-            <h1>Admin Dashboard</h1>
-            <p>Monitor users, activity, and platform analytics</p>
-        </div>
-
-        <!-- Stats Cards -->
-        <div class="stats-grid">
-            <div class="stat-card gold">
-                <div class="stat-icon"><i class="fas fa-users"></i></div>
-                <div class="stat-label">Total Users</div>
-                <div class="stat-value" id="statTotalUsers">—</div>
-                <div class="stat-trend up" id="statUsersTrend">
-                    <i class="fas fa-arrow-up"></i> Loading...
-                </div>
-            </div>
-            <div class="stat-card blue">
-                <div class="stat-icon"><i class="fas fa-user-plus"></i></div>
-                <div class="stat-label">New This Week</div>
-                <div class="stat-value" id="statNewUsers">—</div>
-                <div class="stat-trend up" id="statNewTrend">
-                    <i class="fas fa-arrow-up"></i> Loading...
-                </div>
-            </div>
-            <div class="stat-card green">
-                <div class="stat-icon"><i class="fas fa-clock"></i></div>
-                <div class="stat-label">Avg. Session Time</div>
-                <div class="stat-value" id="statAvgTime">—</div>
-                <div class="stat-trend" id="statTimeTrend">
-                    Tracking active
-                </div>
-            </div>
-            <div class="stat-card orange">
-                <div class="stat-icon"><i class="fas fa-signal"></i></div>
-                <div class="stat-label">Active Now</div>
-                <div class="stat-value" id="statActiveNow">—</div>
-                <div class="stat-trend" id="statActiveTrend">
-                    Real-time
-                </div>
-            </div>
-        </div>
-
-        <!-- Users Table + Traffic Sources -->
-        <div class="content-grid">
-            <!-- Users Table -->
-            <div class="admin-card">
-                <div class="card-header">
-                    <h3><i class="fas fa-users" style="margin-right:8px; color: var(--primary-gold);"></i> Registered Users</h3>
-                    <button class="card-action" onclick="exportUsersCSV()">
-                        <i class="fas fa-download"></i> Export CSV
-                    </button>
-                </div>
-                <div class="card-body" style="padding: 0;">
-                    <div class="users-table-wrap">
-                        <table class="users-table">
-                            <thead>
-                                <tr>
-                                    <th>User</th>
-                                    <th>Country</th>
-                                    <th>Joined</th>
-                                    <th>Last Active</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="usersTableBody">
-                                <tr>
-                                    <td colspan="5">
-                                        <div class="empty-state">
-                                            <i class="fas fa-spinner fa-spin"></i>
-                                            <p>Loading users...</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Traffic Sources -->
-            <div class="admin-card">
-                <div class="card-header">
-                    <h3><i class="fas fa-globe" style="margin-right:8px; color: var(--primary-gold);"></i> Traffic Sources</h3>
-                </div>
-                <div class="card-body">
-                    <ul class="traffic-list" id="trafficList">
-                        <li class="traffic-item">
-                            <div class="traffic-source">
-                                <div class="traffic-icon direct"><i class="fas fa-link"></i></div>
-                                <div>
-                                    <div class="traffic-name">Direct</div>
-                                    <div class="traffic-url">pilgrimspath.io</div>
-                                </div>
-                            </div>
-                            <div class="traffic-stats">
-                                <div class="traffic-count" id="trafficDirect">—</div>
-                                <div class="traffic-pct">visitors</div>
-                            </div>
-                        </li>
-                        <li class="traffic-item">
-                            <div class="traffic-source">
-                                <div class="traffic-icon google"><i class="fab fa-google"></i></div>
-                                <div>
-                                    <div class="traffic-name">Google Search</div>
-                                    <div class="traffic-url">google.com</div>
-                                </div>
-                            </div>
-                            <div class="traffic-stats">
-                                <div class="traffic-count" id="trafficGoogle">—</div>
-                                <div class="traffic-pct">visitors</div>
-                            </div>
-                        </li>
-                        <li class="traffic-item">
-                            <div class="traffic-source">
-                                <div class="traffic-icon social"><i class="fab fa-instagram"></i></div>
-                                <div>
-                                    <div class="traffic-name">Social Media</div>
-                                    <div class="traffic-url">instagram, tiktok, etc.</div>
-                                </div>
-                            </div>
-                            <div class="traffic-stats">
-                                <div class="traffic-count" id="trafficSocial">—</div>
-                                <div class="traffic-pct">visitors</div>
-                            </div>
-                        </li>
-                        <li class="traffic-item">
-                            <div class="traffic-source">
-                                <div class="traffic-icon referral"><i class="fas fa-share-alt"></i></div>
-                                <div>
-                                    <div class="traffic-name">Referrals</div>
-                                    <div class="traffic-url">partner sites</div>
-                                </div>
-                            </div>
-                            <div class="traffic-stats">
-                                <div class="traffic-count" id="trafficReferral">—</div>
-                                <div class="traffic-pct">visitors</div>
-                            </div>
-                        </li>
-                        <li class="traffic-item">
-                            <div class="traffic-source">
-                                <div class="traffic-icon email"><i class="fas fa-envelope"></i></div>
-                                <div>
-                                    <div class="traffic-name">Email</div>
-                                    <div class="traffic-url">newsletters</div>
-                                </div>
-                            </div>
-                            <div class="traffic-stats">
-                                <div class="traffic-count" id="trafficEmail">—</div>
-                                <div class="traffic-pct">visitors</div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- Activity Chart + Recent Activity -->
-        <div class="content-grid">
-            <!-- Weekly Activity Chart -->
-            <div class="admin-card">
-                <div class="card-header">
-                    <h3><i class="fas fa-chart-bar" style="margin-right:8px; color: var(--primary-gold);"></i> Weekly Activity</h3>
-                    <span style="font-size: 0.8rem; color: var(--text-secondary);">Last 7 days</span>
-                </div>
-                <div class="card-body">
-                    <div class="chart-placeholder">
-                        <div class="chart-bars" id="activityChart">
-                            <!-- Filled by JS -->
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 20px; margin-top: 16px; font-size: 0.8rem;">
-                        <span style="display: flex; align-items: center; gap: 6px;">
-                            <span style="width:12px; height:12px; border-radius:3px; background: var(--primary-gold);"></span>
-                            Signups
-                        </span>
-                        <span style="display: flex; align-items: center; gap: 6px;">
-                            <span style="width:12px; height:12px; border-radius:3px; background: rgba(201,162,39,0.25);"></span>
-                            Logins
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent Activity Feed -->
-            <div class="admin-card">
-                <div class="card-header">
-                    <h3><i class="fas fa-stream" style="margin-right:8px; color: var(--primary-gold);"></i> Recent Activity</h3>
-                </div>
-                <div class="card-body" style="padding: 8px 24px;">
-                    <div class="activity-feed" id="activityFeed">
-                        <div class="empty-state">
-                            <i class="fas fa-spinner fa-spin"></i>
-                            <p>Loading activity...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Users by Country -->
-        <div class="admin-card" style="margin-bottom: 32px;">
+    <div class="grid-2-1">
+        <div class="card">
             <div class="card-header">
-                <h3><i class="fas fa-map-marked-alt" style="margin-right:8px; color: var(--primary-gold);"></i> Users by Country</h3>
+                <h3>Traffic & Engagement (30 Days)</h3>
+                <div>
+                    <button class="btn btn-sm btn-outline" onclick="setChartRange('7d')">7D</button>
+                    <button class="btn btn-sm btn-outline" onclick="setChartRange('30d')" style="border-color:var(--gold-border);color:var(--gold)">30D</button>
+                    <button class="btn btn-sm btn-outline" onclick="setChartRange('90d')">90D</button>
+                </div>
             </div>
             <div class="card-body">
-                <div class="country-grid" id="countryGrid">
-                    <div class="empty-state" style="grid-column: 1/-1;">
-                        <i class="fas fa-spinner fa-spin"></i>
-                        <p>Loading countries...</p>
+                <div class="chart-container">
+                    <canvas id="trafficChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h3>Top Countries</h3>
+            </div>
+            <div class="card-body" id="topCountries">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header">
+                <h3>Recent Activity</h3>
+            </div>
+            <div class="card-body" id="recentActivity" style="max-height:320px;overflow-y:auto">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h3>Conversion Funnel</h3>
+            </div>
+            <div class="card-body">
+                <div class="chart-container" style="height:300px">
+                    <canvas id="funnelChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- MODULE 2: USER MANAGEMENT                    -->
+<!-- ============================================ -->
+<section class="module-section" id="mod-users">
+    <div class="section-header">
+        <h1>User Management</h1>
+        <p>View and manage platform users</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card gold">
+            <div class="stat-icon"><i class="fas fa-user-plus"></i></div>
+            <div class="stat-label">New This Week</div>
+            <div class="stat-value" id="usersNewWeek">—</div>
+        </div>
+        <div class="stat-card green">
+            <div class="stat-icon"><i class="fas fa-user-check"></i></div>
+            <div class="stat-label">Active (30d)</div>
+            <div class="stat-value" id="usersActive30">—</div>
+        </div>
+        <div class="stat-card blue">
+            <div class="stat-icon"><i class="fas fa-crown"></i></div>
+            <div class="stat-label">Premium Users</div>
+            <div class="stat-value" id="usersPremium">—</div>
+        </div>
+        <div class="stat-card orange">
+            <div class="stat-icon"><i class="fas fa-building"></i></div>
+            <div class="stat-label">Agency Accounts</div>
+            <div class="stat-value" id="usersAgency">—</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>All Users</h3>
+            <div style="display:flex;gap:8px;align-items:center">
+                <input type="text" class="form-input" placeholder="Search users..." id="userSearch" style="width:220px;margin:0">
+                <button class="btn btn-gold btn-sm" onclick="exportUsersCSV()"><i class="fas fa-download"></i> Export</button>
+            </div>
+        </div>
+        <div class="card-body" style="padding:0;overflow-x:auto">
+            <table class="data-table" id="usersTable">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Plan</th>
+                        <th>Country</th>
+                        <th>Joined</th>
+                        <th>Last Active</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- MODULE 3: AI MARKETING INTELLIGENCE HUB      -->
+<!-- ============================================ -->
+<section class="module-section" id="mod-ai-hub">
+    <div class="section-header">
+        <h1><i class="fas fa-robot" style="color:var(--gold);margin-right:8px"></i>AI Marketing Intelligence Hub</h1>
+        <p>Claude-powered campaign generation, audience insights, and content strategy</p>
+    </div>
+
+    <!-- Sub-tabs -->
+    <div class="tab-bar" id="aiTabBar">
+        <button class="tab-btn active" onclick="switchAiTab('campaign')">Campaign Studio</button>
+        <button class="tab-btn" onclick="switchAiTab('performance')">Performance</button>
+        <button class="tab-btn" onclick="switchAiTab('audience')">Audience Intel</button>
+        <button class="tab-btn" onclick="switchAiTab('content-gen')">Content Generator</button>
+    </div>
+
+    <!-- Campaign Intelligence Studio -->
+    <div class="tab-content active" id="ai-tab-campaign" style="padding-top:20px">
+        <div class="ai-hub-grid">
+            <div>
+                <div class="ai-prompt-box">
+                    <h3 style="font-size:0.9rem;margin-bottom:12px;color:var(--text-primary)">Campaign Brief</h3>
+                    <div class="ai-quick-actions">
+                        <button class="ai-quick-btn" onclick="setAIPrompt('hajj2026')">Hajj 2026 Campaign</button>
+                        <button class="ai-quick-btn" onclick="setAIPrompt('umrah')">Umrah Promo</button>
+                        <button class="ai-quick-btn" onclick="setAIPrompt('ramadan')">Ramadan Special</button>
+                        <button class="ai-quick-btn" onclick="setAIPrompt('agency')">Agency B2B</button>
+                        <button class="ai-quick-btn" onclick="setAIPrompt('retarget')">Retargeting</button>
+                    </div>
+                    <textarea id="aiPromptInput" placeholder="Describe your campaign goal, target audience, budget, and desired outcome...
+
+Example: Create a Facebook ad campaign targeting Muslim millennials in the US and UK for Hajj 2026 preparation. Budget $500/month. Goal: drive VR experience sign-ups."></textarea>
+                    <div style="display:flex;gap:8px;margin-top:12px">
+                        <button class="btn btn-gold" onclick="generateCampaign()" id="aiGenerateBtn">
+                            <i class="fas fa-wand-magic-sparkles"></i> Generate Campaign
+                        </button>
+                        <button class="btn btn-outline" onclick="clearAIResponse()">
+                            <i class="fas fa-eraser"></i> Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="ai-prompt-box">
+                    <h3 style="font-size:0.9rem;margin-bottom:12px;color:var(--text-primary)">AI Response</h3>
+                    <div class="ai-response-box" id="aiResponseBox">
+                        <span style="color:var(--text-muted)">Click "Generate Campaign" to get AI-powered campaign suggestions...</span>
+                    </div>
+                    <div style="display:flex;gap:8px;margin-top:12px">
+                        <button class="btn btn-sm btn-outline" onclick="copyAIResponse()"><i class="fas fa-copy"></i> Copy</button>
+                        <button class="btn btn-sm btn-outline" onclick="saveAIDraft()"><i class="fas fa-save"></i> Save Draft</button>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
 
-    <!-- Supabase JS SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="auth.js"></script>
+        <!-- Saved Drafts -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Saved Campaign Drafts</h3>
+                <button class="btn btn-sm btn-outline" onclick="clearAllDrafts()"><i class="fas fa-trash"></i> Clear All</button>
+            </div>
+            <div class="card-body" id="savedDrafts">
+                <div class="empty-state"><i class="fas fa-bookmark"></i><p>No saved drafts yet</p></div>
+            </div>
+        </div>
+    </div>
 
-    <script>
-    // ===== ADMIN DASHBOARD LOGIC =====
+    <!-- Performance Dashboard -->
+    <div class="tab-content" id="ai-tab-performance" style="padding-top:20px">
+        <div class="stats-grid">
+            <div class="stat-card gold">
+                <div class="stat-icon"><i class="fas fa-bullhorn"></i></div>
+                <div class="stat-label">Active Campaigns</div>
+                <div class="stat-value">3</div>
+            </div>
+            <div class="stat-card blue">
+                <div class="stat-icon"><i class="fas fa-eye"></i></div>
+                <div class="stat-label">Total Impressions</div>
+                <div class="stat-value">284K</div>
+                <div class="stat-trend up"><i class="fas fa-arrow-up"></i> 18% this week</div>
+            </div>
+            <div class="stat-card green">
+                <div class="stat-icon"><i class="fas fa-mouse-pointer"></i></div>
+                <div class="stat-label">Click-Through Rate</div>
+                <div class="stat-value">3.2%</div>
+                <div class="stat-trend up"><i class="fas fa-arrow-up"></i> 0.4%</div>
+            </div>
+            <div class="stat-card purple">
+                <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+                <div class="stat-label">Ad Spend (MTD)</div>
+                <div class="stat-value">$1,240</div>
+                <div class="stat-trend down"><i class="fas fa-arrow-down"></i> Under budget</div>
+            </div>
+        </div>
 
-    // Admin email whitelist — add your admin email(s) here
-    const ADMIN_EMAILS = ['aminabuhuraira@gmail.com', 'admin@pilgrimspath.io'];
-
-    // Country code → flag emoji + name
-    const COUNTRY_MAP = {
-        'US': { flag: '🇺🇸', name: 'United States' },
-        'UK': { flag: '🇬🇧', name: 'United Kingdom' },
-        'CA': { flag: '🇨🇦', name: 'Canada' },
-        'AU': { flag: '🇦🇺', name: 'Australia' },
-        'AE': { flag: '🇦🇪', name: 'UAE' },
-        'SA': { flag: '🇸🇦', name: 'Saudi Arabia' },
-        'MY': { flag: '🇲🇾', name: 'Malaysia' },
-        'ID': { flag: '🇮🇩', name: 'Indonesia' },
-        'PK': { flag: '🇵🇰', name: 'Pakistan' },
-        'IN': { flag: '🇮🇳', name: 'India' },
-        'BD': { flag: '🇧🇩', name: 'Bangladesh' },
-        'EG': { flag: '🇪🇬', name: 'Egypt' },
-        'TR': { flag: '🇹🇷', name: 'Turkey' },
-        'NG': { flag: '🇳🇬', name: 'Nigeria' },
-        'ZA': { flag: '🇿🇦', name: 'South Africa' },
-        'OTHER': { flag: '🌍', name: 'Other' }
-    };
-
-    // ===== SESSION TRACKING =====
-    // Track visitor sessions in localStorage for traffic analytics
-    function trackVisit() {
-        try {
-            const visits = JSON.parse(localStorage.getItem('pp_visits') || '[]');
-            const referrer = document.referrer || 'direct';
-            visits.push({
-                time: new Date().toISOString(),
-                referrer: referrer,
-                page: window.location.pathname
-            });
-            // Keep last 500 visits
-            if (visits.length > 500) visits.splice(0, visits.length - 500);
-            localStorage.setItem('pp_visits', JSON.stringify(visits));
-        } catch(e) {}
-    }
-
-    // ===== INITIALIZE ADMIN =====
-    document.addEventListener('DOMContentLoaded', async () => {
-        try {
-            const user = await requireAuth();
-            if (!user) return;
-
-            // Check admin access
-            if (!ADMIN_EMAILS.includes(user.email)) {
-                document.getElementById('loadingOverlay').innerHTML = `
-                    <div class="loading-spinner">
-                        <i class="fas fa-lock" style="animation:none; color: var(--danger);"></i>
-                        <p style="margin-top:16px; font-weight:600;">Access Denied</p>
-                        <p>You do not have admin privileges.</p>
-                        <a href="dashboard.html" style="display:inline-block; margin-top:16px; color: var(--primary-gold); font-weight:600;">Go to Dashboard →</a>
-                    </div>`;
-                return;
-            }
-
-            // Set admin info
-            const name = getUserDisplayName(user);
-            const initials = getUserInitials(user);
-            document.getElementById('adminAvatar').textContent = initials;
-            document.getElementById('adminName').textContent = name;
-
-            // Load data
-            await loadAdminData();
-
-            // Hide loading
-            document.getElementById('loadingOverlay').style.display = 'none';
-
-        } catch(err) {
-            console.error('Admin init error:', err);
-            document.getElementById('loadingOverlay').innerHTML = `
-                <div class="loading-spinner">
-                    <i class="fas fa-exclamation-triangle" style="animation:none; color: var(--danger);"></i>
-                    <p style="margin-top:16px;">${err.message || 'Failed to load admin dashboard.'}</p>
-                    <a href="login.html" style="display:inline-block; margin-top:16px; color: var(--primary-gold); font-weight:600;">Go to Login →</a>
-                </div>`;
-        }
-    });
-
-    // ===== LOAD ALL ADMIN DATA =====
-    async function loadAdminData() {
-        const sb = getSupabaseClient();
-        let users = [];
-        let profilesTableExists = false;
-
-        try {
-            // Query the profiles table (created via supabase-setup.sql)
-            const { data: profiles, error } = await sb
-                .from('profiles')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (!error && profiles && profiles.length > 0) {
-                users = profiles;
-                profilesTableExists = true;
-            } else if (error) {
-                console.warn('Profiles table query error:', error.message);
-            }
-        } catch(e) {
-            console.log('Profiles table not available');
-        }
-
-        // Fallback: show current admin user if profiles table doesn't exist yet
-        if (users.length === 0) {
-            const currentUser = await getCurrentUser();
-            if (currentUser) {
-                users = [{
-                    id: currentUser.id,
-                    email: currentUser.email,
-                    first_name: currentUser.user_metadata?.first_name || '',
-                    last_name: currentUser.user_metadata?.last_name || '',
-                    country: currentUser.user_metadata?.country || 'OTHER',
-                    created_at: currentUser.created_at,
-                    last_sign_in_at: currentUser.last_sign_in_at
-                }];
-            }
-
-            // Show setup notice if profiles table doesn't exist
-            if (!profilesTableExists) {
-                const header = document.querySelector('.admin-header');
-                if (header && !document.getElementById('setupNotice')) {
-                    header.insertAdjacentHTML('afterend', `
-                        <div id="setupNotice" style="background:#FEF3C7; border:1px solid #F59E0B; border-radius:12px; padding:16px 20px; margin-bottom:24px; display:flex; align-items:center; gap:12px;">
-                            <i class="fas fa-exclamation-triangle" style="color:#F59E0B; font-size:1.2rem;"></i>
-                            <div style="flex:1;">
-                                <strong style="font-size:0.9rem;">Profiles table not set up yet</strong>
-                                <p style="font-size:0.82rem; color:#92400E; margin-top:2px;">
-                                    Run the SQL in <code>supabase-setup.sql</code> in your 
-                                    <a href="https://supabase.com/dashboard/project/giftctxrqvlfekhzpcaa/sql/new" target="_blank" style="color:#B45309; font-weight:600;">Supabase SQL Editor</a> 
-                                    to enable full user tracking. Currently showing only your account.
-                                </p>
-                            </div>
-                        </div>
-                    `);
-                }
-            }
-        }
-
-        // Update stats
-        updateStats(users);
-        
-        // Update users table
-        updateUsersTable(users);
-        
-        // Update traffic sources from localStorage tracking
-        updateTrafficSources();
-        
-        // Update activity chart
-        updateActivityChart(users);
-        
-        // Update recent activity
-        updateRecentActivity(users);
-        
-        // Update country grid
-        updateCountryGrid(users);
-    }
-
-    // ===== UPDATE STATS =====
-    function updateStats(users) {
-        const total = users.length;
-        const now = new Date();
-        const weekAgo = new Date(now - 7 * 24 * 60 * 60 * 1000);
-        const newThisWeek = users.filter(u => new Date(u.created_at) > weekAgo).length;
-
-        document.getElementById('statTotalUsers').textContent = total;
-        document.getElementById('statNewUsers').textContent = newThisWeek;
-        
-        // Avg session time from localStorage
-        const avgTime = getAvgSessionTime();
-        document.getElementById('statAvgTime').textContent = avgTime;
-
-        // Active now (users active in last 5 min — simplified)
-        const fiveMinAgo = new Date(now - 5 * 60 * 1000);
-        const activeNow = users.filter(u => u.last_sign_in_at && new Date(u.last_sign_in_at) > fiveMinAgo).length;
-        document.getElementById('statActiveNow').textContent = Math.max(1, activeNow);
-
-        // Trends
-        document.getElementById('statUsersTrend').innerHTML = `<i class="fas fa-arrow-up"></i> ${total} total registered`;
-        document.getElementById('statNewTrend').innerHTML = newThisWeek > 0 
-            ? `<i class="fas fa-arrow-up"></i> +${newThisWeek} this week`
-            : `<i class="fas fa-minus"></i> No new signups this week`;
-    }
-
-    function getAvgSessionTime() {
-        try {
-            const sessions = JSON.parse(localStorage.getItem('pp_sessions') || '[]');
-            if (sessions.length === 0) return '—';
-            const avg = sessions.reduce((a, b) => a + b, 0) / sessions.length;
-            if (avg < 60) return `${Math.round(avg)}s`;
-            return `${Math.round(avg / 60)}m`;
-        } catch(e) {
-            return '—';
-        }
-    }
-
-    // ===== USERS TABLE =====
-    function updateUsersTable(users) {
-        const tbody = document.getElementById('usersTableBody');
-        
-        if (users.length === 0) {
-            tbody.innerHTML = `
-                <tr><td colspan="5">
-                    <div class="empty-state">
-                        <i class="fas fa-users"></i>
-                        <p>No users registered yet.<br>Users will appear here once they sign up.</p>
-                    </div>
-                </td></tr>`;
-            return;
-        }
-
-        tbody.innerHTML = users.map(user => {
-            const name = `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.email?.split('@')[0] || 'Unknown';
-            const initials = ((user.first_name || user.email || 'U')[0] + (user.last_name || '')[0]).toUpperCase() || 'U';
-            const country = COUNTRY_MAP[user.country]?.name || user.country || '—';
-            const joined = formatDate(user.created_at);
-            const lastActive = user.last_sign_in_at ? formatRelative(user.last_sign_in_at) : 'Never';
-            
-            const now = new Date();
-            const fiveMinAgo = new Date(now - 5 * 60 * 1000);
-            const dayAgo = new Date(now - 24 * 60 * 60 * 1000);
-            const weekAgo = new Date(now - 7 * 24 * 60 * 60 * 1000);
-            
-            let status, statusClass;
-            if (user.last_sign_in_at && new Date(user.last_sign_in_at) > fiveMinAgo) {
-                status = 'Online'; statusClass = 'active';
-            } else if (new Date(user.created_at) > weekAgo) {
-                status = 'New'; statusClass = 'new';
-            } else if (!user.last_sign_in_at || new Date(user.last_sign_in_at) < dayAgo) {
-                status = 'Inactive'; statusClass = 'inactive';
-            } else {
-                status = 'Active'; statusClass = 'active';
-            }
-
-            return `
-                <tr>
-                    <td>
-                        <div class="user-cell">
-                            <div class="user-cell-avatar">${initials}</div>
-                            <div>
-                                <div class="user-cell-name">${escapeHTML(name)}</div>
-                                <div class="user-cell-email">${escapeHTML(user.email || '')}</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td>${escapeHTML(country)}</td>
-                    <td>${joined}</td>
-                    <td>${lastActive}</td>
-                    <td><span class="status-badge ${statusClass}"><span class="status-dot"></span>${status}</span></td>
-                </tr>`;
-        }).join('');
-    }
-
-    // ===== TRAFFIC SOURCES =====
-    function updateTrafficSources() {
-        try {
-            const visits = JSON.parse(localStorage.getItem('pp_visits') || '[]');
-            let sources = { direct: 0, google: 0, social: 0, referral: 0, email: 0 };
-            
-            visits.forEach(v => {
-                const ref = (v.referrer || '').toLowerCase();
-                if (!ref || ref === 'direct' || ref === '') {
-                    sources.direct++;
-                } else if (ref.includes('google')) {
-                    sources.google++;
-                } else if (ref.includes('instagram') || ref.includes('facebook') || ref.includes('twitter') || ref.includes('tiktok') || ref.includes('youtube')) {
-                    sources.social++;
-                } else if (ref.includes('mail') || ref.includes('email')) {
-                    sources.email++;
-                } else {
-                    sources.referral++;
-                }
-            });
-
-            document.getElementById('trafficDirect').textContent = sources.direct || '—';
-            document.getElementById('trafficGoogle').textContent = sources.google || '—';
-            document.getElementById('trafficSocial').textContent = sources.social || '—';
-            document.getElementById('trafficReferral').textContent = sources.referral || '—';
-            document.getElementById('trafficEmail').textContent = sources.email || '—';
-        } catch(e) {
-            console.log('Traffic tracking error:', e);
-        }
-    }
-
-    // ===== ACTIVITY CHART =====
-    function updateActivityChart(users) {
-        const chart = document.getElementById('activityChart');
-        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        const now = new Date();
-        
-        // Count signups per day of week from user data
-        let signupsByDay = [0, 0, 0, 0, 0, 0, 0];
-        let loginsByDay = [0, 0, 0, 0, 0, 0, 0];
-        
-        users.forEach(u => {
-            if (u.created_at) {
-                const d = new Date(u.created_at).getDay();
-                signupsByDay[d]++;
-            }
-            if (u.last_sign_in_at) {
-                const d = new Date(u.last_sign_in_at).getDay();
-                loginsByDay[d]++;
-            }
-        });
-
-        const maxVal = Math.max(...signupsByDay, ...loginsByDay, 1);
-        
-        // Build chart starting from today going back
-        let html = '';
-        for (let i = 6; i >= 0; i--) {
-            const dayIdx = new Date(now - i * 24 * 60 * 60 * 1000).getDay();
-            const signupH = Math.max(8, (signupsByDay[dayIdx] / maxVal) * 160);
-            const loginH = Math.max(8, (loginsByDay[dayIdx] / maxVal) * 160);
-            
-            html += `
-                <div class="chart-bar-group">
-                    <div style="display:flex; gap:4px; align-items:flex-end; height:160px;">
-                        <div class="chart-bar" style="height:${signupH}px;" title="${signupsByDay[dayIdx]} signups"></div>
-                        <div class="chart-bar secondary" style="height:${loginH}px;" title="${loginsByDay[dayIdx]} logins"></div>
-                    </div>
-                    <div class="chart-bar-label">${days[dayIdx]}</div>
-                </div>`;
-        }
-        
-        chart.innerHTML = html;
-    }
-
-    // ===== RECENT ACTIVITY =====
-    function updateRecentActivity(users) {
-        const feed = document.getElementById('activityFeed');
-        
-        // Build activity items from user data
-        let activities = [];
-        
-        users.forEach(u => {
-            const name = `${u.first_name || ''} ${u.last_name || ''}`.trim() || u.email?.split('@')[0] || 'A user';
-            
-            if (u.created_at) {
-                activities.push({
-                    type: 'signup',
-                    icon: 'fa-user-plus',
-                    text: `<strong>${escapeHTML(name)}</strong> created an account`,
-                    time: u.created_at
-                });
-            }
-            
-            if (u.last_sign_in_at && u.last_sign_in_at !== u.created_at) {
-                activities.push({
-                    type: 'login',
-                    icon: 'fa-sign-in-alt',
-                    text: `<strong>${escapeHTML(name)}</strong> signed in`,
-                    time: u.last_sign_in_at
-                });
-            }
-        });
-
-        // Sort by time descending
-        activities.sort((a, b) => new Date(b.time) - new Date(a.time));
-
-        if (activities.length === 0) {
-            feed.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-stream"></i>
-                    <p>No activity yet. Activity will appear here as users interact with the platform.</p>
-                </div>`;
-            return;
-        }
-
-        feed.innerHTML = activities.slice(0, 20).map(a => `
-            <div class="activity-item">
-                <div class="activity-icon-wrap ${a.type}">
-                    <i class="fas ${a.icon}"></i>
-                </div>
-                <div>
-                    <div class="activity-text">${a.text}</div>
-                    <div class="activity-time">${formatRelative(a.time)}</div>
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-header"><h3>Campaign Performance</h3></div>
+                <div class="card-body">
+                    <div class="chart-container"><canvas id="campaignChart"></canvas></div>
                 </div>
             </div>
-        `).join('');
-    }
+            <div class="card">
+                <div class="card-header"><h3>Ad Spend vs Revenue</h3></div>
+                <div class="card-body">
+                    <div class="chart-container"><canvas id="spendRevenueChart"></canvas></div>
+                </div>
+            </div>
+        </div>
 
-    // ===== COUNTRY GRID =====
-    function updateCountryGrid(users) {
-        const grid = document.getElementById('countryGrid');
-        
-        // Count users by country
-        let countryCounts = {};
-        users.forEach(u => {
-            const code = u.country || 'OTHER';
-            countryCounts[code] = (countryCounts[code] || 0) + 1;
-        });
+        <div class="card">
+            <div class="card-header"><h3>Active Campaigns</h3></div>
+            <div class="card-body" style="padding:0;overflow-x:auto">
+                <table class="data-table">
+                    <thead>
+                        <tr><th>Campaign</th><th>Platform</th><th>Status</th><th>Impressions</th><th>CTR</th><th>Spend</th><th>Conversions</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong style="color:var(--text-primary)">Hajj 2026 Early Bird</strong></td>
+                            <td><span class="tag tag-info"><i class="fab fa-facebook"></i> Facebook</span></td>
+                            <td><span class="tag tag-success">Active</span></td>
+                            <td>142,300</td><td>3.8%</td><td>$580</td><td>86</td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color:var(--text-primary)">VR Experience Launch</strong></td>
+                            <td><span class="tag tag-purple"><i class="fab fa-instagram"></i> Instagram</span></td>
+                            <td><span class="tag tag-success">Active</span></td>
+                            <td>98,700</td><td>2.9%</td><td>$420</td><td>52</td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color:var(--text-primary)">Agency Partner Outreach</strong></td>
+                            <td><span class="tag tag-info"><i class="fab fa-google"></i> Google</span></td>
+                            <td><span class="tag tag-warning">Paused</span></td>
+                            <td>43,200</td><td>2.1%</td><td>$240</td><td>18</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-        const sorted = Object.entries(countryCounts).sort((a, b) => b[1] - a[1]);
-
-        if (sorted.length === 0) {
-            grid.innerHTML = `
-                <div class="empty-state" style="grid-column: 1/-1;">
-                    <i class="fas fa-map-marked-alt"></i>
-                    <p>No country data yet.</p>
-                </div>`;
-            return;
-        }
-
-        grid.innerHTML = sorted.map(([code, count]) => {
-            const info = COUNTRY_MAP[code] || { flag: '🌍', name: code };
-            return `
-                <div class="country-item">
-                    <div class="country-info">
-                        <span class="country-flag">${info.flag}</span>
-                        <span class="country-name">${escapeHTML(info.name)}</span>
+    <!-- Audience Intelligence -->
+    <div class="tab-content" id="ai-tab-audience" style="padding-top:20px">
+        <div class="ai-hub-grid">
+            <div class="card">
+                <div class="card-header"><h3>Audience Segments</h3></div>
+                <div class="card-body" id="audienceSegments">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><h3>AI Audience Analysis</h3></div>
+                <div class="card-body">
+                    <textarea class="form-textarea" id="audiencePrompt" placeholder="Ask about your audience... e.g. 'What's the best demographic to target for Hajj 2026 VR packages?'"></textarea>
+                    <button class="btn btn-gold btn-sm" style="margin-top:10px" onclick="analyzeAudience()">
+                        <i class="fas fa-brain"></i> Analyze
+                    </button>
+                    <div class="ai-response-box" id="audienceResponse" style="margin-top:12px;min-height:120px">
+                        <span style="color:var(--text-muted)">AI audience analysis will appear here...</span>
                     </div>
-                    <span class="country-count">${count}</span>
-                </div>`;
-        }).join('');
-    }
+                </div>
+            </div>
+        </div>
+    </div>
 
-    // ===== EXPORT CSV =====
-    function exportUsersCSV() {
-        const rows = document.querySelectorAll('#usersTableBody tr');
-        let csv = 'Name,Email,Country,Joined,Last Active,Status\n';
-        
-        rows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            if (cells.length >= 5) {
-                const name = cells[0].querySelector('.user-cell-name')?.textContent || '';
-                const email = cells[0].querySelector('.user-cell-email')?.textContent || '';
-                const country = cells[1]?.textContent || '';
-                const joined = cells[2]?.textContent || '';
-                const lastActive = cells[3]?.textContent || '';
-                const status = cells[4]?.textContent?.trim() || '';
-                csv += `"${name}","${email}","${country}","${joined}","${lastActive}","${status}"\n`;
-            }
-        });
+    <!-- Content Generator -->
+    <div class="tab-content" id="ai-tab-content-gen" style="padding-top:20px">
+        <div class="ai-hub-grid">
+            <div>
+                <div class="ai-prompt-box">
+                    <h3 style="font-size:0.9rem;margin-bottom:12px;color:var(--text-primary)">Content Type</h3>
+                    <div class="ai-quick-actions">
+                        <button class="ai-quick-btn" onclick="setContentType('social')">Social Post</button>
+                        <button class="ai-quick-btn" onclick="setContentType('email')">Email Campaign</button>
+                        <button class="ai-quick-btn" onclick="setContentType('ad')">Ad Copy</button>
+                        <button class="ai-quick-btn" onclick="setContentType('blog')">Blog Outline</button>
+                        <button class="ai-quick-btn" onclick="setContentType('seo')">SEO Meta</button>
+                    </div>
+                    <textarea id="contentPrompt" placeholder="Describe the content you need...
 
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `pilgrimspath-users-${new Date().toISOString().split('T')[0]}.csv`;
-        a.click();
-        URL.revokeObjectURL(url);
-    }
+Example: Write 5 Instagram captions for promoting our VR Hajj experience during Ramadan. Include relevant hashtags."></textarea>
+                    <button class="btn btn-gold" style="margin-top:12px" onclick="generateContent()">
+                        <i class="fas fa-pen-nib"></i> Generate Content
+                    </button>
+                </div>
+            </div>
+            <div>
+                <div class="ai-prompt-box">
+                    <h3 style="font-size:0.9rem;margin-bottom:12px;color:var(--text-primary)">Generated Content</h3>
+                    <div class="ai-response-box" id="contentResponseBox">
+                        <span style="color:var(--text-muted)">Generated content will appear here...</span>
+                    </div>
+                    <div style="display:flex;gap:8px;margin-top:12px">
+                        <button class="btn btn-sm btn-outline" onclick="copyContent()"><i class="fas fa-copy"></i> Copy</button>
+                        <button class="btn btn-sm btn-outline" onclick="scheduleContent()"><i class="fas fa-calendar-plus"></i> Add to Calendar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-    // ===== UTILITY FUNCTIONS =====
-    function formatDate(dateStr) {
-        if (!dateStr) return '—';
-        const d = new Date(dateStr);
-        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    }
+<!-- ============================================ -->
+<!-- MODULE 4: A/B TESTING                        -->
+<!-- ============================================ -->
+<section class="module-section" id="mod-ab-testing">
+    <div class="section-header">
+        <h1>A/B Testing Command Center</h1>
+        <p>Run experiments and optimize conversion rates</p>
+    </div>
 
-    function formatRelative(dateStr) {
-        if (!dateStr) return '—';
-        const now = new Date();
-        const d = new Date(dateStr);
-        const diff = Math.floor((now - d) / 1000);
-        
-        if (diff < 60) return 'Just now';
-        if (diff < 3600) return `${Math.floor(diff/60)}m ago`;
-        if (diff < 86400) return `${Math.floor(diff/3600)}h ago`;
-        if (diff < 604800) return `${Math.floor(diff/86400)}d ago`;
-        return formatDate(dateStr);
-    }
+    <div class="stats-grid">
+        <div class="stat-card green">
+            <div class="stat-icon"><i class="fas fa-flask"></i></div>
+            <div class="stat-label">Active Tests</div>
+            <div class="stat-value">4</div>
+        </div>
+        <div class="stat-card gold">
+            <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+            <div class="stat-label">Winners Found</div>
+            <div class="stat-value">12</div>
+        </div>
+        <div class="stat-card blue">
+            <div class="stat-icon"><i class="fas fa-chart-bar"></i></div>
+            <div class="stat-label">Avg Lift</div>
+            <div class="stat-value">+23%</div>
+        </div>
+        <div class="stat-card purple">
+            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+            <div class="stat-label">Avg Duration</div>
+            <div class="stat-value">14d</div>
+        </div>
+    </div>
 
-    function escapeHTML(str) {
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
-    }
+    <div class="card" style="margin-bottom:20px">
+        <div class="card-header">
+            <h3>Active Experiments</h3>
+            <button class="btn btn-gold btn-sm" onclick="showNewTestForm()"><i class="fas fa-plus"></i> New Test</button>
+        </div>
+        <div class="card-body" id="abTestsList">
+            <!-- Populated by JS -->
+        </div>
+    </div>
 
-    // ===== SIDEBAR TOGGLE =====
-    document.getElementById('sidebarToggle').addEventListener('click', () => {
-        document.getElementById('adminSidebar').classList.toggle('open');
-    });
+    <!-- New Test Form (hidden by default) -->
+    <div class="card" id="newTestForm" style="display:none;margin-bottom:20px">
+        <div class="card-header">
+            <h3>Create New A/B Test</h3>
+            <button class="btn btn-sm btn-outline" onclick="hideNewTestForm()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="card-body">
+            <div class="grid-2">
+                <div class="form-group">
+                    <label class="form-label">Test Name</label>
+                    <input class="form-input" id="testName" placeholder="e.g., Hero CTA Button Color">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Test Type</label>
+                    <select class="form-select" id="testType">
+                        <option>CTA Button</option>
+                        <option>Headline</option>
+                        <option>Pricing</option>
+                        <option>Layout</option>
+                        <option>Email Subject</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label class="form-label">Variant A</label>
+                    <input class="form-input" id="variantA" placeholder="Control version">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Variant B</label>
+                    <input class="form-input" id="variantB" placeholder="Test version">
+                </div>
+            </div>
+            <button class="btn btn-gold" onclick="createABTest()"><i class="fas fa-play"></i> Start Test</button>
+        </div>
+    </div>
 
-    // Close sidebar on outside click (mobile)
-    document.addEventListener('click', (e) => {
-        const sidebar = document.getElementById('adminSidebar');
-        const toggle = document.getElementById('sidebarToggle');
-        if (window.innerWidth <= 768 && sidebar.classList.contains('open') && 
-            !sidebar.contains(e.target) && !toggle.contains(e.target)) {
-            sidebar.classList.remove('open');
-        }
-    });
+    <div class="card">
+        <div class="card-header"><h3>Completed Tests</h3></div>
+        <div class="card-body" style="padding:0;overflow-x:auto">
+            <table class="data-table">
+                <thead>
+                    <tr><th>Test</th><th>Winner</th><th>Lift</th><th>Confidence</th><th>Duration</th><th>Status</th></tr>
+                </thead>
+                <tbody id="completedTests">
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
 
-    // ===== SESSION TIME TRACKING =====
-    // Track how long users spend on the site
-    (function() {
-        const startTime = Date.now();
-        window.addEventListener('beforeunload', () => {
-            try {
-                const duration = Math.floor((Date.now() - startTime) / 1000);
-                const sessions = JSON.parse(localStorage.getItem('pp_sessions') || '[]');
-                sessions.push(duration);
-                if (sessions.length > 100) sessions.splice(0, sessions.length - 100);
-                localStorage.setItem('pp_sessions', JSON.stringify(sessions));
-            } catch(e) {}
-        });
-    })();
+<!-- ============================================ -->
+<!-- MODULE 5: CONTENT CALENDAR                   -->
+<!-- ============================================ -->
+<section class="module-section" id="mod-calendar">
+    <div class="section-header">
+        <h1>Content Calendar</h1>
+        <p>Plan, schedule, and manage your content pipeline</p>
+    </div>
 
-    // Track this visit
-    trackVisit();
-    </script>
-<script src="meta-capi.js" defer></script>
+    <div class="grid-2-1">
+        <div class="card">
+            <div class="card-header">
+                <div style="display:flex;align-items:center;gap:12px">
+                    <button class="btn btn-sm btn-outline" onclick="changeMonth(-1)"><i class="fas fa-chevron-left"></i></button>
+                    <h3 id="calendarTitle">April 2026</h3>
+                    <button class="btn btn-sm btn-outline" onclick="changeMonth(1)"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <button class="btn btn-gold btn-sm" onclick="generate30DayPlan()"><i class="fas fa-wand-magic-sparkles"></i> AI 30-Day Plan</button>
+            </div>
+            <div class="card-body">
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="card" style="margin-bottom:16px">
+                <div class="card-header"><h3>Upcoming</h3></div>
+                <div class="card-body" id="upcomingContent" style="max-height:250px;overflow-y:auto">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><h3>Quick Add</h3></div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <input class="form-input" id="calendarItemTitle" placeholder="Content title">
+                    </div>
+                    <div class="form-group">
+                        <input class="form-input" id="calendarItemDate" type="date">
+                    </div>
+                    <div class="form-group">
+                        <select class="form-select" id="calendarItemType">
+                            <option value="social">Social Post</option>
+                            <option value="email">Email</option>
+                            <option value="blog">Blog Article</option>
+                            <option value="ad">Ad Campaign</option>
+                            <option value="video">Video</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-gold btn-sm" onclick="addCalendarItem()"><i class="fas fa-plus"></i> Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- MODULE 6: CONTENT PERFORMANCE                -->
+<!-- ============================================ -->
+<section class="module-section" id="mod-content">
+    <div class="section-header">
+        <h1>Content Performance</h1>
+        <p>VR scene analytics and article engagement metrics</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card gold">
+            <div class="stat-icon"><i class="fas fa-photo-video"></i></div>
+            <div class="stat-label">Total VR Scenes</div>
+            <div class="stat-value">11</div>
+        </div>
+        <div class="stat-card blue">
+            <div class="stat-icon"><i class="fas fa-newspaper"></i></div>
+            <div class="stat-label">Published Articles</div>
+            <div class="stat-value">24</div>
+        </div>
+        <div class="stat-card green">
+            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+            <div class="stat-label">Avg Session Time</div>
+            <div class="stat-value">4m 32s</div>
+        </div>
+        <div class="stat-card purple">
+            <div class="stat-icon"><i class="fas fa-share-nodes"></i></div>
+            <div class="stat-label">Social Shares</div>
+            <div class="stat-value">1,847</div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header"><h3>VR Scene Engagement</h3></div>
+            <div class="card-body">
+                <div class="chart-container"><canvas id="sceneChart"></canvas></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header"><h3>Top Articles</h3></div>
+            <div class="card-body" id="topArticles" style="max-height:300px;overflow-y:auto">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- MODULE 7: REVENUE & SUBSCRIPTIONS            -->
+<!-- ============================================ -->
+<section class="module-section" id="mod-revenue">
+    <div class="section-header">
+        <h1>Revenue & Subscriptions</h1>
+        <p>Track payments, subscriptions, and financial metrics</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card gold">
+            <div class="stat-icon"><i class="fas fa-wallet"></i></div>
+            <div class="stat-label">Monthly Revenue</div>
+            <div class="stat-value">$4,280</div>
+            <div class="stat-trend up"><i class="fas fa-arrow-up"></i> 24% vs last month</div>
+        </div>
+        <div class="stat-card green">
+            <div class="stat-icon"><i class="fas fa-credit-card"></i></div>
+            <div class="stat-label">Active Subs</div>
+            <div class="stat-value">187</div>
+            <div class="stat-trend up"><i class="fas fa-arrow-up"></i> 12 new</div>
+        </div>
+        <div class="stat-card blue">
+            <div class="stat-icon"><i class="fas fa-hand-holding-dollar"></i></div>
+            <div class="stat-label">Donations</div>
+            <div class="stat-value">$890</div>
+        </div>
+        <div class="stat-card orange">
+            <div class="stat-icon"><i class="fas fa-percent"></i></div>
+            <div class="stat-label">Churn Rate</div>
+            <div class="stat-value">2.1%</div>
+            <div class="stat-trend down"><i class="fas fa-arrow-down"></i> -0.5%</div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header"><h3>Revenue Over Time</h3></div>
+            <div class="card-body">
+                <div class="chart-container"><canvas id="revenueChart"></canvas></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header"><h3>Plan Distribution</h3></div>
+            <div class="card-body">
+                <div class="chart-container"><canvas id="planChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><h3>Recent Transactions</h3></div>
+        <div class="card-body" style="padding:0;overflow-x:auto">
+            <table class="data-table">
+                <thead>
+                    <tr><th>Date</th><th>User</th><th>Type</th><th>Plan</th><th>Amount</th><th>Status</th></tr>
+                </thead>
+                <tbody id="transactionsTable">
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- MODULE 8: AGENCY CRM                         -->
+<!-- ============================================ -->
+<section class="module-section" id="mod-crm">
+    <div class="section-header">
+        <h1>Agency B2B CRM</h1>
+        <p>Manage travel agency partnerships and pipeline</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card gold">
+            <div class="stat-icon"><i class="fas fa-handshake"></i></div>
+            <div class="stat-label">Total Leads</div>
+            <div class="stat-value">42</div>
+        </div>
+        <div class="stat-card green">
+            <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+            <div class="stat-label">Active Partners</div>
+            <div class="stat-value">8</div>
+        </div>
+        <div class="stat-card blue">
+            <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+            <div class="stat-label">Pipeline Value</div>
+            <div class="stat-value">$38K</div>
+        </div>
+        <div class="stat-card purple">
+            <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
+            <div class="stat-label">Win Rate</div>
+            <div class="stat-value">28%</div>
+        </div>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+        <div class="card-header">
+            <h3>Pipeline Board</h3>
+            <button class="btn btn-gold btn-sm" onclick="addCRMLead()"><i class="fas fa-plus"></i> Add Lead</button>
+        </div>
+        <div class="card-body" style="overflow-x:auto">
+            <div class="pipeline-board" id="pipelineBoard">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- MODULE 9: NOTIFICATIONS                      -->
+<!-- ============================================ -->
+<section class="module-section" id="mod-notifications">
+    <div class="section-header">
+        <h1>Notifications & Alerts</h1>
+        <p>Stay updated on platform activity</p>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>All Notifications</h3>
+            <button class="btn btn-sm btn-outline" onclick="markAllRead()"><i class="fas fa-check-double"></i> Mark All Read</button>
+        </div>
+        <div class="card-body">
+            <div class="notif-list" id="notifList">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- MODULE 10: SETTINGS                          -->
+<!-- ============================================ -->
+<section class="module-section" id="mod-settings">
+    <div class="section-header">
+        <h1>Settings & Integrations</h1>
+        <p>Configure platform settings and third-party integrations</p>
+    </div>
+
+    <div class="settings-section">
+        <h3>General</h3>
+        <p>Basic platform configuration</p>
+        <div class="settings-row">
+            <div>
+                <div class="settings-row-label">Platform Name</div>
+                <div class="settings-row-desc">Shown across all pages</div>
+            </div>
+            <input class="form-input" style="width:250px" value="Pilgrim's Path">
+        </div>
+        <div class="settings-row">
+            <div>
+                <div class="settings-row-label">Maintenance Mode</div>
+                <div class="settings-row-desc">Disable public access temporarily</div>
+            </div>
+            <div class="toggle" onclick="this.classList.toggle('active')"></div>
+        </div>
+        <div class="settings-row">
+            <div>
+                <div class="settings-row-label">Demo Mode</div>
+                <div class="settings-row-desc">Show mock data instead of live data</div>
+            </div>
+            <div class="toggle active" id="settingsDemoToggle" onclick="toggleDemoMode();this.classList.toggle('active')"></div>
+        </div>
+    </div>
+
+    <div class="settings-section">
+        <h3>Integrations</h3>
+        <p>Third-party service connections</p>
+        <div class="settings-row">
+            <div>
+                <div class="settings-row-label">Supabase</div>
+                <div class="settings-row-desc">Database and authentication</div>
+            </div>
+            <span class="tag tag-success"><i class="fas fa-check"></i> Connected</span>
+        </div>
+        <div class="settings-row">
+            <div>
+                <div class="settings-row-label">Paystack</div>
+                <div class="settings-row-desc">Payment processing</div>
+            </div>
+            <span class="tag tag-success"><i class="fas fa-check"></i> Connected</span>
+        </div>
+        <div class="settings-row">
+            <div>
+                <div class="settings-row-label">Meta Pixel</div>
+                <div class="settings-row-desc">Conversion tracking (ID: 1199634958501931)</div>
+            </div>
+            <span class="tag tag-success"><i class="fas fa-check"></i> Active</span>
+        </div>
+        <div class="settings-row">
+            <div>
+                <div class="settings-row-label">Claude AI (Anthropic)</div>
+                <div class="settings-row-desc">AI Marketing Intelligence</div>
+            </div>
+            <span class="tag tag-success" id="claudeStatus"><i class="fas fa-check"></i> Connected</span>
+        </div>
+        <div class="settings-row">
+            <div>
+                <div class="settings-row-label">Meta Ads API</div>
+                <div class="settings-row-desc">Campaign management</div>
+            </div>
+            <span class="tag tag-warning"><i class="fas fa-exclamation-triangle"></i> Not Connected</span>
+        </div>
+    </div>
+
+    <div class="settings-section">
+        <h3>Notifications</h3>
+        <p>Configure alert preferences</p>
+        <div class="settings-row">
+            <div>
+                <div class="settings-row-label">New User Signups</div>
+                <div class="settings-row-desc">Get notified when users register</div>
+            </div>
+            <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+        </div>
+        <div class="settings-row">
+            <div>
+                <div class="settings-row-label">Payment Alerts</div>
+                <div class="settings-row-desc">New subscriptions and donations</div>
+            </div>
+            <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+        </div>
+        <div class="settings-row">
+            <div>
+                <div class="settings-row-label">Weekly Report Email</div>
+                <div class="settings-row-desc">Sent every Monday at 9 AM</div>
+            </div>
+            <div class="toggle" onclick="this.classList.toggle('active')"></div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<script src="admin-dashboard.js"></script>
 </body>
 </html>
