@@ -10,6 +10,12 @@ const { ExpirationPlugin } = workbox.expiration;
 const { CacheableResponsePlugin } = workbox.cacheableResponse;
 const { precacheAndRoute } = workbox.precaching;
 
+// ─── 0. Skip admin pages entirely — always go to network ───
+registerRoute(
+  ({ url }) => url.pathname.includes('admin'),
+  new NetworkFirst({ cacheName: 'admin-bypass' })
+);
+
 // ─── 1. 360° Panorama tiles (largest assets — cache aggressively) ───
 // Matches panorama_* directories containing multi-resolution tiles
 registerRoute(
