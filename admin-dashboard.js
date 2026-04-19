@@ -4,19 +4,8 @@
    ============================================= */
 
 // ===== ADMIN AUTH =====
-const ADMIN_CREDENTIALS = {
-    email: 'admin@pilgrimspath.io',
-    // SHA-256 hash of the password — never store plaintext
-    passwordHash: 'bc0f4bcc8a76b7663afcf82ba09faf48d254316e55f815305419582a0a94ec79' // CHANGE THIS
-};
-
-function hashPassword(password) {
-    // Simple SHA-256 via SubtleCrypto
-    const encoder = new TextEncoder();
-    return crypto.subtle.digest('SHA-256', encoder.encode(password)).then(buf => {
-        return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-    });
-}
+const ADMIN_EMAIL = 'admin@pilgrimspath.io';
+const ADMIN_PASS = 'PilgrimsPath2026!';
 
 async function handleAdminLogin(e) {
     e.preventDefault();
@@ -29,12 +18,10 @@ async function handleAdminLogin(e) {
     btn.textContent = 'Signing in...';
     errorEl.textContent = '';
 
-    // Rate-limit: basic client-side delay to slow brute force
+    // Small delay to slow brute force
     await new Promise(r => setTimeout(r, 500));
 
-    const hash = await hashPassword(password);
-
-    if (email === ADMIN_CREDENTIALS.email && hash === ADMIN_CREDENTIALS.passwordHash) {
+    if (email === ADMIN_EMAIL && password === ADMIN_PASS) {
         sessionStorage.setItem('pp_admin_auth', Date.now().toString());
         showDashboard();
     } else {
