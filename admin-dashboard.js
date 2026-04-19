@@ -3,6 +3,68 @@
    9-Module Dashboard with Claude AI Integration
    ============================================= */
 
+// ===== ADMIN AUTH =====
+const ADMIN_CREDENTIALS = {
+    email: 'admin@pilgrimspath.io',
+    // SHA-256 hash of the password — never store plaintext
+    passwordHash: 'bc0f4bcc8a76b7663afcf82ba09faf48d254316e55f815305419582a0a94ec79' // CHANGE THIS
+};
+
+function hashPassword(password) {
+    // Simple SHA-256 via SubtleCrypto
+    const encoder = new TextEncoder();
+    return crypto.subtle.digest('SHA-256', encoder.encode(password)).then(buf => {
+        return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    });
+}
+
+async function handleAdminLogin(e) {
+    e.preventDefault();
+    const btn = document.getElementById('adminLoginBtn');
+    const errorEl = document.getElementById('adminLoginError');
+    const email = document.getElementById('adminEmail').value.trim().toLowerCase();
+    const password = document.getElementById('adminPassword').value;
+
+    btn.disabled = true;
+    btn.textContent = 'Signing in...';
+    errorEl.textContent = '';
+
+    // Rate-limit: basic client-side delay to slow brute force
+    await new Promise(r => setTimeout(r, 500));
+
+    const hash = await hashPassword(password);
+
+    if (email === ADMIN_CREDENTIALS.email && hash === ADMIN_CREDENTIALS.passwordHash) {
+        sessionStorage.setItem('pp_admin_auth', Date.now().toString());
+        showDashboard();
+    } else {
+        errorEl.textContent = 'Invalid email or password';
+        btn.disabled = false;
+        btn.textContent = 'Sign In';
+    }
+    return false;
+}
+
+function showDashboard() {
+    document.getElementById('adminLoginOverlay').classList.add('hidden');
+    document.querySelector('.admin-topbar').style.display = '';
+    document.getElementById('adminSidebar').style.display = '';
+    document.getElementById('adminMain').style.display = '';
+}
+
+function checkAdminAuth() {
+    const auth = sessionStorage.getItem('pp_admin_auth');
+    if (auth) {
+        const elapsed = Date.now() - parseInt(auth);
+        // Session valid for 8 hours
+        if (elapsed < 8 * 60 * 60 * 1000) {
+            showDashboard();
+            return;
+        }
+        sessionStorage.removeItem('pp_admin_auth');
+    }
+}
+
 // ===== CONFIGURATION =====
 const SUPABASE_URL = 'https://giftctxrqvlfekhzpcaa.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpZnRjdHhycXZsZmVraHpwY2FhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3MTg0NjQsImV4cCI6MjA4ODI5NDQ2NH0.Dm4tb6lvLMf9CDLo04qA9msYVLjBT-Web48pgk0BOYc';
@@ -1112,6 +1174,9 @@ document.getElementById('globalSearch').addEventListener('input', (e) => {
 
 // ===== INITIALIZE =====
 document.addEventListener('DOMContentLoaded', () => {
+    // Check if already authenticated
+    checkAdminAuth();
+
     if (demoMode) {
         document.getElementById('demoToggle').classList.add('active');
         loadDemoData();

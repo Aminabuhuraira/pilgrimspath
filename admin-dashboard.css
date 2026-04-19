@@ -4,6 +4,98 @@
    ============================================ */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
+/* ===== LOGIN OVERLAY ===== */
+.admin-login-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: var(--bg-primary, #0A0F1E);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.admin-login-overlay.hidden { display: none; }
+.admin-login-card {
+    background: #1A1F35;
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 16px;
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.admin-login-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+    background: linear-gradient(135deg, #C9A84C, #8B6914);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: #fff;
+}
+.admin-login-card h2 {
+    font-family: 'Cinzel', serif;
+    color: #C9A84C;
+    font-size: 24px;
+    margin: 0 0 4px;
+}
+.admin-login-subtitle {
+    color: #8B95A5;
+    font-size: 14px;
+    margin: 0 0 32px;
+}
+.admin-login-field {
+    text-align: left;
+    margin-bottom: 16px;
+}
+.admin-login-field label {
+    display: block;
+    color: #8B95A5;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+.admin-login-field input {
+    width: 100%;
+    padding: 12px 14px;
+    background: #0A0F1E;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+.admin-login-field input:focus {
+    border-color: #C9A84C;
+}
+.admin-login-error {
+    color: #EF4444;
+    font-size: 13px;
+    min-height: 20px;
+    margin-bottom: 8px;
+}
+.admin-login-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #C9A84C, #8B6914);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.admin-login-btn:hover { opacity: 0.9; }
+.admin-login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
 :root {
     --bg-primary: #0A0F1E;
     --bg-secondary: #111827;

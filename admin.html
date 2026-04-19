@@ -12,8 +12,29 @@
 </head>
 <body>
 
+<!-- ===== LOGIN SCREEN ===== -->
+<div class="admin-login-overlay" id="adminLoginOverlay">
+    <div class="admin-login-card">
+        <div class="admin-login-icon"><i class="fas fa-kaaba"></i></div>
+        <h2>Pilgrim's Path</h2>
+        <p class="admin-login-subtitle">Admin Dashboard</p>
+        <form id="adminLoginForm" onsubmit="return handleAdminLogin(event)">
+            <div class="admin-login-field">
+                <label for="adminEmail">Email</label>
+                <input type="email" id="adminEmail" placeholder="admin@pilgrimspath.io" required autocomplete="username">
+            </div>
+            <div class="admin-login-field">
+                <label for="adminPassword">Password</label>
+                <input type="password" id="adminPassword" placeholder="Enter password" required autocomplete="current-password">
+            </div>
+            <div class="admin-login-error" id="adminLoginError"></div>
+            <button type="submit" class="admin-login-btn" id="adminLoginBtn">Sign In</button>
+        </form>
+    </div>
+</div>
+
 <!-- ===== TOP BAR ===== -->
-<header class="admin-topbar">
+<header class="admin-topbar" style="display:none">
     <div class="topbar-left">
         <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
         <a href="index.html" class="admin-logo">
@@ -47,7 +68,7 @@
 </header>
 
 <!-- ===== SIDEBAR ===== -->
-<aside class="admin-sidebar" id="adminSidebar">
+<aside class="admin-sidebar" id="adminSidebar" style="display:none">
     <nav class="sidebar-nav">
         <span class="sidebar-label">Core</span>
         <button class="sidebar-link active" data-module="overview" onclick="switchModule('overview')">
@@ -97,7 +118,7 @@
 </aside>
 
 <!-- ===== MAIN CONTENT ===== -->
-<main class="admin-main">
+<main class="admin-main" id="adminMain" style="display:none">
 
 <!-- ============================================ -->
 <!-- MODULE 1: ANALYTICS OVERVIEW                 -->
