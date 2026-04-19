@@ -32,6 +32,32 @@
         </form>
     </div>
 </div>
+<script>
+// Inline login — not subject to SW caching
+function handleAdminLogin(e){
+    e.preventDefault();
+    var email=document.getElementById('adminEmail').value.trim().toLowerCase();
+    var pw=document.getElementById('adminPassword').value;
+    var err=document.getElementById('adminLoginError');
+    if(email==='admin@pilgrimspath.io'&&pw==='PilgrimsPath2026!'){
+        sessionStorage.setItem('pp_admin_auth',Date.now().toString());
+        showDashboard();
+    }else{
+        err.textContent='Invalid email or password';
+    }
+    return false;
+}
+function showDashboard(){
+    document.getElementById('adminLoginOverlay').classList.add('hidden');
+    document.querySelector('.admin-topbar').style.display='';
+    document.getElementById('adminSidebar').style.display='';
+    document.getElementById('adminMain').style.display='';
+}
+(function(){
+    var a=sessionStorage.getItem('pp_admin_auth');
+    if(a&&(Date.now()-parseInt(a))<28800000) showDashboard();
+})();
+</script>
 
 <!-- ===== TOP BAR ===== -->
 <header class="admin-topbar" style="display:none">
@@ -904,6 +930,6 @@ Example: Write 5 Instagram captions for promoting our VR Hajj experience during 
 
 </main>
 
-<script src="admin-dashboard.js"></script>
+<script src="admin-dashboard.js?v=2"></script>
 </body>
 </html>

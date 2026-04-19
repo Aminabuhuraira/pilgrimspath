@@ -3,54 +3,7 @@
    9-Module Dashboard with Claude AI Integration
    ============================================= */
 
-// ===== ADMIN AUTH =====
-const ADMIN_EMAIL = 'admin@pilgrimspath.io';
-const ADMIN_PASS = 'PilgrimsPath2026!';
-
-async function handleAdminLogin(e) {
-    e.preventDefault();
-    const btn = document.getElementById('adminLoginBtn');
-    const errorEl = document.getElementById('adminLoginError');
-    const email = document.getElementById('adminEmail').value.trim().toLowerCase();
-    const password = document.getElementById('adminPassword').value;
-
-    btn.disabled = true;
-    btn.textContent = 'Signing in...';
-    errorEl.textContent = '';
-
-    // Small delay to slow brute force
-    await new Promise(r => setTimeout(r, 500));
-
-    if (email === ADMIN_EMAIL && password === ADMIN_PASS) {
-        sessionStorage.setItem('pp_admin_auth', Date.now().toString());
-        showDashboard();
-    } else {
-        errorEl.textContent = 'Invalid email or password';
-        btn.disabled = false;
-        btn.textContent = 'Sign In';
-    }
-    return false;
-}
-
-function showDashboard() {
-    document.getElementById('adminLoginOverlay').classList.add('hidden');
-    document.querySelector('.admin-topbar').style.display = '';
-    document.getElementById('adminSidebar').style.display = '';
-    document.getElementById('adminMain').style.display = '';
-}
-
-function checkAdminAuth() {
-    const auth = sessionStorage.getItem('pp_admin_auth');
-    if (auth) {
-        const elapsed = Date.now() - parseInt(auth);
-        // Session valid for 8 hours
-        if (elapsed < 8 * 60 * 60 * 1000) {
-            showDashboard();
-            return;
-        }
-        sessionStorage.removeItem('pp_admin_auth');
-    }
-}
+// Auth is handled inline in admin.html to bypass SW cache
 
 // ===== CONFIGURATION =====
 const SUPABASE_URL = 'https://giftctxrqvlfekhzpcaa.supabase.co';
@@ -1161,9 +1114,6 @@ document.getElementById('globalSearch').addEventListener('input', (e) => {
 
 // ===== INITIALIZE =====
 document.addEventListener('DOMContentLoaded', () => {
-    // Check if already authenticated
-    checkAdminAuth();
-
     if (demoMode) {
         document.getElementById('demoToggle').classList.add('active');
         loadDemoData();
