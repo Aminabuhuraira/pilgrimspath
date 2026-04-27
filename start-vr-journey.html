@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Loading Hajj Journey...</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); font-family: Arial, sans-serif; color: white;">
+    <div style="text-align: center;">
+        <h1>🕋 Loading Your Hajj Journey...</h1>
+        <p>Redirecting to the virtual tour...</p>
+        <p id="redirect-link"></p>
+    </div>
+    
+    <script>
+        // Navigate to the VR tour
+        const baseURL = window.location.origin;
+        const vrPath = baseURL + '/pilgrimspath-vr/index.htm';
+        
+        // Update the link
+        document.getElementById('redirect-link').innerHTML = `<a href="${vrPath}" style="color: #FFD700; text-decoration: none;">Click here if not redirected automatically</a>`;
+        
+        // Redirect after a short delay
+        setTimeout(() => {
+            window.location.href = vrPath;
+        }, 500);
+    </script>
+</body>
+</html>

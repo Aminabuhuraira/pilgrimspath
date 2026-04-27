@@ -1,0 +1,430 @@
+
+<style>
+#wrap{text-align:center;padding:1.5rem 0;}
+#cv{display:block;margin:0 auto;border-radius:14px;background:#111318;}
+.btns{display:flex;gap:10px;justify-content:center;margin-top:1rem;flex-wrap:wrap;}
+#st{font-size:12px;color:var(--color-text-tertiary);margin-top:.4rem;}
+</style>
+<div id="wrap">
+  <canvas id="cv" width="320" height="420"></canvas>
+  <div class="btns">
+    <button onclick="togglePlay()" id="pb">Pause</button>
+    <button onclick="doGif()" id="gb">Download GIF</button>
+  </div>
+  <p id="st">320×420 · transparent bg · loop</p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+<script>
+const cv=document.getElementById('cv'),cx=cv.getContext('2d');
+const W=320,H=420,NF=54,DL=42;
+let fr=0,play=true,trail=[];
+
+function eio(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
+function eo(t){return 1-Math.pow(1-t,3);}
+function ei(t){return t*t*t;}
+function lerp(a,b,t){return a+(b-a)*t;}
+function cl(v,a,b){return Math.max(a,Math.min(b,v));}
+
+// ── HAND DRAWING ─────────────────────────────────────────────────────────────
+// Draws a realistic filled hand using bezier paths.
+// cx0,cy0 = wrist center  grip=0 open, 1 fist  tilt= radians extra rotation
+function hand(ctx, wx, wy, grip, tilt, alpha){
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.translate(wx, wy);
+  ctx.rotate(tilt);
+
+  const fill  = '#B8BCC8';
+  const mid   = '#9096A4';
+  const dark  = '#6A6E7A';
+  const light = '#D8DCE8';
+  const lw    = 1.4;
+
+  // Helper: filled + stroked path
+  function shape(fn, fColor, sColor, sw){
+    ctx.beginPath(); fn();
+    if(fColor){ctx.fillStyle=fColor;ctx.fill();}
+    if(sColor){ctx.strokeStyle=sColor;ctx.lineWidth=sw||lw;ctx.stroke();}
+  }
+
+  // ── PALM ──
+  // Wide trapezoidal palm, wider at knuckles (top), narrower at wrist (bottom)
+  shape(()=>{
+    ctx.moveTo(-26, 10);          // wrist left
+    ctx.bezierCurveTo(-28,0, -30,-30, -24,-52);  // left side up
+    ctx.bezierCurveTo(-18,-58, 18,-58, 24,-52);  // knuckle top
+    ctx.bezierCurveTo(30,-30,  28,0,  26, 10);   // right side down
+    ctx.bezierCurveTo(18,18,  -18,18, -26,10);   // wrist bottom
+    ctx.closePath();
+  }, fill, dark, 1.2);
+
+  // Palm crease
+  ctx.beginPath();
+  ctx.moveTo(-22, -5);
+  ctx.bezierCurveTo(-10,-20, 10,-20, 22,-5);
+  ctx.strokeStyle='rgba(100,106,120,0.55)';ctx.lineWidth=1;ctx.stroke();
+
+  // ── THUMB ──
+  // Thumb base sits left side of palm, sticks out left then curves up
+  const tBase = grip; // 0=open, 1=tucked
+  const thBaseX = -26, thBaseY = -18;
+  // tip position: open = out to left, gripped = tucked under index
+  const thTipX = lerp(-52, -10, tBase);
+  const thTipY = lerp(-45, -65, tBase);
+  const thCtrlX = lerp(-55, -28, tBase);
+  const thCtrlY = lerp(-10, -48, tBase);
+
+  // Thumb body (filled sausage shape via two curves)
+  shape(()=>{
+    ctx.moveTo(thBaseX, thBaseY);
+    ctx.bezierCurveTo(thCtrlX-6, thCtrlY+8, thCtrlX-4, thTipY+14, thTipX, thTipY);
+    ctx.bezierCurveTo(thTipX+6, thTipY-10, thTipX+12, thCtrlY-4, thBaseX+8, thBaseY-4);
+    ctx.closePath();
+  }, fill, dark, 1.2);
+
+  // Thumb knuckle
+  ctx.beginPath();
+  ctx.arc(lerp(-46, -22, tBase), lerp(-28, -52, tBase), 3.5, 0, Math.PI*2);
+  ctx.fillStyle=mid;ctx.fill();
+
+  // Thumbnail
+  shape(()=>{
+    ctx.ellipse(thTipX+4, thTipY-5, 3.5, 5, -0.3, 0, Math.PI*2);
+  }, '#C8CDD8', dark, 0.8);
+
+  // ── FINGERS ──
+  // Each finger: index=0 .. pinky=3
+  // finger base positions along knuckle line (y≈-52)
+  const fBX = [-18, -6, 6, 18];
+  const fBY = [-54, -57, -57, -54];
+  // finger lengths
+  const fLen = [64, 72, 68, 52];
+  // natural splay angles (open hand) in radians
+  const fSplay = [-0.18, -0.05, 0.06, 0.20];
+  // curl angles (fist): tip folds to base
+  const fCurl  = [1.4, 1.5, 1.5, 1.4];
+
+  for(let i=0;i<4;i++){
+    ctx.save();
+    ctx.translate(fBX[i], fBY[i]);
+
+    const splay = lerp(fSplay[i], fSplay[i]*0.3, grip);
+    ctx.rotate(splay);
+
+    const curl = lerp(0, fCurl[i], grip);
+    const seg  = fLen[i]/3;  // 3 phalanges
+
+    // Draw 3 phalanges as rounded rects, each rotated by curl/3
+    let px=0, py=0, pa=0;
+    const widths=[10,9,8];
+    for(let s=0;s<3;s++){
+      const segCurl = curl/3;
+      ctx.save();
+      ctx.translate(px,py);
+      ctx.rotate(pa);
+
+      const sw=widths[s], sh=seg-2;
+      shape(()=>{
+        ctx.roundRect(-sw/2, -sh, sw, sh, sw/2);
+      }, s===0?fill: s===1?fill:light, dark, 1.1);
+
+      // Knuckle joint crease
+      if(s<2){
+        ctx.beginPath();
+        ctx.moveTo(-sw/2+2, -2);
+        ctx.lineTo( sw/2-2, -2);
+        ctx.strokeStyle='rgba(90,95,110,0.5)';ctx.lineWidth=1;ctx.stroke();
+      }
+
+      // Fingernail on last segment
+      if(s===2){
+        shape(()=>{
+          ctx.ellipse(0, -sh+5, sw/2-1, 6, 0, 0, Math.PI*2);
+        }, '#C8CDD8', dark, 0.8);
+      }
+
+      px=0; py=-sh-1;
+      pa+=segCurl;
+      // carry the accumulated rotation for next segment
+      // (we do this by staying in the transformed frame)
+      // Actually we need to stay in transformed space:
+    }
+    // Unwind the inner saves
+    ctx.restore(); // s=2
+    ctx.restore(); // finger
+  }
+
+  // Wrist cylinder hint
+  shape(()=>{
+    ctx.ellipse(0, 16, 22, 8, 0, 0, Math.PI*2);
+  }, mid, dark, 1);
+  ctx.beginPath();
+  ctx.moveTo(-22,10); ctx.lineTo(-22,16);
+  ctx.moveTo( 22,10); ctx.lineTo( 22,16);
+  ctx.strokeStyle=dark;ctx.lineWidth=1.2;ctx.stroke();
+
+  ctx.restore();
+}
+
+// Better finger drawing — use individual segment approach cleanly
+function drawHand(ctx, wx, wy, grip, tilt, alpha){
+  if(alpha<=0) return;
+  ctx.save();
+  ctx.globalAlpha=alpha;
+  ctx.translate(wx,wy);
+  ctx.rotate(tilt);
+
+  const F  ='#B4B8C6';
+  const FM ='#8C909E';
+  const FD ='#5C6070';
+  const FL ='#D4D8E4';
+  const NAIL='#CDD0DA';
+
+  function seg(ctx,w,h,fColor,sColor){
+    ctx.beginPath();
+    ctx.roundRect(-w/2,-h,w,h,w/2);
+    ctx.fillStyle=fColor; ctx.fill();
+    ctx.strokeStyle=sColor; ctx.lineWidth=1.1; ctx.stroke();
+  }
+
+  function crease(ctx,w){
+    ctx.beginPath();ctx.moveTo(-w/2+2,-1.5);ctx.lineTo(w/2-2,-1.5);
+    ctx.strokeStyle='rgba(70,75,90,0.45)';ctx.lineWidth=0.9;ctx.stroke();
+  }
+
+  function nail(ctx,w,h){
+    ctx.beginPath();ctx.roundRect(-w/2+1,-h+2,w-2,h*0.55,3);
+    ctx.fillStyle=NAIL;ctx.fill();
+    ctx.strokeStyle=FM;ctx.lineWidth=0.7;ctx.stroke();
+  }
+
+  // PALM
+  ctx.beginPath();
+  ctx.moveTo(-24,12);
+  ctx.bezierCurveTo(-26,2,-28,-26,-22,-50);
+  ctx.bezierCurveTo(-16,-56,16,-56,22,-50);
+  ctx.bezierCurveTo(28,-26,26,2,24,12);
+  ctx.bezierCurveTo(16,20,-16,20,-24,12);
+  ctx.closePath();
+  ctx.fillStyle=F; ctx.fill();
+  ctx.strokeStyle=FD; ctx.lineWidth=1.2; ctx.stroke();
+
+  // Palm crease
+  ctx.beginPath();ctx.moveTo(-20,-8);ctx.bezierCurveTo(-8,-22,8,-22,20,-8);
+  ctx.strokeStyle='rgba(80,85,100,0.4)';ctx.lineWidth=1;ctx.stroke();
+
+  // THUMB
+  const thOpen=1-grip;
+  const thAngle=lerp(-1.1,-0.25,grip);
+  ctx.save();
+  ctx.translate(-22,-14);
+  ctx.rotate(thAngle);
+  // proximal
+  seg(ctx,12,22,F,FD);
+  crease(ctx,12);
+  ctx.translate(0,-21);
+  ctx.rotate(lerp(-0.1,0.3,grip));
+  // distal
+  seg(ctx,11,20,FL,FD);
+  nail(ctx,11,20);
+  ctx.restore();
+
+  // FINGERS: index, middle, ring, pinky
+  const fbx=[-16,-5,5,15];
+  const fby=[-51,-54,-54,-51];
+  const flen=[[20,18,14],[22,20,15],[20,18,13],[16,13,10]];
+  const fsplay=[-.16,-.04,.05,.17];
+  // curl per segment when grip=1
+  const fcurl=[[.45,.55,.65],[.45,.60,.70],[.45,.58,.68],[.50,.60,.65]];
+
+  for(let i=0;i<4;i++){
+    ctx.save();
+    ctx.translate(fbx[i],fby[i]);
+    ctx.rotate(lerp(fsplay[i],fsplay[i]*.2,grip));
+
+    for(let s=0;s<3;s++){
+      const w=lerp(10,9,s/2)-i*.5;
+      const h=flen[i][s];
+      seg(ctx,w,h,s===2?FL:F,FD);
+      if(s<2) crease(ctx,w);
+      if(s===2) nail(ctx,w,h);
+      ctx.translate(0,-h+0.5);
+      ctx.rotate(lerp(0,fcurl[i][s],grip));
+    }
+    ctx.restore();
+  }
+
+  // WRIST
+  ctx.beginPath();
+  ctx.ellipse(0,15,20,7,0,0,Math.PI*2);
+  ctx.fillStyle=FM;ctx.fill();
+  ctx.strokeStyle=FD;ctx.lineWidth=1;ctx.stroke();
+  ctx.beginPath();ctx.moveTo(-20,10);ctx.lineTo(-20,15);
+  ctx.moveTo(20,10);ctx.lineTo(20,15);
+  ctx.strokeStyle=FD;ctx.lineWidth=1.1;ctx.stroke();
+
+  ctx.restore();
+}
+
+// ── STONE ─────────────────────────────────────────────────────────────────────
+function drawStone(ctx,x,y,r,alpha,spin){
+  if(alpha<=0)return;
+  ctx.save();ctx.globalAlpha=alpha;
+  ctx.translate(x,y);ctx.rotate(spin);
+  ctx.beginPath();ctx.ellipse(0,0,r,r*.85,.2,0,Math.PI*2);
+  ctx.fillStyle='#909298';ctx.fill();
+  ctx.strokeStyle='#C4C8D2';ctx.lineWidth=1.1;ctx.stroke();
+  // highlight
+  ctx.beginPath();ctx.ellipse(-r*.25,-r*.22,r*.3,r*.18,-.4,0,Math.PI*2);
+  ctx.fillStyle='rgba(255,255,255,.5)';ctx.fill();
+  // crack
+  ctx.beginPath();ctx.moveTo(-r*.08,r*.08);ctx.lineTo(r*.28,-r*.12);
+  ctx.moveTo(-r*.22,-r*.04);ctx.lineTo(-r*.08,r*.18);
+  ctx.strokeStyle='#606268';ctx.lineWidth=.7;ctx.stroke();
+  ctx.restore();
+}
+
+// ── TRAIL ─────────────────────────────────────────────────────────────────────
+function drawTrail(ctx,pts){
+  for(let i=1;i<pts.length;i++){
+    const a=(i/pts.length)*.35;
+    ctx.beginPath();ctx.arc(pts[i][0],pts[i][1],pts[i][2]*(i/pts.length),0,Math.PI*2);
+    ctx.fillStyle=`rgba(170,180,205,${a})`;ctx.fill();
+  }
+}
+
+// ── ANIMATION STATE ───────────────────────────────────────────────────────────
+function state(f){
+  const t=f/NF;
+
+  // Hand phases
+  // 0.00-0.18 enter from bottom (grip=1, stone held)
+  // 0.18-0.42 raise & slight windup
+  // 0.42-0.65 throw forward fast
+  // 0.65-0.85 follow-through
+  // 0.85-1.00 fade out
+
+  let wx,wy,grip,tilt,hAlpha,stoneAlpha,stoneX,stoneY,stoneSpin;
+
+  stoneSpin=t*Math.PI*4;
+
+  if(t<.18){
+    const p=eio(t/.18);
+    wx=160; wy=lerp(480,310,p);
+    grip=1; tilt=-.08;
+    hAlpha=p; stoneAlpha=p;
+    stoneX=wx-8; stoneY=wy-68;
+  } else if(t<.42){
+    const p=eio((t-.18)/.24);
+    wx=lerp(160,148,p); wy=lerp(310,260,p);
+    grip=1; tilt=lerp(-.08,-.05,p);
+    hAlpha=1; stoneAlpha=1;
+    stoneX=wx-8+lerp(0,4,p); stoneY=wy-68+lerp(0,6,p);
+  } else if(t<.65){
+    const p=eio((t-.42)/.23);
+    wx=lerp(148,168,p); wy=lerp(260,225,p);
+    tilt=lerp(-.05,-.55,p);
+    // Release at p=0.62
+    const rel=p>.62;
+    grip=rel?lerp(1,0,(p-.62)/.38):1;
+    hAlpha=1;
+    if(!rel){
+      stoneAlpha=1; stoneX=wx+tilt*30-5; stoneY=wy-70;
+    } else {
+      const sp=(p-.62)/.38;
+      const rx=168+tilt*30-5, ry=225-70;
+      stoneX=rx+sp*110; stoneY=ry-sp*90+sp*sp*60;
+      stoneAlpha=1-sp*.3;
+    }
+  } else if(t<.85){
+    const p=eo((t-.65)/.20);
+    wx=lerp(168,172,p); wy=lerp(225,245,p);
+    grip=0; tilt=lerp(-.55,-.7,p);
+    hAlpha=1;
+    const sp=(t-.65)/.20;
+    const rx=168+(-0.55)*30-5, ry=225-70;
+    stoneX=rx+sp*1.0*110+110; stoneY=ry-90+sp*60+sp*sp*80;
+    stoneAlpha=cl(1-(t-.65)/.25,0,1);
+  } else {
+    const p=eo((t-.85)/.15);
+    wx=172; wy=245;
+    grip=0; tilt=-.7;
+    hAlpha=1-p;
+    stoneAlpha=0; stoneX=320; stoneY=0;
+  }
+
+  return {wx,wy,grip,tilt,hAlpha,stoneAlpha,stoneX,stoneY,stoneSpin};
+}
+
+function renderTo(ctx, f, localTrail){
+  ctx.clearRect(0,0,W,H);
+  const s=state(f);
+  const t=f/NF;
+
+  // update trail
+  if(t>.62 && t<.88 && s.stoneAlpha>.05){
+    localTrail.push([s.stoneX, s.stoneY, 9]);
+    if(localTrail.length>14) localTrail.shift();
+  } else if(t<.05){
+    localTrail.length=0;
+  }
+
+  drawTrail(ctx, localTrail);
+
+  // stone behind hand while gripped
+  if(t<.63) drawStone(ctx,s.stoneX,s.stoneY,12,s.stoneAlpha,s.stoneSpin);
+
+  drawHand(ctx,s.wx,s.wy,s.grip,s.tilt,s.hAlpha);
+
+  // stone in front after release
+  if(t>=.63) drawStone(ctx,s.stoneX,s.stoneY,12,s.stoneAlpha,s.stoneSpin);
+
+  // click pulse at start
+  if(t<.16){
+    const pa=Math.sin(t/.16*Math.PI)*.5;
+    for(const r of [22,14]){
+      ctx.beginPath();ctx.arc(160,390,r,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(200,210,230,${pa*(r===22?.5:1)})`;
+      ctx.lineWidth=1.5;ctx.stroke();
+    }
+  }
+}
+
+// ── LOOP ──────────────────────────────────────────────────────────────────────
+function loop(){
+  renderTo(cx,fr,trail);
+  fr=(fr+1)%NF;
+  if(play) setTimeout(()=>requestAnimationFrame(loop),DL);
+}
+function togglePlay(){
+  play=!play;
+  document.getElementById('pb').textContent=play?'Pause':'Play';
+  if(play)loop();
+}
+loop();
+
+// ── GIF EXPORT ────────────────────────────────────────────────────────────────
+function doGif(){
+  const gb=document.getElementById('gb'),st=document.getElementById('st');
+  gb.disabled=true;gb.textContent='Building…';
+  st.textContent='Rendering frames (~20s)…';
+  const gif=new GIF({workers:2,quality:5,width:W,height:H,
+    workerScript:'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js',
+    transparent:0x000000,background:'#000000'});
+  const lt=[];
+  for(let f=0;f<NF;f++){
+    const tmp=document.createElement('canvas');
+    tmp.width=W;tmp.height=H;
+    renderTo(tmp.getContext('2d'),f,lt);
+    gif.addFrame(tmp,{delay:DL,copy:true,dispose:2});
+  }
+  gif.on('finished',blob=>{
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='jamarat_throw.gif';a.click();
+    gb.disabled=false;gb.textContent='Download GIF';
+    st.textContent='Done! GIF downloaded.';
+  });
+  gif.render();
+}
+</script>

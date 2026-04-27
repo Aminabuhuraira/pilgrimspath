@@ -9,27 +9,27 @@
     position: fixed;
     inset: 0;
     z-index: 10000;
-    background: var(--bg-primary, #0A0F1E);
+    background: var(--bg-primary, #EEF1F5);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .admin-login-overlay.hidden { display: none; }
 .admin-login-card {
-    background: #1A1F35;
-    border: 1px solid rgba(201,168,76,0.2);
+    background: #FFFFFF;
+    border: 1px solid rgba(184,148,31,0.25);
     border-radius: 16px;
     padding: 48px 40px;
     width: 100%;
     max-width: 400px;
     text-align: center;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    box-shadow: 0 20px 60px rgba(15,23,42,0.12);
 }
 .admin-login-icon {
     width: 64px;
     height: 64px;
     margin: 0 auto 16px;
-    background: linear-gradient(135deg, #C9A84C, #8B6914);
+    background: linear-gradient(135deg, #B8941F, #8B6914);
     border-radius: 16px;
     display: flex;
     align-items: center;
@@ -39,12 +39,12 @@
 }
 .admin-login-card h2 {
     font-family: 'Cinzel', serif;
-    color: #C9A84C;
+    color: #8B6914;
     font-size: 24px;
     margin: 0 0 4px;
 }
 .admin-login-subtitle {
-    color: #8B95A5;
+    color: #5A6478;
     font-size: 14px;
     margin: 0 0 32px;
 }
@@ -54,17 +54,17 @@
 }
 .admin-login-field label {
     display: block;
-    color: #8B95A5;
+    color: #5A6478;
     font-size: 13px;
     margin-bottom: 6px;
 }
 .admin-login-field input {
     width: 100%;
     padding: 12px 14px;
-    background: #0A0F1E;
-    border: 1px solid rgba(255,255,255,0.1);
+    background: #F8FAFC;
+    border: 1px solid rgba(15,23,42,0.12);
     border-radius: 8px;
-    color: #fff;
+    color: #1A2236;
     font-size: 14px;
     font-family: 'DM Sans', sans-serif;
     outline: none;
@@ -72,10 +72,10 @@
     box-sizing: border-box;
 }
 .admin-login-field input:focus {
-    border-color: #C9A84C;
+    border-color: #B8941F;
 }
 .admin-login-error {
-    color: #EF4444;
+    color: #DC2626;
     font-size: 13px;
     min-height: 20px;
     margin-bottom: 8px;
@@ -83,7 +83,7 @@
 .admin-login-btn {
     width: 100%;
     padding: 12px;
-    background: linear-gradient(135deg, #C9A84C, #8B6914);
+    background: linear-gradient(135deg, #B8941F, #8B6914);
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -97,31 +97,32 @@
 .admin-login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 :root {
-    --bg-primary: #0A0F1E;
-    --bg-secondary: #111827;
-    --bg-card: #1A1F35;
-    --bg-card-hover: #222845;
-    --bg-input: #151A2E;
-    --gold: #C9A84C;
-    --gold-dark: #A88B3D;
+    /* Light / silver theme */
+    --bg-primary: #EEF1F5;     /* page background — soft silver */
+    --bg-secondary: #FFFFFF;   /* topbar / sidebar surface */
+    --bg-card: #FFFFFF;        /* cards */
+    --bg-card-hover: #F5F7FA;
+    --bg-input: #F8FAFC;
+    --gold: #B8941F;
+    --gold-dark: #8E7117;
     --gold-light: #E8D5A0;
-    --gold-glow: rgba(201,168,76,0.15);
-    --gold-border: rgba(201,168,76,0.25);
-    --text-primary: #F0EDE8;
-    --text-secondary: #8B95A8;
-    --text-muted: #5A6478;
-    --border: rgba(255,255,255,0.06);
-    --border-light: rgba(255,255,255,0.1);
+    --gold-glow: rgba(184,148,31,0.12);
+    --gold-border: rgba(184,148,31,0.30);
+    --text-primary: #1A2236;
+    --text-secondary: #5A6478;
+    --text-muted: #8B95A8;
+    --border: rgba(15,23,42,0.08);
+    --border-light: rgba(15,23,42,0.12);
     --success: #10B981;
-    --success-bg: rgba(16,185,129,0.12);
-    --warning: #F59E0B;
-    --warning-bg: rgba(245,158,11,0.12);
-    --danger: #EF4444;
-    --danger-bg: rgba(239,68,68,0.12);
-    --info: #3B82F6;
-    --info-bg: rgba(59,130,246,0.12);
-    --purple: #8B5CF6;
-    --purple-bg: rgba(139,92,246,0.12);
+    --success-bg: rgba(16,185,129,0.10);
+    --warning: #D97706;
+    --warning-bg: rgba(217,119,6,0.10);
+    --danger: #DC2626;
+    --danger-bg: rgba(220,38,38,0.10);
+    --info: #2563EB;
+    --info-bg: rgba(37,99,235,0.10);
+    --purple: #7C3AED;
+    --purple-bg: rgba(124,58,237,0.10);
     --sidebar-w: 260px;
     --topbar-h: 60px;
     --radius: 12px;
@@ -144,7 +145,7 @@ body::before {
     content: '';
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9A84C' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23B8941F' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     pointer-events: none;
     z-index: 0;
 }
@@ -406,7 +407,7 @@ body::before {
     font-family: inherit;
 }
 .sidebar-link:hover {
-    background: rgba(255,255,255,0.04);
+    background: rgba(15,23,42,0.04);
     color: var(--text-primary);
 }
 .sidebar-link.active {
@@ -492,10 +493,12 @@ body::before {
     transition: var(--transition);
     position: relative;
     overflow: hidden;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04), 0 1px 2px rgba(15,23,42,0.03);
 }
 .stat-card:hover {
     border-color: var(--border-light);
     background: var(--bg-card-hover);
+    box-shadow: 0 4px 12px rgba(15,23,42,0.08);
 }
 .stat-card::after {
     content: '';
@@ -557,8 +560,9 @@ body::before {
     border-radius: var(--radius-lg);
     overflow: hidden;
     transition: var(--transition);
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04), 0 1px 2px rgba(15,23,42,0.03);
 }
-.card:hover { border-color: var(--border-light); }
+.card:hover { border-color: var(--border-light); box-shadow: 0 4px 12px rgba(15,23,42,0.06); }
 
 .card-header {
     display: flex;
@@ -675,7 +679,7 @@ body::before {
     color: var(--text-secondary);
 }
 .data-table tbody tr:hover {
-    background: rgba(255,255,255,0.02);
+    background: rgba(15,23,42,0.03);
 }
 .data-table tbody tr:last-child td {
     border-bottom: none;

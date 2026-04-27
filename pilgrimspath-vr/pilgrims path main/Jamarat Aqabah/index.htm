@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>jamarat Aqabah</title>
+    <script src="/journey-content-loader.js?v=3"></script>
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1199634958501931');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1199634958501931&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, width=device-width, viewport-fit=cover" data-tdv-general-scale="0.5"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <script src="lib/tdvplayer.js?v=1777125004366"></script>
+    <link rel="preload" href="locale/en.txt?v=1777125004366" as="fetch" crossorigin="anonymous"/>
+	<link rel="preload" href="script.js?v=1777125004366" as="script"/>
+	<link rel="preload" href="media/panorama_691B217E_7C54_3E7A_41D3_35A255D72204_0/r/2/0_0.webp?v=1777125004366" as="image"/>
+	<link rel="preload" href="media/panorama_691B217E_7C54_3E7A_41D3_35A255D72204_0/l/2/0_0.webp?v=1777125004366" as="image"/>
+	<link rel="preload" href="media/panorama_691B217E_7C54_3E7A_41D3_35A255D72204_0/u/2/0_0.webp?v=1777125004366" as="image"/>
+	<link rel="preload" href="media/panorama_691B217E_7C54_3E7A_41D3_35A255D72204_0/d/2/0_0.webp?v=1777125004366" as="image"/>
+	<link rel="preload" href="media/panorama_691B217E_7C54_3E7A_41D3_35A255D72204_0/f/2/0_0.webp?v=1777125004366" as="image"/>
+	<link rel="preload" href="media/panorama_691B217E_7C54_3E7A_41D3_35A255D72204_0/b/2/0_0.webp?v=1777125004366" as="image"/>
+	<meta name="description" content="Virtual Tour"/>
+	<meta name="theme-color" content="#FFFFFF"/>
+    <script src="script.js?v=1777125004366"></script>
+    <style type="text/css">
+        html, body { height:100%; width:100%; height:100vh; width:100vw; margin:0; padding:0; overflow:hidden; }
+        .fill-viewport { position:fixed; top:0; left:0; right:0; bottom:0; padding:0; margin:0; overflow: hidden; }
+        .fill-viewport.landscape-left { left: env(safe-area-inset-left); }
+		.fill-viewport.landscape-right { right: env(safe-area-inset-right); }
+        #viewer { z-index:1; }
+        #preloadContainer { z-index:2; opacity:0; background-color:rgba(255,255,255,1); transition: opacity 0.5s; -webkit-transition: opacity 0.5s; -moz-transition: opacity 0.5s; -o-transition: opacity 0.5s;}
+    </style>
+    
+</head>
+<body>
+    <div id="preloadContainer" class="fill-viewport"><div style="z-index: 4; position: absolute; overflow: hidden; left: 0%; top: 50%; width: 100.00%; height: 10.00%" ><div style="text-align:left; color:#000; "><DIV STYLE="text-align:center;font-size:1.6666666666666663vmin;"><SPAN STYLE="display:inline-block; letter-spacing:0vmin; white-space:pre-wrap;color:#777777;font-size:1.67vmin;font-family:Arial, Helvetica, sans-serif;">Loading virtual tour. Please wait...</SPAN></DIV></div></div></div>
+    <div id="viewer" class="fill-viewport"></div>
+<!-- Meta Pixel VR Event -->
+<script>
+if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Rooftop VR Scene",content_category:"VR Hajj Tour",content_type:"vr_360_scene"});}
+</script>
+<script src="../../../meta-capi.js" defer></script>
+
+<!-- ====== JAMARAT STONE THROWING OVERLAY ====== -->
+<style>
+/* Throw button */
+#jamarThrowBtn{
+  display:none; position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
+  z-index:9999; background:linear-gradient(135deg,#C9A84C,#8B6914);
+  color:#fff; border:none; border-radius:50px; padding:14px 32px;
+  font-size:16px; font-weight:700; font-family:'DM Sans',Arial,sans-serif;
+  cursor:pointer; box-shadow:0 4px 24px rgba(201,168,76,0.5);
+  transition:transform .15s,box-shadow .15s;
+  display:none; align-items:center; gap:10px;
+}
+#jamarThrowBtn:hover{transform:translateX(-50%) scale(1.05);box-shadow:0 6px 32px rgba(201,168,76,0.7);}
+#jamarThrowBtn:active{transform:translateX(-50%) scale(0.97);}
+#jamarThrowBtn .icon{font-size:22px;}
+
+/* Counter HUD */
+#jamarHUD{
+  display:none; position:fixed; top:16px; right:16px; z-index:9999;
+  background:rgba(10,15,30,0.88); border:1px solid rgba(201,168,76,0.4);
+  border-radius:14px; padding:14px 20px; font-family:'DM Sans',Arial,sans-serif;
+  color:#fff; min-width:180px; backdrop-filter:blur(8px);
+}
+#jamarHUD h4{margin:0 0 8px;font-size:13px;color:#C9A84C;letter-spacing:1px;text-transform:uppercase;}
+.hud-pillar{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:14px;}
+.hud-pillar .name{color:#ccc;}
+.hud-pillar .count{font-weight:700;color:#C9A84C;font-size:15px;}
+.hud-pillar .count.done{color:#22c55e;}
+.hud-divider{height:1px;background:rgba(255,255,255,0.1);margin:6px 0;}
+.hud-total{text-align:center;font-size:12px;color:#8B95A5;margin-top:6px;}
+.hud-total strong{color:#fff;font-size:14px;}
+
+/* Stone throw animation overlay (canvas) */
+#jamarThrowCanvas{
+  display:none; position:fixed; bottom:0; left:50%; transform:translateX(-50%);
+  z-index:10000; pointer-events:none;
+}
+
+/* Completion banner */
+#jamarComplete{
+  display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+  z-index:10001; background:rgba(10,15,30,0.95); border:2px solid #C9A84C;
+  border-radius:20px; padding:32px 40px; text-align:center;
+  font-family:'DM Sans',Arial,sans-serif; color:#fff;
+  box-shadow:0 20px 60px rgba(0,0,0,0.6); backdrop-filter:blur(12px);
+}
+#jamarComplete h3{color:#C9A84C;font-size:22px;margin:0 0 8px;}
+#jamarComplete p{color:#ccc;font-size:14px;margin:0 0 16px;}
+#jamarComplete button{
+  background:linear-gradient(135deg,#C9A84C,#8B6914); color:#fff;
+  border:none; border-radius:8px; padding:8px 20px; font-size:13px;
+  font-weight:600; cursor:pointer;
+}
+
+/* Bismillah toast */
+#jamarBismillah{
+  display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+  z-index:10002; font-family:'Cinzel',serif; font-size:28px; color:#C9A84C;
+  text-shadow:0 2px 20px rgba(201,168,76,0.6); pointer-events:none;
+  opacity:0; transition:opacity .3s;
+}
+
+/* Screen-edge glow indicator */
+#jamarGlow{
+  display:none; position:fixed; top:0; left:0; right:0; bottom:0;
+  z-index:9998; pointer-events:none;
+  border:4px solid transparent; transition:border-color .4s, box-shadow .4s;
+  border-color:rgba(255,80,80,0.5);
+  box-shadow:inset 0 0 60px rgba(255,60,60,0.15);
+}
+#jamarGlow.locked{
+  border-color:rgba(34,197,94,0.6);
+  box-shadow:inset 0 0 60px rgba(34,197,94,0.15);
+}
+
+/* Directional arrow */
+#jamarArrow{
+  display:none; position:fixed; top:50%; z-index:9998; pointer-events:none;
+  font-size:36px; color:rgba(201,168,76,0.85); transition:opacity .3s;
+  text-shadow:0 2px 12px rgba(201,168,76,0.5);
+  animation:jamarPulse 1.2s ease-in-out infinite;
+}
+#jamarArrow.arrow-left{ left:16px; transform:translateY(-50%); }
+#jamarArrow.arrow-right{ right:16px; transform:translateY(-50%); }
+#jamarArrow.hidden{ opacity:0; }
+@keyframes jamarPulse{ 0%,100%{opacity:0.6;transform:translateY(-50%) scale(1);} 50%{opacity:1;transform:translateY(-50%) scale(1.15);} }
+
+/* Aim instruction */
+#jamarAimHint{
+  display:none; position:fixed; bottom:130px; left:50%; transform:translateX(-50%);
+  z-index:9998; font-family:'DM Sans',Arial,sans-serif; font-size:14px;
+  color:#ff9999; text-align:center; pointer-events:none;
+  text-shadow:0 1px 6px rgba(0,0,0,0.8); transition:color .3s,opacity .3s;
+  background:rgba(0,0,0,0.5); padding:6px 16px; border-radius:20px;
+}
+#jamarAimHint.locked{ color:#22c55e; }
+
+/* Throw button disabled state */
+#jamarThrowBtn.disabled{
+  opacity:0.35; cursor:not-allowed;
+  background:linear-gradient(135deg,#666,#444);
+}
+#jamarThrowBtn.disabled:hover{transform:translateX(-50%) scale(1);box-shadow:0 4px 24px rgba(201,168,76,0.3);}
+
+/* Debug yaw display (temporary for calibration) */
+#jamarDebugYaw{
+  display:none; position:fixed; bottom:8px; left:8px; z-index:9999;
+  font-family:monospace; font-size:11px; color:#C9A84C;
+  background:rgba(0,0,0,0.7); padding:4px 8px; border-radius:4px;
+  pointer-events:none;
+}
+
+/* Activity Guide Overlay */
+#jamarGuide{
+  display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+  z-index:10003; background:rgba(10,15,30,0.96); border:2px solid #C9A84C;
+  border-radius:20px; padding:28px 34px; max-width:380px; width:90vw;
+  font-family:'DM Sans',Arial,sans-serif; color:#fff;
+  box-shadow:0 20px 60px rgba(0,0,0,0.7); backdrop-filter:blur(12px);
+  text-align:center;
+}
+#jamarGuide h3{ color:#C9A84C; font-size:20px; margin:0 0 6px; }
+#jamarGuide .subtitle{ color:#8B95A5; font-size:13px; margin:0 0 16px; font-style:italic; }
+#jamarGuide .steps{ text-align:left; margin:0 0 18px; padding:0; list-style:none; }
+#jamarGuide .steps li{ padding:6px 0; font-size:14px; color:#ccc; display:flex; gap:10px; align-items:flex-start; }
+#jamarGuide .steps li .num{ color:#C9A84C; font-weight:700; min-width:22px; }
+#jamarGuide .dua{ font-family:'Cinzel',serif; font-size:18px; color:#C9A84C; margin:0 0 18px;
+  text-shadow:0 1px 10px rgba(201,168,76,0.4); direction:rtl; line-height:1.6; }
+#jamarGuide button{
+  background:linear-gradient(135deg,#C9A84C,#8B6914); color:#fff;
+  border:none; border-radius:10px; padding:12px 36px; font-size:15px;
+  font-weight:600; cursor:pointer; transition:transform .15s;
+}
+#jamarGuide button:hover{ transform:scale(1.05); }
+</style>
+
+<!-- Throw Button -->
+<button id="jamarThrowBtn" onclick="throwStone()">
+  <span class="icon">🪨</span> Throw Stone <span id="throwLabel">(1/7)</span>
+</button>
+
+<!-- Counter HUD -->
+<div id="jamarHUD">
+  <h4>⬡ Rami al-Jamarat</h4>
+  <div class="hud-pillar">
+    <span class="name">Sughra (Small)</span>
+    <span class="count" id="hudSmall">0/7</span>
+  </div>
+  <div class="hud-divider"></div>
+  <div class="hud-pillar">
+    <span class="name">Wusta (Medium)</span>
+    <span class="count" id="hudMedium">0/7</span>
+  </div>
+  <div class="hud-divider"></div>
+  <div class="hud-pillar">
+    <span class="name">Aqaba (Large)</span>
+    <span class="count" id="hudLarge">0/7</span>
+  </div>
+  <div class="hud-divider"></div>
+  <div class="hud-total">Total: <strong id="hudTotal">0/21</strong></div>
+</div>
+
+<!-- Throw animation canvas -->
+<canvas id="jamarThrowCanvas" width="240" height="320"></canvas>
+
+<!-- Screen-edge glow -->
+<div id="jamarGlow"></div>
+
+<!-- Directional arrow -->
+<div id="jamarArrow">◀</div>
+
+<!-- Aim hint -->
+<div id="jamarAimHint">↻ Turn towards the pillar to throw</div>
+
+<!-- Debug yaw -->
+<div id="jamarDebugYaw">yaw: --</div>
+
+<!-- Bismillah overlay -->
+<div id="jamarBismillah">بِسْمِ اللَّهِ اللَّهُ أَكْبَرُ</div>
+
+<!-- Activity Guide -->
+<div id="jamarGuide">
+  <h3>🪨 Rami al-Jamarat</h3>
+  <p class="subtitle">The Stoning of the Pillars — Sunnah of Ibrahim (AS)</p>
+  <ul class="steps">
+    <li><span class="num">1.</span> Turn to face the Jamrah (pillar) — follow the arrow</li>
+    <li><span class="num">2.</span> Tap "Throw Stone" when the screen glows green</li>
+    <li><span class="num">3.</span> Throw 7 stones at each of the 3 pillars</li>
+    <li><span class="num">4.</span> Start with Sughra (small) → Wusta (middle) → Aqaba (large)</li>
+  </ul>
+  <div class="dua">بِسْمِ اللَّهِ اللَّهُ أَكْبَرُ</div>
+  <p style="color:#8B95A5;font-size:12px;margin:0 0 14px;">Say this with each throw: "In the name of Allah, Allah is the Greatest"</p>
+  <button onclick="dismissGuide()">Begin Stoning ▸</button>
+</div>
+
+<!-- Completion banner -->
+<div id="jamarComplete">
+  <h3>🕋 MashaAllah!</h3>
+  <p>You have completed all 21 throws.<br>May Allah accept your Hajj.</p>
+  <button onclick="resetJamarat()">Reset &amp; Repeat</button>
+</div>
+
+<script>
+// ====== JAMARAT STONE THROWING SYSTEM ======
+// Panorama IDs that face the Jamarat pillars
+const JAMAR_PANORAMAS = {
+  // Panorama 1: VID_20260217_121959_00_480 (14-44-20)
+  'panorama_92A5C87D_8C55_D2F6_41BD_CABD1E84B587': 'small',
+  // Panorama 2: missing area VID_20260217_121557_00_475 (16-31-07)
+  'panorama_91BCCD88_8C4C_721C_41D8_71D5CA4654E5': 'medium',
+  // Panorama 3: VID_20260217_115635_00_436 (14-35-01)
+  'panorama_691B217E_7C54_3E7A_41D3_35A255D72204': 'large'
+};
+
+// ── TARGET YAW for each pillar (degrees) ──
+// The yaw angle where the pillar is visible in each panorama
+// Tolerance = how many degrees off-center is still accepted
+const PILLAR_TARGET = {
+  small:  { yaw: -82.55, tolerance: 55 },  // edges at -136.7 to -28.4
+  medium: { yaw: 48.15,  tolerance: 10 },  // edges at 40.3 to 56
+  large:  { yaw: -47.85, tolerance: 98 }   // edges at 49.6 to -145.3
+};
+
+// State
+let jamarState = JSON.parse(sessionStorage.getItem('jamarState') || 'null') || {
+  small: 0, medium: 0, large: 0
+};
+let currentPillar = null;
+let throwAnimating = false;
+let isAimedAtPillar = false;
+let currentYaw = 0;
+let currentPitch = 0;
+let tdvPlayer = null; // reference to active PanoramaPlayer
+let guideShown = sessionStorage.getItem('jamarGuideShown') === 'true';
+
+// ── UI refs ──
+const throwBtn = document.getElementById('jamarThrowBtn');
+const throwLabel = document.getElementById('throwLabel');
+const hud = document.getElementById('jamarHUD');
+const throwCanvas = document.getElementById('jamarThrowCanvas');
+const bismillah = document.getElementById('jamarBismillah');
+const completeEl = document.getElementById('jamarComplete');
+const glow = document.getElementById('jamarGlow');
+const arrow = document.getElementById('jamarArrow');
+const aimHint = document.getElementById('jamarAimHint');
+const debugYaw = document.getElementById('jamarDebugYaw');
+const tcx = throwCanvas.getContext('2d');
+
+// ── Save state ──
+function saveState() {
+  sessionStorage.setItem('jamarState', JSON.stringify(jamarState));
+}
+
+// ── Update HUD ──
+function updateHUD() {
+  const total = jamarState.small + jamarState.medium + jamarState.large;
+  document.getElementById('hudSmall').textContent = jamarState.small + '/7';
+  document.getElementById('hudSmall').className = 'count' + (jamarState.small >= 7 ? ' done' : '');
+  document.getElementById('hudMedium').textContent = jamarState.medium + '/7';
+  document.getElementById('hudMedium').className = 'count' + (jamarState.medium >= 7 ? ' done' : '');
+  document.getElementById('hudLarge').textContent = jamarState.large + '/7';
+  document.getElementById('hudLarge').className = 'count' + (jamarState.large >= 7 ? ' done' : '');
+  document.getElementById('hudTotal').textContent = total + '/21';
+
+  if (currentPillar && jamarState[currentPillar] < 7) {
+    throwLabel.textContent = '(' + (jamarState[currentPillar] + 1) + '/7)';
+  }
+}
+
+// ── Angular distance helper (handles wrap-around) ──
+function yawDistance(a, b) {
+  let d = ((a - b) % 360 + 540) % 360 - 180;
+  return Math.abs(d);
+}
+
+// ── Check if camera is aimed at the pillar ──
+function updateAimState() {
+  if (!currentPillar || jamarState[currentPillar] >= 7) {
+    isAimedAtPillar = false;
+    return;
+  }
+  const target = PILLAR_TARGET[currentPillar];
+  const dist = yawDistance(currentYaw, target.yaw);
+  isAimedAtPillar = dist <= target.tolerance;
+
+  // Update glow + arrow
+  if (isAimedAtPillar) {
+    glow.classList.add('locked');
+    arrow.classList.add('hidden');
+    aimHint.classList.add('locked');
+    aimHint.textContent = '\u2714 Facing the pillar \u2014 throw!';
+    throwBtn.classList.remove('disabled');
+  } else {
+    glow.classList.remove('locked');
+    arrow.classList.remove('hidden');
+    aimHint.classList.remove('locked');
+    // Show directional arrow
+    let diff = ((target.yaw - currentYaw) % 360 + 540) % 360 - 180;
+    if (diff < 0) {
+      arrow.className = 'arrow-left';
+      arrow.id = 'jamarArrow';
+      arrow.textContent = '\u25C0';
+    } else {
+      arrow.className = 'arrow-right';
+      arrow.id = 'jamarArrow';
+      arrow.textContent = '\u25B6';
+    }
+    aimHint.textContent = '\u21bb Turn towards the pillar to throw';
+    throwBtn.classList.add('disabled');
+  }
+}
+
+// ── Dismiss guide ──
+function dismissGuide() {
+  document.getElementById('jamarGuide').style.display = 'none';
+  guideShown = true;
+  sessionStorage.setItem('jamarGuideShown', 'true');
+}
+
+// ── Show activity guide ──
+function showGuide() {
+  if (!guideShown) {
+    document.getElementById('jamarGuide').style.display = 'block';
+  }
+}
+
+// ── Show/hide overlay based on current panorama ──
+function checkPanorama(panoramaId) {
+  if(typeof _jbChk==='function') _jbChk(panoramaId);
+  const pillar = JAMAR_PANORAMAS[panoramaId] || null;
+  currentPillar = pillar;
+  const total = jamarState.small + jamarState.medium + jamarState.large;
+
+  // HUD is always visible on all Jamarat panoramas
+  hud.style.display = 'block';
+
+  if (pillar && jamarState[pillar] < 7) {
+    // Show guide on first pillar panorama visit
+    showGuide();
+    throwBtn.style.display = 'flex';
+    glow.style.display = 'block';
+    arrow.style.display = 'block';
+    aimHint.style.display = 'block';
+    debugYaw.style.display = 'block';
+    throwLabel.textContent = '(' + (jamarState[pillar] + 1) + '/7)';
+    updateAimState();
+  } else if (pillar && jamarState[pillar] >= 7) {
+    throwBtn.style.display = 'none';
+    glow.style.display = 'none';
+    arrow.style.display = 'none';
+    aimHint.style.display = 'none';
+    debugYaw.style.display = 'none';
+  } else {
+    throwBtn.style.display = 'none';
+    glow.style.display = 'none';
+    arrow.style.display = 'none';
+    aimHint.style.display = 'none';
+    debugYaw.style.display = 'none';
+  }
+
+  if (total >= 21) {
+    throwBtn.style.display = 'none';
+    glow.style.display = 'none';
+    arrow.style.display = 'none';
+    aimHint.style.display = 'none';
+    completeEl.style.display = 'block';
+  }
+}
+
+// ── THROW ANIMATION (simplified from jamarat_hand_throw_v3) ──
+const TW = 240, TH = 320, TNF = 36;
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+function eio(t) { return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2; }
+
+function drawThrowFrame(ctx, f) {
+  ctx.clearRect(0, 0, TW, TH);
+  const t = f / TNF;
+
+  // Hand position
+  let hx, hy, alpha, stoneA, sx, sy;
+  if (t < 0.2) {
+    const p = eio(t / 0.2);
+    hx = TW/2; hy = lerp(TH + 40, TH * 0.7, p);
+    alpha = p; stoneA = p;
+    sx = hx; sy = hy - 30;
+  } else if (t < 0.5) {
+    const p = eio((t - 0.2) / 0.3);
+    hx = TW/2; hy = lerp(TH * 0.7, TH * 0.55, p);
+    alpha = 1; stoneA = 1;
+    sx = hx; sy = hy - 30;
+  } else if (t < 0.75) {
+    const p = eio((t - 0.5) / 0.25);
+    hx = TW/2; hy = lerp(TH * 0.55, TH * 0.45, p);
+    alpha = 1;
+    sx = hx + p * 80; sy = hy - 30 - p * 120;
+    stoneA = 1 - p * 0.5;
+  } else {
+    const p = eio((t - 0.75) / 0.25);
+    hx = TW/2; hy = lerp(TH * 0.45, TH * 0.6, p);
+    alpha = 1 - p;
+    sx = TW + 20; sy = -20;
+    stoneA = 0;
+  }
+
+  // Draw hand (simplified)
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.translate(hx, hy);
+  // Palm
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 22, 30, 0, 0, Math.PI * 2);
+  ctx.fillStyle = '#B8BCC8';
+  ctx.fill();
+  ctx.strokeStyle = '#6A6E7A';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  // Fingers
+  for (let i = -2; i <= 1; i++) {
+    ctx.beginPath();
+    ctx.roundRect(i * 11 - 4, -28, 9, 20, 4);
+    ctx.fillStyle = '#B8BCC8';
+    ctx.fill();
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  // Draw stone
+  if (stoneA > 0) {
+    ctx.save();
+    ctx.globalAlpha = stoneA;
+    ctx.translate(sx, sy);
+    ctx.rotate(t * Math.PI * 6);
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 10, 8, 0.2, 0, Math.PI * 2);
+    ctx.fillStyle = '#909298';
+    ctx.fill();
+    ctx.strokeStyle = '#C4C8D2';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    // Highlight
+    ctx.beginPath();
+    ctx.ellipse(-3, -2, 3, 2, -0.3, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+function playThrowAnimation(callback) {
+  throwCanvas.style.display = 'block';
+  let frame = 0;
+  function animate() {
+    drawThrowFrame(tcx, frame);
+    frame++;
+    if (frame < TNF) {
+      requestAnimationFrame(animate);
+    } else {
+      throwCanvas.style.display = 'none';
+      if (callback) callback();
+    }
+  }
+  animate();
+}
+
+// ── THROW ACTION ──
+function throwStone() {
+  if (!currentPillar || throwAnimating) return;
+  if (jamarState[currentPillar] >= 7) return;
+  if (!isAimedAtPillar) return; // Must face the pillar!
+  throwAnimating = true;
+  // Hide indicators during throw
+  glow.style.display = 'none';
+  arrow.style.display = 'none';
+  aimHint.style.display = 'none';
+
+  // Show Bismillah
+  bismillah.style.display = 'block';
+  bismillah.style.opacity = '1';
+
+  // Play animation
+  setTimeout(function() {
+    bismillah.style.opacity = '0';
+    setTimeout(function() { bismillah.style.display = 'none'; }, 300);
+
+    playThrowAnimation(function() {
+      // Count the throw
+      jamarState[currentPillar]++;
+      saveState();
+      updateHUD();
+      throwAnimating = false;
+
+      const total = jamarState.small + jamarState.medium + jamarState.large;
+
+      // Pillar complete?
+      if (jamarState[currentPillar] >= 7) {
+        throwBtn.style.display = 'none';
+        glow.style.display = 'none';
+        arrow.style.display = 'none';
+        aimHint.style.display = 'none';
+        if (total >= 21) {
+          completeEl.style.display = 'block';
+          if(typeof playVO==='function'){
+            var _cctx=new URL(window.location).searchParams.get('context')||'';
+            var _cSk=_cctx==='11th-day'?'jamarat-11th':(_cctx==='12th-day'||_cctx==='13th-day')?'jamarat-12th':null;
+            var _cId=_cctx==='11th-day'?'jm11-complete':(_cctx==='12th-day'||_cctx==='13th-day')?'jm12-complete':null;
+            var _ovC=(_cSk&&_cId&&window.PPContent&&window.PPContent.byId(_cSk,_cId))||{};
+            var _cFile=_ovC.audio||(_cctx==='11th-day'?'English Day 11- dhul hijja 2.mp3':(_cctx==='12th-day'||_cctx==='13th-day'?'English Day 13 Dhul hijjah 2.mp3':null));
+            if(_cFile)playVO(_cFile);
+          }
+        }
+      } else {
+        // Show indicators again for next throw
+        glow.style.display = 'block';
+        arrow.style.display = 'block';
+        aimHint.style.display = 'block';
+        updateAimState();
+      }
+    });
+  }, 800);
+}
+
+// ── RESET ──
+function resetJamarat() {
+  jamarState = { small: 0, medium: 0, large: 0 };
+  saveState();
+  updateHUD();
+  completeEl.style.display = 'none';
+  if (currentPillar) {
+    throwBtn.style.display = 'flex';
+    glow.style.display = 'block';
+    arrow.style.display = 'block';
+    aimHint.style.display = 'block';
+    debugYaw.style.display = 'block';
+    throwLabel.textContent = '(1/7)';
+    updateAimState();
+  }
+}
+
+// ── PANORAMA CHANGE DETECTION ──
+let lastPanoId = '';
+const PANO_RE = /(panorama_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+)_0\//i;
+
+function detectPano(url) {
+  if (typeof url !== 'string') return;
+  const m = url.match(PANO_RE);
+  if (m && m[1] !== lastPanoId) {
+    lastPanoId = m[1];
+    // Check if it's a Jamarat panorama OR clear button if not
+    checkPanorama(m[1]);
+  }
+}
+
+// 1. PerformanceObserver — catches ALL resource loads (img, fetch, xhr, css)
+try {
+  const po = new PerformanceObserver(function(list) {
+    const entries = list.getEntries();
+    for (let i = 0; i < entries.length; i++) {
+      detectPano(entries[i].name);
+    }
+  });
+  po.observe({ type: 'resource', buffered: false });
+} catch(e) {}
+
+// 2. Intercept Image constructor (3DVista loads tiles via new Image())
+const OrigImage = window.Image;
+window.Image = function(w, h) {
+  const img = new OrigImage(w, h);
+  const origSet = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'src').set;
+  Object.defineProperty(img, 'src', {
+    set: function(v) { detectPano(v); origSet.call(this, v); },
+    get: function() { return Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'src').get.call(this); }
+  });
+  return img;
+};
+window.Image.prototype = OrigImage.prototype;
+
+// 3. Patch TDV playlist navigation (most direct detection)
+function hookTDV() {
+  if (typeof TDV === 'undefined' || !TDV.Tour || !TDV.Tour.Script) {
+    return setTimeout(hookTDV, 500);
+  }
+  const origSetPLI = TDV.Tour.Script.setPlayListSelectedIndex;
+  if (origSetPLI) {
+    TDV.Tour.Script.setPlayListSelectedIndex = function(a, b) {
+      try {
+        const item = a.get('items')[b];
+        const media = item.get('media');
+        const id = media.get('id');
+        if (id !== lastPanoId) {
+          lastPanoId = id;
+          checkPanorama(id);
+        }
+      } catch(e) {}
+      return origSetPLI.apply(this, arguments);
+    };
+  }
+  const origSetMMI = TDV.Tour.Script.setMainMediaByIndex;
+  if (origSetMMI) {
+    TDV.Tour.Script.setMainMediaByIndex = function(a) {
+      try {
+        const items = this.mainPlayList.get('items');
+        if (a >= 0 && a < items.length) {
+          const id = items[a].get('media').get('id');
+          if (id !== lastPanoId) {
+            lastPanoId = id;
+            checkPanorama(id);
+          }
+        }
+      } catch(e) {}
+      return origSetMMI.apply(this, arguments);
+    };
+  }
+  console.log('[Jamarat] TDV hooks installed');
+}
+hookTDV();
+
+// ── YAW POLLING via global `tour` object ──
+// tour is a global set by 3DVista's script.js
+// Chain: tour._getRootPlayer() → getActivePlayerWithViewer(getMainViewer()) → .get('yaw')
+function pollYaw() {
+  if (!currentPillar) {
+    requestAnimationFrame(pollYaw);
+    return;
+  }
+
+  try {
+    // The global `tour` variable is set by 3DVista's script.js
+    if (typeof tour !== 'undefined' && tour) {
+      let rootPlayer = null;
+
+      // Method 1: tour._getRootPlayer() (the documented internal path)
+      if (typeof tour._getRootPlayer === 'function') {
+        rootPlayer = tour._getRootPlayer();
+      }
+      // Method 2: tour.player.getById('rootPlayer')
+      if (!rootPlayer && tour.player && typeof tour.player.getById === 'function') {
+        rootPlayer = tour.player.getById('rootPlayer');
+      }
+
+      if (rootPlayer) {
+        // Get the main viewer area
+        const mainViewer = rootPlayer.getMainViewer();
+        if (mainViewer) {
+          // Get the active panorama player
+          const activePlayer = rootPlayer.getActivePlayerWithViewer(mainViewer);
+          if (activePlayer && activePlayer.get) {
+            const cls = activePlayer.get('class');
+            if (cls === 'PanoramaPlayer') {
+              const y = activePlayer.get('yaw');
+              const p = activePlayer.get('pitch');
+              if (typeof y === 'number') currentYaw = y;
+              if (typeof p === 'number') currentPitch = p;
+            }
+          }
+        }
+      }
+    }
+  } catch(e) {
+    // Silent fail - will retry next frame
+  }
+
+  // Update debug display
+  debugYaw.textContent = 'yaw: ' + currentYaw.toFixed(1) + '\u00b0 | pitch: ' + currentPitch.toFixed(1) + '\u00b0';
+  if (currentPillar) {
+    const target = PILLAR_TARGET[currentPillar];
+    const dist = yawDistance(currentYaw, target.yaw);
+    debugYaw.textContent += ' | target: ' + target.yaw + '\u00b0 | off: ' + dist.toFixed(1) + '\u00b0';
+  }
+  updateAimState();
+  requestAnimationFrame(pollYaw);
+}
+
+// Init
+updateHUD();
+setTimeout(pollYaw, 2000);
+</script>
+
+<!-- ═══ Scene Guide Banners ═══ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+#sceneBanner{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10003;
+width:min(96vw,900px);min-height:clamp(200px,44vh,420px);background:url('../../media/banner-frame.png') no-repeat center/100% 100%;
+font-family:'DM Sans',Arial,sans-serif;color:#2C1810;text-align:center;}
+#sceneBanner .sceneBannerBody{box-sizing:border-box;width:100%;height:100%;
+padding:clamp(46px,5.6vw,70px) clamp(86px,12vw,140px) clamp(32px,5vw,44px);
+display:flex;flex-direction:column;justify-content:center;align-items:center;overflow-y:auto;overflow-x:hidden;
+scrollbar-width:thin;scrollbar-color:rgba(201,168,76,0.3) transparent;}
+#sceneBanner .sceneBannerBody > *{width:min(100%,560px);}
+#sceneBanner .sceneBannerBody > button{width:auto;max-width:none;display:inline-flex;align-self:center;}
+#sceneBanner .sceneBannerBody::-webkit-scrollbar{width:5px;}
+#sceneBanner .sceneBannerBody::-webkit-scrollbar-thumb{background:rgba(201,168,76,0.4);border-radius:4px;}
+#sceneBanner h3{color:#8B6914;font-size:clamp(18px,2.2vw,34px);margin:0 0 14px;font-weight:700;line-height:1.2;padding-top:6px;}
+#sceneBanner .bb{color:#3D2B1F;font-size:clamp(11px,1.15vw,18px);line-height:1.45;margin:0 0 8px;overflow-wrap:anywhere;word-break:normal;}
+#sceneBanner .ba{color:#8B6914;font-size:clamp(13px,1.45vw,21px);font-style:italic;margin:6px 0 4px;line-height:1.42;overflow-wrap:anywhere;word-break:break-word;}
+#sceneBanner .bt{color:#6B5B4F;font-size:clamp(10px,1vw,16px);font-style:italic;margin:0 0 8px;line-height:1.4;overflow-wrap:anywhere;word-break:normal;}
+#sceneBanner .sep{width:72px;height:2px;background:linear-gradient(90deg,transparent,#C9A84C,transparent);margin:10px auto;}
+#sceneBanner button{background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;border:none;
+border-radius:7px;padding:8px 19px;font-size:clamp(12px,1.05vw,15px);font-weight:600;cursor:pointer;margin-top:6px;
+transition:transform .15s;box-shadow:0 4px 12px rgba(201,168,76,0.32);align-self:center;line-height:1.2;}
+#sceneBanner button:active{transform:scale(0.96);}
+@media(max-width:520px){
+#sceneBanner{width:96vw;}
+#sceneBanner .sceneBannerBody{padding:36px 50px 22px;}
+#sceneBanner .sceneBannerBody > *{width:100%;}
+#sceneBanner .sceneBannerBody > button{width:auto;}
+#sceneBanner h3{font-size:16px;margin-bottom:8px;}
+#sceneBanner .bb{font-size:11.5px;line-height:1.35;}
+#sceneBanner .ba{font-size:12px;line-height:1.35;}
+#sceneBanner .bt{font-size:10.5px;line-height:1.33;}
+#sceneBanner button{padding:9px 18px;font-size:13px;margin-top:6px;}
+}
+</style>
+<div id="sceneBanner"></div>
+<script>
+var _bannerPager={title:'',pages:[],index:0};
+function _splitBannerHtml(html){var segs=html.match(/<h3[\s\S]*?<\/h3>|<p[\s\S]*?<\/p>|<div class="sep"><\/div>|<br\s*\/?\s*>/gi)||[html];var pages=[];var cur=[];var chars=0;for(var i=0;i<segs.length;i++){var s=segs[i];var txt=s.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();var len=txt.length;if(cur.length&&(chars+len>620||cur.length>=6)){pages.push(cur.join(''));cur=[];chars=0;}cur.push(s);chars+=len;}if(cur.length)pages.push(cur.join(''));return pages.length?pages:[html];}
+function _renderBannerPage(){var el=document.getElementById('sceneBanner');if(!el)return;var isLast=_bannerPager.index>=_bannerPager.pages.length-1;var btn=isLast?'Continue ▸':'Next ▸';el.innerHTML='<div class="sceneBannerBody"><h3>'+_bannerPager.title+'</h3>'+_bannerPager.pages[_bannerPager.index]+'<button onclick="dismissBanner()">'+btn+'</button></div>';el.style.display='block';}
+function openBanner(title,html){_bannerPager.title=title;_bannerPager.pages=_splitBannerHtml(html);_bannerPager.index=0;_renderBannerPage();}
+function dismissBanner(){if(_bannerPager.pages.length&&_bannerPager.index<_bannerPager.pages.length-1){_bannerPager.index++;_renderBannerPage();return;}_bannerPager={title:'',pages:[],index:0};document.getElementById('sceneBanner').style.display='none';}
+function playVO(f){
+    if(!f) return;
+    if(window._voAudio){ try{ window._voAudio.pause(); }catch(e){} window._voAudio=null; }
+    window._voPending = f;
+    var url = (window.PPContent && window.PPContent.audioUrl)
+        ? window.PPContent.audioUrl(f)
+        : ('/Hajj%20Voice%20Over/' + encodeURIComponent(f));
+    var a = new Audio(url);
+    window._voAudio = a;
+    a.addEventListener('ended', function(){ if(window._voPending===f) window._voPending=null; });
+    a.addEventListener('error', function(){ console.warn('[VO] failed to load', f); });
+    var p = a.play();
+    if(p && p.catch){
+        p.catch(function(err){
+            console.warn('[VO] autoplay blocked, will play on first user interaction', err && err.name);
+            _showVoHint();
+            if(window._voUnlockBound) return;
+            window._voUnlockBound = true;
+            var unlock = function(){
+                document.removeEventListener('click', unlock, true);
+                document.removeEventListener('touchend', unlock, true);
+                document.removeEventListener('keydown', unlock, true);
+                document.removeEventListener('pointerdown', unlock, true);
+                window._voUnlockBound = false;
+                _hideVoHint();
+                var pending = window._voPending;
+                if(pending) playVO(pending);
+            };
+            document.addEventListener('click', unlock, true);
+            document.addEventListener('touchend', unlock, true);
+            document.addEventListener('keydown', unlock, true);
+            document.addEventListener('pointerdown', unlock, true);
+        });
+    }
+}
+function _showVoHint(){
+    if(document.getElementById('voHint')) return;
+    var h = document.createElement('div');
+    h.id = 'voHint';
+    h.textContent = '\uD83D\uDD0A Tap anywhere to start narration';
+    h.style.cssText = 'position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:99999;'
+      + 'background:linear-gradient(135deg,#D4AF37,#C9A227);color:#fff;padding:9px 18px;border-radius:999px;'
+      + 'font-family:Poppins,sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:.3px;'
+      + 'box-shadow:0 6px 20px rgba(201,162,39,0.5);cursor:pointer;'
+      + 'animation:voHintPulse 1.6s ease-in-out infinite;pointer-events:none;';
+    if(!document.getElementById('voHintStyles')){
+        var st = document.createElement('style'); st.id='voHintStyles';
+        st.textContent = '@keyframes voHintPulse{0%,100%{box-shadow:0 6px 20px rgba(201,162,39,0.45)}50%{box-shadow:0 6px 28px rgba(201,162,39,0.85)}}';
+        document.head.appendChild(st);
+    }
+    document.body.appendChild(h);
+}
+function _hideVoHint(){ var h = document.getElementById('voHint'); if(h) h.remove(); }
+var _jbChk;
+(function(){
+var BANNERS_10TH={'panorama_691B217E_7C54_3E7A_41D3_35A255D72204':{
+  title:'\u{1f54b} 10th Day \u2014 Rami al-Jamrah al-\u02bbAqabah',
+  html:'<p class="bb">It is the morning of the 10th of Dhul-Hijjah \u2014 <strong>Yawm an-Nahr</strong>. After leaving Muzdalifah you arrive at Mina to perform the first stoning of Hajj.</p>'+
+  '<p class="bb"><strong>Today only one pillar is stoned:</strong> Jamrah al-\u02bbAqabah (the largest). You will throw <strong>seven pebbles</strong>, one at a time, with each throw saying:</p>'+
+  '<p class="ba">Bismill\u0101h, All\u0101hu Akbar.</p>'+
+  '<p class="bt">In the name of Allah, Allah is the Greatest.</p>'+
+  '<div class="sep"></div>'+
+  '<p class="bb">Turn until the screen glows green and the pillar is in view, then tap <strong>Throw Stone</strong>. After the seventh throw you will continue to the Qurbani (sacrifice).</p>',
+  // also accept the alternate angle of the same pillar
+  _aliases:['panorama_691B7A27_7C54_4D8A_4199_B128B8AEBDE4']
+},
+// fallback for the original pillar overview panorama (in case journey lands here first)'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':{
+  title:'\u{1f54b} 10th Day of Dhul-Hijjah — Yawm an-Nahr',
+  html:'<p class="bb">Today is the 10th day, Yawm an-Nahr. After completing Fajr prayer, we have now arrived at Rami al-Jamarat where we will perform the full ritual:</p><p class="bb">\u2022 Stone Jamrah al-Aqaba (the large pillar) only once with 7 pebbles<br>\u2022 Perform Qurbani (animal sacrifice)<br>\u2022 Shave or trim your hair<br>\u2022 Return to Al-Masjid Al-Haram for Tawaf al-Ifadha</p>'}
+};
+var BANNERS_11TH={
+'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':{
+  title:'\u{1f54b} 11th Day of Dhul-Hijjah — Days of Tashreeq',
+  html:'<p class="bb">On the 11th day, you return to Rami al-Jamarat. Today you will stone all three pillars in order:</p><p class="bb">\u2022 Jamrah as-Sughra (small) — 7 pebbles<br>\u2022 Jamrah al-Wusta (middle) — 7 pebbles<br>\u2022 Jamrah al-Aqaba (large) — 7 pebbles<br><br>Total: 21 pebbles. After completing the stoning, you may rest at your lodging in Mina or proceed to Muzdalifah if leaving on this day.</p>'}
+};
+var BANNERS_12TH={
+'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':{
+  title:'\u{1f54b} 12th Day of Dhul-Hijjah — Days of Tashreeq',
+  html:'<p class="bb">On the 12th day, you return again to Rami al-Jamarat. Today you will stone all three pillars:</p><p class="bb">\u2022 Jamrah as-Sughra (small) — 7 pebbles<br>\u2022 Jamrah al-Wusta (middle) — 7 pebbles<br>\u2022 Jamrah al-Aqaba (large) — 7 pebbles<br><br>After completing today\'s stoning, you may choose to depart Mina (though you can also stay until the 13th). If you depart, perform Tawaf al-Wida before leaving.</p>'}
+};
+var BANNERS_13TH={
+'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':{
+  title:'\u{1f54b} 13th Day of Dhul-Hijjah — Final Optional Day',
+  html:'<p class="bb">On the 13th day, stoning is optional but encouraged for those who have the time and ability. If you choose to stone today:</p><p class="bb">\u2022 Jamrah as-Sughra (small) — 7 pebbles<br>\u2022 Jamrah al-Wusta (middle) — 7 pebbles<br>\u2022 Jamrah al-Aqaba (large) — 7 pebbles<br><br>After completing today\'s stoning (or if you choose not to stone), proceed directly to Al-Masjid Al-Haram to perform your Farewell Tawaf (Tawaf al-Wida), which marks the conclusion of your Hajj.</p>'}
+};
+var journeyContext=new URL(window.location).searchParams.get('context')||'10th-day';
+var BANNERS=journeyContext==='11th-day'?BANNERS_11TH:(journeyContext==='12th-day'?BANNERS_12TH:(journeyContext==='13th-day'?BANNERS_13TH:BANNERS_10TH));
+var _jVoMap={'10th-day':{'panorama_691B217E_7C54_3E7A_41D3_35A255D72204':'English Day 10 Yawn An Nahr 1.mp3','panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':'English Day 10 Yawn An Nahr 1.mp3'},'11th-day':{'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':'English Day 11- dhul hijja.mp3'},'12th-day':{'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':'English Day 13 dhul hijjah.mp3'},'13th-day':{'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':'English Day 13 dhul hijjah.mp3'}};
+var _jVoCtx=_jVoMap[journeyContext]||{};
+if(window.PPContent && window.PPContent.hasData){
+  var _jSk = journeyContext==='11th-day'?'jamarat-11th':(journeyContext==='12th-day'||journeyContext==='13th-day')?'jamarat-12th':'jamarat-10th';
+  var _oB=window.PPContent.bannerMapByPano(_jSk);
+  Object.keys(_oB).forEach(function(k){BANNERS[k]=_oB[k];});
+  var _oA=window.PPContent.audioMapByPano(_jSk);
+  Object.keys(_oA).forEach(function(k){_jVoCtx[k]=_oA[k];});
+}
+var shown={};
+_jbChk=function(id){var b=BANNERS[id];if(!b||shown[id])return;shown[id]=true;if(b.title||b.html)openBanner(b.title,b.html);
+if(_jVoCtx[id])playVO(_jVoCtx[id]);
+// Signal to journey nav that last activity is complete (after stoning complete)
+if(typeof window!=='undefined'&&id==='panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1'){window.journeyActivityComplete=true;if(typeof showJourneyNextButton==='function'){setTimeout(showJourneyNextButton,300);}}};
+setTimeout(function(){_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},2500);
+})();
+</script>
+
+<!-- ═══ 10th-Day Aqabah-Only Mode ═══ -->
+<script>
+(function(){
+  var ctx=new URL(window.location).searchParams.get('context')||'10th-day';
+  if(ctx!=='10th-day') return; // 11th/12th/13th still use full 3-pillar flow
+
+  // Hide the intro guide immediately — Aqabah stoning goes straight into action
+  sessionStorage.setItem('jamarGuideShown','true');
+  document.addEventListener('DOMContentLoaded',function(){
+    var g=document.getElementById('jamarGuide');
+    if(g) g.style.display='none';
+  });
+  // Also handle case where DOM is already ready
+  if(document.readyState!=='loading'){
+    var _g=document.getElementById('jamarGuide');
+    if(_g) _g.style.display='none';
+  }
+
+  var AQABAH_ID='panorama_691B217E_7C54_3E7A_41D3_35A255D72204';
+  var AQABAH_ALT='panorama_691BD7D8_7C54_C286_41D8_87DAB3A1DC93';
+
+  // Tell journey-nav this scene requires an activity (7 throws) before "Next Stop"
+  window.journeyRequiresActivity = true;
+  window.journeyActivityLabel = 'Throw all 7 stones at Jamrah al-\u02bbAqabah';
+
+  // Widen the large-pillar tolerance so BOTH visible stoning areas in this panorama count
+  // (the new Aqabah panorama shows two valid stoning bays — left and right of the pillar)
+  if(typeof PILLAR_TARGET!=='undefined' && PILLAR_TARGET.large){
+    PILLAR_TARGET.large.yaw = -47.85;
+    PILLAR_TARGET.large.tolerance = 110; // covers both stoning spots
+  }
+
+  // Aim the camera at the stoning area on first load
+  function aimAtStoning(retries){
+    retries=retries||0;
+    try{
+      if(typeof tour!=='undefined' && tour && typeof tour._getRootPlayer==='function'){
+        var rp=tour._getRootPlayer();
+        var mv=rp&&rp.getMainViewer&&rp.getMainViewer();
+        var ap=mv&&rp.getActivePlayerWithViewer&&rp.getActivePlayerWithViewer(mv);
+        if(ap && ap.set){
+          // Stop any auto-rotation sequence so our yaw sticks
+          try{ ap.set('automaticRotationSpeed',0); }catch(e){}
+          try{ ap.set('manualRotationSpeed',0); }catch(e){}
+          try{ ap.set('yaw', -47.85); }catch(e){}
+          return;
+        }
+      }
+    }catch(e){}
+    if(retries<60) setTimeout(function(){aimAtStoning(retries+1);},300);
+  }
+  setTimeout(function(){ aimAtStoning(0); }, 2200);
+  // Re-aim a few times in case TDV resets the camera during initial sequence
+  setTimeout(function(){ aimAtStoning(0); }, 4500);
+  setTimeout(function(){ aimAtStoning(0); }, 7000);
+
+  // 1⃣ Inject CSS overrides: hide non-Aqabah HUD rows + retitle counter
+  var s=document.createElement('style');
+  s.textContent=[
+    '#jamarHUD .hud-pillar:nth-of-type(1),',
+    '#jamarHUD .hud-pillar:nth-of-type(2),',
+    '#jamarHUD .hud-pillar:nth-of-type(3) ~ .hud-divider:nth-of-type(2),',
+    '#jamarHUD .hud-divider:nth-of-type(1),',
+    '#jamarHUD .hud-divider:nth-of-type(2){display:none !important;}',
+    '#jamarHUD .hud-total{display:none !important;}',
+    '#jamarHUD h4{font-size:13px !important;}'
+  ].join('');
+  document.head.appendChild(s);
+
+  // 2⃣ Force-jump to the Aqabah-facing panorama once TDV is ready
+  function jumpToAqabah(retries){
+    retries=retries||0;
+    try{
+      var t=TDV.PlayerAPI.getCurrentPlayer();
+      var pl=t&&t.mainPlayList;
+      if(!pl){ if(retries<40) return setTimeout(function(){jumpToAqabah(retries+1);},250); return; }
+      var items=pl.get('items');
+      for(var i=0;i<items.length;i++){
+        var mid=items[i].get('media').get('id');
+        if(mid===AQABAH_ID||mid===AQABAH_ALT){
+          if(pl.get('selectedIndex')!==i){ pl.set('selectedIndex',i); }
+          return;
+        }
+      }
+    }catch(e){ if(retries<40) setTimeout(function(){jumpToAqabah(retries+1);},250); }
+  }
+  setTimeout(jumpToAqabah,1500);
+
+  // 3⃣ Override completion: when Aqabah hits 7, show custom modal → Qurbani
+  function buildCompletionModal(){
+    var el=document.getElementById('jamarComplete');
+    if(!el) return;
+    el.innerHTML=
+      '<h3>\u{1f389} Aqabah Complete!</h3>'+
+      '<p>Alhamdulillah! You have thrown all seven stones at Jamrah al-\u02bbAqabah.<br>'+
+      'Today\u2019s stoning of the 10th of Dhul-Hijjah is fulfilled.</p>'+
+      '<p style="font-size:12px;color:#8B95A5;margin:0 0 18px;">Next: proceed to the Qurbani (animal sacrifice).</p>'+
+      '<button id="jamarToQurbani">Continue to Qurbani \u25b8</button>'+
+      '<button id="jamarReset10" style="background:rgba(255,255,255,0.08);margin-left:8px;">\u21ba Restart</button>';
+    document.getElementById('jamarToQurbani').onclick=function(){
+      sessionStorage.removeItem('jamarState');
+      var jm=window.HajjJourneyManager||window.jm;
+      if(jm&&typeof jm.goToNext==='function'){jm.goToNext();}
+      else{window.location.href='../5%20Rami%20Jamarat%2C%20Qurbani%2C%20trim%20Shave%2C%20Tawaf/qurbani-scene.html?context=sacrifice';}
+    };
+    document.getElementById('jamarReset10').onclick=function(){
+      if(typeof resetJamarat==='function'){resetJamarat();}
+      el.style.display='none';
+    };
+  }
+  buildCompletionModal();
+
+  // 4⃣ Watch jamarState.large — trigger custom completion at 7
+  var done=false;
+  setInterval(function(){
+    if(done) return;
+    if(typeof jamarState!=='undefined' && jamarState && jamarState.large>=7){
+      done=true;
+      window.journeyActivityComplete = true;
+      if(typeof showJourneyNextButton==='function'){ try{ showJourneyNextButton(); }catch(e){} }
+      var el=document.getElementById('jamarComplete');
+      if(el) el.style.display='block';
+      // Hide other UI just in case
+      var btn=document.getElementById('jamarThrowBtn');if(btn)btn.style.display='none';
+      var glow=document.getElementById('jamarGlow');if(glow)glow.style.display='none';
+      var arrow=document.getElementById('jamarArrow');if(arrow)arrow.style.display='none';
+      var hint=document.getElementById('jamarAimHint');if(hint)hint.style.display='none';
+    }
+  },400);
+})();
+</script>
+
+<!-- ═══ 11th / 12th / 13th-Day Full 3-Pillar Override (DISABLED — dedicated 10th-day Aqabah scene) ═══ -->
+<script>
+(function(){
+  // This scene is dedicated to the 10th-day Aqabah-only flow.
+  // Other days use Jamarat rooftop / Jamarat rooftop basement.
+  return;
+  // eslint-disable-next-line
+  var SUGHRA_ID='panorama_92A5C87D_8C55_D2F6_41BD_CABD1E84B587';
+
+  // Reset jamarState once per day so each day starts fresh
+  var dayInitKey='jamarDayInit_'+ctx;
+  if(!sessionStorage.getItem(dayInitKey)){
+    sessionStorage.removeItem('jamarState');
+    sessionStorage.removeItem('jamarGuideShown');
+    if(typeof jamarState!=='undefined'){jamarState.small=0;jamarState.medium=0;jamarState.large=0;}
+    sessionStorage.setItem(dayInitKey,'1');
+  }
+
+  // Force-jump to Sughra (small) panorama on entry
+  function jumpToSughra(retries){
+    retries=retries||0;
+    try{
+      var t=TDV.PlayerAPI.getCurrentPlayer();
+      var pl=t&&t.mainPlayList;
+      if(!pl){if(retries<40)return setTimeout(function(){jumpToSughra(retries+1);},250);return;}
+      var items=pl.get('items');
+      for(var i=0;i<items.length;i++){
+        if(items[i].get('media').get('id')===SUGHRA_ID){
+          if(pl.get('selectedIndex')!==i)pl.set('selectedIndex',i);
+          return;
+        }
+      }
+    }catch(e){if(retries<40)setTimeout(function(){jumpToSughra(retries+1);},250);}
+  }
+  setTimeout(jumpToSughra,1500);
+
+  // Override completion modal per day
+  function buildCompletionModal(){
+    var el=document.getElementById('jamarComplete');
+    if(!el) return;
+    var dayLabel=ctx==='11th-day'?'11th':(ctx==='12th-day'?'12th':'13th');
+    var html='<h3>🎉 '+dayLabel+' Day Stoning Complete!</h3>'+
+      '<p>Alhamdulillah! You have completed all 21 throws across the three pillars.</p>';
+    if(ctx==='11th-day'){
+      html+='<p style="font-size:12px;color:#8B95A5;margin:0 0 18px;">Next: return to your tent at Mina to rest before the 12th day stoning.</p>'+
+        '<button id="jamarChainBtn">Return to Mina (Tents) ▸</button>'+
+        '<button id="jamarReplay" style="background:rgba(255,255,255,0.08);margin-left:8px;">↺ Restart</button>';
+    } else if(ctx==='12th-day'){
+      html+='<p style="font-size:13px;color:#ccc;margin:0 0 12px;">You may now choose:</p>'+
+        '<button id="jamarChainBtn" style="display:block;margin:8px auto;">Stay for 13th Day Stoning ▸</button>'+
+        '<button id="jamarChainBtn2" style="display:block;margin:8px auto;">Leave for Farewell Tawaf ▸</button>'+
+        '<button id="jamarReplay" style="background:rgba(255,255,255,0.08);margin-top:6px;">↺ Restart</button>';
+    } else {
+      html+='<p style="font-size:12px;color:#8B95A5;margin:0 0 18px;">Your stoning is complete. Proceed to Al-Masjid Al-Haram for Tawaf al-Wida’ (Farewell Tawaf).</p>'+
+        '<button id="jamarChainBtn">Continue to Farewell Tawaf ▸</button>'+
+        '<button id="jamarReplay" style="background:rgba(255,255,255,0.08);margin-left:8px;">↺ Restart</button>';
+    }
+    el.innerHTML=html;
+    function clearAndGo(href){return function(){sessionStorage.removeItem('jamarState');sessionStorage.removeItem(dayInitKey);window.location.href=href;};}
+    if(ctx==='11th-day'){
+      document.getElementById('jamarChainBtn').onclick=clearAndGo('../../3%20Mina/index.htm?context=tents-12th');
+    } else if(ctx==='12th-day'){
+      document.getElementById('jamarChainBtn').onclick=clearAndGo('../../3%20Mina/index.htm?context=tents-13th');
+      document.getElementById('jamarChainBtn2').onclick=clearAndGo('../../1%20Tawaf/index.htm?context=farewell');
+    } else {
+      document.getElementById('jamarChainBtn').onclick=clearAndGo('../../1%20Tawaf/index.htm?context=farewell');
+    }
+    document.getElementById('jamarReplay').onclick=function(){if(typeof resetJamarat==='function'){resetJamarat();}el.style.display='none';};
+  }
+  buildCompletionModal();
+})();
+</script>
+
+<!-- Journey Navigation -->
+<script src="../journey-manager.js?v=3" defer></script>
+<script src="../quiz-content.js?v=1" defer></script>
+<script src="../journey-nav.js?v=10" defer></script>
+<!-- ═══ Scene Navigation Overlay ═══ -->
+<script>window._sceneNavBase='../';window._sceneNavCurrent='jamarat-10th';</script>
+<script src="../../scene-nav-overlay.js?v=7" defer></script>
+
+</body>
+</html>

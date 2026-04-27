@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1199634958501931');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1199634958501931&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Barber Scene — Trim / Shave (Halq &amp; Taqsir)</title>
+<script src="/journey-content-loader.js?v=2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overflow:hidden}
+
+/* ═══ Scene Container ═══ */
+.scene-wrap{
+    position:relative;width:100%;height:100vh;
+    display:flex;align-items:center;justify-content:center;
+    background:#FFFFFF;overflow:hidden;
+}
+/* Subtle Islamic pattern bg */
+.scene-bg{
+    position:absolute;inset:0;overflow:hidden;opacity:0.03;pointer-events:none;
+}
+.scene-bg::before{
+    content:'﷽';position:absolute;font-size:180px;
+    color:#1a1a2e;white-space:nowrap;
+    animation:bgScroll 60s linear infinite;
+}
+@keyframes bgScroll{0%{transform:translateX(100%)}100%{transform:translateX(-200%)}}
+
+.scene-card{
+    position:relative;z-index:2;
+    max-width:700px;width:94%;
+    background:rgba(255,255,255,0.97);
+    border-radius:24px;padding:32px 28px 28px;text-align:center;
+    border:1.5px solid rgba(212,175,55,0.2);
+    box-shadow:0 12px 48px rgba(0,0,0,0.06),0 2px 8px rgba(212,175,55,0.08);
+    opacity:0;animation:cardIn 0.6s 0.1s ease forwards;
+}
+@keyframes cardIn{0%{opacity:0;transform:translateY(20px) scale(0.97)}100%{opacity:1;transform:none}}
+
+/* ═══ Header ═══ */
+.scene-icon{font-size:2.8rem;margin-bottom:6px;opacity:0;animation:fadeUp 0.5s 0.2s ease forwards}
+.scene-label{
+    font-size:0.7rem;text-transform:uppercase;letter-spacing:2.5px;
+    color:#B8941F;font-weight:600;margin-bottom:4px;
+    opacity:0;animation:fadeUp 0.5s 0.25s ease forwards;
+}
+.scene-title{
+    font-size:1.5rem;font-weight:700;color:#1a1a2e;margin-bottom:6px;
+    opacity:0;animation:fadeUp 0.5s 0.3s ease forwards;
+}
+.scene-divider{
+    width:60px;height:2px;margin:0 auto 16px;
+    background:linear-gradient(90deg,transparent,#D4AF37,transparent);
+    opacity:0;animation:fadeUp 0.5s 0.35s ease forwards;
+}
+@keyframes fadeUp{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:none}}
+
+/* ═══ SVG Scene ═══ */
+.barber-scene{
+    position:relative;width:100%;max-width:560px;height:220px;
+    margin:0 auto 20px;border-radius:18px;overflow:hidden;
+    border:1.5px solid rgba(212,175,55,0.2);
+    box-shadow:0 6px 24px rgba(0,0,0,0.06);
+    opacity:0;animation:fadeUp 0.6s 0.4s ease forwards;
+}
+.barber-scene svg{width:100%;height:100%;display:block}
+
+/* Hair fall particles */
+.hair-strand{opacity:0;animation:hairFall 2.5s ease-in infinite}
+@keyframes hairFall{
+    0%{opacity:0;transform:translateY(0) rotate(0deg)}
+    15%{opacity:0.7}
+    100%{opacity:0;transform:translateY(40px) rotate(180deg)}
+}
+
+/* Scissors animation */
+.scissors-hand{
+    transform-origin:72px 58px;
+    animation:cutMotion 2s 1s ease-in-out infinite;
+}
+@keyframes cutMotion{
+    0%,100%{transform:rotate(0deg)}
+    25%{transform:rotate(-8deg)}
+    50%{transform:rotate(4deg)}
+    75%{transform:rotate(-5deg)}
+}
+
+/* Blade open/close */
+.blade-top{transform-origin:88px 52px;animation:snip 0.8s 1s ease-in-out infinite}
+.blade-bot{transform-origin:88px 62px;animation:snipBot 0.8s 1s ease-in-out infinite}
+@keyframes snip{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-12deg)}}
+@keyframes snipBot{0%,100%{transform:rotate(0deg)}50%{transform:rotate(12deg)}}
+
+/* Mirror shimmer */
+.mirror-shimmer{opacity:0;animation:shimmer 4s 2s ease-in-out infinite}
+@keyframes shimmer{0%,100%{opacity:0}50%{opacity:0.35}}
+
+/* Pilgrim seated bob */
+.pilgrim-seated{animation:gentleBob 3s ease-in-out infinite}
+@keyframes gentleBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+
+/* ═══ Options ═══ */
+.options-row{
+    display:flex;gap:16px;justify-content:center;margin:0 auto 20px;
+    opacity:0;animation:fadeUp 0.5s 0.5s ease forwards;
+}
+.option-card{
+    flex:1;max-width:240px;padding:18px 14px 14px;
+    border-radius:16px;border:1.5px solid rgba(212,175,55,0.18);
+    background:linear-gradient(135deg,rgba(212,175,55,0.04),rgba(244,240,230,0.35));
+    text-align:center;transition:border-color 0.3s,box-shadow 0.3s;
+}
+.option-card:hover{
+    border-color:rgba(212,175,55,0.4);
+    box-shadow:0 4px 16px rgba(212,175,55,0.12);
+}
+.option-icon{font-size:2rem;margin-bottom:6px}
+.option-name{
+    font-family:'Amiri',serif;font-size:1.15rem;font-weight:700;
+    color:#1a1a2e;margin-bottom:2px;
+}
+.option-arabic{
+    font-family:'Amiri',serif;font-size:1.3rem;color:#B8941F;
+    margin-bottom:4px;direction:rtl;
+}
+.option-desc{font-size:0.78rem;color:#6a6a7c;line-height:1.5}
+
+/* ═══ Info note ═══ */
+.info-note{
+    display:inline-block;padding:10px 20px;border-radius:12px;
+    background:linear-gradient(135deg,rgba(212,175,55,0.06),rgba(201,162,39,0.02));
+    border:1.5px solid rgba(212,175,55,0.2);
+    font-size:0.82rem;color:#4a4a5c;line-height:1.5;
+    opacity:0;animation:fadeUp 0.5s 0.6s ease forwards;
+}
+.info-note strong{color:#B8941F;font-weight:600}
+
+/* ═══ Dua Section ═══ */
+.dua-block{
+    margin-top:16px;padding:14px 20px;border-radius:14px;
+    background:rgba(26,26,46,0.02);text-align:center;
+    opacity:0;animation:fadeUp 0.5s 0.65s ease forwards;
+}
+.dua-arabic{
+    font-family:'Amiri',serif;font-size:1.4rem;color:#1a1a2e;
+    direction:rtl;line-height:1.8;margin-bottom:6px;
+}
+.dua-translit{font-size:0.78rem;color:#6a6a7c;font-style:italic;margin-bottom:4px}
+.dua-translation{font-size:0.78rem;color:#4a4a5c;line-height:1.5}
+
+/* Responsive */
+@media(max-width:600px){
+    .scene-card{padding:20px 16px 18px}
+    .scene-title{font-size:1.25rem}
+    .barber-scene{height:170px}
+    .options-row{flex-direction:column;align-items:center}
+    .option-card{max-width:100%}
+}
+</style>
+</head>
+<body>
+<div class="scene-wrap">
+    <div class="scene-bg"></div>
+    <div class="scene-card">
+        <!-- Header -->
+        <div class="scene-icon">✂️</div>
+        <p class="scene-label">Step 8 of Hajj</p>
+        <h1 class="scene-title">Halq or Taqsir — Hair Trimming</h1>
+        <div class="scene-divider"></div>
+
+        <!-- Animated barber SVG -->
+        <div class="barber-scene">
+            <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#f5f0e6"/>
+                        <stop offset="100%" stop-color="#ede4d4"/>
+                    </linearGradient>
+                    <linearGradient id="ihramGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#FFFFFF"/>
+                        <stop offset="100%" stop-color="#F0EDE5"/>
+                    </linearGradient>
+                    <radialGradient id="lampGlow" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color="rgba(255,225,140,0.5)"/>
+                        <stop offset="100%" stop-color="rgba(255,225,140,0)"/>
+                    </radialGradient>
+                    <linearGradient id="mirrorGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#e8e4dc"/>
+                        <stop offset="40%" stop-color="#d4d0c8"/>
+                        <stop offset="100%" stop-color="#c8c4bc"/>
+                    </linearGradient>
+                </defs>
+
+                <!-- Background -->
+                <rect width="560" height="220" fill="url(#bgGrad)"/>
+
+                <!-- Floor -->
+                <rect x="0" y="168" width="560" height="52" fill="#d4c8b0"/>
+                <line x1="0" y1="168" x2="560" y2="168" stroke="#c8b898" stroke-width="1"/>
+                <!-- Floor tiles -->
+                <line x1="80" y1="168" x2="80" y2="220" stroke="#ccc0a8" stroke-width="0.5"/>
+                <line x1="160" y1="168" x2="160" y2="220" stroke="#ccc0a8" stroke-width="0.5"/>
+                <line x1="240" y1="168" x2="240" y2="220" stroke="#ccc0a8" stroke-width="0.5"/>
+                <line x1="320" y1="168" x2="320" y2="220" stroke="#ccc0a8" stroke-width="0.5"/>
+                <line x1="400" y1="168" x2="400" y2="220" stroke="#ccc0a8" stroke-width="0.5"/>
+                <line x1="480" y1="168" x2="480" y2="220" stroke="#ccc0a8" stroke-width="0.5"/>
+
+                <!-- Wall detail – arched window -->
+                <rect x="420" y="18" width="80" height="110" rx="40" fill="none" stroke="#d8d0c0" stroke-width="1.5"/>
+                <path d="M420 68 Q460 8 500 68" fill="none" stroke="#d8d0c0" stroke-width="1"/>
+                <rect x="430" y="72" width="60" height="50" fill="rgba(174,205,228,0.15)" rx="2"/>
+                <!-- Light rays from window -->
+                <line x1="458" y1="72" x2="440" y2="168" stroke="rgba(255,225,140,0.08)" stroke-width="30"/>
+
+                <!-- Lamp -->
+                <circle cx="200" cy="10" r="40" fill="url(#lampGlow)"/>
+                <rect x="196" y="0" width="8" height="14" rx="4" fill="#D4AF37"/>
+                <line x1="200" y1="14" x2="200" y2="24" stroke="#c8b070" stroke-width="1"/>
+                <circle cx="200" cy="26" r="3" fill="#ffe8a8" opacity="0.8"/>
+
+                <!-- Mirror on wall -->
+                <rect x="110" y="24" width="64" height="84" rx="32" fill="url(#mirrorGrad)" stroke="#C9A227" stroke-width="1.5"/>
+                <rect x="116" y="30" width="52" height="72" rx="26" fill="#e8e4dc"/>
+                <!-- Mirror shimmer highlight -->
+                <rect class="mirror-shimmer" x="126" y="36" width="16" height="56" rx="8" fill="rgba(255,255,255,0.6)"/>
+
+                <!-- Shelf with items -->
+                <rect x="24" y="72" width="56" height="4" rx="1" fill="#c8b890"/>
+                <rect x="30" y="56" width="12" height="16" rx="2" fill="#5a8f6a"/> <!-- bottle -->
+                <rect x="48" y="62" width="8" height="10" rx="1" fill="#b8941f"/> <!-- oil -->
+                <rect x="60" y="58" width="10" height="14" rx="2" fill="#7a8fa0"/> <!-- can -->
+
+                <!-- Chair / stool -->
+                <rect x="200" y="130" width="70" height="38" rx="6" fill="#8B7355"/>
+                <rect x="203" y="133" width="64" height="32" rx="4" fill="#A0896A"/>
+                <!-- Chair legs -->
+                <rect x="206" y="168" width="6" height="14" rx="1" fill="#7A6548"/>
+                <rect x="258" y="168" width="6" height="14" rx="1" fill="#7A6548"/>
+
+                <!-- Pilgrim (seated, in ihram) -->
+                <g class="pilgrim-seated" transform="translate(235, 70)">
+                    <!-- Body (ihram garment) -->
+                    <path d="M-18 40 Q-20 20 -12 8 Q0 -2 12 8 Q20 20 18 40 L22 62 L-22 62Z" fill="url(#ihramGrad)" stroke="#e0dcd4" stroke-width="0.8"/>
+                    <!-- Head -->
+                    <circle cx="0" cy="-2" r="14" fill="#c8a882"/>
+                    <!-- Face features -->
+                    <circle cx="-4" cy="-4" r="1.2" fill="#4a3a2a"/>
+                    <circle cx="4" cy="-4" r="1.2" fill="#4a3a2a"/>
+                    <path d="M-3 2 Q0 5 3 2" fill="none" stroke="#4a3a2a" stroke-width="0.7"/>
+                    <!-- Hair (being trimmed) -->
+                    <path d="M-12 -10 Q-14 -18 -6 -16 Q0 -20 6 -16 Q14 -18 12 -10" fill="#2a1a0a" opacity="0.5"/>
+                    <!-- Shoulders -->
+                    <path d="M-18 20 Q-28 22 -30 35 L-22 38Z" fill="url(#ihramGrad)" stroke="#e0dcd4" stroke-width="0.5"/>
+                    <path d="M18 20 Q28 22 30 35 L22 38Z" fill="url(#ihramGrad)" stroke="#e0dcd4" stroke-width="0.5"/>
+                </g>
+
+                <!-- Barber (standing behind) -->
+                <g transform="translate(290, 52)">
+                    <!-- Body -->
+                    <path d="M-14 40 Q-16 20 -10 10 Q0 2 10 10 Q16 20 14 40 L18 80 L-18 80Z" fill="#4a6a5a"/>
+                    <!-- Head -->
+                    <circle cx="0" cy="0" r="12" fill="#b89878"/>
+                    <!-- Kufi cap -->
+                    <path d="M-10 -6 Q-10 -14 0 -14 Q10 -14 10 -6" fill="#fff" stroke="#e0dcd4" stroke-width="0.5"/>
+                    <!-- Face -->
+                    <circle cx="-3" cy="-2" r="1" fill="#3a2a1a"/>
+                    <circle cx="3" cy="-2" r="1" fill="#3a2a1a"/>
+                    <path d="M-3 3 Q0 5 3 3" fill="none" stroke="#5a4a3a" stroke-width="0.6"/>
+                    <!-- Beard -->
+                    <path d="M-6 4 Q-7 10 0 12 Q7 10 6 4" fill="#3a2a1a" opacity="0.3"/>
+                    <!-- Arm holding scissors -->
+                    <g class="scissors-hand">
+                        <path d="M-14 30 Q-26 24 -34 14 Q-38 10 -36 6" fill="none" stroke="#b89878" stroke-width="5" stroke-linecap="round"/>
+                        <!-- Scissors -->
+                        <g transform="translate(-42, 2) rotate(-15)">
+                            <g class="blade-top">
+                                <path d="M0 0 L18 -6 L20 -4 L4 0Z" fill="#a0a4a8" stroke="#888" stroke-width="0.3"/>
+                            </g>
+                            <g class="blade-bot">
+                                <path d="M0 0 L18 6 L20 4 L4 0Z" fill="#a0a4a8" stroke="#888" stroke-width="0.3"/>
+                            </g>
+                            <!-- Pivot -->
+                            <circle cx="2" cy="0" r="2" fill="#D4AF37"/>
+                            <!-- Handles -->
+                            <ellipse cx="-6" cy="-4" rx="5" ry="3.5" fill="none" stroke="#888" stroke-width="1.2"/>
+                            <ellipse cx="-6" cy="4" rx="5" ry="3.5" fill="none" stroke="#888" stroke-width="1.2"/>
+                        </g>
+                    </g>
+                </g>
+
+                <!-- Falling hair strands -->
+                <g>
+                    <line class="hair-strand" x1="222" y1="58" x2="224" y2="64" stroke="#3a2a1a" stroke-width="0.8" style="animation-delay:0.5s"/>
+                    <line class="hair-strand" x1="228" y1="60" x2="230" y2="66" stroke="#3a2a1a" stroke-width="0.7" style="animation-delay:1.2s"/>
+                    <line class="hair-strand" x1="234" y1="56" x2="232" y2="62" stroke="#3a2a1a" stroke-width="0.6" style="animation-delay:0.8s"/>
+                    <line class="hair-strand" x1="240" y1="59" x2="238" y2="65" stroke="#3a2a1a" stroke-width="0.7" style="animation-delay:1.8s"/>
+                    <line class="hair-strand" x1="218" y1="62" x2="220" y2="68" stroke="#3a2a1a" stroke-width="0.5" style="animation-delay:2.1s"/>
+                    <line class="hair-strand" x1="246" y1="57" x2="244" y2="63" stroke="#3a2a1a" stroke-width="0.6" style="animation-delay:1.5s"/>
+                </g>
+
+                <!-- Gold decorative border -->
+                <rect x="0" y="0" width="560" height="220" rx="0" fill="none" stroke="rgba(212,175,55,0.15)" stroke-width="2"/>
+            </svg>
+        </div>
+
+        <!-- Two options: Halq vs Taqsir -->
+        <div class="options-row">
+            <div class="option-card">
+                <div class="option-icon">💈</div>
+                <div class="option-name">Halq</div>
+                <div class="option-arabic">حَلْق</div>
+                <p class="option-desc">Complete head shaving — considered the more virtuous option. The Prophet ﷺ made dua thrice for those who shave.</p>
+            </div>
+            <div class="option-card">
+                <div class="option-icon">✂️</div>
+                <div class="option-name">Taqsir</div>
+                <div class="option-arabic">تَقْصِير</div>
+                <p class="option-desc">Trimming at least a fingertip's length of hair from all over the head. Required option for women.</p>
+            </div>
+        </div>
+
+        <!-- Important note -->
+        <p class="info-note">
+            <strong>After trimming you exit the state of Ihram</strong> — all restrictions of Ihram are now lifted.
+        </p>
+
+        <!-- Dua -->
+        <div class="dua-block">
+            <p class="dua-arabic">اللَّهُمَّ اغْفِرْ لِلْمُحَلِّقِينَ وَالْمُقَصِّرِينَ</p>
+            <p class="dua-translit">"Allahumma-ghfir lil-muhalliqeena wal-muqasssireen"</p>
+            <p class="dua-translation">"O Allah, forgive those who shave their heads and those who trim their hair."</p>
+        </div>
+    </div>
+</div>
+
+<!-- Journey Navigation -->
+<script src="../../journey-manager.js?v=3" defer></script>
+<script src="../../quiz-content.js?v=1" defer></script>
+<script src="../../journey-nav.js?v=10" defer></script>
+<script>
+// Show next button for this step
+document.addEventListener('DOMContentLoaded', function(){
+  window.journeyActivityComplete=true;
+  if(typeof showJourneyNextButton==='function'){
+    showJourneyNextButton();
+  }
+});
+</script>
+
+<!-- ═══ Continue button (context-aware) ═══ -->
+<style>
+#barberContinue{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:10005;
+  background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;border:none;
+  border-radius:999px;padding:14px 30px;font-size:15px;font-weight:700;letter-spacing:0.3px;
+  font-family:'Poppins','DM Sans',Arial,sans-serif;cursor:pointer;
+  box-shadow:0 6px 24px rgba(201,168,76,0.55);transition:transform .15s,box-shadow .15s;
+  display:inline-flex;align-items:center;gap:8px;}
+#barberContinue:hover{transform:translateX(-50%) scale(1.05);box-shadow:0 8px 30px rgba(201,168,76,0.7);}
+#barberContinue .bcIcon{font-size:18px;}
+@media(max-width:480px){#barberContinue{font-size:13px;padding:12px 22px;bottom:90px;}}
+</style>
+<button id="barberContinue"><span class="bcIcon">🕋</span> <span id="barberContinueLabel">Continue ▸</span></button>
+<script>
+(function(){
+  var ctx = new URL(window.location).searchParams.get('context') || 'barber';
+  var btn = document.getElementById('barberContinue');
+  var lbl = document.getElementById('barberContinueLabel');
+  if (ctx === 'umrah-trim') {
+    // Step 5 → Step 6: Rest & Pray
+    lbl.textContent = 'Continue: Rest & Pray ▸';
+    btn.querySelector('.bcIcon').textContent = '🌙';
+    btn.onclick = function(){ window.location.href = '../../0%20Ihram/rest-scene.html'; };
+  } else {
+    // Step 13 (post-Hajj halaq) → Step 14: Tawaf al-Ifadah
+    lbl.textContent = 'Continue to Tawaf al-Ifadah ▸';
+    btn.querySelector('.bcIcon').textContent = '🕋';
+    btn.onclick = function(){ window.location.href = '../1%20Tawaf/index.htm?context=ifadha'; };
+  }
+})();
+</script>
+
+<!-- Meta Pixel Event: Barber VR Scene -->
+<script>
+fbq('track', 'ViewContent', {
+  content_name: 'Barber Scene - Halq and Taqsir',
+  content_category: 'VR Hajj Scene',
+  content_type: 'vr_interactive_scene'
+});
+</script>
+<script src="../../../meta-capi.js" defer></script>
+<!-- ═══ Scene Navigation Overlay ═══ -->
+<script>window._sceneNavBase='../';window._sceneNavCurrent='barber';</script>
+<script src="../../scene-nav-overlay.js?v=7" defer></script>
+<script>
+(function(){
+  var ctx=new URL(window.location).searchParams.get('context')||'';
+  function _pbVO(f){var url=(window.PPContent&&window.PPContent.audioUrl(f))||('/Hajj%20Voice%20Over/'+encodeURIComponent(f));var a=new Audio(url);a.play().catch(function(){});}
+  var sk = ctx==='umrah-trim'?'barber-umrah':(ctx==='barber'?'barber-hajj':null);
+  var bid = ctx==='umrah-trim'?'bu-load':(ctx==='barber'?'bh-load':null);
+  var ov=(sk&&bid&&window.PPContent&&window.PPContent.byId(sk,bid))||{};
+  if(ctx==='umrah-trim'){setTimeout(function(){_pbVO(ov.audio||'English Halaq.mp3');},800);}
+  else if(ctx==='barber'){setTimeout(function(){_pbVO(ov.audio||'English Day 10-3.mp3');},800);}
+})();
+</script>
+</body>
+</html>

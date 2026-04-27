@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ihram — The Sacred State</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overflow:hidden}
+
+.scene-wrap{position:relative;width:100%;height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#fbf6ec 0%,#f5ecd9 100%);overflow:auto;padding:24px 12px 110px;}
+.scene-bg{position:absolute;inset:0;overflow:hidden;opacity:0.04;pointer-events:none;}
+.scene-bg::before{content:'﷽';position:absolute;font-size:180px;color:#1a1a2e;white-space:nowrap;animation:bgScroll 60s linear infinite;}
+@keyframes bgScroll{0%{transform:translateX(100%)}100%{transform:translateX(-200%)}}
+
+.scene-card{position:relative;z-index:2;max-width:780px;width:96%;background:rgba(255,255,255,0.97);border-radius:24px;padding:32px 28px 28px;text-align:center;border:1.5px solid rgba(212,175,55,0.25);box-shadow:0 12px 48px rgba(0,0,0,0.06),0 2px 8px rgba(212,175,55,0.08);opacity:0;animation:cardIn 0.6s 0.1s ease forwards;}
+@keyframes cardIn{0%{opacity:0;transform:translateY(20px) scale(0.97)}100%{opacity:1;transform:none}}
+
+.scene-icon{font-size:3rem;margin-bottom:6px;opacity:0;animation:fadeUp 0.5s 0.2s ease forwards}
+.scene-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:2.5px;color:#B8941F;font-weight:600;margin-bottom:4px;opacity:0;animation:fadeUp 0.5s 0.25s ease forwards;}
+.scene-title{font-size:1.6rem;font-weight:700;color:#1a1a2e;margin-bottom:6px;opacity:0;animation:fadeUp 0.5s 0.3s ease forwards;}
+.scene-divider{width:60px;height:2px;margin:0 auto 16px;background:linear-gradient(90deg,transparent,#D4AF37,transparent);opacity:0;animation:fadeUp 0.5s 0.35s ease forwards;}
+@keyframes fadeUp{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:none}}
+
+.voice-over{background:linear-gradient(180deg,rgba(212,175,55,0.07),rgba(212,175,55,0.02));border:1px solid rgba(212,175,55,0.2);border-radius:14px;padding:18px 20px;margin:0 auto 18px;text-align:left;color:#3D2B1F;font-size:0.95rem;line-height:1.6;max-width:620px;opacity:0;animation:fadeUp 0.5s 0.45s ease forwards;}
+.voice-over strong{color:#8B6914;}
+.voice-over .vo-label{display:block;font-size:0.7rem;text-transform:uppercase;letter-spacing:2px;color:#B8941F;font-weight:600;margin-bottom:6px;}
+
+.checklist{text-align:left;max-width:620px;margin:0 auto 18px;background:rgba(248,243,230,0.6);border-radius:12px;padding:16px 20px;opacity:0;animation:fadeUp 0.5s 0.55s ease forwards;}
+.checklist h4{color:#8B6914;font-size:0.9rem;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;}
+.checklist ul{list-style:none;}
+.checklist li{padding:6px 0;font-size:0.92rem;color:#3D2B1F;display:flex;align-items:flex-start;gap:10px;}
+.checklist li::before{content:'✦';color:#C9A227;font-size:0.9rem;flex-shrink:0;margin-top:2px;}
+
+.dua-block{background:#FAF5EB;border-radius:14px;padding:18px 22px;margin:0 auto 20px;max-width:620px;border:1px dashed rgba(201,162,39,0.35);opacity:0;animation:fadeUp 0.5s 0.65s ease forwards;}
+.dua-arabic{font-family:'Amiri',serif;font-size:1.55rem;color:#1a1a2e;line-height:1.8;margin-bottom:10px;direction:rtl;}
+.dua-translit{font-style:italic;color:#8B6914;font-size:0.95rem;margin-bottom:6px;}
+.dua-translation{color:#5a5a5a;font-size:0.85rem;}
+
+.continue-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 32px;max-width:280px;width:100%;margin:0 auto;border-radius:50px;border:none;background:linear-gradient(135deg,#D4AF37,#C9A227,#B8941F);color:#fff;font-family:'Poppins',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;box-shadow:0 6px 24px rgba(201,162,39,0.45);transition:transform .15s,box-shadow .15s;opacity:0;animation:fadeUp 0.5s 0.75s ease forwards;}
+.continue-btn:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 8px 32px rgba(201,162,39,0.6);}
+
+@media(max-width:520px){
+  .scene-card{padding:24px 18px 22px;}
+  .scene-title{font-size:1.3rem;}
+  .voice-over{font-size:0.88rem;padding:14px 16px;}
+  .dua-arabic{font-size:1.3rem;}
+  .checklist li{font-size:0.85rem;}
+  .continue-btn{padding:12px 28px;font-size:0.92rem;}
+}
+</style>
+</head>
+<body>
+<div class="scene-wrap">
+  <div class="scene-bg"></div>
+  <div class="scene-card">
+    <div class="scene-icon" id="sceneIcon">🕊️</div>
+    <div class="scene-label" id="sceneLabel">Step 1 of 18</div>
+    <h1 class="scene-title" id="sceneTitle">Preparation & Intention</h1>
+    <div class="scene-divider"></div>
+
+    <div class="voice-over" id="voiceOver"></div>
+
+    <div class="checklist" id="checklist" style="display:none;">
+      <h4 id="checklistTitle">Before Entering Ihram</h4>
+      <ul id="checklistItems"></ul>
+    </div>
+
+    <div class="dua-block" id="duaBlock" style="display:none;">
+      <p class="dua-arabic" id="duaArabic"></p>
+      <p class="dua-translit" id="duaTranslit"></p>
+      <p class="dua-translation" id="duaTranslation"></p>
+    </div>
+
+    <button class="continue-btn" id="continueBtn">Continue ▸</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var ctx = new URL(window.location).searchParams.get('context') || 'prep';
+
+  var SCENES = {
+    'prep': {
+      icon: '🕊️',
+      label: 'Step 1 of 18 — Preparation',
+      title: 'Preparation & Intention',
+      voiceOver: '<span class="vo-label">Voice-over</span>Before you can enter the sacred state of <strong>Ihram</strong>, take time to prepare your body, mind, and heart. This is the threshold to your pilgrimage — a moment of purification and resolve. Make ablution, perform ghusl (ritual bath), trim your nails and hair, and dress in clean, modest clothing.',
+      checklist: {
+        title: 'Preparation Checklist',
+        items: [
+          'Perform <strong>Ghusl</strong> (full body purification)',
+          'Trim nails, mustache, and any unnecessary hair',
+          'Apply unscented oil if desired (perfume is allowed before Ihram only)',
+          'For men: don the two pieces of white, unstitched cloth (Izar & Rida)',
+          'For women: wear modest, clean clothing covering all but face & hands',
+          'Pray two rak\'ahs of Sunnah at the Miqat (recommended)',
+          'Set your intention quietly in your heart'
+        ]
+      },
+      btn: 'Enter Ihram ▸',
+      next: 'ihram-scene.html?context=enter'
+    },
+    'enter': {
+      icon: '🤲',
+      label: 'Step 2 of 18 — Niyyah & Talbiyah',
+      title: 'Enter the State of Ihram',
+      voiceOver: '<span class="vo-label">Voice-over</span>You now stand at the <strong>Miqat</strong>, the sacred boundary. Make your <strong>Niyyah</strong> (intention) silently in your heart for Umrah, then begin reciting the <strong>Talbiyah</strong> aloud. From this moment forward you are in the state of Ihram — a state of devotion in which the world falls away and only Allah remains.',
+      checklist: {
+        title: 'Restrictions of Ihram',
+        items: [
+          'No cutting of hair or nails',
+          'No use of perfume or scented products',
+          'No hunting or harming of any animal',
+          'No marital relations or proposal of marriage',
+          'No arguing, swearing, or sinful speech',
+          'For men: no stitched garments, no covering of head',
+          'For women: no covering of face or hands with niqab/gloves'
+        ]
+      },
+      dua: {
+        arabic: 'لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لَا شَرِيكَ لَكَ',
+        translit: 'Labbayka-llāhumma labbayk, labbayka lā sharīka laka labbayk, inna-l-ḥamda wa-n-niʿmata laka wa-l-mulk, lā sharīka lak',
+        translation: '"Here I am, O Allah, here I am. Here I am, You have no partner, here I am. Truly all praise, blessings, and dominion belong to You. You have no partner."'
+      },
+      btn: 'Begin Tawaf ▸',
+      next: '../1%20Tawaf/index.htm?context=initial'
+    },
+    're-enter': {
+      icon: '🤲',
+      label: 'Step 5 of 16 — Re-enter Ihram for Hajj',
+      title: 'Re-enter the State of Ihram',
+      voiceOver: '<span class="vo-label">Voice-over</span>Alhamdulillah — your Umrah is complete. Now, on the <strong>8th of Dhul-Hijjah</strong>, you re-enter Ihram for <strong>Hajj itself</strong>. Ahead lie Arafah, Muzdalifah, the stoning, the sacrifice, Tawaf al-Ifadha, and the Farewell Tawaf. <strong>You are about to complete Hajj.</strong>',
+      checklist: {
+        title: 'Re-entering Ihram for Hajj',
+        items: [
+          'Perform Ghusl again if possible',
+          'Don the Ihram clothing',
+          'Make the intention (Niyyah) for <strong>Hajj</strong> this time',
+          'Begin reciting the Talbiyah aloud',
+          'All the same restrictions of Ihram now apply again',
+          'Set out for Mina before Dhuhr (noon)'
+        ]
+      },
+      dua: {
+        arabic: 'لَبَّيْكَ اللَّهُمَّ حَجًّا',
+        translit: 'Labbayka-llāhumma ḥajjā',
+        translation: '"Here I am, O Allah, for Hajj."'
+      },
+      btn: 'Arrive at Mina ▸',
+      next: '../3%20Mina/index.htm?context=8th-day'
+    }
+  };
+
+  var s = SCENES[ctx] || SCENES['prep'];
+
+  document.getElementById('sceneIcon').textContent = s.icon;
+  document.getElementById('sceneLabel').textContent = s.label;
+  document.getElementById('sceneTitle').textContent = s.title;
+  document.getElementById('voiceOver').innerHTML = s.voiceOver;
+
+  if (s.checklist) {
+    document.getElementById('checklist').style.display = 'block';
+    document.getElementById('checklistTitle').textContent = s.checklist.title;
+    var ul = document.getElementById('checklistItems');
+    s.checklist.items.forEach(function(item){
+      var li = document.createElement('li');
+      li.innerHTML = item;
+      ul.appendChild(li);
+    });
+  }
+
+  if (s.dua) {
+    document.getElementById('duaBlock').style.display = 'block';
+    document.getElementById('duaArabic').textContent = s.dua.arabic;
+    document.getElementById('duaTranslit').textContent = s.dua.translit;
+    document.getElementById('duaTranslation').textContent = s.dua.translation;
+  }
+
+  var btn = document.getElementById('continueBtn');
+  btn.textContent = s.btn;
+  btn.onclick = function(){
+    // Use journey-manager when in journey mode, otherwise follow hardcoded next URL
+    var inJourney = new URL(window.location.href).searchParams.has('journey');
+    if(inJourney && typeof window.jm !== 'undefined') {
+      window.jm.goToNext();
+    } else {
+      window.location.href = s.next;
+    }
+  };
+})();
+</script>
+
+<!-- Journey Navigation -->
+<script src="../../journey-manager.js?v=3" defer></script>
+<script src="../../quiz-content.js?v=1" defer></script>
+<script src="../../journey-nav.js?v=10" defer></script>
+
+<!-- Scene Navigation Overlay -->
+<script>window._sceneNavBase='../';window._sceneNavCurrent='ihram';</script>
+<script src="../../scene-nav-overlay.js?v=7" defer></script>
+</body>
+</html>

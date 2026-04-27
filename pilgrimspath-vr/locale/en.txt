@@ -1,0 +1,21 @@
+#: locale=en
+
+## Media
+
+### Audio
+audiores_76887E08_7F58_F963_41C4_62CA1FA327C0.mp3Url = media/audio_744C9484_7F58_2968_41D0_A756D310C079_en.mp3
+
+### Audio Subtitles
+
+### Title
+panorama_743170D8_7F48_6AB8_41C0_AAC239AE8EF7.label = 3VID_20260214_185906_00_313_2026-03-09_14-17-23_screenshot
+album_700679A8_71D8_3C35_41D0_C26DCC2E94B9.label = Photo Album VID_20260217_140155_00_507_2026-03-26_15-12-08_screenshot
+panorama_725CAFF3_71D8_1414_41C8_EBAEFE1538B9.label = Starting area
+album_700679A8_71D8_3C35_41D0_C26DCC2E94B9_0.label = VID_20260217_140155_00_507_2026-03-26_15-12-08_screenshot
+
+## Tour
+
+### Description
+
+### Title
+tour.name = Untitled 1

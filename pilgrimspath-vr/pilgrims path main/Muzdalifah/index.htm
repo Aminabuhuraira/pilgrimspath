@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>muzdalifa</title>
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1199634958501931');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1199634958501931&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, width=device-width, viewport-fit=cover" data-tdv-general-scale="0.5"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <script src="lib/tdvplayer.js?v=1776285383413"></script>
+    <link rel="preload" href="locale/en.txt?v=1776285383413" as="fetch" crossorigin="anonymous"/>
+	<link rel="preload" href="script.js?v=1776285383413" as="script"/>
+	<link rel="preload" href="media/panorama_818474DF_8B44_BA01_41D9_8F1D94AB5DAE_0/r/2/0_0.webp?v=1776285383413" as="image"/>
+	<link rel="preload" href="media/panorama_818474DF_8B44_BA01_41D9_8F1D94AB5DAE_0/l/2/0_0.webp?v=1776285383413" as="image"/>
+	<link rel="preload" href="media/panorama_818474DF_8B44_BA01_41D9_8F1D94AB5DAE_0/u/2/0_0.webp?v=1776285383413" as="image"/>
+	<link rel="preload" href="media/panorama_818474DF_8B44_BA01_41D9_8F1D94AB5DAE_0/d/2/0_0.webp?v=1776285383413" as="image"/>
+	<link rel="preload" href="media/panorama_818474DF_8B44_BA01_41D9_8F1D94AB5DAE_0/f/2/0_0.webp?v=1776285383413" as="image"/>
+	<link rel="preload" href="media/panorama_818474DF_8B44_BA01_41D9_8F1D94AB5DAE_0/b/2/0_0.webp?v=1776285383413" as="image"/>
+	<meta name="description" content="Virtual Tour"/>
+	<meta name="theme-color" content="#FFFFFF"/>
+    <script src="script.js?v=1776285383413"></script>
+    <style type="text/css">
+        html, body { height:100%; width:100%; height:100vh; width:100vw; margin:0; padding:0; overflow:hidden; }
+        .fill-viewport { position:fixed; top:0; left:0; right:0; bottom:0; padding:0; margin:0; overflow: hidden; }
+        .fill-viewport.landscape-left { left: env(safe-area-inset-left); }
+		.fill-viewport.landscape-right { right: env(safe-area-inset-right); }
+        #viewer { z-index:1; }
+        #preloadContainer { z-index:2; opacity:0; background-color:rgba(255,255,255,1); transition: opacity 0.5s; -webkit-transition: opacity 0.5s; -moz-transition: opacity 0.5s; -o-transition: opacity 0.5s;}
+    </style>
+    
+</head>
+<body>
+    <div id="preloadContainer" class="fill-viewport"><div style="z-index: 4; position: absolute; overflow: hidden; left: 0%; top: 50%; width: 100.00%; height: 10.00%" ><div style="text-align:left; color:#000; "><DIV STYLE="text-align:center;font-size:1.6666666666666663vmin;"><SPAN STYLE="display:inline-block; letter-spacing:0vmin; white-space:pre-wrap;color:#777777;font-size:1.67vmin;font-family:Arial, Helvetica, sans-serif;">Loading virtual tour. Please wait...</SPAN></DIV></div></div></div>
+    <div id="viewer" class="fill-viewport"></div>
+<!-- Meta Pixel VR Event -->
+<script>
+if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Muzdalifah VR Scene",content_category:"VR Hajj Tour",content_type:"vr_360_scene"});}
+</script>
+<script src="../../../meta-capi.js" defer></script>
+
+<!-- ====== MUZDALIFAH PEBBLE COLLECTION SYSTEM ====== -->
+<style>
+/* Pebble Collection HUD */
+#pebbleHUD{
+  display:none; position:fixed; top:16px; right:16px; z-index:9999;
+  background:rgba(10,15,30,0.88); border:1px solid rgba(201,168,76,0.4);
+  border-radius:14px; padding:14px 20px; font-family:'DM Sans',Arial,sans-serif;
+  color:#fff; min-width:170px; backdrop-filter:blur(8px);
+}
+#pebbleHUD h4{margin:0 0 8px;font-size:13px;color:#C9A84C;letter-spacing:1px;text-transform:uppercase;}
+.hud-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;font-size:14px;}
+.hud-row .label{color:#ccc;}
+.hud-row .val{font-weight:700;color:#C9A84C;font-size:16px;}
+.hud-row .val.full{color:#22c55e;}
+.hud-sub{font-size:11px;color:#8B95A5;margin-top:6px;text-align:center;}
+
+/* Pebble spots on screen */
+.pebble-spot{
+  position:fixed; z-index:9998; cursor:pointer;
+  width:48px; height:48px; pointer-events:auto;
+  transition:transform .2s, opacity .4s;
+}
+.pebble-spot img{
+  width:100%; height:100%; object-fit:contain;
+  filter:drop-shadow(0 0 8px rgba(201,168,76,0.6));
+  animation:pebbleBreathe 2.4s ease-in-out infinite;
+}
+.pebble-spot:hover{ transform:scale(1.2); }
+.pebble-spot:active{ transform:scale(0.85); }
+.pebble-spot.collected{
+  pointer-events:none;
+  opacity:0; transform:scale(0) translateY(-60px);
+  transition:transform .5s cubic-bezier(.4,0,.2,1), opacity .5s;
+}
+
+@keyframes pebbleBreathe{
+  0%,100%{ filter:drop-shadow(0 0 6px rgba(201,168,76,0.4)) brightness(1); transform:scale(1); }
+  50%{ filter:drop-shadow(0 0 16px rgba(201,168,76,0.8)) brightness(1.15); transform:scale(1.08); }
+}
+
+/* Collect flash */
+.pebble-flash{
+  position:fixed; z-index:9997; pointer-events:none;
+  width:60px; height:60px; border-radius:50%;
+  background:radial-gradient(circle, rgba(201,168,76,0.5) 0%, transparent 70%);
+  animation:pebbleFlash .5s ease-out forwards;
+}
+@keyframes pebbleFlash{
+  0%{ opacity:1; transform:scale(0.5); }
+  100%{ opacity:0; transform:scale(2.5); }
+}
+
+/* Collect counter popup (+1) */
+.pebble-plus{
+  position:fixed; z-index:10000; pointer-events:none;
+  font-family:'DM Sans',Arial,sans-serif; font-size:18px; font-weight:700;
+  color:#C9A84C; text-shadow:0 2px 8px rgba(201,168,76,0.6);
+  animation:pebblePlus .8s ease-out forwards;
+}
+@keyframes pebblePlus{
+  0%{ opacity:1; transform:translateY(0); }
+  100%{ opacity:0; transform:translateY(-50px); }
+}
+
+/* Ground pile indicator */
+#pebblePile{
+  display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+  z-index:9998; text-align:center; pointer-events:none;
+}
+#pebblePile img{
+  width:80px; height:auto; opacity:0.7;
+  filter:drop-shadow(0 0 12px rgba(201,168,76,0.5));
+  animation:pileBreathe 3s ease-in-out infinite;
+}
+#pebblePile .hint{
+  font-family:'DM Sans',Arial,sans-serif; font-size:12px;
+  color:#C9A84C; margin-top:4px; text-shadow:0 1px 4px rgba(0,0,0,0.8);
+}
+@keyframes pileBreathe{
+  0%,100%{ filter:drop-shadow(0 0 8px rgba(201,168,76,0.3)) brightness(0.9); transform:scale(1); }
+  50%{ filter:drop-shadow(0 0 20px rgba(201,168,76,0.7)) brightness(1.1); transform:scale(1.04); }
+}
+
+/* Activity Guide — frame banner */
+#muzGuide{
+  display:none; position:fixed; left:50%; top:50%; transform:translate(-50%,-50%);
+  z-index:10003;
+  width:min(96vw,900px); min-height:clamp(200px,44vh,420px);
+  background:url('../../media/banner-frame.png') no-repeat center/100% 100%;
+  font-family:'DM Sans',Arial,sans-serif;
+}
+.muzGuideBody{
+  box-sizing:border-box; width:100%; height:100%;
+  padding:clamp(30px,4vw,56px) clamp(80px,11vw,130px);
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  overflow-y:auto; overflow-x:hidden; text-align:center;
+}
+#muzGuide h3{ color:#8B6914; font-size:clamp(16px,2vw,26px); margin:0 0 4px; font-weight:700; }
+#muzGuide .subtitle{ color:#6B5B4F; font-size:clamp(10px,1.1vw,15px); margin:0 0 10px; font-style:italic; }
+#muzGuide .steps{ text-align:left; margin:0 0 10px; padding:0; list-style:none; width:min(100%,480px); }
+#muzGuide .steps li{ padding:4px 0; font-size:clamp(10px,1.1vw,15px); color:#3D2B1F; display:flex; gap:8px; align-items:flex-start; }
+#muzGuide .steps li .num{ color:#8B6914; font-weight:700; min-width:20px; }
+#muzGuide .dua{ font-size:clamp(14px,1.5vw,20px); color:#8B6914; margin:6px 0 4px; direction:rtl; line-height:1.6; }
+#muzGuide .pebble-img{ width:56px; margin:0 auto 10px; display:block; opacity:0.85; }
+#muzGuide button{
+  background:linear-gradient(135deg,#C9A84C,#8B6914); color:#fff;
+  border:none; border-radius:10px; padding:10px 32px; font-size:clamp(12px,1.2vw,16px);
+  font-weight:600; cursor:pointer; transition:transform .15s; margin-top:4px;
+}
+#muzGuide button:hover{ transform:scale(1.03); }
+
+/* Completion */
+#pebbleComplete{
+  display:none; position:fixed; left:50%; top:50%; transform:translate(-50%,-50%);
+  z-index:10001;
+  width:min(96vw,700px); min-height:clamp(180px,36vh,340px);
+  background:url('../../media/banner-frame.png') no-repeat center/100% 100%;
+  font-family:'DM Sans',Arial,sans-serif; text-align:center;
+}
+#pebbleComplete .pcBody{
+  box-sizing:border-box; width:100%; height:100%;
+  padding:clamp(30px,4vw,56px) clamp(80px,11vw,130px);
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+}
+#pebbleComplete h3{color:#8B6914;font-size:clamp(16px,2vw,24px);margin:0 0 8px;}
+#pebbleComplete p{color:#3D2B1F;font-size:clamp(11px,1.2vw,15px);margin:0 0 14px;}
+#pebbleComplete button{
+  background:linear-gradient(135deg,#C9A84C,#8B6914); color:#fff;
+  border:none; border-radius:8px; padding:10px 28px; font-size:clamp(12px,1.2vw,15px);
+  font-weight:600; cursor:pointer;
+}
+</style>
+
+<!-- Pebble HUD -->
+<div id="pebbleHUD">
+  <h4>🪨 Pebble Collection</h4>
+  <div class="hud-row">
+    <span class="label">Collected</span>
+    <span class="val" id="hudPebbles">0 / 49</span>
+  </div>
+  <div class="hud-sub">Explore Muzdalifah to find pebbles</div>
+</div>
+
+<!-- Ground pile indicator -->
+<div id="pebblePile">
+  <img src="pebbles_for_jamarat-removebg-preview.png" alt="pebbles">
+  <div class="hint">Tap the glowing pebbles to collect</div>
+</div>
+
+<!-- Pebble spots container (dynamically populated) -->
+<div id="pebbleSpots"></div>
+
+<!-- Activity Guide -->
+<div id="muzGuide">
+  <div class="muzGuideBody">
+    <h3>🌙 Night at Muzdalifah</h3>
+    <p class="subtitle">Collecting pebbles for Rami al-Jamarat</p>
+    <img class="pebble-img" src="pebbles_for_jamarat-removebg-preview.png" alt="pebbles">
+    <ul class="steps">
+      <li><span class="num">1.</span> After Maghrib &amp; Isha, rest under the open sky at Muzdalifah</li>
+      <li><span class="num">2.</span> Collect 49 small pebbles (chickpea-sized) from the ground</li>
+      <li><span class="num">3.</span> These pebbles will be used for stoning the Jamarat over 3 days</li>
+      <li><span class="num">4.</span> Explore the panoramas and tap the glowing pebbles to pick them up</li>
+    </ul>
+    <div class="dua">اللَّهُمَّ اجْعَلْهُ حَجًّا مَبْرُورًا وَذَنْبًا مَغْفُورًا</div>
+    <p style="color:#6B5B4F;font-size:clamp(10px,1vw,13px);margin:0 0 10px;font-style:italic;">"O Allah, make it an accepted Hajj and a forgiven sin"</p>
+    <button onclick="dismissMuzGuide()">Begin Collecting ▸</button>
+  </div>
+</div>
+
+<!-- Completion -->
+<div id="pebbleComplete">
+  <div class="pcBody">
+    <h3>🕋 MashaAllah!</h3>
+    <p>You have collected all 49 pebbles!<br>You are ready for Rami al-Jamarat.</p>
+    <button onclick="resetPebbles()">Collect Again</button>
+  </div>
+</div>
+<script>
+// ====== MUZDALIFAH PEBBLE COLLECTION SYSTEM ======
+
+// Pebble distribution across panoramas (49 total, ~5 per panorama)
+// Each entry: { x: %, y: %, size: px }
+// Positions are in the lower portion of the screen (ground level)
+const PEBBLE_MAP = {
+  'panorama_818474DF_8B44_BA01_41D9_8F1D94AB5DAE': [
+    {x:15, y:78, s:42}, {x:38, y:82, s:36}, {x:62, y:75, s:44},
+    {x:80, y:80, s:38}, {x:50, y:88, s:34}
+  ],
+  'panorama_871E8FB1_8B44_4601_4196_4F4B28434C5D': [
+    {x:12, y:80, s:40}, {x:30, y:76, s:44}, {x:55, y:84, s:36},
+    {x:72, y:78, s:42}, {x:88, y:82, s:38}
+  ],
+  'panorama_8184E14B_8B44_BA01_41DD_609207BB3DF0': [
+    {x:20, y:82, s:38}, {x:42, y:76, s:44}, {x:65, y:80, s:40},
+    {x:82, y:86, s:34}, {x:35, y:88, s:36}
+  ],
+  'panorama_818412B2_8B44_FE03_41D3_A97F25DF4CCB': [
+    {x:10, y:76, s:44}, {x:28, y:84, s:36}, {x:52, y:78, s:42},
+    {x:70, y:82, s:38}, {x:90, y:80, s:40}
+  ],
+  'panorama_81840E5A_8B44_C603_41CB_DD32C22DD4A9': [
+    {x:18, y:80, s:40}, {x:40, y:86, s:34}, {x:58, y:76, s:44},
+    {x:78, y:84, s:38}, {x:48, y:92, s:36}
+  ],
+  'panorama_81841664_8B44_4606_41CC_401DE865B161': [
+    {x:14, y:82, s:38}, {x:34, y:78, s:42}, {x:56, y:84, s:36},
+    {x:75, y:76, s:44}, {x:88, y:88, s:34}
+  ],
+  'panorama_81843C87_8B44_CA02_41C8_C5C950642155': [
+    {x:22, y:76, s:44}, {x:45, y:82, s:38}, {x:68, y:78, s:42},
+    {x:85, y:84, s:36}, {x:30, y:90, s:34}
+  ],
+  'panorama_818479F6_8B44_CA03_41CC_7C01EAD97DA5': [
+    {x:16, y:84, s:36}, {x:38, y:78, s:42}, {x:60, y:82, s:38},
+    {x:80, y:76, s:44}, {x:50, y:90, s:34}
+  ],
+  'panorama_8181AB7D_8B44_4E01_41D9_F0C622DD8FEE': [
+    {x:12, y:78, s:42}, {x:32, y:84, s:36}, {x:54, y:76, s:44},
+    {x:74, y:82, s:38}
+  ],
+  'panorama_8184E797_8B44_C601_41D9_A488ED02B92B': [
+    {x:20, y:80, s:40}, {x:44, y:76, s:44}, {x:66, y:84, s:36},
+    {x:86, y:78, s:42}, {x:52, y:90, s:34}
+  ]
+};
+
+// State
+let pebbleState = JSON.parse(sessionStorage.getItem('muzPebbles') || '{}');
+// pebbleState: { "panoramaId_index": true, ... }
+let totalCollected = Object.keys(pebbleState).length;
+let currentPanoId = '';
+let guideShown = sessionStorage.getItem('muzGuideShown') === 'true';
+
+// UI refs
+const pebbleHUD = document.getElementById('pebbleHUD');
+const hudPebbles = document.getElementById('hudPebbles');
+const pebblePile = document.getElementById('pebblePile');
+const spotsContainer = document.getElementById('pebbleSpots');
+const completeEl = document.getElementById('pebbleComplete');
+
+// Pebble SVG (small stone shape)
+function pebbleSVG(size) {
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 48 48"><ellipse cx="24" cy="26" rx="20" ry="16" fill="#8B8E96" stroke="#6A6D75" stroke-width="2"/><ellipse cx="24" cy="24" rx="18" ry="14" fill="#A0A4AD"/><ellipse cx="20" cy="20" rx="8" ry="5" fill="rgba(255,255,255,0.25)" transform="rotate(-15 20 20)"/><ellipse cx="30" cy="28" rx="5" ry="3" fill="rgba(0,0,0,0.1)"/></svg>';
+}
+
+// Save state
+function saveState() {
+  sessionStorage.setItem('muzPebbles', JSON.stringify(pebbleState));
+}
+
+// Update HUD
+function updateHUD() {
+  totalCollected = Object.keys(pebbleState).length;
+  hudPebbles.textContent = totalCollected + ' / 49';
+  hudPebbles.className = 'val' + (totalCollected >= 49 ? ' full' : '');
+}
+
+// Collect a pebble
+function collectPebble(key, el) {
+  if (pebbleState[key]) return;
+  pebbleState[key] = true;
+  saveState();
+  updateHUD();
+
+  // Collect animation
+  const rect = el.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+
+  // Flash effect
+  const flash = document.createElement('div');
+  flash.className = 'pebble-flash';
+  flash.style.left = (cx - 30) + 'px';
+  flash.style.top = (cy - 30) + 'px';
+  document.body.appendChild(flash);
+  setTimeout(function() { flash.remove(); }, 500);
+
+  // +1 popup
+  const plus = document.createElement('div');
+  plus.className = 'pebble-plus';
+  plus.textContent = '+1 🪨';
+  plus.style.left = cx + 'px';
+  plus.style.top = (cy - 20) + 'px';
+  document.body.appendChild(plus);
+  setTimeout(function() { plus.remove(); }, 900);
+
+  // Check completion
+  if (totalCollected >= 49) {
+    pebblePile.style.display = 'none';
+    completeEl.style.display = 'block';
+    renderPebbles(currentPanoId);
+    return;
+  }
+  renderPebbles(currentPanoId);
+}
+
+function renderPebbles(panoId) {
+  spotsContainer.innerHTML = '';
+  const spots = PEBBLE_MAP[panoId];
+  if (!spots) return;
+
+  spots.forEach(function(spot, i) {
+    const key = panoId + '_' + i;
+    if (pebbleState[key]) return; // already collected
+
+    const el = document.createElement('div');
+    el.className = 'pebble-spot';
+    el.style.left = spot.x + '%';
+    el.style.top = spot.y + '%';
+    el.style.width = spot.s + 'px';
+    el.style.height = spot.s + 'px';
+    // Randomize animation delay for natural look
+    el.style.animationDelay = (i * 0.4) + 's';
+    el.innerHTML = pebbleSVG(spot.s);
+    el.onclick = function() { collectPebble(key, el); };
+    spotsContainer.appendChild(el);
+  });
+}
+
+// Panorama change handler
+function checkPanorama(panoId) {
+  currentPanoId = panoId;
+  pebbleHUD.style.display = 'block';
+  pebblePile.style.display = 'block';
+
+  // Show guide on first visit
+  if (!guideShown) {
+    document.getElementById('muzGuide').style.display = 'block';
+    return;
+  }
+
+  renderPebbles(panoId);
+
+  if (totalCollected >= 49) {
+    pebblePile.style.display = 'none';
+  }
+}
+
+// Dismiss guide
+function dismissMuzGuide() {
+  document.getElementById('muzGuide').style.display = 'none';
+  guideShown = true;
+  sessionStorage.setItem('muzGuideShown', 'true');
+  renderPebbles(currentPanoId);
+}
+
+// Reset
+function resetPebbles() {
+  pebbleState = {};
+  saveState();
+  updateHUD();
+  completeEl.style.display = 'none';
+  pebblePile.style.display = 'block';
+  renderPebbles(currentPanoId);
+}
+
+// ── PANORAMA CHANGE DETECTION ──
+// NOTE: We deliberately do NOT use PerformanceObserver / Image intercept here
+// because adjacent panorama tile preloads would race and clear pebbles for the
+// pano the user is actually viewing. TDV playlist hooks below are authoritative.
+let lastPanoId = '';
+
+// Re-render guard: if the spots container is empty but the current pano has
+// uncollected pebbles, re-render. Handles late DOM init / TDV-hook timing.
+setInterval(function(){
+  if(!currentPanoId || !PEBBLE_MAP[currentPanoId]) return;
+  if(spotsContainer.children.length>0) return;
+  var spots=PEBBLE_MAP[currentPanoId];
+  var anyLeft=spots.some(function(_,i){return !pebbleState[currentPanoId+'_'+i];});
+  if(anyLeft) renderPebbles(currentPanoId);
+}, 1500);
+
+// TDV playlist hooks
+function hookTDV() {
+  if (typeof TDV === 'undefined' || !TDV.Tour || !TDV.Tour.Script) {
+    return setTimeout(hookTDV, 500);
+  }
+  var origSetPLI = TDV.Tour.Script.setPlayListSelectedIndex;
+  if (origSetPLI) {
+    TDV.Tour.Script.setPlayListSelectedIndex = function(a, b) {
+      try {
+        var id = a.get('items')[b].get('media').get('id');
+        if (id !== lastPanoId) { lastPanoId = id; checkPanorama(id); }
+      } catch(e) {}
+      return origSetPLI.apply(this, arguments);
+    };
+  }
+  var origSetMMI = TDV.Tour.Script.setMainMediaByIndex;
+  if (origSetMMI) {
+    TDV.Tour.Script.setMainMediaByIndex = function(a) {
+      try {
+        var items = this.mainPlayList.get('items');
+        if (a >= 0 && a < items.length) {
+          var id = items[a].get('media').get('id');
+          if (id !== lastPanoId) { lastPanoId = id; checkPanorama(id); }
+        }
+      } catch(e) {}
+      return origSetMMI.apply(this, arguments);
+    };
+  }
+  console.log('[Muzdalifah] TDV hooks installed');
+}
+hookTDV();
+
+// Init
+updateHUD();
+</script>
+
+<!-- Journey Navigation -->
+<script src="../../journey-manager.js?v=3" defer></script>
+<script src="../../quiz-content.js?v=1" defer></script>
+<script src="../../journey-nav.js?v=10" defer></script>
+
+<script>
+// Signal to journey nav that last panorama is reached
+// For Muzdalifah, mark complete when scene is loaded
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', function(){
+    window.journeyIsLastPanorama=true;
+    if(typeof showJourneyNextButton==='function'){
+      setTimeout(showJourneyNextButton, 1000);
+    }
+  });
+} else {
+  window.journeyIsLastPanorama=true;
+  if(typeof showJourneyNextButton==='function'){
+    setTimeout(showJourneyNextButton, 1000);
+  }
+}
+</script>
+<!-- ═══ Scene Navigation Overlay ═══ -->
+<script>window._sceneNavBase='../';window._sceneNavCurrent='muzdalifah';</script>
+<script src="../../scene-nav-overlay.js?v=7" defer></script>
+
+</body>
+</html>

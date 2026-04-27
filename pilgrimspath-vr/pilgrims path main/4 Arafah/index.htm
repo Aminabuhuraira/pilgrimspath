@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Arafah</title>
+    <script src="/journey-content-loader.js?v=3"></script>
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1199634958501931');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1199634958501931&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, width=device-width, viewport-fit=cover" data-tdv-general-scale="0.5"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <script src="lib/tdvplayer.js?v=1776286472903"></script>
+    <link rel="preload" href="locale/en.txt?v=1776286472903" as="fetch" crossorigin="anonymous"/>
+	<link rel="preload" href="script.js?v=1776286472903" as="script"/>
+	<link rel="preload" href="media/panorama_84B0CD28_8BC4_4A0E_4196_9526145973A3_0/r/2/0_0.webp?v=1776286472903" as="image"/>
+	<link rel="preload" href="media/panorama_84B0CD28_8BC4_4A0E_4196_9526145973A3_0/l/2/0_0.webp?v=1776286472903" as="image"/>
+	<link rel="preload" href="media/panorama_84B0CD28_8BC4_4A0E_4196_9526145973A3_0/u/2/0_0.webp?v=1776286472903" as="image"/>
+	<link rel="preload" href="media/panorama_84B0CD28_8BC4_4A0E_4196_9526145973A3_0/d/2/0_0.webp?v=1776286472903" as="image"/>
+	<link rel="preload" href="media/panorama_84B0CD28_8BC4_4A0E_4196_9526145973A3_0/f/2/0_0.webp?v=1776286472903" as="image"/>
+	<link rel="preload" href="media/panorama_84B0CD28_8BC4_4A0E_4196_9526145973A3_0/b/2/0_0.webp?v=1776286472903" as="image"/>
+	<meta name="description" content="Virtual Tour"/>
+	<meta name="theme-color" content="#FFFFFF"/>
+    <script src="script.js?v=1776286472903"></script>
+    <style type="text/css">
+        html, body { height:100%; width:100%; height:100vh; width:100vw; margin:0; padding:0; overflow:hidden; }
+        .fill-viewport { position:fixed; top:0; left:0; right:0; bottom:0; padding:0; margin:0; overflow: hidden; }
+        .fill-viewport.landscape-left { left: env(safe-area-inset-left); }
+		.fill-viewport.landscape-right { right: env(safe-area-inset-right); }
+        #viewer { z-index:1; }
+        #preloadContainer { z-index:2; opacity:0; background-color:rgba(255,255,255,1); transition: opacity 0.5s; -webkit-transition: opacity 0.5s; -moz-transition: opacity 0.5s; -o-transition: opacity 0.5s;}
+    </style>
+    
+</head>
+<body>
+    <div id="preloadContainer" class="fill-viewport"><div style="z-index: 4; position: absolute; overflow: hidden; left: 0%; top: 50%; width: 100.00%; height: 10.00%" ><div style="text-align:left; color:#000; "><DIV STYLE="text-align:center;font-size:1.6666666666666663vmin;"><SPAN STYLE="display:inline-block; letter-spacing:0vmin; white-space:pre-wrap;color:#777777;font-size:1.67vmin;font-family:Arial, Helvetica, sans-serif;">Loading virtual tour. Please wait...</SPAN></DIV></div></div></div>
+    <div id="viewer" class="fill-viewport"></div>
+
+<!-- ═══ Scene Guide Banners ═══ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+#sceneBanner{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10003;
+width:min(96vw,900px);min-height:clamp(200px,44vh,420px);background:url('../../media/banner-frame.png') no-repeat center/100% 100%;
+font-family:'DM Sans',Arial,sans-serif;color:#2C1810;text-align:center;}
+#sceneBanner .sceneBannerBody{box-sizing:border-box;width:100%;height:100%;
+padding:clamp(46px,5.6vw,70px) clamp(86px,12vw,140px) clamp(32px,5vw,44px);
+display:flex;flex-direction:column;justify-content:center;align-items:center;overflow-y:auto;overflow-x:hidden;
+scrollbar-width:thin;scrollbar-color:rgba(201,168,76,0.3) transparent;}
+#sceneBanner .sceneBannerBody > *{width:min(100%,560px);}
+#sceneBanner .sceneBannerBody > button{width:auto;max-width:none;display:inline-flex;align-self:center;}
+#sceneBanner .sceneBannerBody::-webkit-scrollbar{width:5px;}
+#sceneBanner .sceneBannerBody::-webkit-scrollbar-thumb{background:rgba(201,168,76,0.4);border-radius:4px;}
+#sceneBanner h3{color:#8B6914;font-size:clamp(18px,2.2vw,34px);margin:0 0 14px;font-weight:700;line-height:1.2;padding-top:6px;}
+#sceneBanner .bb{color:#3D2B1F;font-size:clamp(11px,1.15vw,18px);line-height:1.45;margin:0 0 8px;overflow-wrap:anywhere;word-break:normal;}
+#sceneBanner .ba{color:#8B6914;font-size:clamp(13px,1.45vw,21px);font-style:italic;margin:6px 0 4px;line-height:1.42;overflow-wrap:anywhere;word-break:break-word;}
+#sceneBanner .bt{color:#6B5B4F;font-size:clamp(10px,1vw,16px);font-style:italic;margin:0 0 8px;line-height:1.4;overflow-wrap:anywhere;word-break:normal;}
+#sceneBanner .sep{width:72px;height:2px;background:linear-gradient(90deg,transparent,#C9A84C,transparent);margin:10px auto;}
+#sceneBanner button{background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;border:none;
+border-radius:7px;padding:8px 19px;font-size:clamp(12px,1.05vw,15px);font-weight:600;cursor:pointer;margin-top:6px;
+transition:transform .15s;box-shadow:0 4px 12px rgba(201,168,76,0.32);align-self:center;line-height:1.2;}
+#sceneBanner button:active{transform:scale(0.96);}
+@media(max-width:520px){
+#sceneBanner{width:96vw;}
+#sceneBanner .sceneBannerBody{padding:36px 50px 22px;}
+#sceneBanner .sceneBannerBody > *{width:100%;}
+#sceneBanner .sceneBannerBody > button{width:auto;}
+#sceneBanner h3{font-size:16px;margin-bottom:8px;}
+#sceneBanner .bb{font-size:11.5px;line-height:1.35;}
+#sceneBanner .ba{font-size:12px;line-height:1.35;}
+#sceneBanner .bt{font-size:10.5px;line-height:1.33;}
+#sceneBanner button{padding:9px 18px;font-size:13px;margin-top:6px;}
+}
+</style>
+<div id="sceneBanner"></div>
+<script>
+var _bannerPager={title:'',pages:[],index:0};
+function _splitBannerHtml(html){var segs=html.match(/<h3[\s\S]*?<\/h3>|<p[\s\S]*?<\/p>|<div class="sep"><\/div>|<br\s*\/?\s*>/gi)||[html];var pages=[];var cur=[];var chars=0;for(var i=0;i<segs.length;i++){var s=segs[i];var txt=s.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();var len=txt.length;if(cur.length&&(chars+len>620||cur.length>=6)){pages.push(cur.join(''));cur=[];chars=0;}cur.push(s);chars+=len;}if(cur.length)pages.push(cur.join(''));return pages.length?pages:[html];}
+function _renderBannerPage(){var el=document.getElementById('sceneBanner');if(!el)return;var isLast=_bannerPager.index>=_bannerPager.pages.length-1;var btn=isLast?'Continue ▸':'Next ▸';el.innerHTML='<div class="sceneBannerBody"><h3>'+_bannerPager.title+'</h3>'+_bannerPager.pages[_bannerPager.index]+'<button onclick="dismissBanner()">'+btn+'</button></div>';el.style.display='block';}
+function openBanner(title,html){_bannerPager.title=title;_bannerPager.pages=_splitBannerHtml(html);_bannerPager.index=0;_renderBannerPage();}
+function dismissBanner(){if(_bannerPager.pages.length&&_bannerPager.index<_bannerPager.pages.length-1){_bannerPager.index++;_renderBannerPage();return;}_bannerPager={title:'',pages:[],index:0};document.getElementById('sceneBanner').style.display='none';}
+function playVO(f){
+    if(!f) return;
+    if(window._voAudio){ try{ window._voAudio.pause(); }catch(e){} window._voAudio=null; }
+    window._voPending = f;
+    var url = (window.PPContent && window.PPContent.audioUrl)
+        ? window.PPContent.audioUrl(f)
+        : ('/Hajj%20Voice%20Over/' + encodeURIComponent(f));
+    var a = new Audio(url);
+    window._voAudio = a;
+    a.addEventListener('ended', function(){ if(window._voPending===f) window._voPending=null; });
+    a.addEventListener('error', function(){ console.warn('[VO] failed to load', f); });
+    var p = a.play();
+    if(p && p.catch){
+        p.catch(function(err){
+            console.warn('[VO] autoplay blocked, will play on first user interaction', err && err.name);
+            _showVoHint();
+            if(window._voUnlockBound) return;
+            window._voUnlockBound = true;
+            var unlock = function(){
+                document.removeEventListener('click', unlock, true);
+                document.removeEventListener('touchend', unlock, true);
+                document.removeEventListener('keydown', unlock, true);
+                document.removeEventListener('pointerdown', unlock, true);
+                window._voUnlockBound = false;
+                _hideVoHint();
+                var pending = window._voPending;
+                if(pending) playVO(pending);
+            };
+            document.addEventListener('click', unlock, true);
+            document.addEventListener('touchend', unlock, true);
+            document.addEventListener('keydown', unlock, true);
+            document.addEventListener('pointerdown', unlock, true);
+        });
+    }
+}
+function _showVoHint(){
+    if(document.getElementById('voHint')) return;
+    var h = document.createElement('div');
+    h.id = 'voHint';
+    h.textContent = '\uD83D\uDD0A Tap anywhere to start narration';
+    h.style.cssText = 'position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:99999;'
+      + 'background:linear-gradient(135deg,#D4AF37,#C9A227);color:#fff;padding:9px 18px;border-radius:999px;'
+      + 'font-family:Poppins,sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:.3px;'
+      + 'box-shadow:0 6px 20px rgba(201,162,39,0.5);cursor:pointer;'
+      + 'animation:voHintPulse 1.6s ease-in-out infinite;pointer-events:none;';
+    if(!document.getElementById('voHintStyles')){
+        var st = document.createElement('style'); st.id='voHintStyles';
+        st.textContent = '@keyframes voHintPulse{0%,100%{box-shadow:0 6px 20px rgba(201,162,39,0.45)}50%{box-shadow:0 6px 28px rgba(201,162,39,0.85)}}';
+        document.head.appendChild(st);
+    }
+    document.body.appendChild(h);
+}
+function _hideVoHint(){ var h = document.getElementById('voHint'); if(h) h.remove(); }
+(function(){
+var _arafahSeq=[
+  {title:'🤲 9th Day of Dhul-Hijjah — Day of Arafah',
+   html:'<p class="bb">On this day, the 9th day — the Day of Arafah — we have now arrived on the plains of Arafat. Walk your way to the summit as this is a pivotal moment, where your supplications are answered.</p>',
+   audio:'English Arafah 1.mp3'},
+  {title:'🌙 Travelling to Muzdalifah',
+   html:'<p class="bb">You will now be taken to Muzdalifah. Here, pray Maghrib and Isha together, shortened and combined, with one Adhan and two Iqamahs. At Muzdalifah go collect at least 49 or 70 pebbles for the stoning ritual for the next day.</p>',
+   audio:'English Arafah 2.mp3'},
+  {title:'🎉 Congratulations',
+   html:'<p class="bb">Congratulations — you may now proceed to any resting area under the open sky.</p>',
+   audio:'English Arafah 3.mp3'}
+];
+if(window.PPContent && window.PPContent.hasData){
+  var _ovSeq = window.PPContent.bySequence('arafah-9th');
+  if(_ovSeq && _ovSeq.length){
+    _arafahSeq = _ovSeq.map(function(s,i){return {title:s.title||_arafahSeq[i]&&_arafahSeq[i].title||'',html:s.html||_arafahSeq[i]&&_arafahSeq[i].html||'',audio:s.audio||_arafahSeq[i]&&_arafahSeq[i].audio||''};});
+  }
+}
+var _arafahIdx=0;
+function _showArafahBanner(idx){
+  if(idx>=_arafahSeq.length){
+    window.journeyIsLastPanorama=true;
+    if(typeof showJourneyNextButton==='function'){setTimeout(showJourneyNextButton,300);}
+    return;
+  }
+  var s=_arafahSeq[idx];
+  openBanner(s.title,s.html);
+  playVO(s.audio);
+  setTimeout(function(){
+    var el=document.getElementById('sceneBanner');if(!el)return;
+    var btn=el.querySelector('button');if(!btn)return;
+    if(idx<_arafahSeq.length-1){
+      btn.textContent='Next \u25b8';
+      btn.onclick=function(){
+        _bannerPager.index=_bannerPager.pages.length;dismissBanner();
+        _arafahIdx++;_showArafahBanner(_arafahIdx);
+      };
+    } else {
+      btn.onclick=function(){
+        dismissBanner();
+        window.journeyIsLastPanorama=true;
+        if(typeof showJourneyNextButton==='function'){setTimeout(showJourneyNextButton,300);}
+      };
+    }
+  },50);
+}
+var shown={},lastId='';
+var RE=/(panorama_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+)_0\//i;
+function det(u){if(typeof u!=='string')return;var m=u.match(RE);if(m&&m[1]!==lastId){lastId=m[1];chk(m[1]);}}
+function chk(id){
+  if(id.indexOf('84B0CD28')!==-1&&!shown[id]){shown[id]=true;_arafahIdx=0;_showArafahBanner(0);}
+}
+try{var po=new PerformanceObserver(function(l){l.getEntries().forEach(function(e){det(e.name);});});po.observe({type:'resource',buffered:false});}catch(e){}
+var OI=window.Image;window.Image=function(w,h){var img=new OI(w,h);var os=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src').set;Object.defineProperty(img,'src',{set:function(v){det(v);os.call(this,v);},get:function(){return Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src').get.call(this);}});return img;};window.Image.prototype=OI.prototype;
+function hookTDV(){if(typeof TDV==='undefined'||!TDV.Tour||!TDV.Tour.Script)return setTimeout(hookTDV,500);var o1=TDV.Tour.Script.setPlayListSelectedIndex;if(o1){TDV.Tour.Script.setPlayListSelectedIndex=function(a,b){try{var id=a.get('items')[b].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}catch(e){}return o1.apply(this,arguments);};}var o2=TDV.Tour.Script.setMainMediaByIndex;if(o2){TDV.Tour.Script.setMainMediaByIndex=function(a){try{var items=this.mainPlayList.get('items');if(a>=0&&a<items.length){var id=items[a].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}}catch(e){}return o2.apply(this,arguments);};}console.log('[Arafah] banner hooks installed');}
+hookTDV();setTimeout(function(){chk('panorama_84B0CD28_8BC4_4A0E_4196_9526145973A3');},2500);
+})();
+</script>
+
+<!-- Journey Navigation -->
+<script src="../../journey-manager.js?v=3" defer></script>
+<script src="../../quiz-content.js?v=1" defer></script>
+<script src="../../journey-nav.js?v=10" defer></script>
+
+<!-- Meta Pixel VR Event -->
+<script>
+if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Arafah VR Scene",content_category:"VR Hajj Tour",content_type:"vr_360_scene"});}
+</script>
+<script src="../../../meta-capi.js" defer></script>
+<!-- ═══ Scene Navigation Overlay ═══ -->
+<script>window._sceneNavBase='../';window._sceneNavCurrent='arafah';</script>
+<script src="../../scene-nav-overlay.js?v=7" defer></script>
+</body>
+</html>

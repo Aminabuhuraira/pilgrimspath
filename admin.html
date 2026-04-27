@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex, nofollow">
     <meta name="theme-color" content="#0A0F1E">
     <title>Admin Dashboard | Pilgrim's Path</title>
-    <link rel="stylesheet" href="admin-dashboard.css">
+    <link rel="stylesheet" href="admin-dashboard.css?v=2">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
@@ -50,9 +50,13 @@
         </div>
     </div>
     <div class="topbar-right">
-        <div class="demo-toggle" id="demoToggle" onclick="toggleDemoMode()">
+        <div class="demo-toggle" id="demoToggle" style="display:none" onclick="toggleDemoMode()">
             <span>Demo</span>
             <div class="demo-switch"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:0.78rem;color:var(--text-muted)">
+            <span style="width:8px;height:8px;border-radius:50%;background:#10B981;box-shadow:0 0 8px #10B981"></span>
+            <span>Live data</span>
         </div>
         <button class="topbar-btn" title="Notifications" onclick="switchModule('notifications')">
             <i class="fas fa-bell"></i><span class="badge"></span>
@@ -96,6 +100,10 @@
         <span class="sidebar-label">Content & CRM</span>
         <button class="sidebar-link" data-module="content" onclick="switchModule('content')">
             <i class="fas fa-photo-video"></i> Content Performance
+        </button>
+        <button class="sidebar-link" data-module="journey-content" onclick="switchModule('journey-content')">
+            <i class="fas fa-route"></i> Journey Content
+            <span class="link-badge" style="background:var(--gold);color:var(--bg-primary)">VR</span>
         </button>
         <button class="sidebar-link" data-module="crm" onclick="switchModule('crm')">
             <i class="fas fa-handshake"></i> Agency CRM
@@ -801,6 +809,17 @@ Example: Write 5 Instagram captions for promoting our VR Hajj experience during 
 </section>
 
 <!-- ============================================ -->
+<!-- MODULE: JOURNEY CONTENT (Banners, Audio, i18n) -->
+<!-- ============================================ -->
+<section class="module-section" id="mod-journey-content">
+    <div class="section-header">
+        <h1>Journey Content Manager</h1>
+        <p>Edit banner text, audio voiceovers, and translations across the entire 16-step VR Hajj journey</p>
+    </div>
+    <div id="journeyContentMount"><div style="padding:40px;text-align:center;color:var(--text-muted)">Loading…</div></div>
+</section>
+
+<!-- ============================================ -->
 <!-- MODULE 10: SETTINGS                          -->
 <!-- ============================================ -->
 <section class="module-section" id="mod-settings">
@@ -935,6 +954,7 @@ function showDashboard(){
     }
 })();
 </script>
-<script src="admin-dashboard.js?v=3"></script>
+<script src="admin-dashboard.js?v=4"></script>
+<script src="admin-journey-content.js?v=8"></script>
 </body>
 </html>

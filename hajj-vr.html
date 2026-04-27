@@ -936,6 +936,12 @@
                 <div class="talbiyah-meaning">"Here I am, O Allah, here I am. Here I am, You have no partner, here I am. Verily all praise, grace, and sovereignty belong to You. You have no partner."</div>
             </div>
 
+            <!-- Optional quiz opt-in -->
+            <label class="anim anim-d4" id="quizOptInWrap" style="display:flex;align-items:center;gap:10px;justify-content:center;margin:14px auto 4px;padding:10px 16px;max-width:520px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.32);border-radius:12px;cursor:pointer;font-family:'DM Sans',Arial,sans-serif;color:#3D2B1F;font-size:14px;">
+                <input type="checkbox" id="quizOptIn" style="width:18px;height:18px;accent-color:#8B6914;cursor:pointer;" />
+                <span><strong>Quiz me after each scene</strong> &mdash; short, optional reflection questions to reinforce what you've learned.</span>
+            </label>
+
             <div class="btn-row anim anim-d5">
                 <button class="btn btn-ghost" onclick="goToScreen('screenWelcome')">
                     <i class="fas fa-arrow-left"></i>
@@ -1003,11 +1009,25 @@
             const loader = document.getElementById('loadingOverlay');
             loader.classList.add('active');
 
+            // Persist quiz opt-in choice for the journey
+            try{
+                var optIn = !!document.getElementById('quizOptIn') && document.getElementById('quizOptIn').checked;
+                localStorage.setItem('pp_quiz_enabled', optIn ? '1' : '0');
+            }catch(e){}
+
             // Navigate directly to the VR tour page for best compatibility
             setTimeout(() => {
                 window.location.href = 'pilgrimspath%20vr/index.htm';
             }, 1500);
         }
+
+        // Restore previous opt-in selection on load
+        try{
+            window.addEventListener('DOMContentLoaded', function(){
+                var cb = document.getElementById('quizOptIn');
+                if(cb && localStorage.getItem('pp_quiz_enabled')==='1') cb.checked = true;
+            });
+        }catch(e){}
 
         // ── Exit VR (unused — VR page handles its own navigation) ──
         function exitVR() {

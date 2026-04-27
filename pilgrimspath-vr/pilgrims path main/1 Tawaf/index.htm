@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>tawaf area</title>
+    <script src="/journey-content-loader.js?v=3"></script>
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1199634958501931');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1199634958501931&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, width=device-width, viewport-fit=cover" data-tdv-general-scale="0.5"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <script src="lib/tdvplayer.js?v=1776284580066"></script>
+    <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+    <link rel="preload" href="locale/en.txt?v=1776284580066" as="fetch" crossorigin="anonymous"/>
+	<link rel="preload" href="script.js?v=1776284580066" as="script"/>
+	<link rel="preload" href="media/panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5_0/r/2/0_0.webp?v=1776284580066" as="image"/>
+	<link rel="preload" href="media/panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5_0/l/2/0_0.webp?v=1776284580066" as="image"/>
+	<link rel="preload" href="media/panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5_0/u/2/0_0.webp?v=1776284580066" as="image"/>
+	<link rel="preload" href="media/panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5_0/d/2/0_0.webp?v=1776284580066" as="image"/>
+	<link rel="preload" href="media/panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5_0/f/2/0_0.webp?v=1776284580066" as="image"/>
+	<link rel="preload" href="media/panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5_0/b/2/0_0.webp?v=1776284580066" as="image"/>
+	<meta name="description" content="Virtual Tour"/>
+	<meta name="theme-color" content="#FFFFFF"/>
+    <script src="script.js?v=1776284580066"></script>
+    <script src="../../journey-manager.js?v=3" defer></script>
+    <script src="../../quiz-content.js?v=1" defer></script>
+<script src="../../journey-nav.js?v=10" defer></script>
+    <style type="text/css">
+        html, body { height:100%; width:100%; height:100vh; width:100vw; margin:0; padding:0; overflow:hidden; }
+        .fill-viewport { position:fixed; top:0; left:0; right:0; bottom:0; padding:0; margin:0; overflow: hidden; }
+        .fill-viewport.landscape-left { left: env(safe-area-inset-left); }
+		.fill-viewport.landscape-right { right: env(safe-area-inset-right); }
+        #viewer { z-index:1; }
+        #preloadContainer { z-index:2; opacity:0; background-color:rgba(255,255,255,1); transition: opacity 0.5s; -webkit-transition: opacity 0.5s; -moz-transition: opacity 0.5s; -o-transition: opacity 0.5s;}
+
+        /* ═══ Fonts ═══ */
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        /* ═══ Ihram Guide Overlay ═══ */
+        #ihramGuide {
+            position: fixed; inset: 0; z-index: 100000;
+            display: flex; align-items: center; justify-content: center;
+            background: #FFFFFF;
+            font-family: 'Poppins', Arial, sans-serif;
+            overflow: hidden;
+            transition: opacity 0.8s ease;
+        }
+        #ihramGuide.hidden {
+            opacity: 0; pointer-events: none;
+        }
+
+        /* Animated background pattern */
+        .ihram-bg-pattern {
+            position: absolute; inset: 0; overflow: hidden; opacity: 0.04;
+        }
+        .ihram-bg-pattern::before {
+            content: '﷽';
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Amiri', serif; font-size: 40vw;
+            color: #D4AF37; white-space: nowrap;
+            animation: bgPulse 8s ease-in-out infinite;
+        }
+        @keyframes bgPulse {
+            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.04); }
+        }
+
+        /* Floating particles */
+        .ihram-particle {
+            position: absolute; border-radius: 50%;
+            background: #D4AF37; pointer-events: none;
+            animation: ihramFloat linear infinite;
+        }
+        @keyframes ihramFloat {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+
+        /* Main card */
+        .ihram-card {
+            position: relative; z-index: 2;
+            max-width: 1200px; width: 96%;
+            max-height: 96vh; max-height: 96dvh;
+            background: #FFFFFF;
+            border: 2px solid rgba(212,175,55,0.35);
+            border-radius: 28px;
+            padding: 0;
+            box-shadow: 0 20px 60px rgba(201,162,39,0.08), 0 0 0 1px rgba(212,175,55,0.1);
+            overflow: hidden;
+            display: flex; flex-direction: column;
+            transition: max-width 0.4s ease;
+        }
+        /* Narrower card for steps 0 and 1 */
+        .ihram-card.narrow {
+            max-width: 560px;
+        }
+
+        /* Gold top accent bar */
+        .ihram-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #D4AF37, #F0D060, #D4AF37, transparent);
+        }
+        /* Voice-over now plays automatically; no visible control needed. */
+
+        /* Card inner */
+        .ihram-inner {
+            padding: 36px 32px 28px;
+            text-align: center;
+            overflow-y: auto; overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            flex: 1; min-height: 0;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(212,175,55,0.3) transparent;
+        }
+        .ihram-inner::-webkit-scrollbar { width: 4px; }
+        .ihram-inner::-webkit-scrollbar-track { background: transparent; }
+        .ihram-inner::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.3); border-radius: 4px; }
+
+        /* Section divider within merged step */
+        .ihram-section-divider {
+            display: flex; align-items: center; gap: 12px;
+            margin: 24px auto 20px; max-width: 300px;
+            opacity: 0; animation: ihramFadeUp 0.4s 0.3s ease forwards;
+        }
+        .ihram-section-divider span {
+            flex: 1; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212,175,55,0.25), transparent);
+        }
+        .ihram-section-divider i {
+            color: #D4AF37; font-size: 0.55rem; font-style: normal;
+        }
+
+        /* Dua block for welcome */
+        .ihram-dua {
+            font-family: 'Poppins', sans-serif; font-size: 0.88rem;
+            color: #6a6a7c; font-style: italic; line-height: 1.6;
+            margin: 14px 0 6px;
+            opacity: 0; animation: ihramFadeUp 0.5s 0.4s ease forwards;
+        }
+
+        /* Back button */
+        .ihram-btn-back {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 10px 20px; border-radius: 50px;
+            border: 1px solid rgba(212,175,55,0.3);
+            background: transparent; color: #C9A227;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.8rem; font-weight: 500;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .ihram-btn-back:hover { border-color: #D4AF37; background: rgba(212,175,55,0.05); }
+
+        /* Three-column layout for Step 2 */
+        .ihram-three-col {
+            display: flex; gap: 24px; align-items: stretch;
+            text-align: left; margin-top: 8px;
+        }
+        .ihram-col-video {
+            flex: 0 0 220px; display: flex; flex-direction: column; align-items: center;
+            opacity: 0; animation: ihramFadeUp 0.5s 0.2s ease forwards;
+        }
+        .ihram-col-video .ihram-video-wrap { max-width: 100%; margin: 0; }
+        .ihram-col-restrictions {
+            flex: 0 0 310px;
+            padding: 14px 18px 12px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(212,175,55,0.05), rgba(244,240,230,0.4));
+            border: 1.5px solid rgba(212,175,55,0.18);
+            opacity: 0; animation: ihramFadeUp 0.5s 0.25s ease forwards;
+        }
+        .ihram-col-niyyah {
+            flex: 1; min-width: 0;
+            opacity: 0; animation: ihramFadeUp 0.5s 0.3s ease forwards;
+        }
+        .ihram-niyyah-title {
+            font-family: 'Poppins', sans-serif; font-size: 1.05rem;
+            font-weight: 700; color: #1a1a2e; margin: 0 0 6px;
+        }
+        .ihram-col-niyyah .miqat-scene { margin: 6px 0; max-width: 100%; height: 120px; }
+        .ihram-col-niyyah .miqat-callout { text-align: left; margin: 6px 0; padding: 8px 14px; }
+        .ihram-col-niyyah .miqat-callout strong { font-size: 0.84rem; }
+        .ihram-col-niyyah .miqat-callout span { font-size: 0.72rem; }
+        .ihram-col-niyyah .ihram-body { text-align: left; margin-bottom: 4px; font-size: 0.86rem; }
+        .ihram-col-niyyah .ihram-arabic { font-size: 1.15rem; margin: 5px 0 3px; }
+        .ihram-col-niyyah .ihram-translit { font-size: 0.76rem; }
+        .ihram-col-niyyah .ihram-translation { font-size: 0.76rem; }
+
+        /* Step indicator dots */
+        .ihram-dots {
+            display: flex; justify-content: center; gap: 8px;
+            margin-bottom: 24px;
+        }
+        .ihram-dot {
+            width: 10px; height: 10px; border-radius: 50%;
+            background: rgba(212,175,55,0.18);
+            transition: all 0.5s ease;
+        }
+        .ihram-dot.active {
+            background: #D4AF37;
+            box-shadow: 0 0 12px rgba(212,175,55,0.5);
+            transform: scale(1.2);
+        }
+        .ihram-dot.done {
+            background: rgba(212,175,55,0.4);
+        }
+
+        /* Step icon */
+        .ihram-icon {
+            font-size: 3rem; margin-bottom: 12px;
+            animation: iconPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        @keyframes iconPop {
+            0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        /* Step label */
+        .ihram-label {
+            font-size: 0.7rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 3px;
+            color: #D4AF37; margin-bottom: 6px;
+            opacity: 0; animation: ihramFadeUp 0.5s 0.1s ease forwards;
+        }
+
+        /* Step heading */
+        .ihram-heading {
+            font-size: 1.4rem; font-weight: 700;
+            color: #1a1a2e; margin: 0 0 14px;
+            line-height: 1.3;
+            opacity: 0; animation: ihramFadeUp 0.5s 0.15s ease forwards;
+        }
+
+        /* Divider */
+        .ihram-divider {
+            display: flex; align-items: center; gap: 10px;
+            margin: 14px auto; max-width: 140px;
+            opacity: 0; animation: ihramFadeUp 0.4s 0.2s ease forwards;
+        }
+        .ihram-divider span {
+            flex: 1; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212,175,55,0.4), transparent);
+        }
+        .ihram-divider i { color: #D4AF37; font-size: 0.6rem; }
+
+        /* Body text */
+        .ihram-body {
+            font-size: 0.88rem; color: #4a4a5c;
+            line-height: 1.7; margin-bottom: 10px;
+            opacity: 0; animation: ihramFadeUp 0.5s 0.25s ease forwards;
+        }
+
+        /* Arabic text */
+        .ihram-arabic {
+            font-family: 'Amiri', serif;
+            font-size: 1.5rem; color: #B8941F;
+            direction: rtl; font-weight: 700;
+            line-height: 1.8; margin: 12px 0 6px;
+            opacity: 0; animation: ihramFadeUp 0.5s 0.3s ease forwards;
+        }
+
+        /* Transliteration */
+        .ihram-translit {
+            font-size: 0.78rem; color: #C9A227;
+            font-style: italic; margin-bottom: 4px;
+            opacity: 0; animation: ihramFadeUp 0.4s 0.35s ease forwards;
+        }
+
+        /* Translation */
+        .ihram-translation {
+            font-size: 0.78rem; color: #6a6a7c;
+            font-style: italic; line-height: 1.5;
+            opacity: 0; animation: ihramFadeUp 0.4s 0.38s ease forwards;
+        }
+
+        /* Bullet list */
+        .ihram-list {
+            text-align: left; margin: 12px auto; max-width: 380px;
+            padding: 0; list-style: none;
+        }
+        .ihram-list li {
+            font-size: 0.84rem; color: #4a4a5c;
+            padding: 7px 0 7px 28px; position: relative;
+            line-height: 1.5;
+            opacity: 0; animation: ihramFadeUp 0.4s ease forwards;
+        }
+        .ihram-list li:nth-child(1) { animation-delay: 0.25s; }
+        .ihram-list li:nth-child(2) { animation-delay: 0.32s; }
+        .ihram-list li:nth-child(3) { animation-delay: 0.39s; }
+        .ihram-list li:nth-child(4) { animation-delay: 0.46s; }
+        .ihram-list li:nth-child(5) { animation-delay: 0.53s; }
+        .ihram-list li::before {
+            content: '✦'; position: absolute; left: 4px; top: 7px;
+            color: #D4AF37; font-size: 0.6rem;
+        }
+
+        /* Buttons row */
+        .ihram-btns {
+            display: flex; gap: 12px; justify-content: center;
+            margin-top: 22px;
+            opacity: 0; animation: ihramFadeUp 0.4s 0.4s ease forwards;
+        }
+        .ihram-btn-next {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 32px; border-radius: 50px; border: none;
+            background: linear-gradient(135deg, #D4AF37, #C9A227, #B8941F);
+            color: #fff; font-family: 'Poppins', sans-serif;
+            font-size: 0.88rem; font-weight: 600;
+            cursor: pointer; transition: all 0.3s ease;
+            box-shadow: 0 4px 24px rgba(212,175,55,0.3);
+        }
+        .ihram-btn-next:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(212,175,55,0.45); }
+        .ihram-btn-next:active { transform: translateY(0); }
+        .ihram-btn-skip {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 12px 24px; border-radius: 50px;
+            border: 1px solid rgba(212,175,55,0.35);
+            background: transparent; color: #C9A227;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.82rem; font-weight: 500;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .ihram-btn-skip:hover { border-color: #D4AF37; color: #B8941F; background: rgba(212,175,55,0.05); }
+
+        @keyframes ihramFadeUp {
+            0% { opacity: 0; transform: translateY(16px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Step slide transitions */
+        .ihram-step { display: none; }
+        .ihram-step.active { display: block; }
+
+        /* Step 2 overrides */
+        .ihram-step[data-step="2"] .ihram-icon { font-size: 2.4rem; margin-bottom: 6px; }
+        .ihram-step[data-step="2"] .ihram-label { margin-bottom: 3px; font-size: 0.68rem; }
+        .ihram-step[data-step="2"] .ihram-heading { font-size: 1.3rem; margin-bottom: 6px; }
+        .ihram-step[data-step="2"] .ihram-divider { margin: 4px auto 8px; }
+        .ihram-step[data-step="2"] .ihram-btns { margin-top: 14px; }
+
+        /* ═══ YouTube Embed ═══ */
+        .ihram-video-wrap {
+            margin: 6px auto 4px; max-width: 240px;
+            border-radius: 14px; overflow: hidden;
+            border: 2px solid rgba(212,175,55,0.3);
+            box-shadow: 0 4px 20px rgba(201,162,39,0.12);
+            opacity: 0; animation: ihramFadeUp 0.5s 0.2s ease forwards;
+        }
+        .ihram-video-wrap iframe {
+            display: block; width: 100%; aspect-ratio: 9/16; border: none;
+        }
+        .ihram-video-caption {
+            font-size: 0.68rem; color: #999; text-align: center;
+            margin-top: 4px; font-style: italic;
+            opacity: 0; animation: ihramFadeUp 0.5s 0.6s ease forwards;
+        }
+
+        /* ═══ Miqat / Travel Scene Animation ═══ */
+        .miqat-scene {
+            position: relative; width: 100%; max-width: 400px;
+            height: 150px; margin: 12px auto 8px;
+            border-radius: 16px; overflow: hidden;
+            border: 1.5px solid rgba(212,175,55,0.25);
+            box-shadow: 0 6px 28px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.5);
+            opacity: 0; animation: ihramFadeUp 0.6s 0.2s ease forwards;
+        }
+        .miqat-scene svg { width: 100%; height: 100%; display: block; }
+        /* Clouds */
+        .miqat-cloud { fill: #fff; opacity: 0; }
+        .miqat-cloud.c1 { animation: cloudFloat 16s 0s linear infinite; }
+        .miqat-cloud.c2 { animation: cloudFloat 22s 5s linear infinite; }
+        .miqat-cloud.c3 { animation: cloudFloat 13s 2s linear infinite; }
+        .miqat-cloud.c4 { animation: cloudFloat 26s 8s linear infinite; }
+        @keyframes cloudFloat {
+            0% { transform: translateX(-100px); opacity: 0; }
+            8% { opacity: 0.5; }
+            85% { opacity: 0.3; }
+            100% { transform: translateX(440px); opacity: 0; }
+        }
+        /* Flight path */
+        .miqat-path {
+            fill: none; stroke-width: 1.2;
+            stroke-dasharray: 5 3; stroke-linecap: round;
+            opacity: 0; animation: pathDraw 2.5s 0.3s ease forwards;
+        }
+        @keyframes pathDraw {
+            0% { stroke-dashoffset: 350; opacity: 0; }
+            8% { opacity: 1; }
+            100% { stroke-dashoffset: 0; opacity: 1; }
+        }
+        /* Vapor trail */
+        .miqat-trail {
+            fill: none; stroke: rgba(255,255,255,0.45); stroke-width: 1.5;
+            stroke-linecap: round; stroke-dasharray: 220;
+            stroke-dashoffset: 220; opacity: 0;
+            animation: trailDraw 4.5s 1s ease forwards;
+        }
+        @keyframes trailDraw {
+            0% { stroke-dashoffset: 220; opacity: 0; }
+            5% { opacity: 0.5; }
+            80% { opacity: 0.25; }
+            100% { stroke-dashoffset: 0; opacity: 0.1; }
+        }
+        /* Airplane Lottie overlay */
+        .miqat-plane-lottie {
+            position: absolute; width: 60px; height: 60px;
+            z-index: 2; pointer-events: none;
+            opacity: 0; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            animation: lottiefly 5s 0.8s ease-in-out forwards;
+        }
+        .miqat-plane-lottie dotlottie-player {
+            width: 100%; height: 100%;
+        }
+        @keyframes lottiefly {
+            0%   { opacity: 0; left: 4.5%;  top: 38%;  transform: rotate(-8deg) scale(0.7); }
+            10%  { opacity: 1; left: 12%;   top: 24%;  transform: rotate(-6deg) scale(0.85); }
+            40%  { left: 35%;  top: 10%;  transform: rotate(-3deg) scale(1); }
+            70%  { left: 57%;  top: 18%;  transform: rotate(0deg) scale(1); }
+            90%  { left: 66%;  top: 24%;  transform: rotate(2deg) scale(1); }
+            100% { opacity: 1; left: 70%;  top: 26%;  transform: rotate(2deg) scale(1); }
+        }
+        /* Miqat gate structure */
+        .miqat-marker {
+            opacity: 0; animation: markerAppear 0.7s 4.8s cubic-bezier(0.34,1.56,0.64,1) forwards;
+        }
+        .miqat-gate-pillar { fill: #d4c4a0; stroke: #c8b890; stroke-width: 0.5; }
+        .miqat-gate-arch { fill: none; stroke: #c8b890; stroke-width: 1.5; }
+        .miqat-gate-arch-fill { fill: url(#skyGrad); opacity: 0.5; }
+        .miqat-gate-trim { fill: #D4AF37; }
+        .miqat-gate-crescent { fill: #D4AF37; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15)); }
+        .miqat-marker-pulse {
+            fill: none; stroke: rgba(201,162,39,0.5); stroke-width: 1.5;
+            animation: pulseRing 2s 5.2s ease-out infinite;
+        }
+        @keyframes markerAppear { 0% { opacity: 0; transform: translateY(-14px) scale(0.4); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes pulseRing { 0% { r: 6; opacity: 0.6; } 100% { r: 22; opacity: 0; } }
+        .miqat-label {
+            font-family: 'Poppins', sans-serif; font-size: 7px; font-weight: 700;
+            fill: #B8941F; letter-spacing: 1.2px; text-transform: uppercase;
+            opacity: 0; animation: lblFade 0.5s 5.2s ease forwards;
+        }
+        .miqat-label-sub {
+            font-family: 'Poppins', sans-serif; font-size: 4.5px;
+            fill: #998; opacity: 0; animation: lblFade 0.5s 5.4s ease forwards;
+        }
+        @keyframes lblFade { 0% { opacity: 0; transform: translateX(-4px); } 100% { opacity: 1; transform: translateX(0); } }
+        /* Kaaba at destination */
+        .miqat-kaaba { opacity: 0; animation: kaabaAppear 0.6s 5.6s ease forwards; }
+        @keyframes kaabaAppear { 0% { opacity: 0; transform: scale(0.7); } 100% { opacity: 1; transform: scale(1); } }
+        /* City silhouette */
+        .miqat-city { opacity: 0; animation: lblFade 0.8s 4s ease forwards; }
+        /* Miqat callout */
+        .miqat-callout {
+            display: block; text-align: center; margin: 10px auto 4px;
+            padding: 10px 18px; border-radius: 12px;
+            background: linear-gradient(135deg, rgba(212,175,55,0.08), rgba(201,162,39,0.03));
+            border: 1.5px solid rgba(212,175,55,0.25);
+            opacity: 0; animation: ihramFadeUp 0.5s 0.5s ease forwards;
+        }
+        .miqat-callout strong {
+            display: block; font-size: 0.86rem; font-weight: 700;
+            color: #B8941F; line-height: 1.4;
+        }
+        .miqat-callout span {
+            display: block; font-size: 0.72rem; color: #6a6a7c;
+            margin-top: 3px; line-height: 1.4;
+        }
+
+        /* ═══ Ihram Restrictions (in col) ═══ */
+        .ihram-restrictions-title {
+            font-family: 'Poppins', sans-serif; font-size: 0.92rem;
+            font-weight: 700; color: #B8941F;
+            margin: 0 0 3px; text-align: center;
+        }
+        .ihram-restrictions-intro {
+            font-family: 'Poppins', sans-serif; font-size: 0.76rem;
+            color: #6a6a7c; text-align: center;
+            margin: 0 0 8px; line-height: 1.4;
+        }
+        .ihram-restrictions-list {
+            display: flex; flex-direction: column; gap: 4px;
+        }
+        .ihram-restriction-item {
+            display: flex; align-items: flex-start; gap: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.8rem; color: #4a4a5c;
+            line-height: 1.4; padding: 3px 0;
+        }
+        .restriction-icon {
+            flex-shrink: 0; width: 18px; height: 18px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; font-size: 0.5rem;
+            background: rgba(212,175,55,0.12); color: #C9A227;
+            margin-top: 1px;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .ihram-three-col { flex-direction: column; gap: 12px; text-align: center; }
+            .ihram-col-video { flex: none; width: 100%; }
+            .ihram-col-video .ihram-video-wrap { max-width: 240px; margin: 0 auto; }
+            .ihram-col-restrictions { flex: none; width: 100%; }
+            .ihram-col-niyyah { text-align: center; }
+            .ihram-niyyah-title { text-align: center; }
+            .ihram-col-niyyah .miqat-callout { text-align: center; }
+            .ihram-col-niyyah .ihram-body { text-align: center; }
+        }
+        @media (max-width: 480px) {
+            .ihram-card { width: 96%; border-radius: 22px; }
+            .ihram-card.narrow { max-width: 96%; }
+            .ihram-inner { padding: 24px 18px 20px; }
+            .ihram-heading { font-size: 1.1rem; }
+            .ihram-arabic { font-size: 1.1rem; }
+            .ihram-body { font-size: 0.82rem; }
+            .ihram-btn-next { padding: 10px 22px; font-size: 0.82rem; }
+            .ihram-btn-back { padding: 8px 16px; font-size: 0.76rem; }
+            .miqat-scene { height: 100px; }
+            .miqat-callout strong { font-size: 0.8rem; }
+            .miqat-callout span { font-size: 0.66rem; }
+        }
+        @media (max-width: 360px) {
+            .ihram-inner { padding: 20px 14px 16px; }
+            .ihram-heading { font-size: 1rem; }
+            .ihram-icon { font-size: 2.2rem; margin-bottom: 8px; }
+            .miqat-scene { height: 90px; }
+        }
+        @media (max-height: 700px) {
+            .ihram-inner { padding: 20px 22px 18px; }
+            .ihram-icon { font-size: 2rem; margin-bottom: 6px; }
+            .ihram-heading { font-size: 1.1rem; margin-bottom: 8px; }
+            .ihram-arabic { font-size: 1.05rem; margin: 6px 0 3px; }
+            .ihram-body { font-size: 0.8rem; margin-bottom: 5px; }
+            .ihram-list li { padding: 4px 0 4px 28px; font-size: 0.78rem; }
+            .miqat-scene { height: 95px; }
+        }
+    </style>
+    
+</head>
+<body>
+    <div id="preloadContainer" class="fill-viewport"><div style="z-index: 4; position: absolute; overflow: hidden; left: 0%; top: 50%; width: 100.00%; height: 10.00%" ><div style="text-align:left; color:#000; "><DIV STYLE="text-align:center;font-size:1.6666666666666663vmin;"><SPAN STYLE="display:inline-block; letter-spacing:0vmin; white-space:pre-wrap;color:#777777;font-size:1.67vmin;font-family:Arial, Helvetica, sans-serif;">Loading virtual tour. Please wait...</SPAN></DIV></div></div></div>
+    <div id="viewer" class="fill-viewport"></div>
+
+    <!-- ═══ Ihram Guide Overlay ═══ -->
+    <div id="ihramGuide">
+        <div class="ihram-bg-pattern"></div>
+        <div class="ihram-card narrow">
+            <div class="ihram-inner">
+                <!-- Step dots -->
+                <div class="ihram-dots">
+                    <div class="ihram-dot active" data-dot="0"></div>
+                    <div class="ihram-dot" data-dot="1"></div>
+                    <div class="ihram-dot" data-dot="2"></div>
+                </div>
+
+                <!-- STEP 0: Welcome -->
+                <div class="ihram-step active" data-step="0">
+                    <div class="ihram-icon">🕋</div>
+                    <div class="ihram-label">Welcome</div>
+                    <h2 class="ihram-heading">Welcome</h2>
+                    <div class="ihram-divider"><span></span><i>✦</i><span></span></div>
+                    <p class="ihram-body">Welcome to this immersive Hajj experience, a journey of faith, devotion, and unity. Together, we will explore the sacred rites, duas, and profound meanings of Hajj, bringing you closer to the essence of Hajj.</p>
+                    <p class="ihram-dua">May Allah accept your intentions and grant you blessings as we walk this path together.</p>
+                    <div class="ihram-btns">
+                        <button class="ihram-btn-next" onclick="ihramNext()">Let's Begin →</button>
+                        <button class="ihram-btn-skip" onclick="ihramSkip()">Skip</button>
+                    </div>
+                </div>
+
+                <!-- STEP 1: Cleansing & Garments -->
+                <div class="ihram-step" data-step="1">
+                    <div class="ihram-icon">🤲</div>
+                    <div class="ihram-label">Step 1</div>
+                    <h2 class="ihram-heading">Cleansing &amp; Garments</h2>
+                    <div class="ihram-divider"><span></span><i>✦</i><span></span></div>
+                    <ul class="ihram-list">
+                        <li>Perform <strong style="color:#C9A227">Ghusl</strong> (full ritual bath) or at minimum Wudu</li>
+                        <li><strong style="color:#C9A227">For men:</strong> Wear two white unstitched cloths — the Izaar (lower body) and the Rida (over the shoulder)</li>
+                        <li><strong style="color:#C9A227">For women:</strong> Wear modest, loose clothing covering the body; your face and hands remain uncovered</li>
+                        <li>You may apply fragrance to your body (not the garments) before making your intention</li>
+                    </ul>
+                    <div class="ihram-btns">
+                        <button class="ihram-btn-back" onclick="ihramBack()">← Back</button>
+                        <button class="ihram-btn-next" onclick="ihramNext()">Continue →</button>
+                        <button class="ihram-btn-skip" onclick="ihramSkip()">Skip</button>
+                    </div>
+                </div>
+                <!-- STEP 2: Ihram, Niyyah & Miqat (merged) -->
+                <div class="ihram-step" data-step="2">
+                    <div class="ihram-icon">👔</div>
+                    <div class="ihram-label">Step 2</div>
+                    <h2 class="ihram-heading">Your Ihram &amp; Niyyah</h2>
+                    <div class="ihram-divider"><span></span><i>✦</i><span></span></div>
+
+                    <div class="ihram-three-col">
+                        <!-- Column 1: Video -->
+                        <div class="ihram-col-video">
+                            <div class="ihram-video-wrap">
+                                <iframe src="https://www.youtube.com/embed/XF5Gg8Hw9bI?mute=1" title="How to tie Ihram" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                            </div>
+                            <p class="ihram-video-caption">How the Ihram garments are worn</p>
+                        </div>
+
+                        <!-- Column 2: Restrictions -->
+                        <div class="ihram-col-restrictions">
+                            <h3 class="ihram-restrictions-title">⚠ Ihram Restrictions</h3>
+                            <p class="ihram-restrictions-intro">Once in the state of Ihram, observe these restrictions:</p>
+                            <div class="ihram-restrictions-list">
+                                <div class="ihram-restriction-item"><span class="restriction-icon">✦</span><span><strong style="color:#C9A227">Men:</strong> two seamless white garments only</span></div>
+                                <div class="ihram-restriction-item"><span class="restriction-icon">✦</span><span><strong style="color:#C9A227">Women:</strong> modest clothing covering the body</span></div>
+                                <div class="ihram-restriction-item"><span class="restriction-icon">✦</span><span>No <strong style="color:#C9A227">perfume</strong> or scented products</span></div>
+                                <div class="ihram-restriction-item"><span class="restriction-icon">✦</span><span>No cutting <strong style="color:#C9A227">hair or nails</strong></span></div>
+                                <div class="ihram-restriction-item"><span class="restriction-icon">✦</span><span>No <strong style="color:#C9A227">marital relations</strong></span></div>
+                                <div class="ihram-restriction-item"><span class="restriction-icon">✦</span><span>No <strong style="color:#C9A227">hunting</strong> animals</span></div>
+                                <div class="ihram-restriction-item"><span class="restriction-icon">✦</span><span>No <strong style="color:#C9A227">disputes</strong> or arguments</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Column 3: Niyyah & Miqat -->
+                        <div class="ihram-col-niyyah">
+                            <h3 class="ihram-niyyah-title">Your Niyyah at the Miqat</h3>
+
+                    <!-- Animated travel scene (SVG) -->
+                    <div class="miqat-scene">
+                        <svg viewBox="0 0 400 150" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                            <defs>
+                                <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#aecde4"/>
+                                    <stop offset="45%" stop-color="#d6e4d8"/>
+                                    <stop offset="75%" stop-color="#eddcb8"/>
+                                    <stop offset="100%" stop-color="#e4d0a4"/>
+                                </linearGradient>
+                                <radialGradient id="sunGlow" cx="0.8" cy="0.35" r="0.3">
+                                    <stop offset="0%" stop-color="rgba(255,225,140,0.7)"/>
+                                    <stop offset="50%" stop-color="rgba(255,210,120,0.2)"/>
+                                    <stop offset="100%" stop-color="rgba(255,210,120,0)"/>
+                                </radialGradient>
+                                <linearGradient id="pathGrad" x1="0" y1="0" x2="1" y2="0">
+                                    <stop offset="0%" stop-color="rgba(201,162,39,0.15)"/>
+                                    <stop offset="50%" stop-color="rgba(201,162,39,0.4)"/>
+                                    <stop offset="100%" stop-color="rgba(201,162,39,0.6)"/>
+                                </linearGradient>
+                            </defs>
+                            <!-- Sky -->
+                            <rect width="400" height="150" fill="url(#skyGrad)"/>
+                            <!-- Sun glow + sun -->
+                            <circle cx="330" cy="50" r="120" fill="url(#sunGlow)"/>
+                            <circle cx="330" cy="50" r="14" fill="#ffe8a8" opacity="0.85"/>
+                            <circle cx="330" cy="50" r="18" fill="none" stroke="rgba(255,230,160,0.3)" stroke-width="2"/>
+                            <!-- Far dunes -->
+                            <path d="M0 114 Q40 102 100 110 Q160 96 230 106 Q290 94 350 104 Q385 100 400 106 L400 150 L0 150Z" fill="#ddd0b0" opacity="0.5"/>
+                            <!-- Mid dunes -->
+                            <path d="M0 122 Q55 112 120 118 Q190 106 260 114 Q320 104 400 116 L400 150 L0 150Z" fill="#d4c4a0" opacity="0.8"/>
+                            <!-- Near dunes -->
+                            <path d="M0 132 Q70 124 150 130 Q230 120 310 128 Q365 122 400 130 L400 150 L0 150Z" fill="#c8b890"/>
+                            <!-- Sand ripples -->
+                            <path d="M0 138 Q50 135 100 139 Q150 134 200 138 Q250 135 300 139 Q350 135 400 138" fill="none" stroke="rgba(180,160,120,0.25)" stroke-width="0.5"/>
+                            <path d="M0 145 Q60 142 120 146 Q180 141 240 145 Q300 142 360 146 L400 145" fill="none" stroke="rgba(180,160,120,0.15)" stroke-width="0.4"/>
+                            <!-- Clouds -->
+                            <g class="miqat-cloud c1"><ellipse cx="32" cy="28" rx="30" ry="8"/><ellipse cx="18" cy="24" rx="18" ry="7"/><ellipse cx="44" cy="23" rx="20" ry="7.5"/></g>
+                            <g class="miqat-cloud c2"><ellipse cx="22" cy="50" rx="24" ry="7"/><ellipse cx="38" cy="46" rx="16" ry="6"/></g>
+                            <g class="miqat-cloud c3"><ellipse cx="28" cy="18" rx="26" ry="7.5"/><ellipse cx="14" cy="14" rx="16" ry="6"/><ellipse cx="42" cy="15" rx="18" ry="6.5"/></g>
+                            <g class="miqat-cloud c4"><ellipse cx="24" cy="40" rx="20" ry="6"/><ellipse cx="40" cy="37" rx="14" ry="5.5"/></g>
+                            <!-- Distant city silhouette -->
+                            <g class="miqat-city" transform="translate(335, 104)">
+                                <rect x="-30" y="-5" width="3" height="5" rx="0.5" fill="#b8a880" opacity="0.5"/>
+                                <rect x="-24" y="-9" width="4" height="9" rx="0.5" fill="#b8a880" opacity="0.45"/>
+                                <rect x="-17" y="-6" width="3.5" height="6" rx="0.5" fill="#b8a880" opacity="0.4"/>
+                                <rect x="-11" y="-14" width="2" height="14" rx="0.3" fill="#b8a880" opacity="0.55"/>
+                                <circle cx="-10" cy="-15" r="1.5" fill="#b8a880" opacity="0.55"/>
+                                <rect x="-6" y="-7" width="4" height="7" rx="0.5" fill="#b8a880" opacity="0.4"/>
+                                <rect x="1" y="-10" width="3.5" height="10" rx="0.5" fill="#b8a880" opacity="0.45"/>
+                                <path d="M5 -10 Q7 -14 9 -10" fill="#b8a880" opacity="0.5"/>
+                            </g>
+                            <!-- Flight path -->
+                            <path class="miqat-path" d="M 25 72 C 100 28 210 32 315 56" stroke="url(#pathGrad)"/>
+                            <!-- Vapor trail -->
+                            <path class="miqat-trail" d="M 25 72 C 100 28 210 32 290 50"/>
+                            <!-- Miqat gate structure -->
+                            <g transform="translate(300, 96)">
+                            <g class="miqat-marker">
+                                <circle class="miqat-marker-pulse" cx="0" cy="0" r="6"/>
+                                <!-- Left pillar -->
+                                <rect class="miqat-gate-pillar" x="-14" y="-30" width="5" height="30" rx="1"/>
+                                <!-- Right pillar -->
+                                <rect class="miqat-gate-pillar" x="9" y="-30" width="5" height="30" rx="1"/>
+                                <!-- Arch -->
+                                <path class="miqat-gate-arch-fill" d="M-14 -30 Q0 -46 14 -30 L9 -30 Q0 -42 -9 -30Z"/>
+                                <path class="miqat-gate-arch" d="M-14 -30 Q0 -46 14 -30"/>
+                                <!-- Gold trim band -->
+                                <rect class="miqat-gate-trim" x="-14" y="-16" width="28" height="2" rx="0.5"/>
+                                <rect class="miqat-gate-trim" x="-14" y="-31" width="28" height="1.5" rx="0.3"/>
+                                <!-- Crescent on top -->
+                                <g class="miqat-gate-crescent" transform="translate(0, -46)">
+                                    <circle cx="0" cy="0" r="3.5" fill="#D4AF37"/>
+                                    <circle cx="1.2" cy="-0.8" r="2.8" fill="url(#skyGrad)"/>
+                                    <line x1="0" y1="3.5" x2="0" y2="7" stroke="#D4AF37" stroke-width="1"/>
+                                </g>
+                                <!-- Inner opening detail -->
+                                <rect x="-9" y="-30" width="18" height="30" rx="0" fill="rgba(174,205,228,0.15)"/>
+                                <path d="M-9 -30 Q0 -42 9 -30" fill="rgba(174,205,228,0.15)"/>
+                                <!-- Labels -->
+                                <text class="miqat-label" x="20" y="-26">MIQAT</text>
+                                <text class="miqat-label-sub" x="20" y="-18">Sacred Boundary</text>
+                            </g>
+                            </g>
+                            <!-- Kaaba -->
+                            <g class="miqat-kaaba" transform="translate(370, 96)">
+                                <rect x="-9" y="-12" width="18" height="16" rx="1.5" fill="#1a1a2e"/>
+                                <rect x="-7" y="-5" width="14" height="2.5" rx="0.5" fill="#D4AF37"/>
+                                <rect x="-7" y="-2" width="14" height="0.5" fill="#C9A227"/>
+                                <rect x="-1.5" y="-12" width="3" height="16" fill="rgba(255,255,255,0.08)"/>
+                                <rect x="-9" y="-12" width="18" height="16" rx="1.5" fill="none" stroke="rgba(212,175,55,0.3)" stroke-width="0.5"/>
+                            </g>
+                        </svg>
+                        <!-- Lottie airplane overlay -->
+                        <div class="miqat-plane-lottie">
+                            <dotlottie-player src="media/airplane.lottie" background="transparent" speed="1" loop autoplay></dotlottie-player>
+                        </div>
+                    </div>
+
+                    <div class="miqat-callout">
+                        <strong>You must make your Niyyah before or at the Miqat boundary</strong>
+                        <span>The Miqat is the sacred boundary you cross on your journey — once past it, you must already be in the state of Ihram</span>
+                    </div>
+
+                    <p class="ihram-body">Declare your intention for Umrah or Hajj clearly:</p>
+                    <p class="ihram-arabic">اللَّهُمَّ إِنِّي أُرِيدُ الْعُمْرَةَ فَيَسِّرْهَا لِي وَتَقَبَّلْهَا مِنِّي</p>
+                    <p class="ihram-translit">"Allahumma inni ureedal Umrata fa yassirha li wa taqabbalha minni"</p>
+                    <p class="ihram-translation">"O Allah, I intend to perform Umrah, so make it easy for me and accept it from me."</p>
+                        </div>
+                    </div>
+
+                    <div class="ihram-btns">
+                        <button class="ihram-btn-back" onclick="ihramBack()">← Back</button>
+                        <button class="ihram-btn-next" onclick="ihramStep2PlayVO();ihramSkip();">Begin Your Tawaf 🕋</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    /* ═══ Ihram Guide Logic ═══ */
+    var ihramStep = 0;
+    var ihramTotal = 3;
+
+    // Auto-skip ihram guide only for subsequent Tawaf circuits (ifadha/farewell)
+    // For context=initial the built-in guide serves as the Ihram intro
+    (function(){
+      var ctx = new URL(window.location.href).searchParams.get('context') || '';
+      if(ctx === 'ifadha' || ctx === 'farewell') {
+        var g = document.getElementById('ihramGuide');
+        if(g){ g.style.display='none'; }
+      }
+    })();
+
+    var lowPerfMode = (new URL(window.location.href).searchParams.get('lite') === '1') ||
+        (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) ||
+        (navigator.connection && navigator.connection.saveData) ||
+        (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
+        (navigator.deviceMemory && navigator.deviceMemory <= 4);
+
+    if (lowPerfMode) {
+        document.documentElement.classList.add('pp-lite');
+    }
+
+    // Spawn floating golden particles
+    (function() {
+        var guide = document.getElementById('ihramGuide');
+        if (!guide || lowPerfMode) return;
+        var goldShades = ['#D4AF37', '#F0D060', '#C9A227', '#E8C84A', '#B8941F'];
+        for (var i = 0; i < 24; i++) {
+            var p = document.createElement('div');
+            p.className = 'ihram-particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.width = p.style.height = (2 + Math.random() * 6) + 'px';
+            p.style.background = goldShades[Math.floor(Math.random() * goldShades.length)];
+            p.style.animationDuration = (5 + Math.random() * 12) + 's';
+            p.style.animationDelay = (Math.random() * 10) + 's';
+            p.style.opacity = 0;
+            guide.appendChild(p);
+        }
+    })();
+
+    function ihramShowStep(step) {
+        var el = document.querySelector('.ihram-step[data-step="' + step + '"]');
+        if (!el) return;
+        el.classList.add('active');
+        el.style.animation = 'none'; el.offsetHeight; el.style.animation = '';
+        el.querySelectorAll('[class*="ihram-"], [class*="miqat-"], li').forEach(function(c) {
+            c.style.animation = 'none'; c.offsetHeight; c.style.animation = '';
+        });
+        document.querySelector('.ihram-inner').scrollTop = 0;
+        // Card width: wide for step 2, narrow for 0-1
+        var card = document.querySelector('.ihram-card');
+        if (step >= 2) { card.classList.remove('narrow'); } else { card.classList.add('narrow'); }
+        // Reset for new step (no UI button anymore — audio is auto)
+        if(typeof _setVoBtn==='function') _setVoBtn('blocked');
+    }
+
+    function ihramNext() {
+        // STEP 0 (Welcome) gate: don't stomp the welcome VO. If it hasn't played
+        // yet (autoplay was blocked, or user is clicking past it on a fresh load)
+        // start it now and don't advance — user clicks again to continue.
+        if(ihramStep===0 && !window._welcomeVoDone){
+            if(window._welcomeVoStarted){
+                // Second click — user wants to skip the welcome VO and move on.
+                if(window._voAudio){ try{ window._voAudio.pause(); }catch(e){} window._voAudio=null; }
+                window._voPending = null;
+                window._welcomeVoDone = true;
+            } else {
+                // First click on Let's Begin — user gesture. Play welcome VO now.
+                window._welcomeVoStarted = true;
+                _hideVoHint && _hideVoHint();
+                var _ov0=window.PPContent&&window.PPContent.byId('tawaf-initial','tw-guide-0');
+                var _wf=_ov0?_ov0.audio:'English Welcome Info.mp3';
+                if(_wf) playVO(_wf);
+                if(window._voAudio){
+                    window._voAudio.addEventListener('ended', function(){ window._welcomeVoDone = true; }, { once: true });
+                } else {
+                    // No audio configured — mark welcome "done" so next click advances.
+                    window._welcomeVoDone = true;
+                }
+                // Update button label to indicate the next click will continue
+                var _btn = document.querySelector('.ihram-step[data-step="0"] .ihram-btn-next');
+                if(_btn){ _btn.textContent = 'Continue →'; }
+                return; // do NOT advance yet
+            }
+        }
+        if (ihramStep >= ihramTotal - 1) { ihramSkip(); return; }
+        var current = document.querySelector('.ihram-step[data-step="' + ihramStep + '"]');
+        if (current) current.classList.remove('active');
+        var oldDot = document.querySelector('.ihram-dot[data-dot="' + ihramStep + '"]');
+        if (oldDot) { oldDot.classList.remove('active'); oldDot.classList.add('done'); }
+        ihramStep++;
+        ihramShowStep(ihramStep);
+        var newDot = document.querySelector('.ihram-dot[data-dot="' + ihramStep + '"]');
+        if (newDot) newDot.classList.add('active');
+        if(ihramStep===1&&typeof playVO==='function'){
+            // Play Ihram part 1, then chain part 2 automatically when it ends
+            if(window._voAudio){window._voAudio.pause();window._voAudio=null;}
+            var _ov1=window.PPContent&&window.PPContent.byId('tawaf-initial','tw-guide-1');
+            var _f1=_ov1?_ov1.audio:'English Ihram part 1.mp3';
+            var _f2=_ov1?_ov1.audioChain:'English Ihram part 2.mp3';
+            if(_f1){
+                var _u1=(window.PPContent&&window.PPContent.audioUrl(_f1))||('/Hajj%20Voice%20Over/'+encodeURIComponent(_f1));
+                var _a1=new Audio(_u1);
+                window._voAudio=_a1;
+                _a1.onended=function(){ if(_f2) playVO(_f2); };
+                _a1.play().catch(function(){});
+            } else if(_f2){ playVO(_f2); }
+        }
+        if(ihramStep===2){
+            // Step-3 voice-over no longer auto-plays. It is triggered by the
+            // "Begin Your Tawaf" button (see ihramSkip wrapper below) so the
+            // user controls when narration starts.
+            window._ihramStep2Audio = (function(){
+                var _ov2=window.PPContent&&window.PPContent.byId('tawaf-initial','tw-guide-2');
+                return _ov2?_ov2.audio:'English Ihram part 3.mp3';
+            })();
+        }
+    }
+    function ihramStep2PlayVO(){
+        var f = window._ihramStep2Audio;
+        if(!f || typeof playVO!=='function') return;
+        playVO(f);
+    }
+
+    function ihramBack() {
+        if (ihramStep <= 0) return;
+        var current = document.querySelector('.ihram-step[data-step="' + ihramStep + '"]');
+        if (current) current.classList.remove('active');
+        var curDot = document.querySelector('.ihram-dot[data-dot="' + ihramStep + '"]');
+        if (curDot) curDot.classList.remove('active');
+        ihramStep--;
+        ihramShowStep(ihramStep);
+        var prevDot = document.querySelector('.ihram-dot[data-dot="' + ihramStep + '"]');
+        if (prevDot) { prevDot.classList.remove('done'); prevDot.classList.add('active'); }
+    }
+
+    function ihramSkip() {
+        // Don't replay any ihram step audio here — it already played when user
+        // advanced to that step. Cancelling it now lets the upcoming panorama
+        // banner audio (set in admin) play cleanly without overlap.
+        if(window._voAudio){ try{ window._voAudio.pause(); }catch(e){} window._voAudio=null; }
+        window._voPending = null;
+        var guide = document.getElementById('ihramGuide');
+        guide.classList.add('hidden');
+        setTimeout(function() { guide.style.display = 'none'; }, 900);
+        // Trigger first banner check after Ihram guide dismisses
+        setTimeout(function(){ if(typeof _bannerChk==='function') _bannerChk(_bannerFirstId); }, 1200);
+    }
+    </script>
+
+<!-- ═══ Scene Guide Banners ═══ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+#sceneBanner{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10003;
+width:min(96vw,900px);min-height:clamp(200px,44vh,420px);background:url('../../media/banner-frame.png') no-repeat center/100% 100%;
+font-family:'DM Sans',Arial,sans-serif;color:#2C1810;text-align:center;}
+#sceneBanner .sceneBannerBody{box-sizing:border-box;width:100%;height:100%;
+padding:clamp(46px,5.6vw,70px) clamp(86px,12vw,140px) clamp(32px,5vw,44px);
+display:flex;flex-direction:column;justify-content:center;align-items:center;overflow-y:auto;overflow-x:hidden;
+scrollbar-width:thin;scrollbar-color:rgba(201,168,76,0.3) transparent;}
+#sceneBanner .sceneBannerBody > *{width:min(100%,560px);}
+#sceneBanner .sceneBannerBody > button{width:auto;max-width:none;display:inline-flex;align-self:center;}
+#sceneBanner .sceneBannerBody::-webkit-scrollbar{width:5px;}
+#sceneBanner .sceneBannerBody::-webkit-scrollbar-thumb{background:rgba(201,168,76,0.4);border-radius:4px;}
+#sceneBanner h3{color:#8B6914;font-size:clamp(18px,2.2vw,34px);margin:0 0 14px;font-weight:700;line-height:1.2;padding-top:6px;}
+#sceneBanner .bb{color:#3D2B1F;font-size:clamp(11px,1.15vw,18px);line-height:1.45;margin:0 0 8px;overflow-wrap:anywhere;word-break:normal;}
+#sceneBanner .ba{color:#8B6914;font-size:clamp(13px,1.45vw,21px);font-style:italic;margin:6px 0 4px;line-height:1.42;overflow-wrap:anywhere;word-break:break-word;}
+#sceneBanner .bt{color:#6B5B4F;font-size:clamp(10px,1vw,16px);font-style:italic;margin:0 0 8px;line-height:1.4;overflow-wrap:anywhere;word-break:normal;}
+#sceneBanner .sep{width:72px;height:2px;background:linear-gradient(90deg,transparent,#C9A84C,transparent);margin:10px auto;}
+#sceneBanner button{background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;border:none;
+border-radius:7px;padding:8px 19px;font-size:clamp(12px,1.05vw,15px);font-weight:600;cursor:pointer;margin-top:6px;
+transition:transform .15s;box-shadow:0 4px 12px rgba(201,168,76,0.32);align-self:center;line-height:1.2;}
+#sceneBanner button:active{transform:scale(0.96);}
+    .pp-lite #ihramGuide *, .pp-lite #sceneBanner * {animation:none !important; transition:none !important; opacity:1 !important; transform:none !important;}
+.pp-lite .ihram-bg-pattern::before, .pp-lite .ihram-particle, .pp-lite .miqat-plane-lottie {display:none !important;}
+@media(max-width:520px){
+#sceneBanner{width:96vw;}
+#sceneBanner .sceneBannerBody{padding:36px 50px 22px;}
+#sceneBanner .sceneBannerBody > *{width:100%;}
+#sceneBanner .sceneBannerBody > button{width:auto;}
+#sceneBanner h3{font-size:16px;margin-bottom:8px;}
+#sceneBanner .bb{font-size:11.5px;line-height:1.35;}
+#sceneBanner .ba{font-size:12px;line-height:1.35;}
+#sceneBanner .bt{font-size:10.5px;line-height:1.33;}
+#sceneBanner button{padding:9px 18px;font-size:13px;margin-top:6px;}
+}
+</style>
+<div id="sceneBanner"></div>
+<script>
+var _bannerPager={title:'',pages:[],index:0};
+function _splitBannerHtml(html){
+    var segs=html.match(/<h3[\s\S]*?<\/h3>|<p[\s\S]*?<\/p>|<div class="sep"><\/div>|<br\s*\/?\s*>/gi)||[html];
+    var pages=[];var cur=[];var chars=0;
+    for(var i=0;i<segs.length;i++){
+        var s=segs[i];
+        var txt=s.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+        var len=txt.length;
+        if(cur.length && (chars+len>440 || cur.length>=4)){
+            pages.push(cur.join(''));
+            cur=[];chars=0;
+        }
+        cur.push(s);chars+=len;
+    }
+    if(cur.length) pages.push(cur.join(''));
+    return pages.length?pages:[html];
+}
+function _renderBannerPage(){
+    var el=document.getElementById('sceneBanner');
+    if(!el) return;
+    var isLast=_bannerPager.index>=_bannerPager.pages.length-1;
+    var btn=isLast?'Continue ▸':'Next ▸';
+    el.innerHTML='<div class="sceneBannerBody"><h3>'+_bannerPager.title+'</h3>'+_bannerPager.pages[_bannerPager.index]+'<button onclick="dismissBanner()">'+btn+'</button></div>';
+    el.style.display='block';
+}
+function openBanner(title,html){
+    _bannerPager.title=title;
+    _bannerPager.pages=_splitBannerHtml(html);
+    _bannerPager.index=0;
+    _renderBannerPage();
+}
+function dismissBanner(){
+    if(_bannerPager.pages.length && _bannerPager.index<_bannerPager.pages.length-1){
+        _bannerPager.index++;
+        _renderBannerPage();
+        return;
+    }
+    _bannerPager={title:'',pages:[],index:0};
+    document.getElementById('sceneBanner').style.display='none';
+}
+function playVO(f){
+    if(!f) return;
+    // Cancel any audio currently playing
+    if(window._voAudio){ try{ window._voAudio.pause(); }catch(e){} window._voAudio=null; }
+    // Always update the LATEST pending intent so a stale unlock handler plays
+    // the correct (most recent) requested track, never an outdated welcome clip.
+    window._voPending = f;
+    var url = (window.PPContent && window.PPContent.audioUrl)
+        ? window.PPContent.audioUrl(f)
+        : ('/Hajj%20Voice%20Over/' + encodeURIComponent(f));
+    var a = new Audio(url);
+    window._voAudio = a;
+    a.addEventListener('ended', function(){ if(window._voPending===f) window._voPending=null; });
+    a.addEventListener('error', function(){ console.warn('[VO] failed to load', f); });
+    var p = a.play();
+    if(p && p.catch){
+        p.catch(function(err){
+            console.warn('[VO] autoplay blocked, will play on first user interaction', err && err.name);
+            _showVoHint();
+            // Install a single global unlock handler (idempotent).
+            if(window._voUnlockBound) return;
+            window._voUnlockBound = true;
+            var unlock = function(){
+                document.removeEventListener('click', unlock, true);
+                document.removeEventListener('touchend', unlock, true);
+                document.removeEventListener('keydown', unlock, true);
+                document.removeEventListener('pointerdown', unlock, true);
+                window._voUnlockBound = false;
+                _hideVoHint();
+                var pending = window._voPending;
+                if(pending) playVO(pending);
+            };
+            document.addEventListener('click', unlock, true);
+            document.addEventListener('touchend', unlock, true);
+            document.addEventListener('keydown', unlock, true);
+            document.addEventListener('pointerdown', unlock, true);
+        });
+    }
+}
+function _showVoHint(){
+    if(document.getElementById('voHint')) return;
+    var h = document.createElement('div');
+    h.id = 'voHint';
+    h.textContent = '🔊 Tap anywhere to start narration';
+    h.style.cssText = 'position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:99999;'
+      + 'background:linear-gradient(135deg,#D4AF37,#C9A227);color:#fff;padding:9px 18px;border-radius:999px;'
+      + 'font-family:Poppins,sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:.3px;'
+      + 'box-shadow:0 6px 20px rgba(201,162,39,0.5);cursor:pointer;'
+      + 'animation:voHintPulse 1.6s ease-in-out infinite;pointer-events:none;';
+    if(!document.getElementById('voHintStyles')){
+        var st = document.createElement('style'); st.id='voHintStyles';
+        st.textContent = '@keyframes voHintPulse{0%,100%{box-shadow:0 6px 20px rgba(201,162,39,0.45)}50%{box-shadow:0 6px 28px rgba(201,162,39,0.85)}}';
+        document.head.appendChild(st);
+    }
+    document.body.appendChild(h);
+}
+function _hideVoHint(){ var h = document.getElementById('voHint'); if(h) h.remove(); }
+function _setVoBtn(){ /* no-op: visible button removed, audio is auto */ }
+function ihramPlayCurrentVO(){ /* legacy stub — button removed */ }
+var _bannerFirstId='panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5';
+var _bannerChk;
+(function(){
+var BANNERS_INITIAL={
+// Entrance cleaned up 1 (playlist index 0)
+'panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5':{
+  title:'\u{1f54c} Entering the Haram Mosque',
+        html:'<p class="bb"><strong>Voice-over:</strong> As you approach the sacred mosque, Al-Masjid Al-Haram, enter with humility and reverence. Step forward with your right foot and recite:</p>'+
+  '<p class="ba">Bismillahi, Allahumma salli ala Muhammadin wa ali Muhammad. Allahumma ighfir li dhunubi wa iftah li abwaba rahmatika.</p>'+
+        '<p class="bt">Translation: "In the name of Allah, O Allah, send prayers upon Muhammad and his family. O Allah, forgive my sins and open the gates of Your mercy."</p>'},
+// Starting area (playlist index 1)
+'panorama_89070D75_955C_4A01_41D4_F7F58617B959':{
+  title:'\u{1f932} Dua upon Seeing the Kaaba for the First Time',
+        html:'<p class="bb"><strong>Voice-over:</strong> Upon sighting the Kaaba, raise your hands and make any personal dua you wish. This is a moment when your dua is especially powerful. You may also recite:</p>'+
+    '<p class="ba">Allahumma zid hadha al-bayt tashreefan wa ta\'dheeman wa takreeman wa mahabatan, wa zid man sharrafahu wa karramahu mimman hajjahu awi\'tamarahu tashreefan wa takreeman wa ta\'dheeman wa birran.</p>'+
+        '<p class="bt">Translation: "O Allah, increase this house (the Kaaba) in honor, nobility, and respect, and increase in honor and nobility the one who honors and respects it."</p>'},
+// main starting area (playlist index 3)
+'panorama_7F92625E_71D8_25CE_41DA_487A76BA9DE1':{
+  title:'\u{1f54b} Tawaf — Circumambulation of the Kaaba',
+        html:'<p class="bb"><strong>Voice-over:</strong> You will now begin Tawaf, circling the Kaaba seven times. Starting from the Black Stone, raise your hand towards it, and say:</p>'+
+    '<p class="ba">Bismillahi Allahu Akbar</p>'+
+    '<p class="bt">(In the name of Allah, Allah is the Greatest).</p>'+
+    '<div class="sep"></div>'+
+        '<p class="bb">You have now begun your Tawaf — you may recite any duas or dhikr that you find meaningful.</p>'},
+// st main 3 (playlist index 8) — Maqam Ibrahim
+'panorama_7F9246DB_71D8_6AD6_41DA_A3880DC6DC13':{
+  title:'\u{1f9ce} Praying at Maqam Ibrahim',
+        html:'<p class="bb"><strong>Voice-over:</strong> Here at the Maqam Ibrahim (the Station of Ibrahim), you may offer two rak\'ahs of Salah.</p>'+
+  '<p class="bb">In the first rak\'ah, recite Surah Al-Fatiha followed by Surah Al-Kafirun. In the second rak\'ah, recite Surah Al-Fatiha followed by Surah Al-Ikhlas.</p>'+
+        '<p class="bb">After completing the prayer, make any personal supplications.</p>'},
+// Yemeni Corner — al-Rukn al-Yamani (mid-tawaf panorama)
+'panorama_7F927F34_71D8_3B52_41C5_1D549449A4CF':{
+  title:'\u{1f54b} Al-Rukn al-Yamani — Yemeni Corner',
+  html:'<p class="bb">As you pass the Yemeni Corner (al-Rukn al-Yamani), touch it with your right hand if possible and say: <strong>Bismillahi Allahu Akbar</strong>.</p>'+
+  '<p class="bb">Between the Yemeni Corner and the Black Stone, recite:</p>'+
+  '<p class="ba">Rabbana atina fid-dunya hasanatan, wa fil-akhirati hasanatan, wa qina adhaban-nar.</p>'+
+  '<p class="bt">Translation: "O our Lord, give us good in this world and good in the Hereafter, and protect us from the punishment of the Fire."</p>'}
+};
+var BANNERS_IFADHA={
+'panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5':{
+  title:'\u{1f54c} Tawaf al-Ifadha (Circumambulation of Visiting)',
+  html:'<p class="bb">You now perform Tawaf al-Ifadha, the obligatory circumambulation on the 10th of Dhul-Hijjah after leaving Muzdalifah.</p>'+
+  '<p class="bb">This Tawaf comes after the animal sacrifice and hair shaving. Begin from the Black Stone and circle the Kaaba seven times with the same reverence as your initial Tawaf.</p>'+
+  '<p class="bb">Make sincere duas for yourself, your family, and the ummah as you walk around the House of Allah.</p>'},
+'panorama_7F92DC96_71D8_1D5E_41BF_87B612A8A131':{
+  title:'\u{1f932} Continuing Your Second Tawaf',
+  html:'<p class="bb">Continue your circumambulation with devotion and focus.</p>'+
+  '<p class="bb">Remember that this Tawaf is an essential pillar of Hajj on the day of Eid al-Adha.</p>'},
+'panorama_8AF67A73_955C_4E01_41DA_44BCCE2B395A':{
+  title:'\u{1f54b} Tawaf al-Ifadha Progress',
+  html:'<p class="bb">You are progressing through your Tawaf al-Ifadha. Maintain your focus and complete all seven circuits with mindfulness.</p>'+
+  '<p class="ba">Recite as you walk: Subhana\'Allah wa\'l-hamdulillah wa la ilaha illallah wa\'Allahu Akbar.</p>'},
+'panorama_8AC63E8D_9544_C601_41E0_0A05A67E5557':{
+  title:'\u{1f9ce} Salah After Tawaf al-Ifadha',
+  html:'<p class="bb">After completing your Tawaf al-Ifadha, offer two rak\'ahs of prayer at Maqam Ibrahim or nearby in the mosque.</p>'+
+  '<p class="bb">Then proceed to perform Sa\'i (the walking between Safa and Marwa) to complete the major rituals of Hajj.</p>'}
+};
+var BANNERS_FAREWELL={
+'panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5':{
+  title:'\u{1f54c} Tawaf al-Wida (Farewell Circumambulation)',
+  html:'<p class="bb">You now perform your final Tawaf, called Tawaf al-Wida (the Farewell Circumambulation), as your last ritual before departing the holy house.</p>'+
+  '<p class="bb">Circle the Kaaba seven times with devoted dua, bidding farewell to this sacred place. This is your last opportunity to make sincere supplications in the Haram before departing.</p>'},
+'panorama_7F92DC96_71D8_1D5E_41BF_87B612A8A131':{
+  title:'\u{1f932} Final Moments at the Kaaba',
+  html:'<p class="bb">As you walk in Tawaf al-Wida, reflect on your Hajj journey and the spiritual transformation you have undergone.</p>'+
+  '<p class="bb">Make heartfelt duas for your loved ones and ask Allah to accept your pilgrimage.</p>'},
+'panorama_8AF67A73_955C_4E01_41DA_44BCCE2B395A':{
+  title:'\u{1f54b} Completing Your Final Circumambulation',
+  html:'<p class="bb">Continue with devotion as you complete the final circuits of Tawaf al-Wida.</p>'+
+  '<p class="ba">May Allah accept from you and grant you the rewards of a blessed Hajj.</p>'},
+'panorama_8AC63E8D_9544_C601_41E0_0A05A67E5557':{
+  title:'\u{1f9ce} Last Prayer in the Haram',
+  html:'<p class="bb">Offer your final prayer in Al-Masjid Al-Haram, making duas and seeking Allah\'s blessings one last time.</p>'+
+  '<p class="bb">This concludes your Hajj journey. May Allah accept your pilgrimage and grant you safe travels home.</p>'}
+};
+var journeyContext=new URL(window.location).searchParams.get('context')||'initial';
+var BANNERS=journeyContext==='ifadha'?BANNERS_IFADHA:(journeyContext==='farewell'?BANNERS_FAREWELL:BANNERS_INITIAL);
+// Index-keyed mirror so we still trigger the right banner regardless of preload
+// race conditions. Indices match the mainPlayList order in script_general.js:
+//   0 = Entrance cleaned up 1   (panorama_8CE4041C…)
+//   1 = Starting area           (panorama_89070D75…)
+//   3 = main starting area      (panorama_7F92625E…)
+//   8 = st main 3 / Maqam Ibrahim (panorama_7F9246DB…)
+var BANNERS_INITIAL_BY_INDEX={
+0: BANNERS_INITIAL['panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5'],
+1: BANNERS_INITIAL['panorama_89070D75_955C_4A01_41D4_F7F58617B959'],
+3: BANNERS_INITIAL['panorama_7F92625E_71D8_25CE_41DA_487A76BA9DE1'],
+8: BANNERS_INITIAL['panorama_7F9246DB_71D8_6AD6_41DA_A3880DC6DC13']
+};
+var shown={},lastId='';
+_bannerChk=chk;
+var RE=/(panorama_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+)_0\//i;
+function det(u){if(typeof u!=='string')return;var m=u.match(RE);if(m&&m[1]!==lastId){lastId=m[1];chk(m[1],null);}}
+// ═══ Voiceover maps per context ═══
+var _VO_INITIAL={'panorama_89070D75_955C_4A01_41D4_F7F58617B959':'English Upon seeing the ka_aba.mp3','panorama_7F92625E_71D8_25CE_41DA_487A76BA9DE1':'English Tawaf.mp3','panorama_7F927F34_71D8_3B52_41C5_1D549449A4CF':'English Yemeni Corner.mp3','panorama_7F9246DB_71D8_6AD6_41DA_A3880DC6DC13':'English Maqama Ibrahim.mp3'};
+var _VO_IFADHA={'panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5':'English Day 10-4.mp3','panorama_8AC63E8D_9544_C601_41E0_0A05A67E5557':'English Day 10-5.mp3'};
+var _VO_FAREWELL={'panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5':'English Farewell Tawaf.mp3','panorama_8AC63E8D_9544_C601_41E0_0A05A67E5557':'English Farewell Tawaf Congratulations.mp3'};
+// ═══ Apply admin overrides from PPContent (live-edit support) ═══
+if(window.PPContent && window.PPContent.hasData){
+  function _ppMerge(sk,B,V){
+    var oB=window.PPContent.bannerMapByPano(sk);
+    Object.keys(oB).forEach(function(k){B[k]=oB[k];});
+    var oA=window.PPContent.audioMapByPano(sk);
+    Object.keys(oA).forEach(function(k){V[k]=oA[k];});
+  }
+  _ppMerge('tawaf-initial', BANNERS_INITIAL, _VO_INITIAL);
+  _ppMerge('tawaf-ifadha',  BANNERS_IFADHA,  _VO_IFADHA);
+  _ppMerge('tawaf-farewell',BANNERS_FAREWELL,_VO_FAREWELL);
+  // Refresh by-index lookup since BANNERS_INITIAL entries may have been replaced
+  BANNERS_INITIAL_BY_INDEX[0]=BANNERS_INITIAL['panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5'];
+  BANNERS_INITIAL_BY_INDEX[1]=BANNERS_INITIAL['panorama_89070D75_955C_4A01_41D4_F7F58617B959'];
+  BANNERS_INITIAL_BY_INDEX[3]=BANNERS_INITIAL['panorama_7F92625E_71D8_25CE_41DA_487A76BA9DE1'];
+  BANNERS_INITIAL_BY_INDEX[8]=BANNERS_INITIAL['panorama_7F9246DB_71D8_6AD6_41DA_A3880DC6DC13'];
+}
+var _VO_MAP=journeyContext==='ifadha'?_VO_IFADHA:journeyContext==='farewell'?_VO_FAREWELL:_VO_INITIAL;
+function _pickBanner(id,idx){
+if(journeyContext==='initial'&&typeof idx==='number') return BANNERS_INITIAL_BY_INDEX[idx]||null;
+return BANNERS[id]||null;
+}
+var _tawafFirstVisitSeen=false;
+function chk(id,idx){// Auto-count lap when user returns to main starting area (skip the very first arrival)
+window._currentPanoId = id; // publish for HUD gating
+if(id.indexOf('7F92625E')!==-1){if(!_tawafFirstVisitSeen){_tawafFirstVisitSeen=true;}else if(typeof window.tawafLapInc==='function'){window.tawafLapInc();}}
+var key=(journeyContext==='initial'&&typeof idx==='number')?('idx:'+idx):id;var b=_pickBanner(id,idx);if(!b||shown[key])return;
+// Don't show if Ihram guide is still visible
+var g=document.getElementById('ihramGuide');if(g&&g.style.display!=='none'&&!g.classList.contains('hidden'))return;
+openBanner(b.title,b.html);
+if(_VO_MAP[id])playVO(_VO_MAP[id]);
+shown[key]=true;
+// Signal to journey nav that last guided panorama is reached (Maqam Ibrahim — st main 3)
+if(id==='panorama_7F9246DB_71D8_6AD6_41DA_A3880DC6DC13'&&typeof window!=='undefined'){window.journeyIsLastPanorama=true;if(typeof showJourneyNextButton==='function'){setTimeout(showJourneyNextButton,300);}}}
+if(!lowPerfMode){
+try{var po=new PerformanceObserver(function(l){l.getEntries().forEach(function(e){det(e.name);});});po.observe({type:'resource',buffered:false});}catch(e){}
+var OI=window.Image;window.Image=function(w,h){var img=new OI(w,h);var os=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src').set;Object.defineProperty(img,'src',{set:function(v){det(v);os.call(this,v);},get:function(){return Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src').get.call(this);}});return img;};window.Image.prototype=OI.prototype;
+}
+function hookTDV(){if(typeof TDV==='undefined'||!TDV.Tour||!TDV.Tour.Script)return setTimeout(hookTDV,500);var o1=TDV.Tour.Script.setPlayListSelectedIndex;if(o1){TDV.Tour.Script.setPlayListSelectedIndex=function(a,b){try{var id=a.get('items')[b].get('media').get('id');if(id!==lastId){lastId=id;chk(id,b);}}catch(e){}return o1.apply(this,arguments);};}var o2=TDV.Tour.Script.setMainMediaByIndex;if(o2){TDV.Tour.Script.setMainMediaByIndex=function(a){try{var items=this.mainPlayList.get('items');if(a>=0&&a<items.length){var id=items[a].get('media').get('id');if(id!==lastId){lastId=id;chk(id,a);}}}catch(e){}return o2.apply(this,arguments);};}console.log('[Tawaf] banner hooks installed');}
+hookTDV();
+})();
+
+// Ensure pre-Tawaf onboarding screens are visible — but NOT for ifadha/farewell (no Ihram needed again).
+(function(){
+    var ctx = new URL(window.location.href).searchParams.get('context') || '';
+    if(ctx === 'ifadha' || ctx === 'farewell') return;
+    var guide=document.getElementById('ihramGuide');
+    if(!guide) return;
+    // Apply admin overrides for the 3 Ihram guide screens (title + body HTML)
+    if(window.PPContent && window.PPContent.hasData){
+      [['tw-guide-0',0],['tw-guide-1',1],['tw-guide-2',2]].forEach(function(pair){
+        var ov = window.PPContent.byId('tawaf-initial', pair[0]); if(!ov) return;
+        var step = guide.querySelector('.ihram-step[data-step="'+pair[1]+'"]'); if(!step) return;
+        if(ov.title){
+          var h = step.querySelector('.ihram-heading'); if(h) h.innerHTML = ov.title;
+        }
+        if(ov.body){
+          // Replace primary content block: prefer .ihram-body, else .ihram-list, else inject
+          var primary = step.querySelector('.ihram-body, .ihram-list, .ihram-three-col');
+          if(primary){
+            var div = document.createElement('div');
+            div.className='ihram-body';
+            div.style.lineHeight='1.6';
+            div.innerHTML = ov.body;
+            primary.parentNode.insertBefore(div, primary);
+            primary.style.display='none';
+            // Also hide the dua paragraph for step 0 since we replaced body
+            var dua = step.querySelector('.ihram-dua'); if(dua && pair[1]===0) dua.style.display='none';
+          }
+        }
+      });
+    }
+    guide.classList.remove('hidden');
+    guide.style.display='flex';
+    setTimeout(function(){
+        if(typeof playVO==='function'){
+            var _ov=window.PPContent&&window.PPContent.byId('tawaf-initial','tw-guide-0');
+            var _wf=_ov?_ov.audio:'English Welcome Info.mp3';
+            if(_wf) playVO(_wf);
+        }
+    }, 800);
+})();
+
+// For ifadha/farewell: jump to the designated starting area panorama and show intro banner
+(function(){
+  var ctx = new URL(window.location.href).searchParams.get('context') || '';
+  if(ctx !== 'ifadha' && ctx !== 'farewell') return;
+  var START_PANO = 'panorama_89070D75_955C_4A01_41D4_F7F58617B959';
+  function jumpToStartingArea(retries){
+    retries = retries || 0;
+    try{
+      var t = TDV.PlayerAPI.getCurrentPlayer();
+      var pl = t && t.mainPlayList;
+      if(!pl){ if(retries<40) return setTimeout(function(){ jumpToStartingArea(retries+1); }, 250); return; }
+      var items = pl.get('items');
+      for(var i=0; i<items.length; i++){
+        if(items[i].get('media').get('id') === START_PANO){
+          if(pl.get('selectedIndex') !== i) pl.set('selectedIndex', i);
+          // trigger the context-specific intro banner after jump
+          setTimeout(function(){ if(typeof _bannerChk==='function') _bannerChk('panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5'); }, 700);
+          return;
+        }
+      }
+    }catch(e){ if(retries<40) setTimeout(function(){ jumpToStartingArea(retries+1); }, 250); }
+  }
+  setTimeout(jumpToStartingArea, 1500);
+})();
+</script>
+
+<!-- ═══ Tawaf Lap Counter HUD ═══ -->
+<style>
+#tawafCounter{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:10002;
+display:none;align-items:center;gap:7px;padding:5px 12px;border-radius:999px;
+background:linear-gradient(145deg,#FFFDF7,#F4EBD2);
+border:1px solid #C9A84C;box-shadow:0 2px 10px rgba(0,0,0,0.22);
+font-family:'DM Sans',Arial,sans-serif;color:#3D2B1F;}
+#tawafCounter .tcLabel{font-size:11px;letter-spacing:0.2px;color:#8B6914;font-weight:700;}
+#tawafCounter .tcCount{font-size:13px;font-weight:800;color:#8B6914;min-width:32px;text-align:center;letter-spacing:0.3px;}
+#tawafCounter button{background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;border:none;
+border-radius:999px;padding:3px 9px;font-size:10px;font-weight:600;cursor:pointer;
+box-shadow:0 1px 4px rgba(201,168,76,0.35);transition:transform .12s;line-height:1.3;}
+#tawafCounter button:active{transform:scale(0.94);}
+#tawafCounter .tcReset{background:rgba(139,105,20,0.1);box-shadow:none;padding:3px 8px;font-size:10px;color:#8B6914;}
+#tawafComplete{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10004;display:none;
+width:min(92vw,520px);padding:30px 28px;border-radius:24px;text-align:center;
+background:linear-gradient(135deg,#fff8e7,#fbecc4);border:2px solid #C9A84C;
+box-shadow:0 20px 60px rgba(0,0,0,0.5);font-family:'DM Sans',Arial,sans-serif;color:#3D2B1F;}
+#tawafComplete h3{margin:0 0 10px;color:#22c55e;font-size:24px;}
+#tawafComplete p{margin:0 0 16px;font-size:15px;line-height:1.5;}
+#tawafComplete button{background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;border:none;
+border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:pointer;margin:0 6px;}
+</style>
+<div id="tawafCounter">
+  <span class="tcLabel">🕋 Circuit</span>
+  <span class="tcCount" id="tawafCount">0/7</span>
+  <button class="tcReset" onclick="tawafLapReset()" title="Reset">↺</button>
+</div>
+<div id="tawafComplete">
+  <h3 id="tcTitle">🎉 Tawaf Complete!</h3>
+  <p id="tcMsg">Alhamdulillah! You have completed all seven circuits of the Kaaba.<br>May Allah accept your Tawaf.</p>
+  <p style="font-size:13px;opacity:0.75;margin-bottom:20px;">What would you like to do next?</p>
+  <button id="tcNextBtn">Next ▸</button>
+  <button class="tcReset" onclick="tawafLapReset();document.getElementById('tawafComplete').style.display='none';location.reload()">↺ Restart Tawaf</button>
+</div>
+<script>
+(function(){
+  var ctx=new URL(window.location).searchParams.get('context')||'initial';
+  var nextBtn=document.getElementById('tcNextBtn');
+  var titleEl=document.getElementById('tcTitle');
+  var msgEl=document.getElementById('tcMsg');
+  function go(href){return function(){sessionStorage.removeItem('tawafLaps');window.location.href=href;};}
+  if(ctx==='ifadha'){
+    titleEl.textContent='🎉 Tawaf al-Ifadha Complete!';
+    msgEl.innerHTML='Alhamdulillah! You have completed Tawaf al-Ifadha.<br>You will now return to your tent at Mina to rest before the 11th day stoning.';
+    nextBtn.textContent='Return to Mina (Tents) ▸';
+    nextBtn.onclick=go('../3%20Mina/index.htm?context=tents-11th');
+  } else if(ctx==='farewell'){
+    titleEl.textContent='🕋 Hajj Complete — May Allah Accept!';
+    msgEl.innerHTML='You have completed Tawaf al-Wida’, the farewell circumambulation.<br><br>Recite as you exit with your right foot:<br><em style="color:#8B6914;display:block;margin-top:8px;">Bismillāhi wa s-salātu wa s-salāmu ʿalā rasūlillāh, Allāhumma innī asʾaluka min faḍlik.</em><br><span style="font-size:12px;opacity:0.75;">“In the name of Allah, and prayers and peace upon the Messenger of Allah. O Allah, I ask You for Your bounty.”</span><br><br><strong style="color:#22c55e;">Congratulations on completing your Hajj. May Allah accept this act of ‘ibādah.</strong>';
+    nextBtn.textContent='🏠 Return to Home';
+    nextBtn.onclick=function(){sessionStorage.removeItem('tawafLaps');window.location.href='/index.html';};
+  } else {
+    nextBtn.textContent="Next: Sa'i ▸";
+    nextBtn.onclick=go('../2%20Safa%20and%20Marwa/index.htm');
+  }
+})();
+</script>
+<script>
+(function(){
+  var laps = parseInt(sessionStorage.getItem('tawafLaps')||'0',10);
+  var hud = document.getElementById('tawafCounter');
+  var countEl = document.getElementById('tawafCount');
+  function render(){countEl.textContent = laps + '/7';}
+  window.tawafLapInc = function(){
+    if(laps>=7) return;
+    laps++; sessionStorage.setItem('tawafLaps', laps); render();
+    if(laps===7){
+      window._tawafActive = false;
+      setTimeout(function(){ document.getElementById('tawafComplete').style.display='block'; }, 250);
+    }
+  };
+  window.tawafLapReset = function(){ laps=0; sessionStorage.setItem('tawafLaps','0'); render(); window._tawafActive = true; };
+  render();
+  // Once user has begun tawaf, keep HUD visible across all panoramas until 7/7.
+  if(laps>0 && laps<7) window._tawafActive = true;
+  // Show HUD ONLY on the main starting area panorama (panorama_7F92625E_…),
+  // and only after the Ihram guide is dismissed.
+  // Uses window._currentPanoId published by chk() above (most reliable).
+  function curPanoId(){
+    if(window._currentPanoId) return window._currentPanoId;
+    try{
+      var p = TDV.PlayerAPI.getCurrentPlayer();
+      var pl = p && p.mainPlayList;
+      if(!pl) return '';
+      var i = pl.get('selectedIndex');
+      if(i<0) return '';
+      return pl.get('items')[i].get('media').get('id') || '';
+    }catch(e){ return ''; }
+  }
+  function maybeShow(){
+    var g = document.getElementById('ihramGuide');
+    var ihramHidden = !g || g.style.display==='none' || g.classList.contains('hidden');
+    var id = curPanoId();
+    var onStart = id.indexOf('7F92625E') !== -1;
+    // First arrival at the start panorama activates persistent counter.
+    if(ihramHidden && onStart && laps<7) window._tawafActive = true;
+    // Persist HUD throughout the tawaf activity (any panorama) until 7/7.
+    var active = window._tawafActive && laps<7;
+    hud.style.display = (ihramHidden && (active || onStart)) ? 'flex' : 'none';
+  }
+  setInterval(maybeShow, 600);
+})();
+</script>
+
+<script>
+if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Tawaf VR Scene",content_category:"VR Hajj Tour",content_type:"vr_360_scene"});}
+</script>
+<script src="../../../meta-capi.js" defer></script>
+<!-- ═══ Scene Navigation Overlay ═══ -->
+<script>window._sceneNavBase='../';window._sceneNavCurrent='tawaf';</script>
+<script src="../../scene-nav-overlay.js?v=7" defer></script>
+</body>
+</html>
+</html>

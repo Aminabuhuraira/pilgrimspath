@@ -10,7 +10,10 @@ const SUPABASE_URL = 'https://giftctxrqvlfekhzpcaa.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpZnRjdHhycXZsZmVraHpwY2FhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3MTg0NjQsImV4cCI6MjA4ODI5NDQ2NH0.Dm4tb6lvLMf9CDLo04qA9msYVLjBT-Web48pgk0BOYc';
 const CLAUDE_PROXY = '/api/claude';
 
-let demoMode = true;
+// LIVE mode is the default. Mock data has been removed; the dashboard now
+// reads directly from Supabase. Sections without a real backing data source
+// render an empty state instead of fake numbers.
+let demoMode = false;
 let currentModule = 'overview';
 let calendarMonth = new Date().getMonth();
 let calendarYear = new Date().getFullYear();
@@ -18,132 +21,48 @@ let calendarItems = JSON.parse(localStorage.getItem('pp_calendar') || '[]');
 let aiDrafts = JSON.parse(localStorage.getItem('pp_ai_drafts') || '[]');
 let abTests = JSON.parse(localStorage.getItem('pp_ab_tests') || '[]');
 
-// ===== MOCK DATA =====
-const MOCK = {
-    users: generateMockUsers(186),
-    leads: 412,
-    vrSessions: 3847,
-    revenue: 4280,
-    revenueHistory: [1800,2100,2400,2200,3100,3600,4280],
-    months: ['Oct','Nov','Dec','Jan','Feb','Mar','Apr'],
-    trafficData: generateTrafficData(30),
-    countries: [
-        { code: 'US', flag: '🇺🇸', name: 'United States', count: 42 },
-        { code: 'GB', flag: '🇬🇧', name: 'United Kingdom', count: 28 },
-        { code: 'SA', flag: '🇸🇦', name: 'Saudi Arabia', count: 24 },
-        { code: 'NG', flag: '🇳🇬', name: 'Nigeria', count: 19 },
-        { code: 'MY', flag: '🇲🇾', name: 'Malaysia', count: 16 },
-        { code: 'PK', flag: '🇵🇰', name: 'Pakistan', count: 14 },
-        { code: 'ID', flag: '🇮🇩', name: 'Indonesia', count: 12 },
-        { code: 'CA', flag: '🇨🇦', name: 'Canada', count: 11 },
-        { code: 'AE', flag: '🇦🇪', name: 'UAE', count: 10 },
-        { code: 'TR', flag: '🇹🇷', name: 'Turkey', count: 8 }
-    ],
-    transactions: [
-        { date: '2026-04-19', user: 'Amina Hassan', type: 'Subscription', plan: 'Individual ($19/yr)', amount: '$19.00', status: 'completed' },
-        { date: '2026-04-18', user: 'Omar Sheikh', type: 'Donation', plan: '—', amount: '$50.00', status: 'completed' },
-        { date: '2026-04-18', user: 'Fatima Al-Rashid', type: 'Subscription', plan: 'Agency ($999/yr)', amount: '$999.00', status: 'completed' },
-        { date: '2026-04-17', user: 'Ibrahim Yusuf', type: 'Subscription', plan: 'Individual ($19/yr)', amount: '$19.00', status: 'completed' },
-        { date: '2026-04-17', user: 'Sarah Ahmed', type: 'Donation', plan: '—', amount: '$25.00', status: 'completed' },
-        { date: '2026-04-16', user: 'Khalid Bin Walid Agency', type: 'Subscription', plan: 'Agency ($999/yr)', amount: '$999.00', status: 'pending' },
-        { date: '2026-04-15', user: 'Maryam Obi', type: 'Donation', plan: '—', amount: '$10.00', status: 'completed' },
-        { date: '2026-04-14', user: 'Abdul Rahman', type: 'Subscription', plan: 'Individual ($19/yr)', amount: '$19.00', status: 'completed' }
-    ],
-    crmLeads: [
-        { name: 'Al-Huda Travel', value: '$5,990', stage: 'lead', contact: 'Ahmed K.', days: 3 },
-        { name: 'Sacred Journeys Ltd', value: '$11,970', stage: 'lead', contact: 'Omar S.', days: 5 },
-        { name: 'Barakah Tours', value: '$5,990', stage: 'qualified', contact: 'Fatima R.', days: 8 },
-        { name: 'Noor Pilgrimages', value: '$17,960', stage: 'qualified', contact: 'Hassan M.', days: 12 },
-        { name: 'Tawfiq Travels', value: '$5,990', stage: 'proposal', contact: 'Yusuf A.', days: 15 },
-        { name: 'Ihsan Group', value: '$11,970', stage: 'proposal', contact: 'Aisha B.', days: 20 },
-        { name: 'Madinah Voyages', value: '$5,990', stage: 'closed', contact: 'Bilal T.', days: 30 },
-        { name: 'Salam Travel Co', value: '$11,970', stage: 'closed', contact: 'Maryam O.', days: 45 }
-    ],
-    abTests: [
-        { name: 'Hero CTA: "Start Journey" vs "Experience Now"', varA: 'Start Your Journey', varB: 'Experience Now', aConv: 3.2, bConv: 4.7, status: 'active', days: 8, traffic: 2400 },
-        { name: 'Pricing: Show Annual vs Monthly', varA: 'Annual Only', varB: 'Monthly Toggle', aConv: 2.8, bConv: 3.1, status: 'active', days: 5, traffic: 1800 },
-        { name: 'VR Preview: Autoplay vs Click', varA: 'Click to Play', varB: 'Autoplay', aConv: 5.1, bConv: 6.8, status: 'active', days: 12, traffic: 3200 },
-        { name: 'Lead Form: Inline vs Popup', varA: 'Inline Form', varB: 'Popup Modal', aConv: 1.9, bConv: 2.4, status: 'active', days: 3, traffic: 900 }
-    ],
-    completedTests: [
-        { name: 'Donate Button Color', winner: 'Gold (#C9A84C)', lift: '+34%', confidence: '98%', duration: '14 days' },
-        { name: 'Nav Position: Sticky vs Fixed', winner: 'Fixed Top', lift: '+12%', confidence: '95%', duration: '10 days' },
-        { name: 'Article CTA Placement', winner: 'End of Article', lift: '+28%', confidence: '97%', duration: '18 days' },
-        { name: 'Email Subject: Question vs Statement', winner: 'Question Format', lift: '+41%', confidence: '99%', duration: '7 days' }
-    ],
-    notifications: [
-        { icon: 'fa-user-plus', cls: 'gold', text: '<strong>Amina Hassan</strong> signed up for Individual plan', time: '2 hours ago', unread: true },
-        { icon: 'fa-dollar-sign', cls: 'green', text: 'New donation of <strong>$50</strong> from Omar Sheikh', time: '4 hours ago', unread: true },
-        { icon: 'fa-building', cls: 'blue', text: '<strong>Khalid Bin Walid Agency</strong> requested a demo', time: '6 hours ago', unread: true },
-        { icon: 'fa-chart-line', cls: 'gold', text: 'Weekly traffic up <strong>18%</strong> — 3,200 sessions', time: '1 day ago', unread: false },
-        { icon: 'fa-flask', cls: 'green', text: 'A/B Test "Hero CTA" reached <strong>95% confidence</strong>', time: '1 day ago', unread: false },
-        { icon: 'fa-newspaper', cls: 'blue', text: 'Article "Hajj 2026 Dates" hit <strong>5,000 views</strong>', time: '2 days ago', unread: false },
-        { icon: 'fa-exclamation-triangle', cls: 'red', text: 'Paystack webhook timeout — resolved automatically', time: '3 days ago', unread: false }
-    ],
-    scenes: [
-        { name: 'Tawaf (Kaaba)', views: 12400, avgTime: '5:23', completion: 78 },
-        { name: 'Safa & Marwa', views: 9800, avgTime: '4:45', completion: 72 },
-        { name: 'Mina', views: 7200, avgTime: '3:18', completion: 65 },
-        { name: 'Arafah', views: 8900, avgTime: '6:02', completion: 82 },
-        { name: 'Muzdalifah', views: 6100, avgTime: '2:45', completion: 58 },
-        { name: 'Rami al-Jamarat', views: 5300, avgTime: '3:32', completion: 61 },
-        { name: 'Masjid al-Haram', views: 14200, avgTime: '7:15', completion: 85 }
-    ],
-    articles: [
-        { title: 'Hajj 2026 Dates & Schedule', views: 8400, shares: 342, ctr: '4.2%' },
-        { title: 'Complete Umrah Step-by-Step', views: 6200, shares: 218, ctr: '3.8%' },
-        { title: 'How to Perform Hajj Guide', views: 5800, shares: 195, ctr: '3.5%' },
-        { title: 'Tawaf Guide', views: 4100, shares: 156, ctr: '3.1%' },
-        { title: 'Ihram Guide for Men & Women', views: 3900, shares: 134, ctr: '2.9%' },
-        { title: 'Day of Arafah Guide', views: 3600, shares: 128, ctr: '3.3%' },
-        { title: 'What to Pack for Hajj', views: 3200, shares: 112, ctr: '2.7%' },
-        { title: 'VR Kaaba Tawaf Guide', views: 2800, shares: 98, ctr: '4.5%' }
-    ],
-    audienceSegments: [
-        { name: 'First-Time Pilgrims', size: '42%', desc: 'Age 25-40, exploring Hajj/Umrah info', engagement: 'High', color: 'gold' },
-        { name: 'Returning Pilgrims', size: '23%', desc: 'Have performed before, seeking VR nostalgia', engagement: 'Medium', color: 'blue' },
-        { name: 'Islamic Educators', size: '15%', desc: 'Teachers, imams using VR for education', engagement: 'Very High', color: 'green' },
-        { name: 'Travel Agencies', size: '8%', desc: 'B2B prospects evaluating platform', engagement: 'Medium', color: 'purple' },
-        { name: 'Muslim Parents', size: '12%', desc: 'Teaching children about Hajj virtually', engagement: 'High', color: 'orange' }
-    ]
+// ===== LIVE DATA STORE =====
+// Populated by Supabase queries. Each section that doesn't have a backing
+// table will fall back to an empty state (no fake data).
+const LIVE = {
+    users: [],            // profiles table rows
+    leads: 0,             // count of leads table rows
+    vrSessions: null,     // no telemetry table yet → empty state
+    revenue: null,        // no transactions table yet → empty state
+    revenueHistory: [],   // requires transactions history
+    months: [],
+    trafficData: { labels: [], visitors: [], sessions: [], pageViews: [] },
+    countries: [],        // aggregated from profiles.country
+    transactions: [],
+    crmLeads: [],
+    abTests: JSON.parse(localStorage.getItem('pp_ab_tests') || '[]'),
+    completedTests: [],
+    notifications: [],    // derived from recent profiles + leads
+    scenes: [],
+    articles: [],
+    audienceSegments: []
 };
 
-function generateMockUsers(count) {
-    const firstNames = ['Amina','Omar','Fatima','Ibrahim','Sarah','Khalid','Maryam','Abdul','Aisha','Hassan','Yusuf','Zainab','Ahmed','Layla','Bilal','Khadija','Mustafa','Noor','Ali','Hafsa'];
-    const lastNames = ['Hassan','Sheikh','Al-Rashid','Yusuf','Ahmed','Obi','Rahman','Malik','Khan','Patel','Ibrahim','Ali','Hussain','Bakr','Siddiqui','Farooq','Nasser','Saleh','Mahmoud','Chowdhury'];
-    const countries = ['US','GB','SA','NG','MY','PK','ID','CA','AE','TR','EG','IN','BD','DE','FR'];
-    const plans = ['Free','Free','Free','Free','Individual','Individual','Individual','Agency'];
-    const users = [];
-    const now = Date.now();
-    for (let i = 0; i < count; i++) {
-        const createdDaysAgo = Math.floor(Math.random() * 180);
-        const lastActiveDaysAgo = Math.floor(Math.random() * Math.min(createdDaysAgo + 1, 30));
-        users.push({
-            name: firstNames[i % firstNames.length] + ' ' + lastNames[i % lastNames.length],
-            email: (firstNames[i % firstNames.length] + '.' + lastNames[i % lastNames.length] + (i > 19 ? i : '') + '@example.com').toLowerCase(),
-            country: countries[Math.floor(Math.random() * countries.length)],
-            plan: plans[Math.floor(Math.random() * plans.length)],
-            joined: new Date(now - createdDaysAgo * 86400000).toISOString().split('T')[0],
-            lastActive: lastActiveDaysAgo === 0 ? 'Today' : lastActiveDaysAgo + 'd ago',
-            status: lastActiveDaysAgo < 7 ? 'active' : lastActiveDaysAgo < 30 ? 'inactive' : 'churned'
-        });
-    }
-    return users;
-}
+// Backwards-compat alias so any code that still references MOCK keeps working
+// while pointing at the live store.
+const MOCK = LIVE;
 
-function generateTrafficData(days) {
-    const data = { labels: [], visitors: [], sessions: [], pageViews: [] };
-    const now = new Date();
-    for (let i = days - 1; i >= 0; i--) {
-        const d = new Date(now - i * 86400000);
-        data.labels.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
-        const base = 80 + Math.floor(Math.random() * 60);
-        data.visitors.push(base);
-        data.sessions.push(base + Math.floor(Math.random() * 40));
-        data.pageViews.push(base * 3 + Math.floor(Math.random() * 100));
-    }
-    return data;
-}
+// Country code → flag emoji map (used by populateCountries when aggregating
+// real users from Supabase profiles.country)
+const COUNTRY_FLAGS = {
+    US:'🇺🇸', GB:'🇬🇧', SA:'🇸🇦', NG:'🇳🇬', MY:'🇲🇾', PK:'🇵🇰', ID:'🇮🇩',
+    CA:'🇨🇦', AE:'🇦🇪', TR:'🇹🇷', EG:'🇪🇬', IN:'🇮🇳', BD:'🇧🇩', DE:'🇩🇪',
+    FR:'🇫🇷', AU:'🇦🇺', ZA:'🇿🇦', KE:'🇰🇪', MA:'🇲🇦', JO:'🇯🇴', QA:'🇶🇦',
+    KW:'🇰🇼', BH:'🇧🇭', OM:'🇴🇲', LB:'🇱🇧', IQ:'🇮🇶', SY:'🇸🇾', YE:'🇾🇪'
+};
+const COUNTRY_NAMES = {
+    US:'United States', GB:'United Kingdom', SA:'Saudi Arabia', NG:'Nigeria',
+    MY:'Malaysia', PK:'Pakistan', ID:'Indonesia', CA:'Canada', AE:'UAE',
+    TR:'Turkey', EG:'Egypt', IN:'India', BD:'Bangladesh', DE:'Germany',
+    FR:'France', AU:'Australia', ZA:'South Africa', KE:'Kenya', MA:'Morocco',
+    JO:'Jordan', QA:'Qatar', KW:'Kuwait', BH:'Bahrain', OM:'Oman',
+    LB:'Lebanon', IQ:'Iraq', SY:'Syria', YE:'Yemen'
+};
 
 // ===== MODULE SWITCHING =====
 function switchModule(moduleId) {
@@ -170,6 +89,7 @@ function initModuleCharts(moduleId) {
         case 'ai-hub': initAICharts(); break;
         case 'content': initContentCharts(); break;
         case 'revenue': initRevenueCharts(); break;
+        case 'journey-content': if(window.PPJourneyContent&&window.PPJourneyContent.mount)window.PPJourneyContent.mount(); break;
     }
 }
 
@@ -192,56 +112,96 @@ async function supabaseFetch(table, query) {
         const res = await fetch(url, {
             headers: {
                 'apikey': SUPABASE_KEY,
-                'Authorization': `Bearer ${SUPABASE_KEY}`
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Prefer': 'count=exact'
             }
         });
         if (!res.ok) throw new Error(`Supabase error: ${res.status}`);
-        return await res.json();
+        const range = res.headers.get('content-range') || '';
+        const totalCount = parseInt(range.split('/')[1], 10);
+        const rows = await res.json();
+        if (Array.isArray(rows)) rows._count = isNaN(totalCount) ? rows.length : totalCount;
+        return rows;
     } catch (e) {
-        console.warn('Supabase fetch failed:', e);
+        console.warn('[Supabase] fetch failed:', table, e.message);
         return null;
     }
 }
 
-async function loadLiveData() {
-    // Try loading real user data from Supabase
-    const users = await supabaseFetch('profiles', '?select=*&order=created_at.desc&limit=200');
-    const leads = await supabaseFetch('leads', '?select=id&head=true');
-
-    if (users && users.length > 0) {
-        document.getElementById('statTotalUsers').textContent = users.length.toLocaleString();
-        // Additional live data processing could go here
-    } else {
-        // Fallback to demo if no live data
-        demoMode = true;
-        document.getElementById('demoToggle').classList.add('active');
-        loadDemoData();
+// Map a Supabase profile row → admin-table user shape
+function profileToUser(p){
+    const first = (p.first_name||'').trim();
+    const last  = (p.last_name||'').trim();
+    const name  = (p.display_name||'').trim() || `${first} ${last}`.trim() || (p.email||'').split('@')[0] || 'User';
+    const joined = (p.created_at||'').split('T')[0] || '';
+    let lastActive = '—';
+    let status = 'inactive';
+    if(p.last_sign_in_at){
+        const days = Math.floor((Date.now() - new Date(p.last_sign_in_at).getTime())/86400000);
+        lastActive = days === 0 ? 'Today' : days + 'd ago';
+        status = days < 7 ? 'active' : days < 30 ? 'inactive' : 'churned';
     }
+    return {
+        name, email: p.email||'',
+        country: p.country||'',
+        plan: p.plan||'Free',
+        joined, lastActive, status
+    };
 }
 
-function loadDemoData() {
-    // Overview stats
-    document.getElementById('statTotalUsers').textContent = MOCK.users.length.toLocaleString();
-    document.getElementById('statUsersTrend').textContent = '12%';
-    document.getElementById('statVRSessions').textContent = MOCK.vrSessions.toLocaleString();
-    document.getElementById('statVRTrend').textContent = '18%';
-    document.getElementById('statRevenue').textContent = '$' + MOCK.revenue.toLocaleString();
-    document.getElementById('statRevTrend').textContent = '24%';
-    document.getElementById('statLeads').textContent = MOCK.leads.toLocaleString();
-    document.getElementById('statLeadsTrend').textContent = '15%';
+async function loadLiveData() {
+    // 0. Restore admin-created data persisted in localStorage
+    try {
+        const savedTests = localStorage.getItem('pp_ab_tests');
+        if(savedTests) LIVE.abTests = JSON.parse(savedTests);
+        const savedLeads = localStorage.getItem('pp_crm_leads');
+        if(savedLeads) LIVE.crmLeads = JSON.parse(savedLeads);
+    } catch(e) { console.warn('localStorage restore failed', e); }
 
-    // User stats
-    const newThisWeek = MOCK.users.filter(u => {
-        const d = new Date(u.joined);
-        return (Date.now() - d) < 7 * 86400000;
-    }).length;
-    document.getElementById('usersNewWeek').textContent = newThisWeek;
-    document.getElementById('usersActive30').textContent = MOCK.users.filter(u => u.status === 'active').length;
-    document.getElementById('usersPremium').textContent = MOCK.users.filter(u => u.plan === 'Individual').length;
-    document.getElementById('usersAgency').textContent = MOCK.users.filter(u => u.plan === 'Agency').length;
+    // 1. Profiles → users
+    const profiles = await supabaseFetch('profiles', '?select=*&order=created_at.desc&limit=500');
+    LIVE.users = (profiles || []).map(profileToUser);
 
-    populateUsersTable(MOCK.users);
-    populateCountries(MOCK.countries);
+    // 2. Leads count
+    const leads = await supabaseFetch('leads', '?select=id&limit=1');
+    LIVE.leads = (leads && typeof leads._count === 'number') ? leads._count : (leads ? leads.length : 0);
+
+    // 3. Aggregate countries from profiles
+    const countryCounts = {};
+    LIVE.users.forEach(u => { if(u.country) countryCounts[u.country] = (countryCounts[u.country]||0)+1; });
+    LIVE.countries = Object.entries(countryCounts)
+        .sort((a,b)=>b[1]-a[1])
+        .slice(0,10)
+        .map(([code,count]) => ({
+            code,
+            flag: COUNTRY_FLAGS[code] || '🌍',
+            name: COUNTRY_NAMES[code] || code,
+            count
+        }));
+
+    // 4. Recent activity = recent signups + recent leads
+    const recentLeads = await supabaseFetch('leads', '?select=email,created_at,source&order=created_at.desc&limit=5');
+    LIVE.notifications = [];
+    LIVE.users.slice(0,5).forEach(u => {
+        LIVE.notifications.push({
+            icon:'fa-user-plus', cls:'gold',
+            text:`<strong>${escapeHTML(u.name)}</strong> joined Pilgrim's Path`,
+            time: timeAgo(u.joined), unread:false
+        });
+    });
+    (recentLeads||[]).forEach(l => {
+        LIVE.notifications.push({
+            icon:'fa-envelope', cls:'blue',
+            text:`<strong>${escapeHTML(l.email)}</strong> signed up via ${escapeHTML(l.source||'site')}`,
+            time: timeAgo(l.created_at), unread:false
+        });
+    });
+    LIVE.notifications.sort((a,b)=> a.time.localeCompare(b.time));
+
+    // 5. Render everything
+    renderLiveStats();
+    populateUsersTable(LIVE.users);
+    populateCountries(LIVE.countries);
     populateRecentActivity();
     populateTopArticles();
     populateABTests();
@@ -254,6 +214,51 @@ function loadDemoData() {
     renderUpcoming();
     loadSavedDrafts();
     initOverviewCharts();
+}
+
+function renderLiveStats(){
+    setStat('statTotalUsers', LIVE.users.length);
+    setStat('statUsersTrend', '—');
+    setStat('statVRSessions', LIVE.vrSessions==null ? '—' : LIVE.vrSessions);
+    setStat('statVRTrend', '—');
+    setStat('statRevenue', LIVE.revenue==null ? '—' : ('$'+LIVE.revenue.toLocaleString()));
+    setStat('statRevTrend', '—');
+    setStat('statLeads', LIVE.leads);
+    setStat('statLeadsTrend', '—');
+
+    // Per-tab user metrics
+    const newThisWeek = LIVE.users.filter(u => {
+        if(!u.joined) return false;
+        return (Date.now() - new Date(u.joined).getTime()) < 7*86400000;
+    }).length;
+    setStat('usersNewWeek', newThisWeek);
+    setStat('usersActive30', LIVE.users.filter(u => u.status === 'active').length);
+    setStat('usersPremium', LIVE.users.filter(u => u.plan === 'Individual').length);
+    setStat('usersAgency', LIVE.users.filter(u => u.plan === 'Agency').length);
+}
+
+function setStat(id, val){
+    const el = document.getElementById(id); if(!el) return;
+    if(typeof val === 'number') el.textContent = val.toLocaleString();
+    else el.textContent = val;
+}
+
+function timeAgo(iso){
+    if(!iso) return '';
+    const d = new Date(iso); if(isNaN(d)) return '';
+    const s = Math.floor((Date.now()-d.getTime())/1000);
+    if(s<60) return 'just now';
+    if(s<3600) return Math.floor(s/60)+'m ago';
+    if(s<86400) return Math.floor(s/3600)+'h ago';
+    if(s<2592000) return Math.floor(s/86400)+'d ago';
+    return d.toISOString().split('T')[0];
+}
+
+function loadDemoData() {
+    // Demo mode is no longer the default. This shim keeps the function name
+    // working for any legacy callers, but routes everything through the live
+    // loader so the dashboard never displays fabricated numbers.
+    return loadLiveData();
 }
 
 // ===== CHART INITIALIZATION =====
@@ -283,102 +288,74 @@ function initOverviewCharts() {
     const ctx1 = document.getElementById('trafficChart');
     if (!ctx1) return;
     destroyChart('traffic');
-    charts.traffic = new Chart(ctx1, {
-        type: 'line',
-        data: {
-            labels: MOCK.trafficData.labels,
-            datasets: [
-                {
-                    label: 'Visitors',
-                    data: MOCK.trafficData.visitors,
-                    borderColor: '#C9A84C',
-                    backgroundColor: 'rgba(201,168,76,0.1)',
-                    fill: true,
-                    tension: 0.4,
-                    borderWidth: 2,
-                    pointRadius: 0,
-                    pointHoverRadius: 4
-                },
-                {
-                    label: 'Sessions',
-                    data: MOCK.trafficData.sessions,
-                    borderColor: '#3B82F6',
-                    backgroundColor: 'rgba(59,130,246,0.08)',
-                    fill: true,
-                    tension: 0.4,
-                    borderWidth: 2,
-                    pointRadius: 0,
-                    pointHoverRadius: 4
-                }
-            ]
-        },
-        options: {
-            ...chartDefaults,
-            interaction: { intersect: false, mode: 'index' }
-        }
-    });
+    const td = LIVE.trafficData || { labels: [], visitors: [], sessions: [] };
+    if(!td.labels || td.labels.length === 0){
+        const wrap = ctx1.parentElement; if(wrap) wrap.innerHTML = '<div style="padding:48px;text-align:center;color:var(--text-muted);font-size:0.82rem"><i class="fas fa-chart-line" style="font-size:2rem;display:block;margin-bottom:10px;opacity:.5"></i>Traffic analytics not connected. Integrate Vercel Analytics or Google Analytics to see daily traffic here.</div>';
+    } else {
+        charts.traffic = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: td.labels,
+                datasets: [
+                    { label: 'Visitors', data: td.visitors, borderColor: '#C9A84C', backgroundColor: 'rgba(201,168,76,0.1)', fill: true, tension: 0.4, borderWidth: 2, pointRadius: 0, pointHoverRadius: 4 },
+                    { label: 'Sessions', data: td.sessions, borderColor: '#3B82F6', backgroundColor: 'rgba(59,130,246,0.08)', fill: true, tension: 0.4, borderWidth: 2, pointRadius: 0, pointHoverRadius: 4 }
+                ]
+            },
+            options: { ...chartDefaults, interaction: { intersect: false, mode: 'index' } }
+        });
+    }
 
-    // Funnel Chart
+    // Funnel Chart — only render when we have any of: leads, users
     const ctx2 = document.getElementById('funnelChart');
     if (!ctx2) return;
     destroyChart('funnel');
+    const totalUsers = LIVE.users.length;
+    const totalLeads = LIVE.leads || 0;
+    if(totalUsers === 0 && totalLeads === 0){
+        const wrap = ctx2.parentElement; if(wrap) wrap.innerHTML = '<div style="padding:48px;text-align:center;color:var(--text-muted);font-size:0.82rem"><i class="fas fa-funnel-dollar" style="font-size:2rem;display:block;margin-bottom:10px;opacity:.5"></i>Conversion funnel will populate once leads and users start coming in.</div>';
+        return;
+    }
+    const paid = LIVE.users.filter(u => u.plan==='Individual').length;
+    const agency = LIVE.users.filter(u => u.plan==='Agency').length;
+    const free = LIVE.users.filter(u => u.plan==='Free').length;
     charts.funnel = new Chart(ctx2, {
         type: 'bar',
         data: {
-            labels: ['Site Visitors', 'VR Sessions', 'Leads', 'Free Users', 'Paid Users', 'Agency'],
+            labels: ['Email Leads', 'All Users', 'Free Users', 'Paid Users', 'Agency'],
             datasets: [{
-                data: [3847, 2180, 412, 186, 48, 8],
-                backgroundColor: ['#C9A84C', '#E8D5A0', '#3B82F6', '#10B981', '#8B5CF6', '#F59E0B'],
+                data: [totalLeads, totalUsers, free, paid, agency],
+                backgroundColor: ['#3B82F6', '#C9A84C', '#10B981', '#8B5CF6', '#F59E0B'],
                 borderRadius: 6,
                 borderSkipped: false
             }]
         },
-        options: {
-            ...chartDefaults,
-            indexAxis: 'y',
-            plugins: { ...chartDefaults.plugins, legend: { display: false } }
-        }
+        options: { ...chartDefaults, indexAxis: 'y', plugins: { ...chartDefaults.plugins, legend: { display: false } } }
     });
 }
 
 function initAICharts() {
-    // Campaign performance
+    // Campaign performance — no real ad-platform integration yet, show empty state
     const ctx1 = document.getElementById('campaignChart');
-    if (!ctx1) return;
-    destroyChart('campaign');
-    charts.campaign = new Chart(ctx1, {
-        type: 'bar',
-        data: {
-            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-            datasets: [
-                { label: 'Impressions (K)', data: [42, 58, 71, 84], backgroundColor: '#C9A84C', borderRadius: 4 },
-                { label: 'Clicks', data: [1.6, 2.1, 2.8, 3.2], backgroundColor: '#3B82F6', borderRadius: 4 }
-            ]
-        },
-        options: chartDefaults
-    });
-
-    // Spend vs Revenue
+    if (ctx1 && !charts.campaign) {
+        const wrap = ctx1.parentElement;
+        if(wrap) wrap.innerHTML = '<div style="padding:48px;text-align:center;color:var(--text-muted);font-size:0.82rem"><i class="fas fa-bullhorn" style="font-size:2rem;display:block;margin-bottom:10px;opacity:.5"></i>Campaign metrics require a Meta/Google Ads API integration. Use the AI prompts above to draft campaigns now.</div>';
+    }
     const ctx2 = document.getElementById('spendRevenueChart');
-    if (!ctx2) return;
-    destroyChart('spendRevenue');
-    charts.spendRevenue = new Chart(ctx2, {
-        type: 'line',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr'],
-            datasets: [
-                { label: 'Ad Spend', data: [800, 950, 1100, 1240], borderColor: '#EF4444', backgroundColor: 'rgba(239,68,68,0.1)', fill: true, tension: 0.4 },
-                { label: 'Revenue', data: [2200, 3100, 3600, 4280], borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.1)', fill: true, tension: 0.4 }
-            ]
-        },
-        options: { ...chartDefaults, interaction: { intersect: false, mode: 'index' } }
-    });
+    if (ctx2 && !charts.spendRevenue) {
+        const wrap = ctx2.parentElement;
+        if(wrap) wrap.innerHTML = '<div style="padding:48px;text-align:center;color:var(--text-muted);font-size:0.82rem"><i class="fas fa-chart-area" style="font-size:2rem;display:block;margin-bottom:10px;opacity:.5"></i>Spend vs revenue will appear once ad-spend data and the <code>transactions</code> table are connected.</div>';
+    }
 }
 
 function initContentCharts() {
     const ctx = document.getElementById('sceneChart');
     if (!ctx) return;
     destroyChart('scene');
+    const scenes = LIVE.scenes || [];
+    if(scenes.length === 0){
+        const wrap = ctx.parentElement; if(wrap) wrap.innerHTML = '<div style="padding:48px;text-align:center;color:var(--text-muted);font-size:0.82rem"><i class="fas fa-vr-cardboard" style="font-size:2rem;display:block;margin-bottom:10px;opacity:.5"></i>VR scene analytics will appear once journey telemetry is connected.</div>';
+        return;
+    }
     charts.scene = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -400,47 +377,33 @@ function initRevenueCharts() {
     const ctx1 = document.getElementById('revenueChart');
     if (ctx1) {
         destroyChart('revenue');
-        charts.revenue = new Chart(ctx1, {
-            type: 'line',
-            data: {
-                labels: MOCK.months,
-                datasets: [{
-                    label: 'Revenue ($)',
-                    data: MOCK.revenueHistory,
-                    borderColor: '#C9A84C',
-                    backgroundColor: 'rgba(201,168,76,0.15)',
-                    fill: true,
-                    tension: 0.4,
-                    borderWidth: 2,
-                    pointBackgroundColor: '#C9A84C'
-                }]
-            },
-            options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, legend: { display: false } } }
-        });
+        const history = LIVE.revenueHistory || [];
+        if(history.length === 0){
+            const wrap = ctx1.parentElement; if(wrap) wrap.innerHTML = '<div style="padding:48px;text-align:center;color:var(--text-muted);font-size:0.82rem"><i class="fas fa-chart-line" style="font-size:2rem;display:block;margin-bottom:10px;opacity:.5"></i>Revenue chart will populate once a Supabase <code>transactions</code> table is added and Paystack webhooks log payments.</div>';
+        } else {
+            charts.revenue = new Chart(ctx1, {
+                type: 'line',
+                data: { labels: LIVE.months, datasets: [{ label: 'Revenue ($)', data: history, borderColor: '#C9A84C', backgroundColor: 'rgba(201,168,76,0.15)', fill: true, tension: 0.4, borderWidth: 2, pointBackgroundColor: '#C9A84C' }] },
+                options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, legend: { display: false } } }
+            });
+        }
     }
 
     const ctx2 = document.getElementById('planChart');
     if (ctx2) {
         destroyChart('plan');
-        charts.plan = new Chart(ctx2, {
-            type: 'doughnut',
-            data: {
-                labels: ['Free', 'Individual ($19/yr)', 'Agency ($999/yr)'],
-                datasets: [{
-                    data: [130, 48, 8],
-                    backgroundColor: ['#5A6478', '#C9A84C', '#8B5CF6'],
-                    borderColor: '#1A1F35',
-                    borderWidth: 3
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'bottom', labels: { color: '#8B95A8', font: { family: 'DM Sans', size: 11 }, padding: 16 } }
-                }
-            }
-        });
+        const free = LIVE.users.filter(u=>u.plan==='Free').length;
+        const ind  = LIVE.users.filter(u=>u.plan==='Individual').length;
+        const agy  = LIVE.users.filter(u=>u.plan==='Agency').length;
+        if(free+ind+agy === 0){
+            const wrap = ctx2.parentElement; if(wrap) wrap.innerHTML = '<div style="padding:48px;text-align:center;color:var(--text-muted);font-size:0.82rem"><i class="fas fa-chart-pie" style="font-size:2rem;display:block;margin-bottom:10px;opacity:.5"></i>Plan distribution will appear once users are signing up.</div>';
+        } else {
+            charts.plan = new Chart(ctx2, {
+                type: 'doughnut',
+                data: { labels: ['Free', 'Individual ($19/yr)', 'Agency ($999/yr)'], datasets: [{ data: [free, ind, agy], backgroundColor: ['#5A6478', '#C9A84C', '#8B5CF6'], borderColor: '#1A1F35', borderWidth: 3 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#8B95A8', font: { family: 'DM Sans', size: 11 }, padding: 16 } } } }
+            });
+        }
     }
 }
 
@@ -448,6 +411,10 @@ function initRevenueCharts() {
 function populateUsersTable(users) {
     const tbody = document.getElementById('usersTableBody');
     if (!tbody) return;
+    if(!users || users.length === 0){
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted)"><i class="fas fa-users" style="font-size:1.6rem;display:block;margin-bottom:8px;opacity:.5"></i>No users yet — once people sign up they will appear here.</td></tr>';
+        return;
+    }
     const flagMap = { US: '🇺🇸', GB: '🇬🇧', SA: '🇸🇦', NG: '🇳🇬', MY: '🇲🇾', PK: '🇵🇰', ID: '🇮🇩', CA: '🇨🇦', AE: '🇦🇪', TR: '🇹🇷', EG: '🇪🇬', IN: '🇮🇳', BD: '🇧🇩', DE: '🇩🇪', FR: '🇫🇷' };
     const planTag = { Free: 'tag-info', Individual: 'tag-gold', Agency: 'tag-purple' };
     const statusTag = { active: 'tag-success', inactive: 'tag-warning', churned: 'tag-danger' };
@@ -475,6 +442,10 @@ function populateUsersTable(users) {
 function populateCountries(countries) {
     const el = document.getElementById('topCountries');
     if (!el) return;
+    if(!countries || countries.length === 0){
+        el.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:0.82rem"><i class="fas fa-globe" style="display:block;margin-bottom:6px;opacity:.5"></i>No country data yet</div>';
+        return;
+    }
     el.innerHTML = countries.map(c => `
         <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
             <div style="display:flex;align-items:center;gap:10px">
@@ -489,16 +460,13 @@ function populateCountries(countries) {
 function populateRecentActivity() {
     const el = document.getElementById('recentActivity');
     if (!el) return;
-    const activities = [
-        { dot: 'gold', text: '<strong>Amina Hassan</strong> signed up for Individual plan', time: '2h ago' },
-        { dot: 'green', text: '<strong>Omar Sheikh</strong> donated $50', time: '4h ago' },
-        { dot: 'blue', text: '<strong>Fatima Al-Rashid</strong> completed Tawaf VR scene', time: '5h ago' },
-        { dot: 'gold', text: '<strong>Ibrahim Y.</strong> started free trial', time: '6h ago' },
-        { dot: 'green', text: '<strong>Sarah Ahmed</strong> donated $25', time: '8h ago' },
-        { dot: 'blue', text: '<strong>Khalid Agency</strong> requested demo', time: '1d ago' },
-        { dot: 'red', text: 'Paystack webhook timeout (resolved)', time: '1d ago' },
-        { dot: 'gold', text: '<strong>Maryam Obi</strong> signed up', time: '1d ago' }
-    ];
+    const activities = (LIVE.notifications || []).slice(0,8).map(n => ({
+        dot: n.cls || 'gold', text: n.text, time: n.time
+    }));
+    if(activities.length === 0){
+        el.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:0.82rem"><i class="fas fa-bell-slash" style="display:block;margin-bottom:6px;opacity:.5"></i>No recent activity yet</div>';
+        return;
+    }
     el.innerHTML = activities.map(a => `
         <div class="activity-item">
             <div class="activity-dot ${a.dot}"></div>
@@ -513,7 +481,12 @@ function populateRecentActivity() {
 function populateTopArticles() {
     const el = document.getElementById('topArticles');
     if (!el) return;
-    el.innerHTML = MOCK.articles.map((a, i) => `
+    const articles = LIVE.articles || [];
+    if(articles.length === 0){
+        el.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:0.82rem"><i class="fas fa-newspaper" style="display:block;margin-bottom:6px;opacity:.5"></i>Article analytics will appear here once page-view tracking is connected.</div>';
+        return;
+    }
+    el.innerHTML = articles.map((a, i) => `
         <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
             <div style="display:flex;align-items:center;gap:10px">
                 <span style="font-size:0.7rem;font-weight:700;color:var(--text-muted);width:20px">#${i + 1}</span>
@@ -530,7 +503,12 @@ function populateTopArticles() {
 function populateABTests() {
     const el = document.getElementById('abTestsList');
     if (!el) return;
-    el.innerHTML = MOCK.abTests.map(t => {
+    const tests = LIVE.abTests || [];
+    if(tests.length === 0){
+        el.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);font-size:0.82rem;background:var(--bg-input);border-radius:10px"><i class="fas fa-flask" style="font-size:1.6rem;display:block;margin-bottom:8px;opacity:.5"></i>No active A/B tests. Create your first test using the form above.</div>';
+        return;
+    }
+    el.innerHTML = tests.map(t => {
         const leading = t.bConv > t.aConv ? 'B' : 'A';
         const lift = Math.abs(((t.bConv - t.aConv) / t.aConv) * 100).toFixed(0);
         return `
@@ -562,7 +540,12 @@ function populateABTests() {
 function populateCompletedTests() {
     const el = document.getElementById('completedTests');
     if (!el) return;
-    el.innerHTML = MOCK.completedTests.map(t => `
+    const done = LIVE.completedTests || [];
+    if(done.length === 0){
+        el.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-muted)">No completed tests yet.</td></tr>';
+        return;
+    }
+    el.innerHTML = done.map(t => `
         <tr>
             <td><strong style="color:var(--text-primary)">${t.name}</strong></td>
             <td>${t.winner}</td>
@@ -577,7 +560,12 @@ function populateCompletedTests() {
 function populateNotifications() {
     const el = document.getElementById('notifList');
     if (!el) return;
-    el.innerHTML = MOCK.notifications.map(n => `
+    const list = LIVE.notifications || [];
+    if(list.length === 0){
+        el.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);font-size:0.82rem"><i class="fas fa-bell-slash" style="font-size:1.6rem;display:block;margin-bottom:8px;opacity:.5"></i>You\'re all caught up. New signups and donations will show here.</div>';
+        return;
+    }
+    el.innerHTML = list.map(n => `
         <div class="notif-item ${n.unread ? 'unread' : ''}">
             <div class="notif-icon ${n.cls}"><i class="fas ${n.icon}"></i></div>
             <div>
@@ -597,9 +585,14 @@ function populateCRMPipeline() {
         { id: 'proposal', title: 'Proposal Sent', color: 'var(--purple)' },
         { id: 'closed', title: 'Closed Won', color: 'var(--success)' }
     ];
+    const allLeads = LIVE.crmLeads || [];
+    if(allLeads.length === 0){
+        el.innerHTML = '<div style="grid-column:1/-1;padding:40px;text-align:center;color:var(--text-muted);background:var(--bg-input);border-radius:12px"><i class="fas fa-handshake" style="font-size:2rem;display:block;margin-bottom:10px;opacity:.5"></i><strong>No agency leads yet</strong><p style="margin-top:6px;font-size:0.82rem">Use “Add Lead” to start your B2B pipeline. Leads are stored locally in this browser until a CRM table is added to Supabase.</p></div>';
+        return;
+    }
 
     el.innerHTML = stages.map(stage => {
-        const leads = MOCK.crmLeads.filter(l => l.stage === stage.id);
+        const leads = allLeads.filter(l => l.stage === stage.id);
         return `
         <div class="pipeline-column">
             <div class="pipeline-column-header">
@@ -623,7 +616,12 @@ function populateCRMPipeline() {
 function populateAudienceSegments() {
     const el = document.getElementById('audienceSegments');
     if (!el) return;
-    el.innerHTML = MOCK.audienceSegments.map(s => `
+    const segs = LIVE.audienceSegments || [];
+    if(segs.length === 0){
+        el.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:0.82rem"><i class="fas fa-users" style="font-size:1.4rem;display:block;margin-bottom:8px;opacity:.5"></i>Audience segments require behavioural analytics. Use the “Audience Intelligence” AI prompt to analyse your real users.</div>';
+        return;
+    }
+    el.innerHTML = segs.map(s => `
         <div style="padding:12px 0;border-bottom:1px solid var(--border)">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
                 <strong style="color:var(--text-primary);font-size:0.85rem">${s.name}</strong>
@@ -641,7 +639,12 @@ function populateAudienceSegments() {
 function populateTransactions() {
     const el = document.getElementById('transactionsTable');
     if (!el) return;
-    el.innerHTML = MOCK.transactions.map(t => `
+    const txs = LIVE.transactions || [];
+    if(txs.length === 0){
+        el.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted)"><i class="fas fa-receipt" style="font-size:1.6rem;display:block;margin-bottom:8px;opacity:.5"></i>No transactions yet. Connect Paystack webhooks to a Supabase <code>transactions</code> table to populate this view.</td></tr>';
+        return;
+    }
+    el.innerHTML = txs.map(t => `
         <tr>
             <td>${t.date}</td>
             <td><strong style="color:var(--text-primary)">${t.user}</strong></td>
@@ -777,10 +780,12 @@ async function analyzeAudience() {
     const responseBox = document.getElementById('audienceResponse');
     responseBox.innerHTML = '<div class="loading"><div class="spinner"></div> Analyzing audience data...</div>';
 
-    const context = `Current audience data:\n${MOCK.audienceSegments.map(s => `- ${s.name}: ${s.size} of users, ${s.desc}, Engagement: ${s.engagement}`).join('\n')}\n\nTop countries: ${MOCK.countries.map(c => `${c.name} (${c.count})`).join(', ')}\n\nUser question: ${input}`;
+    const segLines = (LIVE.audienceSegments||[]).map(s => `- ${s.name}: ${s.size} of users, ${s.desc}, Engagement: ${s.engagement}`).join('\n') || '- (no segment data — use overall stats)';
+    const countryLines = (LIVE.countries||[]).map(c => `${c.name} (${c.count})`).join(', ') || '(no country data yet)';
+    const context = `Real platform data:\nUsers: ${LIVE.users.length}\nLeads: ${LIVE.leads}\n\nSegments:\n${segLines}\n\nTop countries: ${countryLines}\n\nUser question: ${input}`;
 
     const response = await callClaude([{ role: 'user', content: context }],
-        'You are an audience analytics expert for Pilgrim\'s Path, a virtual Hajj & Umrah VR platform. Analyze the provided audience data and answer the user\'s question with actionable insights.'
+        'You are an audience analytics expert for Pilgrim\'s Path, a virtual Hajj & Umrah VR platform. Analyze the provided real audience data and answer the user\'s question with actionable insights.'
     );
     responseBox.textContent = response;
 }
@@ -961,14 +966,15 @@ function createABTest() {
         id: Date.now(),
         name: `${type}: ${name}`,
         varA, varB,
-        aConv: (Math.random() * 3 + 1).toFixed(1),
-        bConv: (Math.random() * 3 + 1.5).toFixed(1),
+        aConv: 0,
+        bConv: 0,
         status: 'active',
         days: 0,
         traffic: 0
     };
 
-    MOCK.abTests.push(test);
+    LIVE.abTests.push(test);
+    localStorage.setItem('pp_ab_tests', JSON.stringify(LIVE.abTests));
     populateABTests();
     hideNewTestForm();
     document.getElementById('testName').value = '';
@@ -982,11 +988,12 @@ function addCRMLead() {
     const name = prompt('Agency name:');
     if (!name) return;
     const value = prompt('Deal value (e.g. $5,990):') || '$5,990';
-    MOCK.crmLeads.unshift({
+    LIVE.crmLeads.unshift({
         name, value, stage: 'lead',
         contact: 'New Contact',
         days: 0
     });
+    localStorage.setItem('pp_crm_leads', JSON.stringify(LIVE.crmLeads));
     populateCRMPipeline();
     showToast('Lead added to pipeline');
 }
@@ -1003,10 +1010,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             const q = e.target.value.toLowerCase();
-            const filtered = MOCK.users.filter(u =>
+            const filtered = LIVE.users.filter(u =>
                 u.name.toLowerCase().includes(q) ||
                 u.email.toLowerCase().includes(q) ||
-                u.country.toLowerCase().includes(q)
+                (u.country||'').toLowerCase().includes(q)
             );
             populateUsersTable(filtered);
         });
@@ -1015,7 +1022,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function exportUsersCSV() {
     let csv = 'Name,Email,Plan,Country,Joined,Last Active,Status\n';
-    MOCK.users.forEach(u => {
+    LIVE.users.forEach(u => {
         csv += `"${u.name}","${u.email}","${u.plan}","${u.country}","${u.joined}","${u.lastActive}","${u.status}"\n`;
     });
     const blob = new Blob([csv], { type: 'text/csv' });
@@ -1114,10 +1121,9 @@ document.getElementById('globalSearch').addEventListener('input', (e) => {
 
 // ===== INITIALIZE =====
 document.addEventListener('DOMContentLoaded', () => {
-    if (demoMode) {
-        document.getElementById('demoToggle').classList.add('active');
-        loadDemoData();
-    } else {
-        loadLiveData();
-    }
+    // Always load LIVE data on first paint. The demo toggle (if still in the
+    // DOM) just re-runs the live loader; mock data has been removed.
+    const toggle = document.getElementById('demoToggle');
+    if(toggle) toggle.classList.remove('active');
+    loadLiveData();
 });

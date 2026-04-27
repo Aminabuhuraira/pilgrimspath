@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1199634958501931');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1199634958501931&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Qurbani Scene — The Sacrifice</title>
+<script src="/journey-content-loader.js?v=2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overflow:hidden}
+
+/* ═══ Scene Container ═══ */
+.scene-wrap{
+    position:relative;width:100%;height:100vh;
+    display:flex;align-items:center;justify-content:center;
+    background:#FFFFFF;overflow:hidden;
+}
+.scene-bg{
+    position:absolute;inset:0;overflow:hidden;opacity:0.03;pointer-events:none;
+}
+.scene-bg::before{
+    content:'﷽';position:absolute;font-size:180px;
+    color:#1a1a2e;white-space:nowrap;
+    animation:bgScroll 60s linear infinite;
+}
+@keyframes bgScroll{0%{transform:translateX(100%)}100%{transform:translateX(-200%)}}
+
+.scene-card{
+    position:relative;z-index:2;
+    max-width:720px;width:94%;
+    background:rgba(255,255,255,0.97);
+    border-radius:24px;padding:32px 28px 28px;text-align:center;
+    border:1.5px solid rgba(212,175,55,0.2);
+    box-shadow:0 12px 48px rgba(0,0,0,0.06),0 2px 8px rgba(212,175,55,0.08);
+    opacity:0;animation:cardIn 0.6s 0.1s ease forwards;
+}
+@keyframes cardIn{0%{opacity:0;transform:translateY(20px) scale(0.97)}100%{opacity:1;transform:none}}
+
+/* ═══ Header ═══ */
+.scene-icon{font-size:2.8rem;margin-bottom:6px;opacity:0;animation:fadeUp 0.5s 0.2s ease forwards}
+.scene-label{
+    font-size:0.7rem;text-transform:uppercase;letter-spacing:2.5px;
+    color:#B8941F;font-weight:600;margin-bottom:4px;
+    opacity:0;animation:fadeUp 0.5s 0.25s ease forwards;
+}
+.scene-title{
+    font-size:1.5rem;font-weight:700;color:#1a1a2e;margin-bottom:6px;
+    opacity:0;animation:fadeUp 0.5s 0.3s ease forwards;
+}
+.scene-divider{
+    width:60px;height:2px;margin:0 auto 16px;
+    background:linear-gradient(90deg,transparent,#D4AF37,transparent);
+    opacity:0;animation:fadeUp 0.5s 0.35s ease forwards;
+}
+@keyframes fadeUp{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:none}}
+
+/* ═══ SVG Scene ═══ */
+.qurbani-scene{
+    position:relative;width:100%;max-width:580px;height:230px;
+    margin:0 auto 20px;border-radius:18px;overflow:hidden;
+    border:1.5px solid rgba(212,175,55,0.2);
+    box-shadow:0 6px 24px rgba(0,0,0,0.06);
+    opacity:0;animation:fadeUp 0.6s 0.4s ease forwards;
+}
+.qurbani-scene svg{width:100%;height:100%;display:block}
+
+/* Smoke from camp -->*/
+.smoke-puff{fill:rgba(200,190,170,0.3);animation:smokeFl 4s ease-in-out infinite}
+@keyframes smokeFl{
+    0%{opacity:0;transform:translateY(0) scale(0.6)}
+    30%{opacity:0.4}
+    100%{opacity:0;transform:translateY(-40px) scale(1.5)}
+}
+
+/* Pilgrim gentle motion */
+.pilgrim-q{animation:gentleSway 4s ease-in-out infinite}
+@keyframes gentleSway{0%,100%{transform:translateX(0)}50%{transform:translateX(2px)}}
+
+/* Animal gentle idle -->*/
+.animal-idle{animation:animalBreathe 3s ease-in-out infinite}
+@keyframes animalBreathe{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.015)}}
+
+/* Tent flag flutter */
+.tent-flag{transform-origin:100% 100%;animation:flutter 2.5s ease-in-out infinite}
+@keyframes flutter{0%,100%{transform:rotate(0deg)}50%{transform:rotate(8deg)}}
+
+/* Sun pulse */
+.sun-pulse{animation:sunGlow 5s ease-in-out infinite}
+@keyframes sunGlow{0%,100%{opacity:0.6}50%{opacity:0.9}}
+
+/* ═══ Info Columns ═══ */
+.info-cols{
+    display:flex;gap:16px;margin:0 auto 18px;max-width:580px;
+    opacity:0;animation:fadeUp 0.5s 0.5s ease forwards;
+}
+.info-col{
+    flex:1;padding:16px 14px 12px;border-radius:14px;text-align:left;
+    border:1.5px solid rgba(212,175,55,0.15);
+    background:linear-gradient(135deg,rgba(212,175,55,0.04),rgba(244,240,230,0.3));
+}
+.info-col-icon{font-size:1.4rem;margin-bottom:4px}
+.info-col-title{
+    font-family:'Poppins',sans-serif;font-size:0.88rem;font-weight:700;
+    color:#B8941F;margin-bottom:4px;
+}
+.info-col-body{font-size:0.78rem;color:#4a4a5c;line-height:1.55}
+.info-col-body strong{color:#1a1a2e;font-weight:600}
+
+/* ═══ Timeline ═══ */
+.qurbani-timeline{
+    display:flex;justify-content:center;gap:0;margin:0 auto 18px;max-width:500px;
+    opacity:0;animation:fadeUp 0.5s 0.55s ease forwards;
+}
+.qt-step{flex:1;text-align:center;position:relative}
+.qt-step::after{
+    content:'';position:absolute;top:14px;left:50%;width:100%;height:2px;
+    background:linear-gradient(90deg,#D4AF37,rgba(212,175,55,0.2));z-index:0;
+}
+.qt-step:last-child::after{display:none}
+.qt-dot{
+    width:28px;height:28px;border-radius:50%;margin:0 auto 6px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.7rem;font-weight:700;color:#fff;
+    background:#D4AF37;position:relative;z-index:1;
+    box-shadow:0 2px 8px rgba(212,175,55,0.3);
+}
+.qt-label{font-size:0.7rem;color:#4a4a5c;line-height:1.3}
+.qt-label strong{display:block;color:#1a1a2e;font-size:0.74rem;margin-bottom:1px}
+
+/* ═══ Dua Section ═══ */
+.dua-block{
+    margin-top:4px;padding:14px 20px;border-radius:14px;
+    background:rgba(26,26,46,0.02);text-align:center;
+    opacity:0;animation:fadeUp 0.5s 0.6s ease forwards;
+}
+.dua-arabic{
+    font-family:'Amiri',serif;font-size:1.35rem;color:#1a1a2e;
+    direction:rtl;line-height:1.8;margin-bottom:6px;
+}
+.dua-translit{font-size:0.78rem;color:#6a6a7c;font-style:italic;margin-bottom:4px}
+.dua-translation{font-size:0.78rem;color:#4a4a5c;line-height:1.5}
+
+/* Responsive */
+@media(max-width:600px){
+    .scene-card{padding:20px 16px 18px}
+    .scene-title{font-size:1.25rem}
+    .qurbani-scene{height:180px}
+    .info-cols{flex-direction:column}
+    .qurbani-timeline{flex-wrap:wrap;gap:8px}
+    .qt-step::after{display:none}
+}
+</style>
+</head>
+<body>
+<div class="scene-wrap">
+    <div class="scene-bg"></div>
+    <div class="scene-card">
+        <!-- Header -->
+        <div class="scene-icon">🐑</div>
+        <p class="scene-label">Day of Sacrifice — 10th Dhul Hijjah</p>
+        <h1 class="scene-title">Qurbani — The Sacred Sacrifice</h1>
+        <div class="scene-divider"></div>
+
+        <!-- Animated Qurbani SVG -->
+        <div class="qurbani-scene">
+            <svg viewBox="0 0 580 230" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                    <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#aecde4"/>
+                        <stop offset="50%" stop-color="#d6e4d8"/>
+                        <stop offset="80%" stop-color="#eddcb8"/>
+                        <stop offset="100%" stop-color="#e4d0a4"/>
+                    </linearGradient>
+                    <radialGradient id="sunG" cx="0.85" cy="0.2" r="0.25">
+                        <stop offset="0%" stop-color="rgba(255,225,140,0.7)"/>
+                        <stop offset="100%" stop-color="rgba(255,225,140,0)"/>
+                    </radialGradient>
+                    <linearGradient id="tentG" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#F5F0E6"/>
+                        <stop offset="100%" stop-color="#E8E0D0"/>
+                    </linearGradient>
+                    <linearGradient id="ihramG" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#FFFFFF"/>
+                        <stop offset="100%" stop-color="#F0EDE5"/>
+                    </linearGradient>
+                </defs>
+
+                <!-- Sky -->
+                <rect width="580" height="230" fill="url(#skyG)"/>
+                <!-- Sun -->
+                <circle class="sun-pulse" cx="500" cy="40" r="100" fill="url(#sunG)"/>
+                <circle cx="500" cy="40" r="16" fill="#ffe8a8" opacity="0.85"/>
+                <circle cx="500" cy="40" r="20" fill="none" stroke="rgba(255,230,160,0.25)" stroke-width="2"/>
+
+                <!-- Far mountains / hills -->
+                <path d="M0 140 Q60 110 140 128 Q200 108 280 122 Q340 100 420 118 Q470 106 540 124 L580 120 L580 230 L0 230Z" fill="#d4c8a8" opacity="0.4"/>
+                <!-- Mid dunes -->
+                <path d="M0 156 Q80 138 170 150 Q250 132 350 146 Q420 130 500 144 L580 140 L580 230 L0 230Z" fill="#d0c09a" opacity="0.6"/>
+                <!-- Near ground -->
+                <path d="M0 172 Q90 160 200 168 Q300 158 400 166 Q480 160 580 170 L580 230 L0 230Z" fill="#c8b890"/>
+                <!-- Sand texture -->
+                <path d="M0 185 Q70 182 140 186 Q210 181 280 185 Q350 182 420 186 Q490 182 580 186" fill="none" stroke="rgba(180,160,120,0.2)" stroke-width="0.5"/>
+
+                <!-- Mina tents (background) -->
+                <g opacity="0.5">
+                    <!-- Tent 1 -->
+                    <path d="M40 160 L65 130 L90 160Z" fill="url(#tentG)" stroke="#d4c4a0" stroke-width="0.8"/>
+                    <line x1="65" y1="130" x2="65" y2="125" stroke="#b89870" stroke-width="1"/>
+                    <polygon class="tent-flag" points="65,125 55,120 65,117" fill="#D4AF37" opacity="0.7"/>
+                    <!-- Tent 2 -->
+                    <path d="M100 158 L130 124 L160 158Z" fill="url(#tentG)" stroke="#d4c4a0" stroke-width="0.8"/>
+                    <line x1="130" y1="124" x2="130" y2="118" stroke="#b89870" stroke-width="1"/>
+                    <polygon class="tent-flag" points="130,118 120,113 130,110" fill="#D4AF37" opacity="0.7" style="animation-delay:0.5s"/>
+                    <!-- Tent 3 -->
+                    <path d="M430 156 L460 120 L490 156Z" fill="url(#tentG)" stroke="#d4c4a0" stroke-width="0.8"/>
+                    <line x1="460" y1="120" x2="460" y2="114" stroke="#b89870" stroke-width="1"/>
+                </g>
+
+                <!-- Designated area enclosure -->
+                <rect x="195" y="150" width="190" height="62" rx="4" fill="rgba(212,175,55,0.06)" stroke="rgba(212,175,55,0.2)" stroke-width="1" stroke-dasharray="4 2"/>
+                <!-- Small sign -->
+                <rect x="195" y="144" width="56" height="12" rx="2" fill="rgba(212,175,55,0.15)"/>
+                <text x="223" y="153" font-family="Poppins" font-size="5" fill="#B8941F" font-weight="600" text-anchor="middle" letter-spacing="0.8">NAHR AREA</text>
+
+                <!-- Animal (sheep) — gentle breathing idle -->
+                <g class="animal-idle" transform="translate(310, 172)">
+                    <!-- Body -->
+                    <ellipse cx="0" cy="0" rx="22" ry="14" fill="#f0ece0"/>
+                    <ellipse cx="0" cy="-2" rx="20" ry="12" fill="#f5f0e6"/>
+                    <!-- Wool texture -->
+                    <circle cx="-8" cy="-6" r="4" fill="#e8e4dc"/>
+                    <circle cx="0" cy="-8" r="4.5" fill="#e8e4dc"/>
+                    <circle cx="8" cy="-6" r="4" fill="#e8e4dc"/>
+                    <circle cx="-12" cy="-2" r="3.5" fill="#e8e4dc"/>
+                    <circle cx="12" cy="-2" r="3.5" fill="#e8e4dc"/>
+                    <!-- Head -->
+                    <ellipse cx="22" cy="-4" rx="8" ry="7" fill="#e0d8c8"/>
+                    <circle cx="26" cy="-6" r="1.2" fill="#2a1a0a"/><!-- eye -->
+                    <ellipse cx="28" cy="-2" rx="2.5" ry="1.8" fill="#d0c8b8"/><!-- nose -->
+                    <!-- Ears -->
+                    <ellipse cx="18" cy="-10" rx="3" ry="5" fill="#d8d0c0" transform="rotate(-20 18 -10)"/>
+                    <!-- Legs -->
+                    <rect x="-14" y="10" width="3" height="12" rx="1" fill="#d8d0c0"/>
+                    <rect x="-6" y="10" width="3" height="12" rx="1" fill="#d8d0c0"/>
+                    <rect x="4" y="10" width="3" height="12" rx="1" fill="#d8d0c0"/>
+                    <rect x="12" y="10" width="3" height="12" rx="1" fill="#d8d0c0"/>
+                    <!-- Tail -->
+                    <ellipse cx="-22" cy="-4" rx="4" ry="3" fill="#e8e4dc"/>
+                </g>
+
+                <!-- Pilgrim (standing, in Ihram, making dua gesture) -->
+                <g class="pilgrim-q" transform="translate(248, 120)">
+                    <!-- Body -->
+                    <path d="M-14 30 Q-16 14 -10 6 Q0 -2 10 6 Q16 14 14 30 L16 58 L-16 58Z" fill="url(#ihramG)" stroke="#e0dcd4" stroke-width="0.8"/>
+                    <!-- Head -->
+                    <circle cx="0" cy="-4" r="12" fill="#c8a882"/>
+                    <!-- Face -->
+                    <circle cx="-3" cy="-5" r="1" fill="#4a3a2a"/>
+                    <circle cx="3" cy="-5" r="1" fill="#4a3a2a"/>
+                    <path d="M-2 0 Q0 2 2 0" fill="none" stroke="#5a4a3a" stroke-width="0.6"/>
+                    <!-- Beard -->
+                    <path d="M-5 1 Q-6 8 0 10 Q6 8 5 1" fill="#3a2a1a" opacity="0.25"/>
+                    <!-- Arms raised in dua -->
+                    <path d="M-14 20 Q-22 10 -24 2 Q-25 -2 -22 -4" fill="none" stroke="#c8a882" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M14 20 Q22 10 24 2 Q25 -2 22 -4" fill="none" stroke="#c8a882" stroke-width="4" stroke-linecap="round"/>
+                    <!-- Open palms (dua) -->
+                    <ellipse cx="-22" cy="-6" rx="4" ry="5" fill="#c8a882"/>
+                    <ellipse cx="22" cy="-6" rx="4" ry="5" fill="#c8a882"/>
+                    <!-- Legs -->
+                    <rect x="-8" y="56" width="5" height="16" rx="1.5" fill="url(#ihramG)" stroke="#e0dcd4" stroke-width="0.5"/>
+                    <rect x="3" y="56" width="5" height="16" rx="1.5" fill="url(#ihramG)" stroke="#e0dcd4" stroke-width="0.5"/>
+                </g>
+
+                <!-- Smoke wisps from a campfire/preparation area -->
+                <g transform="translate(160, 160)">
+                    <circle cx="0" cy="4" r="5" fill="#a08060" opacity="0.4"/>
+                    <ellipse class="smoke-puff" cx="-2" cy="-4" rx="5" ry="4" style="animation-delay:0s"/>
+                    <ellipse class="smoke-puff" cx="3" cy="-8" rx="4" ry="3" style="animation-delay:1.2s"/>
+                    <ellipse class="smoke-puff" cx="-4" cy="-6" rx="3.5" ry="3" style="animation-delay:2.5s"/>
+                </g>
+
+                <!-- Birds in sky -->
+                <g opacity="0.3">
+                    <path d="M360 35 Q363 30 366 35" fill="none" stroke="#6a6a7c" stroke-width="0.8"/>
+                    <path d="M380 28 Q383 23 386 28" fill="none" stroke="#6a6a7c" stroke-width="0.7"/>
+                    <path d="M345 42 Q348 38 351 42" fill="none" stroke="#6a6a7c" stroke-width="0.6"/>
+                </g>
+
+                <!-- Decorative frame -->
+                <rect x="0" y="0" width="580" height="230" fill="none" stroke="rgba(212,175,55,0.12)" stroke-width="2"/>
+            </svg>
+        </div>
+
+        <!-- Info columns -->
+        <div class="info-cols">
+            <div class="info-col">
+                <div class="info-col-icon">📋</div>
+                <div class="info-col-title">What is Qurbani?</div>
+                <p class="info-col-body">The ritual sacrifice of a livestock animal (sheep, goat, cow, or camel) performed on the <strong>10th, 11th, or 12th of Dhul Hijjah</strong>. It commemorates Prophet Ibrahim's (AS) willingness to sacrifice his son.</p>
+            </div>
+            <div class="info-col">
+                <div class="info-col-icon">📜</div>
+                <div class="info-col-title">Key Rules</div>
+                <p class="info-col-body">
+                    • Animal must be healthy and of proper age<br/>
+                    • Must say <strong>Bismillah, Allahu Akbar</strong> before slaughter<br/>
+                    • Meat divided into <strong>3 parts</strong>: family, relatives, and the needy<br/>
+                    • Can be delegated to a trusted agent
+                </p>
+            </div>
+        </div>
+
+        <!-- Timeline of Day 10 -->
+        <div class="qurbani-timeline">
+            <div class="qt-step">
+                <div class="qt-dot">1</div>
+                <div class="qt-label"><strong>Rami</strong>Pelt Jamarat al-Aqaba</div>
+            </div>
+            <div class="qt-step">
+                <div class="qt-dot">2</div>
+                <div class="qt-label"><strong>Qurbani</strong>Sacrifice animal</div>
+            </div>
+            <div class="qt-step">
+                <div class="qt-dot">3</div>
+                <div class="qt-label"><strong>Halq/Taqsir</strong>Shave or trim hair</div>
+            </div>
+            <div class="qt-step">
+                <div class="qt-dot">4</div>
+                <div class="qt-label"><strong>Tawaf</strong>Tawaf al-Ifadah</div>
+            </div>
+        </div>
+
+        <!-- Dua spoken at sacrifice -->
+        <div class="dua-block">
+            <p class="dua-arabic">بِسْمِ اللَّهِ وَاللَّهُ أَكْبَرُ، اللَّهُمَّ هَذَا مِنْكَ وَلَكَ</p>
+            <p class="dua-translit">"Bismillahi wallahu Akbar, Allahumma hadha minka wa lak"</p>
+            <p class="dua-translation">"In the name of Allah, and Allah is the Greatest. O Allah, this is from You and for You."</p>
+        </div>
+    </div>
+</div>
+
+<!-- Journey Navigation -->
+<script src="../../journey-manager.js?v=3" defer></script>
+<script src="../../quiz-content.js?v=1" defer></script>
+<script src="../../journey-nav.js?v=10" defer></script>
+<script>
+// Show next button for this step
+document.addEventListener('DOMContentLoaded', function(){
+  window.journeyActivityComplete=true;
+  if(typeof showJourneyNextButton==='function'){
+    showJourneyNextButton();
+  }
+});
+</script>
+
+<!-- Meta Pixel Event: Qurbani VR Scene -->
+<script>
+fbq('track', 'ViewContent', {
+  content_name: 'Qurbani Scene - The Sacrifice',
+  content_category: 'VR Hajj Scene',
+  content_type: 'vr_interactive_scene'
+});
+</script>
+<script src="../../../meta-capi.js" defer></script>
+<!-- ═══ Scene Navigation Overlay ═══ -->
+<script>window._sceneNavBase='../';window._sceneNavCurrent='qurbani';</script>
+<script src="../../scene-nav-overlay.js?v=7" defer></script>
+<script>
+setTimeout(function(){
+  var f=(window.PPContent&&window.PPContent.byId('qurbani-10th','qb-load')||{}).audio||'English Day 10 -2.mp3';
+  var url=(window.PPContent&&window.PPContent.audioUrl(f))||('/Hajj%20Voice%20Over/'+encodeURIComponent(f));
+  var a=new Audio(url);a.play().catch(function(){});
+},800);
+</script>
+</body>
+</html>
