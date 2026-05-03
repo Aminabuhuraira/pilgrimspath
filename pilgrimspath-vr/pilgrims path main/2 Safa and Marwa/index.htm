@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <title>safa da marwa</title>
-    <script src="/journey-content-loader.js?v=3"></script>
+    <script src="/admin-journey-content.js?v=11"></script>
+    <script src="/journey-content-loader.js?v=23"></script>
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -50,7 +51,7 @@
     <div id="preloadContainer" class="fill-viewport"><div style="z-index: 4; position: absolute; overflow: hidden; left: 0%; top: 50%; width: 100.00%; height: 10.00%" ><div style="text-align:left; color:#000; "><DIV STYLE="text-align:center;font-size:1.6666666666666663vmin;"><SPAN STYLE="display:inline-block; letter-spacing:0vmin; white-space:pre-wrap;color:#777777;font-size:1.67vmin;font-family:Arial, Helvetica, sans-serif;">Loading virtual tour. Please wait...</SPAN></DIV></div></div></div>
     <div id="viewer" class="fill-viewport"></div>
 
-<!-- ═══ Scene Guide Banners ═══ -->
+<!-- --- Scene Guide Banners --- -->
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
 #sceneBanner{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10003;
@@ -89,12 +90,15 @@ transition:transform .15s;box-shadow:0 4px 12px rgba(201,168,76,0.32);align-self
 <script>
 var _bannerPager={title:'',pages:[],index:0};
 function _splitBannerHtml(html){var segs=html.match(/<h3[\s\S]*?<\/h3>|<p[\s\S]*?<\/p>|<div class="sep"><\/div>|<br\s*\/?\s*>/gi)||[html];var pages=[];var cur=[];var chars=0;for(var i=0;i<segs.length;i++){var s=segs[i];var txt=s.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();var len=txt.length;if(cur.length&&(chars+len>440||cur.length>=4)){pages.push(cur.join(''));cur=[];chars=0;}cur.push(s);chars+=len;}if(cur.length)pages.push(cur.join(''));return pages.length?pages:[html];}
-function _renderBannerPage(){var el=document.getElementById('sceneBanner');if(!el)return;var isLast=_bannerPager.index>=_bannerPager.pages.length-1;var btn=isLast?'Continue ▸':'Next ▸';el.innerHTML='<div class="sceneBannerBody"><h3>'+_bannerPager.title+'</h3>'+_bannerPager.pages[_bannerPager.index]+'<button onclick="dismissBanner()">'+btn+'</button></div>';el.style.display='block';}
+function _renderBannerPage(){var el=document.getElementById('sceneBanner');if(!el)return;var isLast=_bannerPager.index>=_bannerPager.pages.length-1;var btn=isLast?'Continue \u25B8':'Next \u25B8';el.innerHTML='<div class="sceneBannerBody"><h3>'+_bannerPager.title+'</h3>'+_bannerPager.pages[_bannerPager.index]+'<button onclick="dismissBanner()">'+btn+'</button></div>';el.style.display='block';}
 function openBanner(title,html){_bannerPager.title=title;_bannerPager.pages=_splitBannerHtml(html);_bannerPager.index=0;_renderBannerPage();}
 function dismissBanner(){if(_bannerPager.pages.length&&_bannerPager.index<_bannerPager.pages.length-1){_bannerPager.index++;_renderBannerPage();return;}_bannerPager={title:'',pages:[],index:0};document.getElementById('sceneBanner').style.display='none';}
 function playVO(f){
     if(!f) return;
+    if(window._voCurrentFile===f && window._voAudio && !window._voAudio.paused && !window._voAudio.ended) return;
+    window._voCurrentFile = f;
     if(window._voAudio){ try{ window._voAudio.pause(); }catch(e){} window._voAudio=null; }
+    if(window._voChainPending && window._voChainPending !== f) window._voChainPending = null;
     window._voPending = f;
     var url = (window.PPContent && window.PPContent.audioUrl)
         ? window.PPContent.audioUrl(f)
@@ -177,6 +181,12 @@ var BANNERS={
   '<p class="bb">You have now completed Umrah.</p>'}
 };
 var shown={},lastId='';
+// --- Persist dedupe across reloads in same browser session ---
+var _shownKey='pp_shown_safa_marwa';
+try{var _ss=sessionStorage.getItem(_shownKey);if(_ss){var _p=JSON.parse(_ss);if(_p&&typeof _p==='object'){shown=_p;}}}catch(_e){}
+function _persistShown(){try{sessionStorage.setItem(_shownKey,JSON.stringify(shown));}catch(_e){}}
+// Halaq panorama (final ritual + congrats) — gated to fire only AFTER all 7 circuits are done
+var HALAQ_PANO='panorama_77BBA118_7348_272D_41C8_26E405934981';
 var _VO_MAP={'panorama_740A042A_74AC_0DF9_41CC_5E0AB90618E2':'English Safa and Marwa.mp3','panorama_740A504C_74AC_0D19_41D9_9C8CE3F3A7A0':'Safaandmarwa3.mp3','panorama_77BBA118_7348_272D_41C8_26E405934981':'English Congratulations Umrah.mp3'};
 if(window.PPContent && window.PPContent.hasData){
   var _oB=window.PPContent.bannerMapByPano('safa-marwa');
@@ -187,10 +197,12 @@ if(window.PPContent && window.PPContent.hasData){
 function chk(id){
 // Auto-count Sa'i lap when reaching sm 6 (Marwa) or sm21 (back to Safa side)
 if((id.indexOf('740A3162')!==-1||id.indexOf('77BBA118')!==-1)&&typeof window.saiLapInc==='function'){window.saiLapInc();}
-var b=BANNERS[id];if(!b||shown[id])return;shown[id]=true;if(b.title||b.html)openBanner(b.title,b.html);
+// Gate the Halaq / Congratulations banner: only fire after all 7 circuits are complete
+if(id===HALAQ_PANO){var _laps=parseInt(sessionStorage.getItem('saiLaps')||'0',10);if(_laps<7){return;}}
+var b=BANNERS[id];if(!b||shown[id])return;shown[id]=true;_persistShown();if(b.title||b.html)openBanner(b.title,b.html);
 if(_VO_MAP[id])playVO(_VO_MAP[id]);
 // Signal to journey nav that last panorama is reached (Halaq is the last step)
-if(id==='panorama_77BBA118_7348_272D_41C8_26E405934981'&&typeof window!=='undefined'){window.journeyIsLastPanorama=true;if(typeof showJourneyNextButton==='function'){setTimeout(showJourneyNextButton,300);}}}
+if(id===HALAQ_PANO&&typeof window!=='undefined'){window.journeyIsLastPanorama=true;if(typeof showJourneyNextButton==='function'){setTimeout(showJourneyNextButton,300);}}}
 // TDV-hook only detection (PerformanceObserver was racing on adjacent-pano preloads)
 function hookTDV(){if(typeof TDV==='undefined'||!TDV.Tour||!TDV.Tour.Script)return setTimeout(hookTDV,500);var o1=TDV.Tour.Script.setPlayListSelectedIndex;if(o1){TDV.Tour.Script.setPlayListSelectedIndex=function(a,b){try{var id=a.get('items')[b].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}catch(e){}return o1.apply(this,arguments);};}var o2=TDV.Tour.Script.setMainMediaByIndex;if(o2){TDV.Tour.Script.setMainMediaByIndex=function(a){try{var items=this.mainPlayList.get('items');if(a>=0&&a<items.length){var id=items[a].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}}catch(e){}return o2.apply(this,arguments);};}console.log('[SafaMarwa] banner hooks installed');}
 hookTDV();
@@ -200,24 +212,24 @@ setTimeout(function(){try{var t=TDV.PlayerAPI.getCurrentPlayer();var pl=t&&t.mai
 </script>
 
 <!-- Journey Navigation -->
-<script src="../../journey-manager.js?v=3" defer></script>
-<script src="../../quiz-content.js?v=1" defer></script>
-<script src="../../journey-nav.js?v=10" defer></script>
+<script src="../../journey-manager.js?v=7" defer></script>
+<script src="../../quiz-content.js?v=6" defer></script>
+<script src="../../journey-nav.js?v=26" defer></script>
 
-<!-- ═══ Sa'i Lap Counter HUD ═══ -->
+<!-- --- Sa'i Lap Counter HUD (top, matches Tawaf style) --- -->
 <style>
-#saiCounter{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:10002;
-display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:999px;
-background:linear-gradient(135deg,rgba(20,12,4,0.92),rgba(40,26,10,0.92));
-border:1px solid rgba(201,168,76,0.55);box-shadow:0 6px 22px rgba(0,0,0,0.45);
-font-family:'DM Sans',Arial,sans-serif;color:#F4E4BC;backdrop-filter:blur(6px);}
-#saiCounter .scLabel{font-size:13px;letter-spacing:0.3px;opacity:0.85;}
-#saiCounter .scCount{font-size:18px;font-weight:700;color:#FFD98A;min-width:46px;text-align:center;}
+#saiCounter{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:10002;
+display:none;align-items:center;gap:7px;padding:5px 12px;border-radius:999px;
+background:linear-gradient(145deg,#FFFDF7,#F4EBD2);
+border:1px solid #C9A84C;box-shadow:0 2px 10px rgba(0,0,0,0.22);
+font-family:'DM Sans',Arial,sans-serif;color:#3D2B1F;width:auto;max-width:max-content;height:auto;min-height:0;line-height:1;white-space:nowrap;box-sizing:content-box;}
+#saiCounter .scLabel{font-size:11px;letter-spacing:0.2px;color:#8B6914;font-weight:700;}
+#saiCounter .scCount{font-size:13px;font-weight:800;color:#8B6914;min-width:32px;text-align:center;letter-spacing:0.3px;}
 #saiCounter button{background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;border:none;
-border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;
-box-shadow:0 3px 10px rgba(201,168,76,0.35);transition:transform .12s;}
+border-radius:999px;padding:3px 9px;font-size:10px;font-weight:600;cursor:pointer;
+box-shadow:0 1px 4px rgba(201,168,76,0.35);transition:transform .12s;line-height:1.3;}
 #saiCounter button:active{transform:scale(0.94);}
-#saiCounter .scReset{background:rgba(255,255,255,0.08);box-shadow:none;padding:7px 10px;font-size:11px;color:#F4E4BC;}
+#saiCounter .scReset{background:rgba(139,105,20,0.1);box-shadow:none;padding:3px 8px;font-size:10px;color:#8B6914;}
 #saiComplete{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10004;display:none;
 width:min(92vw,520px);padding:30px 28px;border-radius:24px;text-align:center;
 background:linear-gradient(135deg,#fff8e7,#fbecc4);border:2px solid #C9A84C;
@@ -228,29 +240,60 @@ box-shadow:0 20px 60px rgba(0,0,0,0.5);font-family:'DM Sans',Arial,sans-serif;co
 border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:pointer;margin:0 6px;}
 </style>
 <div id="saiCounter">
-  <span class="scLabel">🚶 Sa'i Circuit</span>
+  <span class="scLabel">&#x1F6B6; Circuit</span>
   <span class="scCount" id="saiCount">0/7</span>
-  <button class="scReset" onclick="saiLapReset()" title="Reset">↺ Reset</button>
+  <button class="scReset" onclick="saiLapReset()" title="Reset">&#x21BA;</button>
 </div>
 <div id="saiComplete">
-  <h3>🎉 Sa'i Complete!</h3>
+  <h3>&#x1F389; Sa'i Complete!</h3>
   <p>Alhamdulillah! You have walked all seven legs between Safa and Marwa.<br>May Allah accept your Sa'i.</p>
   <p style="font-size:13px;opacity:0.75;margin-bottom:20px;">What would you like to do next?</p>
-  <button onclick="sessionStorage.removeItem('saiLaps');document.getElementById('saiComplete').style.display='none';if(typeof showJourneyNextButton==='function'){showJourneyNextButton();}">Next Scene ▸</button>
-  <button class="scReset" onclick="saiLapReset();document.getElementById('saiComplete').style.display='none';location.reload()">↺ Restart Sa'i</button>
+  <button id="saiNextSceneBtn">Next Scene &#x25B8;</button>
+  <button class="scReset" onclick="saiLapReset();document.getElementById('saiComplete').style.display='none';location.reload()">&#x21BA; Restart Sa'i</button>
 </div>
 <script>
 (function(){
   var laps = parseInt(sessionStorage.getItem('saiLaps')||'0',10);
   var countEl = document.getElementById('saiCount');
+  var hud = document.getElementById('saiCounter');
   function render(){countEl.textContent = laps + '/7';}
+  function showHud(){ if(hud) hud.style.display='inline-flex'; }
   window.saiLapInc = function(){
     if(laps>=7) return;
-    laps++; sessionStorage.setItem('saiLaps', laps); render();
+    laps++; sessionStorage.setItem('saiLaps', laps); render(); showHud();
     if(laps===7){ setTimeout(function(){ document.getElementById('saiComplete').style.display='block'; }, 250); }
   };
-  window.saiLapReset = function(){ laps=0; sessionStorage.setItem('saiLaps','0'); render(); };
+  window.saiLapReset = function(){ laps=0; sessionStorage.setItem('saiLaps','0'); render(); showHud(); };
   render();
+  // Show HUD on scene load if user has any progress, otherwise reveal after a brief delay
+  if(laps>0){ showHud(); } else { setTimeout(showHud, 1500); }
+
+  // Wire the "Next Scene" button via JS so journey-manager / quiz can be reliably called.
+  function wireNextBtn(){
+    var btn = document.getElementById('saiNextSceneBtn');
+    if(!btn) return;
+    btn.addEventListener('click', function(){
+      console.log('[Sai] Next Scene clicked');
+      try{ sessionStorage.removeItem('saiLaps'); }catch(_){ }
+      var card = document.getElementById('saiComplete'); if(card) card.style.display='none';
+      window.journeyActivityComplete = true;
+      var nav = function(){
+        // Step 2 (Sa'i) ? Step 3 (Trim/Umrah barber). Use goToStep so we land in the right context.
+        if(window.jm && typeof window.jm.goToStep==='function'){
+          window.jm.goToStep(3);
+        } else {
+          window.location.href = '../5%20Rami%20Jamarat,%20Qurbani,%20trim%20Shave,%20Tawaf/barber-scene.html?journey=3&context=umrah-trim';
+        }
+      };
+      if(typeof window.proceedWithQuiz === 'function'){
+        window.proceedWithQuiz(nav);
+      } else {
+        nav();
+      }
+    });
+  }
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', wireNextBtn); }
+  else { wireNextBtn(); }
 })();
 </script>
 
@@ -259,8 +302,8 @@ border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:point
 if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Safa and Marwa VR Scene",content_category:"VR Hajj Tour",content_type:"vr_360_scene"});}
 </script>
 <script src="../../../meta-capi.js" defer></script>
-<!-- ═══ Scene Navigation Overlay ═══ -->
+<!-- --- Scene Navigation Overlay --- -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='safa';</script>
-<script src="../../scene-nav-overlay.js?v=7" defer></script>
+<script src="../../scene-nav-overlay.js?v=8" defer></script>
 </body>
 </html>

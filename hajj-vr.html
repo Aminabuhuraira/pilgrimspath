@@ -937,9 +937,12 @@
             </div>
 
             <!-- Optional quiz opt-in -->
-            <label class="anim anim-d4" id="quizOptInWrap" style="display:flex;align-items:center;gap:10px;justify-content:center;margin:14px auto 4px;padding:10px 16px;max-width:520px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.32);border-radius:12px;cursor:pointer;font-family:'DM Sans',Arial,sans-serif;color:#3D2B1F;font-size:14px;">
-                <input type="checkbox" id="quizOptIn" style="width:18px;height:18px;accent-color:#8B6914;cursor:pointer;" />
-                <span><strong>Quiz me after each scene</strong> &mdash; short, optional reflection questions to reinforce what you've learned.</span>
+            <label class="anim anim-d4" id="quizOptInWrap" style="display:flex;align-items:flex-start;gap:10px;justify-content:center;margin:14px auto 4px;padding:12px 18px;max-width:560px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.32);border-radius:12px;cursor:pointer;font-family:'DM Sans',Arial,sans-serif;color:#3D2B1F;font-size:14px;text-align:left;">
+                <input type="checkbox" id="quizOptIn" style="width:18px;height:18px;accent-color:#8B6914;cursor:pointer;margin-top:3px;flex-shrink:0;" />
+                <span>
+                    <strong>Quiz me after each scene</strong> &mdash; short reflection questions to reinforce what you've learned.<br>
+                    <span style="display:inline-block;margin-top:6px;padding:3px 9px;border-radius:999px;background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;font-size:11px;font-weight:700;letter-spacing:0.3px;">🏆 Score 80%+ to earn your Hajj Readiness Certificate</span>
+                </span>
             </label>
 
             <div class="btn-row anim anim-d5">
@@ -1015,9 +1018,9 @@
                 localStorage.setItem('pp_quiz_enabled', optIn ? '1' : '0');
             }catch(e){}
 
-            // Navigate directly to the VR tour page for best compatibility
+            // Navigate directly to step 1 of the VR tour (Tawaf x7)
             setTimeout(() => {
-                window.location.href = 'pilgrimspath%20vr/index.htm';
+                window.location.href = '/pilgrimspath-vr/pilgrims%20path%20main/1%20Tawaf/index.htm?journey=1&context=initial';
             }, 1500);
         }
 
@@ -1066,7 +1069,8 @@
 <script>
 (function() {
     // Check if user already gave email or is logged in
-    var hasAccess = localStorage.getItem('pp_lead_email');
+    // Bypass gate on localhost for local development
+    var hasAccess = localStorage.getItem('pp_lead_email') || (location.hostname === 'localhost' || location.hostname === '127.0.0.1');
     
     // Also check if Supabase user is logged in
     var sb = window.supabase ? window.supabase.createClient(

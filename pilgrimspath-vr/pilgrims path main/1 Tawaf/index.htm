@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <title>tawaf area</title>
-    <script src="/journey-content-loader.js?v=3"></script>
+    <script src="/admin-journey-content.js?v=11"></script>
+    <script src="/journey-content-loader.js?v=23"></script>
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -37,9 +38,9 @@
 	<meta name="description" content="Virtual Tour"/>
 	<meta name="theme-color" content="#FFFFFF"/>
     <script src="script.js?v=1776284580066"></script>
-    <script src="../../journey-manager.js?v=3" defer></script>
-    <script src="../../quiz-content.js?v=1" defer></script>
-<script src="../../journey-nav.js?v=10" defer></script>
+    <script src="../../journey-manager.js?v=6" defer></script>
+    <script src="../../quiz-content.js?v=6" defer></script>
+<script src="../../journey-nav.js?v=26" defer></script>
     <style type="text/css">
         html, body { height:100%; width:100%; height:100vh; width:100vw; margin:0; padding:0; overflow:hidden; }
         .fill-viewport { position:fixed; top:0; left:0; right:0; bottom:0; padding:0; margin:0; overflow: hidden; }
@@ -831,7 +832,7 @@
                 window._welcomeVoStarted = true;
                 _hideVoHint && _hideVoHint();
                 var _ov0=window.PPContent&&window.PPContent.byId('tawaf-initial','tw-guide-0');
-                var _wf=_ov0?_ov0.audio:'English Welcome Info.mp3';
+                var _wf=(_ov0&&_ov0.audio)||'1 English Welcome Info.mp3';
                 if(_wf) playVO(_wf);
                 if(window._voAudio){
                     window._voAudio.addEventListener('ended', function(){ window._welcomeVoDone = true; }, { once: true });
@@ -858,10 +859,10 @@
             // Play Ihram part 1, then chain part 2 automatically when it ends
             if(window._voAudio){window._voAudio.pause();window._voAudio=null;}
             var _ov1=window.PPContent&&window.PPContent.byId('tawaf-initial','tw-guide-1');
-            var _f1=_ov1?_ov1.audio:'English Ihram part 1.mp3';
-            var _f2=_ov1?_ov1.audioChain:'English Ihram part 2.mp3';
+            var _f1=(_ov1&&_ov1.audio)||'2 English Ihram part 1.mp3';
+            var _f2=(_ov1&&_ov1.audioChain)||'3 English Ihram part 2 .mp3';
             if(_f1){
-                var _u1=(window.PPContent&&window.PPContent.audioUrl(_f1))||('/Hajj%20Voice%20Over/'+encodeURIComponent(_f1));
+                var _u1=(window.PPContent&&window.PPContent.audioUrl(_f1))||('/Hajj%20voiceover%20english/English/'+encodeURIComponent(_f1));
                 var _a1=new Audio(_u1);
                 window._voAudio=_a1;
                 _a1.onended=function(){ if(_f2) playVO(_f2); };
@@ -874,7 +875,7 @@
             // user controls when narration starts.
             window._ihramStep2Audio = (function(){
                 var _ov2=window.PPContent&&window.PPContent.byId('tawaf-initial','tw-guide-2');
-                return _ov2?_ov2.audio:'English Ihram part 3.mp3';
+                return (_ov2&&_ov2.audio)||'4 English Ihram part 3.mp3';
             })();
         }
     }
@@ -998,7 +999,7 @@ function playVO(f){
     window._voPending = f;
     var url = (window.PPContent && window.PPContent.audioUrl)
         ? window.PPContent.audioUrl(f)
-        : ('/Hajj%20Voice%20Over/' + encodeURIComponent(f));
+        : ('/Hajj%20voiceover%20english/English/' + encodeURIComponent(f));
     var a = new Audio(url);
     window._voAudio = a;
     a.addEventListener('ended', function(){ if(window._voPending===f) window._voPending=null; });
@@ -1170,7 +1171,11 @@ return BANNERS[id]||null;
 var _tawafFirstVisitSeen=false;
 function chk(id,idx){// Auto-count lap when user returns to main starting area (skip the very first arrival)
 window._currentPanoId = id; // publish for HUD gating
-if(id.indexOf('7F92625E')!==-1){if(!_tawafFirstVisitSeen){_tawafFirstVisitSeen=true;}else if(typeof window.tawafLapInc==='function'){window.tawafLapInc();}}
+// Lap-counting is panorama-specific to the INITIAL Tawaf context. Tawaf
+// al-Ifadha and Tawaf al-Wida are physically the same circuits but the
+// banner/VO mapping uses a different set of panorama IDs, so we guard the
+// counter so it can't accidentally fire from a stale/shared trigger.
+if(journeyContext==='initial' && id.indexOf('7F92625E')!==-1){if(!_tawafFirstVisitSeen){_tawafFirstVisitSeen=true;}else if(typeof window.tawafLapInc==='function'){window.tawafLapInc();}}
 var key=(journeyContext==='initial'&&typeof idx==='number')?('idx:'+idx):id;var b=_pickBanner(id,idx);if(!b||shown[key])return;
 // Don't show if Ihram guide is still visible
 var g=document.getElementById('ihramGuide');if(g&&g.style.display!=='none'&&!g.classList.contains('hidden'))return;
@@ -1179,7 +1184,14 @@ if(_VO_MAP[id])playVO(_VO_MAP[id]);
 shown[key]=true;
 // Signal to journey nav that last guided panorama is reached (Maqam Ibrahim — st main 3)
 if(id==='panorama_7F9246DB_71D8_6AD6_41DA_A3880DC6DC13'&&typeof window!=='undefined'){window.journeyIsLastPanorama=true;if(typeof showJourneyNextButton==='function'){setTimeout(showJourneyNextButton,300);}}}
-if(!lowPerfMode){
+// Preload-based detection (PerformanceObserver + Image src hijack) misfires in
+// ifadha/farewell contexts: 3DVista preloads tiles for adjacent panoramas, and
+// each preload call triggers chk() for a panorama the user is NOT actually in
+// — causing banners/voiceovers to play back-to-back. In 'initial' mode this
+// was masked by the ihramGuide blocker. For ifadha/farewell rely solely on the
+// TDV hook (real navigation events) below.
+var _useFastDetect = !lowPerfMode && (journeyContext!=='ifadha' && journeyContext!=='farewell');
+if(_useFastDetect){
 try{var po=new PerformanceObserver(function(l){l.getEntries().forEach(function(e){det(e.name);});});po.observe({type:'resource',buffered:false});}catch(e){}
 var OI=window.Image;window.Image=function(w,h){var img=new OI(w,h);var os=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src').set;Object.defineProperty(img,'src',{set:function(v){det(v);os.call(this,v);},get:function(){return Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src').get.call(this);}});return img;};window.Image.prototype=OI.prototype;
 }
@@ -1222,7 +1234,7 @@ hookTDV();
     setTimeout(function(){
         if(typeof playVO==='function'){
             var _ov=window.PPContent&&window.PPContent.byId('tawaf-initial','tw-guide-0');
-            var _wf=_ov?_ov.audio:'English Welcome Info.mp3';
+            var _wf=(_ov&&_ov.audio)||'1 English Welcome Info.mp3';
             if(_wf) playVO(_wf);
         }
     }, 800);
@@ -1292,10 +1304,11 @@ border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:point
 <script>
 (function(){
   var ctx=new URL(window.location).searchParams.get('context')||'initial';
+  var _lapKey='tawafLaps_'+ctx;
   var nextBtn=document.getElementById('tcNextBtn');
   var titleEl=document.getElementById('tcTitle');
   var msgEl=document.getElementById('tcMsg');
-  function go(href){return function(){sessionStorage.removeItem('tawafLaps');window.location.href=href;};}
+  function go(href){return function(){sessionStorage.removeItem(_lapKey);window.location.href=href;};}
   if(ctx==='ifadha'){
     titleEl.textContent='🎉 Tawaf al-Ifadha Complete!';
     msgEl.innerHTML='Alhamdulillah! You have completed Tawaf al-Ifadha.<br>You will now return to your tent at Mina to rest before the 11th day stoning.';
@@ -1305,7 +1318,7 @@ border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:point
     titleEl.textContent='🕋 Hajj Complete — May Allah Accept!';
     msgEl.innerHTML='You have completed Tawaf al-Wida’, the farewell circumambulation.<br><br>Recite as you exit with your right foot:<br><em style="color:#8B6914;display:block;margin-top:8px;">Bismillāhi wa s-salātu wa s-salāmu ʿalā rasūlillāh, Allāhumma innī asʾaluka min faḍlik.</em><br><span style="font-size:12px;opacity:0.75;">“In the name of Allah, and prayers and peace upon the Messenger of Allah. O Allah, I ask You for Your bounty.”</span><br><br><strong style="color:#22c55e;">Congratulations on completing your Hajj. May Allah accept this act of ‘ibādah.</strong>';
     nextBtn.textContent='🏠 Return to Home';
-    nextBtn.onclick=function(){sessionStorage.removeItem('tawafLaps');window.location.href='/index.html';};
+    nextBtn.onclick=function(){sessionStorage.removeItem(_lapKey);window.location.href='/index.html';};
   } else {
     nextBtn.textContent="Next: Sa'i ▸";
     nextBtn.onclick=go('../2%20Safa%20and%20Marwa/index.htm');
@@ -1314,19 +1327,26 @@ border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:point
 </script>
 <script>
 (function(){
-  var laps = parseInt(sessionStorage.getItem('tawafLaps')||'0',10);
+  // Per-context lap counter — initial / ifadha / farewell each get their own
+  // sessionStorage key so a stale 6/7 from a previous Tawaf leg cannot
+  // prematurely fire the Hajj-Complete modal on the next leg.
+  var ctx=new URL(window.location).searchParams.get('context')||'initial';
+  var _lapKey='tawafLaps_'+ctx;
+  // One-time migration: clear the legacy shared key.
+  try{ sessionStorage.removeItem('tawafLaps'); }catch(_e){}
+  var laps = parseInt(sessionStorage.getItem(_lapKey)||'0',10);
   var hud = document.getElementById('tawafCounter');
   var countEl = document.getElementById('tawafCount');
   function render(){countEl.textContent = laps + '/7';}
   window.tawafLapInc = function(){
     if(laps>=7) return;
-    laps++; sessionStorage.setItem('tawafLaps', laps); render();
+    laps++; sessionStorage.setItem(_lapKey, laps); render();
     if(laps===7){
       window._tawafActive = false;
       setTimeout(function(){ document.getElementById('tawafComplete').style.display='block'; }, 250);
     }
   };
-  window.tawafLapReset = function(){ laps=0; sessionStorage.setItem('tawafLaps','0'); render(); window._tawafActive = true; };
+  window.tawafLapReset = function(){ laps=0; sessionStorage.setItem(_lapKey,'0'); render(); window._tawafActive = true; };
   render();
   // Once user has begun tawaf, keep HUD visible across all panoramas until 7/7.
   if(laps>0 && laps<7) window._tawafActive = true;
@@ -1365,7 +1385,7 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Tawaf VR S
 <script src="../../../meta-capi.js" defer></script>
 <!-- ═══ Scene Navigation Overlay ═══ -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='tawaf';</script>
-<script src="../../scene-nav-overlay.js?v=7" defer></script>
+<script src="../../scene-nav-overlay.js?v=8" defer></script>
 </body>
 </html>
 </html>

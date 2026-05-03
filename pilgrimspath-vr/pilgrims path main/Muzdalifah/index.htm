@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+?<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>muzdalifa</title>
@@ -58,7 +58,7 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Muzdalifah
 <style>
 /* Pebble Collection HUD */
 #pebbleHUD{
-  display:none; position:fixed; top:16px; right:16px; z-index:9999;
+  display:none; position:fixed; top:74px; right:16px; z-index:9999;
   background:rgba(10,15,30,0.88); border:1px solid rgba(201,168,76,0.4);
   border-radius:14px; padding:14px 20px; font-family:'DM Sans',Arial,sans-serif;
   color:#fff; min-width:170px; backdrop-filter:blur(8px);
@@ -118,20 +118,10 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Muzdalifah
   100%{ opacity:0; transform:translateY(-50px); }
 }
 
-/* Ground pile indicator */
-#pebblePile{
-  display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
-  z-index:9998; text-align:center; pointer-events:none;
-}
-#pebblePile img{
-  width:80px; height:auto; opacity:0.7;
-  filter:drop-shadow(0 0 12px rgba(201,168,76,0.5));
-  animation:pileBreathe 3s ease-in-out infinite;
-}
-#pebblePile .hint{
-  font-family:'DM Sans',Arial,sans-serif; font-size:12px;
-  color:#C9A84C; margin-top:4px; text-shadow:0 1px 4px rgba(0,0,0,0.8);
-}
+/* Ground pile indicator (decorative rocks image) — REMOVED at user request.
+   The static pile of pebbles at the bottom centre was visual clutter and
+   distinct from the collectible glowing pebbles. Hidden permanently. */
+#pebblePile{ display:none !important; }
 @keyframes pileBreathe{
   0%,100%{ filter:drop-shadow(0 0 8px rgba(201,168,76,0.3)) brightness(0.9); transform:scale(1); }
   50%{ filter:drop-shadow(0 0 20px rgba(201,168,76,0.7)) brightness(1.1); transform:scale(1.04); }
@@ -189,7 +179,7 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Muzdalifah
 
 <!-- Pebble HUD -->
 <div id="pebbleHUD">
-  <h4>🪨 Pebble Collection</h4>
+  <h4>🌙 Pebble Collection</h4>
   <div class="hud-row">
     <span class="label">Collected</span>
     <span class="val" id="hudPebbles">0 / 49</span>
@@ -197,11 +187,7 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Muzdalifah
   <div class="hud-sub">Explore Muzdalifah to find pebbles</div>
 </div>
 
-<!-- Ground pile indicator -->
-<div id="pebblePile">
-  <img src="pebbles_for_jamarat-removebg-preview.png" alt="pebbles">
-  <div class="hint">Tap the glowing pebbles to collect</div>
-</div>
+<!-- Ground pile indicator removed (decorative rocks image — see CSS note above) -->
 
 <!-- Pebble spots container (dynamically populated) -->
 <div id="pebbleSpots"></div>
@@ -218,7 +204,7 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Muzdalifah
       <li><span class="num">3.</span> These pebbles will be used for stoning the Jamarat over 3 days</li>
       <li><span class="num">4.</span> Explore the panoramas and tap the glowing pebbles to pick them up</li>
     </ul>
-    <div class="dua">اللَّهُمَّ اجْعَلْهُ حَجًّا مَبْرُورًا وَذَنْبًا مَغْفُورًا</div>
+    <div class="dua" style="direction:rtl;font-family:'Cinzel',serif;">اللَّهُمَّ اجْعَلْهُ حَجًّا مَبْرُورًا وَذَنْبًا مَغْفُورًا</div>
     <p style="color:#6B5B4F;font-size:clamp(10px,1vw,13px);margin:0 0 10px;font-style:italic;">"O Allah, make it an accepted Hajj and a forgiven sin"</p>
     <button onclick="dismissMuzGuide()">Begin Collecting ▸</button>
   </div>
@@ -227,7 +213,7 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Muzdalifah
 <!-- Completion -->
 <div id="pebbleComplete">
   <div class="pcBody">
-    <h3>🕋 MashaAllah!</h3>
+    <h3>🎉 MashaAllah!</h3>
     <p>You have collected all 49 pebbles!<br>You are ready for Rami al-Jamarat.</p>
     <button onclick="resetPebbles()">Collect Again</button>
   </div>
@@ -235,51 +221,61 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Muzdalifah
 <script>
 // ====== MUZDALIFAH PEBBLE COLLECTION SYSTEM ======
 
-// Pebble distribution across panoramas (49 total, ~5 per panorama)
-// Each entry: { x: %, y: %, size: px }
-// Positions are in the lower portion of the screen (ground level)
+// Pebble distribution across panoramas — pool of ~80 spots so users have
+// abundant choice. Collection is capped at 49 (the actual ritual count).
 const PEBBLE_MAP = {
   'panorama_818474DF_8B44_BA01_41D9_8F1D94AB5DAE': [
     {x:15, y:78, s:42}, {x:38, y:82, s:36}, {x:62, y:75, s:44},
-    {x:80, y:80, s:38}, {x:50, y:88, s:34}
+    {x:80, y:80, s:38}, {x:50, y:88, s:34},
+    {x:25, y:92, s:32}, {x:70, y:90, s:30}, {x:5,  y:84, s:34}
   ],
   'panorama_871E8FB1_8B44_4601_4196_4F4B28434C5D': [
     {x:12, y:80, s:40}, {x:30, y:76, s:44}, {x:55, y:84, s:36},
-    {x:72, y:78, s:42}, {x:88, y:82, s:38}
+    {x:72, y:78, s:42}, {x:88, y:82, s:38},
+    {x:22, y:90, s:32}, {x:48, y:92, s:30}, {x:65, y:90, s:34}
   ],
   'panorama_8184E14B_8B44_BA01_41DD_609207BB3DF0': [
     {x:20, y:82, s:38}, {x:42, y:76, s:44}, {x:65, y:80, s:40},
-    {x:82, y:86, s:34}, {x:35, y:88, s:36}
+    {x:82, y:86, s:34}, {x:35, y:88, s:36},
+    {x:8,  y:90, s:32}, {x:55, y:92, s:30}, {x:90, y:90, s:34}
   ],
   'panorama_818412B2_8B44_FE03_41D3_A97F25DF4CCB': [
     {x:10, y:76, s:44}, {x:28, y:84, s:36}, {x:52, y:78, s:42},
-    {x:70, y:82, s:38}, {x:90, y:80, s:40}
+    {x:70, y:82, s:38}, {x:90, y:80, s:40},
+    {x:18, y:90, s:30}, {x:42, y:92, s:32}, {x:78, y:90, s:34}
   ],
   'panorama_81840E5A_8B44_C603_41CB_DD32C22DD4A9': [
     {x:18, y:80, s:40}, {x:40, y:86, s:34}, {x:58, y:76, s:44},
-    {x:78, y:84, s:38}, {x:48, y:92, s:36}
+    {x:78, y:84, s:38}, {x:48, y:92, s:36},
+    {x:8,  y:88, s:30}, {x:30, y:94, s:32}, {x:88, y:92, s:34}
   ],
   'panorama_81841664_8B44_4606_41CC_401DE865B161': [
     {x:14, y:82, s:38}, {x:34, y:78, s:42}, {x:56, y:84, s:36},
-    {x:75, y:76, s:44}, {x:88, y:88, s:34}
+    {x:75, y:76, s:44}, {x:88, y:88, s:34},
+    {x:24, y:90, s:32}, {x:46, y:92, s:30}, {x:64, y:92, s:34}
   ],
   'panorama_81843C87_8B44_CA02_41C8_C5C950642155': [
     {x:22, y:76, s:44}, {x:45, y:82, s:38}, {x:68, y:78, s:42},
-    {x:85, y:84, s:36}, {x:30, y:90, s:34}
+    {x:85, y:84, s:36}, {x:30, y:90, s:34},
+    {x:10, y:88, s:32}, {x:55, y:92, s:30}, {x:78, y:92, s:34}
   ],
   'panorama_818479F6_8B44_CA03_41CC_7C01EAD97DA5': [
     {x:16, y:84, s:36}, {x:38, y:78, s:42}, {x:60, y:82, s:38},
-    {x:80, y:76, s:44}, {x:50, y:90, s:34}
+    {x:80, y:76, s:44}, {x:50, y:90, s:34},
+    {x:6,  y:90, s:30}, {x:28, y:92, s:32}, {x:88, y:90, s:34}
   ],
   'panorama_8181AB7D_8B44_4E01_41D9_F0C622DD8FEE': [
     {x:12, y:78, s:42}, {x:32, y:84, s:36}, {x:54, y:76, s:44},
-    {x:74, y:82, s:38}
+    {x:74, y:82, s:38},
+    {x:22, y:90, s:32}, {x:46, y:92, s:30}, {x:88, y:88, s:34}
   ],
   'panorama_8184E797_8B44_C601_41D9_A488ED02B92B': [
     {x:20, y:80, s:40}, {x:44, y:76, s:44}, {x:66, y:84, s:36},
-    {x:86, y:78, s:42}, {x:52, y:90, s:34}
+    {x:86, y:78, s:42}, {x:52, y:90, s:34},
+    {x:8,  y:88, s:30}, {x:30, y:92, s:32}, {x:74, y:92, s:34}
   ]
 };
+const PEBBLE_TARGET = 49;
 
 // State
 let pebbleState = JSON.parse(sessionStorage.getItem('muzPebbles') || '{}');
@@ -308,13 +304,18 @@ function saveState() {
 // Update HUD
 function updateHUD() {
   totalCollected = Object.keys(pebbleState).length;
-  hudPebbles.textContent = totalCollected + ' / 49';
-  hudPebbles.className = 'val' + (totalCollected >= 49 ? ' full' : '');
+  hudPebbles.textContent = totalCollected + ' / ' + PEBBLE_TARGET;
+  hudPebbles.className = 'val' + (totalCollected >= PEBBLE_TARGET ? ' full' : '');
 }
 
 // Collect a pebble
 function collectPebble(key, el) {
   if (pebbleState[key]) return;
+  if (totalCollected >= PEBBLE_TARGET) {
+    // Pouch is full — ignore further taps and surface the completion prompt
+    showPebbleComplete();
+    return;
+  }
   pebbleState[key] = true;
   saveState();
   updateHUD();
@@ -335,24 +336,56 @@ function collectPebble(key, el) {
   // +1 popup
   const plus = document.createElement('div');
   plus.className = 'pebble-plus';
-  plus.textContent = '+1 🪨';
+  plus.textContent = '+1 \uD83E\uDEA8';
   plus.style.left = cx + 'px';
   plus.style.top = (cy - 20) + 'px';
   document.body.appendChild(plus);
   setTimeout(function() { plus.remove(); }, 900);
 
   // Check completion
-  if (totalCollected >= 49) {
+  if (totalCollected >= PEBBLE_TARGET) {
     pebblePile.style.display = 'none';
-    completeEl.style.display = 'block';
+    showPebbleComplete();
     renderPebbles(currentPanoId);
     return;
   }
   renderPebbles(currentPanoId);
 }
 
+/* Render the completion modal with three actions: continue / keep exploring / restart.
+   Replaces the original simple "Collect Again" button. */
+function showPebbleComplete() {
+  if (!completeEl) return;
+  completeEl.innerHTML =
+    '<div class="pcBody">'
+      +'<h3>\uD83C\uDF89 MashaAllah!</h3>'
+      +'<p>You have collected all '+PEBBLE_TARGET+' pebbles — your pouch is full.<br>You are ready for Rami al-Jamarat.</p>'
+      +'<div style="display:flex;flex-direction:column;gap:10px;margin-top:6px;">'
+        +'<button id="pbContinue" style="background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;border:none;border-radius:999px;padding:11px 22px;font-size:14px;font-weight:700;cursor:pointer;">Continue to Next Scene ▸</button>'
+        +'<button id="pbExplore" style="background:transparent;color:#8B6914;border:1.5px solid #C9A84C;border-radius:999px;padding:10px 22px;font-size:13px;font-weight:600;cursor:pointer;">Keep Exploring</button>'
+        +'<button id="pbRestart" style="background:transparent;color:#6B5B4F;border:1px solid rgba(107,91,79,.4);border-radius:999px;padding:9px 22px;font-size:12px;font-weight:600;cursor:pointer;">\u21bb Restart Scene</button>'
+      +'</div>'
+    +'</div>';
+  completeEl.style.display = 'block';
+  var c = document.getElementById('pbContinue');
+  if (c) c.onclick = function() {
+    completeEl.style.display = 'none';
+    window.journeyIsLastPanorama = true;
+    if (typeof showJourneyNextButton === 'function') showJourneyNextButton();
+  };
+  var e = document.getElementById('pbExplore');
+  if (e) e.onclick = function() { completeEl.style.display = 'none'; };
+  var r = document.getElementById('pbRestart');
+  if (r) r.onclick = function() {
+    try { sessionStorage.removeItem('muzPebbles'); } catch(_){}
+    resetPebbles();
+    location.reload();
+  };
+}
+
 function renderPebbles(panoId) {
   spotsContainer.innerHTML = '';
+  if (totalCollected >= PEBBLE_TARGET) return; // pouch full — hide remaining spots
   const spots = PEBBLE_MAP[panoId];
   if (!spots) return;
 
@@ -388,7 +421,7 @@ function checkPanorama(panoId) {
 
   renderPebbles(panoId);
 
-  if (totalCollected >= 49) {
+  if (totalCollected >= PEBBLE_TARGET) {
     pebblePile.style.display = 'none';
   }
 }
@@ -411,7 +444,7 @@ function resetPebbles() {
   renderPebbles(currentPanoId);
 }
 
-// ── PANORAMA CHANGE DETECTION ──
+// -- PANORAMA CHANGE DETECTION --
 // NOTE: We deliberately do NOT use PerformanceObserver / Image intercept here
 // because adjacent panorama tile preloads would race and clear pebbles for the
 // pano the user is actually viewing. TDV playlist hooks below are authoritative.
@@ -464,9 +497,9 @@ updateHUD();
 </script>
 
 <!-- Journey Navigation -->
-<script src="../../journey-manager.js?v=3" defer></script>
-<script src="../../quiz-content.js?v=1" defer></script>
-<script src="../../journey-nav.js?v=10" defer></script>
+<script src="../../journey-manager.js?v=6" defer></script>
+<script src="../../quiz-content.js?v=6" defer></script>
+<script src="../../journey-nav.js?v=26" defer></script>
 
 <script>
 // Signal to journey nav that last panorama is reached
@@ -485,9 +518,9 @@ if(document.readyState === 'loading'){
   }
 }
 </script>
-<!-- ═══ Scene Navigation Overlay ═══ -->
+<!-- --- Scene Navigation Overlay --- -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='muzdalifah';</script>
-<script src="../../scene-nav-overlay.js?v=7" defer></script>
+<script src="../../scene-nav-overlay.js?v=8" defer></script>
 
 </body>
 </html>

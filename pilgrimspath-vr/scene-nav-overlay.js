@@ -16,7 +16,7 @@
   var SCENES = [
     { step:1,  id:'tawaf',         emoji:'🕋',  name:'Tawaf',     colors:['#8B6914','#4A3308'], path: BASE + '1%20Tawaf/index.htm?context=initial' },
     { step:2,  id:'safa',          emoji:'🚶',  name:"Sa\u02bfi", colors:['#1D6497','#0A3258'], path: BASE + '2%20Safa%20and%20Marwa/index.htm' },
-    { step:3,  id:'barber-umrah',  emoji:'✂️', name:'Trim',      colors:['#475569','#1F2937'], path: B5 + 'barber-scene.html?context=umrah-trim' },
+    { step:3,  id:'barber-umrah',  emoji:'✂️', name:'Trim',      colors:['#15803d','#0f5132'], path: B5 + 'umrah-trim-scene.html?context=umrah-trim' },
     { step:4,  id:'rest',          emoji:'🌙',  name:'Rest',      colors:['#1E3A5F','#0D2240'], path: BASE + '0%20Ihram/rest-scene.html' },
     { step:5,  id:'ihram-reenter', emoji:'🤲',  name:'Re-Ihram',  colors:['#C9A227','#8B6914'], path: BASE + '0%20Ihram/ihram-scene.html?context=re-enter' },
     { step:6,  id:'mina-8th',      emoji:'⛺',  name:'Mina 8',   colors:['#15683A','#083D22'], path: BASE + '3%20Mina/index.htm?context=8th-day' },
@@ -28,7 +28,7 @@
     { step:12, id:'tawaf-ifadha',  emoji:'🕋',  name:'Ifadha',   colors:['#8B6914','#4A3308'], path: BASE + '1%20Tawaf/index.htm?context=ifadha' },
     { step:13, id:'jamarat-11th',  emoji:'🪨',  name:'Day 11',   colors:['#991B1B','#510E0E'], path: B5 + 'Jamarat%20rooftop/index.htm?context=11th-day' },
     { step:14, id:'mina-12th',     emoji:'⛺',  name:'Night 12', colors:['#15683A','#083D22'], path: BASE + '3%20Mina/index.htm?context=tents-12th' },
-    { step:15, id:'jamarat-12th',  emoji:'🪨',  name:'Day 12',   colors:['#991B1B','#510E0E'], path: BASE + 'Jamarat%20Base%202/index.htm?context=12th-day&v=10' },
+    { step:15, id:'jamarat-12th',  emoji:'🪨',  name:'Day 12',   colors:['#991B1B','#510E0E'], path: BASE + 'jamarat%20base%20update%202/index.htm?context=12th-day&v=15' },
     { step:16, id:'farewell',      emoji:'🕌',  name:'Farewell', colors:['#8B6914','#4A3308'], path: BASE + '1%20Tawaf/index.htm?context=farewell' }
   ];
 
@@ -114,7 +114,7 @@
       '.scnItem.scnActiveItem .scnItemName{color:#FFD98A;}',
       '.scnItem.scnDoneItem .scnItemName{color:#86efac;}',
       /* push other bottom-anchored UI up so they do not collide with the rail */
-      '#saiCounter,#muzdHud,#muzdPouch{bottom:80px !important;}',
+      '#muzdHud,#muzdPouch{bottom:80px !important;}',
       /* ===== Mobile: scene strip moves to LEFT side, vertical & scrollable ===== */
       '@media(max-width:640px){',
         /* slim left rail with fixed width so other UI can offset reliably */
@@ -138,7 +138,9 @@
         '.scnCircle{font-size:15px;}',
         '.scnItemName{font-size:8px;max-width:48px;}',
         /* keep bottom-anchored HUDs out of the way of the now-narrow rail */
-        '#saiCounter,#muzdHud,#muzdPouch{bottom:20px !important;left:auto !important;right:14px !important;transform:none !important;}',
+        '#muzdHud,#muzdPouch{bottom:20px !important;left:auto !important;right:14px !important;transform:none !important;}',
+        /* sai counter is top-anchored like tawaf — nudge right to clear the left rail */
+        '#saiCounter{left:calc(50% + 27px) !important;}',
         /* ===== shift center/edge-anchored UI to clear the 54px left rail ===== */
         /* center-anchored HUD/banners: nudge right by half the rail width */
         '#tawafCounter{left:calc(50% + 27px) !important;}',
@@ -169,7 +171,11 @@
 
       var a = document.createElement('a');
       a.className = 'scnItem' + (isActive ? ' scnActiveItem' : '') + (isDone ? ' scnDoneItem' : '');
-      a.href = s.path;
+      // Append journey=<step> so the destination scene sets its currentStep
+      // correctly (matters for Tawaf which is reused at steps 1, 12 and 16 —
+      // each Tawaf-leg must drive its own state independently).
+      var _sep = s.path.indexOf('?')>=0 ? '&' : '?';
+      a.href = s.path + _sep + 'journey=' + s.step;
       a.title = 'Step ' + s.step + ': ' + s.name;
       a.setAttribute('aria-label', s.name);
 
@@ -224,7 +230,7 @@
       currentGroupItems.appendChild(a);
     });
 
-    document.body.appendChild(rail);
+    (document.getElementById('viewer') || document.body).appendChild(rail);
 
     // Scroll active icon into view after a short delay (strip may not be in full layout yet)
     setTimeout(function(){

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>jamarat Aqabah</title>
-    <script src="/journey-content-loader.js?v=3"></script>
+    <script src="/journey-content-loader.js?v=23"></script>
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -71,12 +71,12 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ro
 #jamarThrowBtn:active{transform:translateX(-50%) scale(0.97);}
 #jamarThrowBtn .icon{font-size:22px;}
 
-/* Counter HUD */
+/* Counter HUD — offset below the journey menu button (top:14px right:14px, ~50px tall) */
 #jamarHUD{
-  display:none; position:fixed; top:16px; right:16px; z-index:9999;
+  display:none; position:fixed; top:74px; right:16px; z-index:9999;
   background:rgba(10,15,30,0.88); border:1px solid rgba(201,168,76,0.4);
-  border-radius:14px; padding:14px 20px; font-family:'DM Sans',Arial,sans-serif;
-  color:#fff; min-width:180px; backdrop-filter:blur(8px);
+  border-radius:14px; padding:12px 18px; font-family:'DM Sans',Arial,sans-serif;
+  color:#fff; min-width:170px; backdrop-filter:blur(8px);
 }
 #jamarHUD h4{margin:0 0 8px;font-size:13px;color:#C9A84C;letter-spacing:1px;text-transform:uppercase;}
 .hud-pillar{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:14px;}
@@ -198,23 +198,11 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ro
 
 <!-- Counter HUD -->
 <div id="jamarHUD">
-  <h4>⬡ Rami al-Jamarat</h4>
-  <div class="hud-pillar">
-    <span class="name">Sughra (Small)</span>
-    <span class="count" id="hudSmall">0/7</span>
-  </div>
-  <div class="hud-divider"></div>
-  <div class="hud-pillar">
-    <span class="name">Wusta (Medium)</span>
-    <span class="count" id="hudMedium">0/7</span>
-  </div>
-  <div class="hud-divider"></div>
+  <h4>⬡ Rami al-Aqabah</h4>
   <div class="hud-pillar">
     <span class="name">Aqaba (Large)</span>
     <span class="count" id="hudLarge">0/7</span>
   </div>
-  <div class="hud-divider"></div>
-  <div class="hud-total">Total: <strong id="hudTotal">0/21</strong></div>
 </div>
 
 <!-- Throw animation canvas -->
@@ -237,13 +225,13 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ro
 
 <!-- Activity Guide -->
 <div id="jamarGuide">
-  <h3>🪨 Rami al-Jamarat</h3>
-  <p class="subtitle">The Stoning of the Pillars — Sunnah of Ibrahim (AS)</p>
+  <h3>🪨 Rami al-Aqabah</h3>
+  <p class="subtitle">Day of Sacrifice (10th Dhul-Hijjah) — Stoning of Jamarat al-Aqabah</p>
   <ul class="steps">
     <li><span class="num">1.</span> Turn to face the Jamrah (pillar) — follow the arrow</li>
     <li><span class="num">2.</span> Tap "Throw Stone" when the screen glows green</li>
-    <li><span class="num">3.</span> Throw 7 stones at each of the 3 pillars</li>
-    <li><span class="num">4.</span> Start with Sughra (small) → Wusta (middle) → Aqaba (large)</li>
+    <li><span class="num">3.</span> Throw 7 stones at Jamarat al-Aqabah only</li>
+    <li><span class="num">4.</span> Today only Aqabah is stoned — the other two pillars are stoned on the 11th–13th</li>
   </ul>
   <div class="dua">بِسْمِ اللَّهِ اللَّهُ أَكْبَرُ</div>
   <p style="color:#8B95A5;font-size:12px;margin:0 0 14px;">Say this with each throw: "In the name of Allah, Allah is the Greatest"</p>
@@ -253,19 +241,18 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ro
 <!-- Completion banner -->
 <div id="jamarComplete">
   <h3>🕋 MashaAllah!</h3>
-  <p>You have completed all 21 throws.<br>May Allah accept your Hajj.</p>
+  <p>You have completed your 7 throws at Jamarat al-Aqabah.<br>May Allah accept your Hajj.</p>
   <button onclick="resetJamarat()">Reset &amp; Repeat</button>
 </div>
 
 <script>
 // ====== JAMARAT STONE THROWING SYSTEM ======
 // Panorama IDs that face the Jamarat pillars
+// NOTE: 10th-day Rami is at Aqabah pillar ONLY. All panoramas in this scene
+// are mapped to 'large' so any throw counts toward Aqabah.
 const JAMAR_PANORAMAS = {
-  // Panorama 1: VID_20260217_121959_00_480 (14-44-20)
-  'panorama_92A5C87D_8C55_D2F6_41BD_CABD1E84B587': 'small',
-  // Panorama 2: missing area VID_20260217_121557_00_475 (16-31-07)
-  'panorama_91BCCD88_8C4C_721C_41D8_71D5CA4654E5': 'medium',
-  // Panorama 3: VID_20260217_115635_00_436 (14-35-01)
+  'panorama_92A5C87D_8C55_D2F6_41BD_CABD1E84B587': 'large',
+  'panorama_91BCCD88_8C4C_721C_41D8_71D5CA4654E5': 'large',
   'panorama_691B217E_7C54_3E7A_41D3_35A255D72204': 'large'
 };
 
@@ -273,9 +260,9 @@ const JAMAR_PANORAMAS = {
 // The yaw angle where the pillar is visible in each panorama
 // Tolerance = how many degrees off-center is still accepted
 const PILLAR_TARGET = {
-  small:  { yaw: -82.55, tolerance: 55 },  // edges at -136.7 to -28.4
-  medium: { yaw: 48.15,  tolerance: 10 },  // edges at 40.3 to 56
-  large:  { yaw: -47.85, tolerance: 98 }   // edges at 49.6 to -145.3
+  small:  { yaw: -82.55, tolerance: 18 },
+  medium: { yaw: 48.15,  tolerance: 18 },
+  large:  { yaw: -47.85, tolerance: 18 }   // tight cone — must actually face the pillar
 };
 
 // State
@@ -310,14 +297,8 @@ function saveState() {
 
 // ── Update HUD ──
 function updateHUD() {
-  const total = jamarState.small + jamarState.medium + jamarState.large;
-  document.getElementById('hudSmall').textContent = jamarState.small + '/7';
-  document.getElementById('hudSmall').className = 'count' + (jamarState.small >= 7 ? ' done' : '');
-  document.getElementById('hudMedium').textContent = jamarState.medium + '/7';
-  document.getElementById('hudMedium').className = 'count' + (jamarState.medium >= 7 ? ' done' : '');
   document.getElementById('hudLarge').textContent = jamarState.large + '/7';
   document.getElementById('hudLarge').className = 'count' + (jamarState.large >= 7 ? ' done' : '');
-  document.getElementById('hudTotal').textContent = total + '/21';
 
   if (currentPillar && jamarState[currentPillar] < 7) {
     throwLabel.textContent = '(' + (jamarState[currentPillar] + 1) + '/7)';
@@ -386,7 +367,7 @@ function checkPanorama(panoramaId) {
   if(typeof _jbChk==='function') _jbChk(panoramaId);
   const pillar = JAMAR_PANORAMAS[panoramaId] || null;
   currentPillar = pillar;
-  const total = jamarState.small + jamarState.medium + jamarState.large;
+  const total = jamarState.large; // Aqabah only on 10th day
 
   // HUD is always visible on all Jamarat panoramas
   hud.style.display = 'block';
@@ -415,7 +396,7 @@ function checkPanorama(panoramaId) {
     debugYaw.style.display = 'none';
   }
 
-  if (total >= 21) {
+  if (total >= 7) {
     throwBtn.style.display = 'none';
     glow.style.display = 'none';
     arrow.style.display = 'none';
@@ -547,7 +528,7 @@ function throwStone() {
       updateHUD();
       throwAnimating = false;
 
-      const total = jamarState.small + jamarState.medium + jamarState.large;
+      const total = jamarState.large; // Aqabah only on 10th day
 
       // Pillar complete?
       if (jamarState[currentPillar] >= 7) {
@@ -555,7 +536,7 @@ function throwStone() {
         glow.style.display = 'none';
         arrow.style.display = 'none';
         aimHint.style.display = 'none';
-        if (total >= 21) {
+        if (total >= 7) {
           completeEl.style.display = 'block';
           if(typeof playVO==='function'){
             var _cctx=new URL(window.location).searchParams.get('context')||'';
@@ -1087,11 +1068,11 @@ setTimeout(function(){_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},
 
 <!-- Journey Navigation -->
 <script src="../journey-manager.js?v=3" defer></script>
-<script src="../quiz-content.js?v=1" defer></script>
-<script src="../journey-nav.js?v=10" defer></script>
+<script src="../quiz-content.js?v=6" defer></script>
+<script src="../journey-nav.js?v=26" defer></script>
 <!-- ═══ Scene Navigation Overlay ═══ -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='jamarat-10th';</script>
-<script src="../../scene-nav-overlay.js?v=7" defer></script>
+<script src="../../scene-nav-overlay.js?v=8" defer></script>
 
 </body>
 </html>

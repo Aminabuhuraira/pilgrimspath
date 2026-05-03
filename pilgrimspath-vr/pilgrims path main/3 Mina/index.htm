@@ -1,8 +1,9 @@
-<!DOCTYPE html>
+?<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Mina tents </title>
-    <script src="/journey-content-loader.js?v=3"></script>
+    <script src="/admin-journey-content.js?v=11"></script>
+    <script src="/journey-content-loader.js?v=23"></script>
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -50,7 +51,7 @@
     <div id="preloadContainer" class="fill-viewport"><div style="z-index: 4; position: absolute; overflow: hidden; left: 0%; top: 50%; width: 100.00%; height: 10.00%" ><div style="text-align:left; color:#000; "><DIV STYLE="text-align:center;font-size:1.6666666666666663vmin;"><SPAN STYLE="display:inline-block; letter-spacing:0vmin; white-space:pre-wrap;color:#777777;font-size:1.67vmin;font-family:Arial, Helvetica, sans-serif;">Loading virtual tour. Please wait...</SPAN></DIV></div></div></div>
     <div id="viewer" class="fill-viewport"></div>
 
-<!-- ═══ Scene Guide Banners ═══ -->
+<!-- --- Scene Guide Banners --- -->
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
 #sceneBanner{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10003;
@@ -98,33 +99,37 @@ transition:transform .15s;box-shadow:0 4px 12px rgba(201,168,76,0.32);align-self
 #minaContinue:hover{transform:translateX(-50%) scale(1.05);box-shadow:0 8px 30px rgba(201,168,76,0.7);}
 @media(max-width:480px){#minaContinue{font-size:13px;padding:12px 22px;bottom:90px;}}
 </style>
-<button id="minaContinue">🗺️ Continue to Jamarat ▸</button>
+<button id="minaContinue">🕋 Continue to Jamarat ▸</button>
 <script>
 (function(){
   var ctx=new URL(window.location).searchParams.get('context')||'8th-day';
   var btn=document.getElementById('minaContinue');
   if(!btn) return;
+  function _withQuiz(go){ if(window.proceedWithQuiz) window.proceedWithQuiz(go); else go(); }
   if(ctx==='tents-11th'){
-    btn.innerHTML='🗺️ Continue to Jamarat (11th Day) ▸';
-    btn.onclick=function(){window.location.href='../5%20Rami%20Jamarat,%20Qurbani,%20trim%20Shave,%20Tawaf/Jamarat%20rooftop/index.htm?context=11th-day';};
+    btn.innerHTML='\uD83D\uDD4B Continue to Jamarat (11th Day) \u25b8';
+    btn.onclick=function(){_withQuiz(function(){window.location.href='../5%20Rami%20Jamarat,%20Qurbani,%20trim%20Shave,%20Tawaf/Jamarat%20rooftop/index.htm?context=11th-day';});};
   } else if(ctx==='tents-12th'){
-    btn.innerHTML='🗺️ Continue to Jamarat (12th Day) ▸';
-    btn.onclick=function(){window.location.href='../5%20Rami%20Jamarat,%20Qurbani,%20trim%20Shave,%20Tawaf/Jamarat%20rooftop/index.htm?context=12th-day';};
+    btn.innerHTML='\uD83D\uDD4B Continue to Jamarat (12th Day) \u25b8';
+    btn.onclick=function(){_withQuiz(function(){window.location.href='../5%20Rami%20Jamarat,%20Qurbani,%20trim%20Shave,%20Tawaf/Jamarat%20rooftop/index.htm?context=12th-day';});};
   } else if(ctx==='tents-13th'){
-    btn.innerHTML='🗺️ Continue to Jamarat (13th Day) ▸';
-    btn.onclick=function(){window.location.href='../5%20Rami%20Jamarat,%20Qurbani,%20trim%20Shave,%20Tawaf/Jamarat%20rooftop/index.htm?context=13th-day';};
+    btn.innerHTML='\uD83D\uDD4B Continue to Jamarat (13th Day) \u25b8';
+    btn.onclick=function(){_withQuiz(function(){window.location.href='../5%20Rami%20Jamarat,%20Qurbani,%20trim%20Shave,%20Tawaf/Jamarat%20rooftop/index.htm?context=13th-day';});};
   }
 })();
 </script>
 <script>
 var _bannerPager={title:'',pages:[],index:0};
 function _splitBannerHtml(html){var segs=html.match(/<h3[\s\S]*?<\/h3>|<p[\s\S]*?<\/p>|<div class="sep"><\/div>|<br\s*\/?\s*>/gi)||[html];var pages=[];var cur=[];var chars=0;for(var i=0;i<segs.length;i++){var s=segs[i];var txt=s.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();var len=txt.length;if(cur.length&&(chars+len>620||cur.length>=6)){pages.push(cur.join(''));cur=[];chars=0;}cur.push(s);chars+=len;}if(cur.length)pages.push(cur.join(''));return pages.length?pages:[html];}
-function _renderBannerPage(){var el=document.getElementById('sceneBanner');if(!el)return;var isLast=_bannerPager.index>=_bannerPager.pages.length-1;var btn=isLast?'Continue ▸':'Next ▸';el.innerHTML='<div class="sceneBannerBody"><h3>'+_bannerPager.title+'</h3>'+_bannerPager.pages[_bannerPager.index]+'<button onclick="dismissBanner()">'+btn+'</button></div>';el.style.display='block';}
+function _renderBannerPage(){var el=document.getElementById('sceneBanner');if(!el)return;var isLast=_bannerPager.index>=_bannerPager.pages.length-1;var btn=isLast?'Continue \u25b8':'Next \u25b8';el.innerHTML='<div class="sceneBannerBody"><h3>'+_bannerPager.title+'</h3>'+_bannerPager.pages[_bannerPager.index]+'<button onclick="dismissBanner()">'+btn+'</button></div>';el.style.display='block';}
 function openBanner(title,html){_bannerPager.title=title;_bannerPager.pages=_splitBannerHtml(html);_bannerPager.index=0;_renderBannerPage();}
 function dismissBanner(){if(_bannerPager.pages.length&&_bannerPager.index<_bannerPager.pages.length-1){_bannerPager.index++;_renderBannerPage();return;}_bannerPager={title:'',pages:[],index:0};document.getElementById('sceneBanner').style.display='none';}
 function playVO(f){
     if(!f) return;
+    if(window._voCurrentFile===f && window._voAudio && !window._voAudio.paused && !window._voAudio.ended) return;
+    window._voCurrentFile = f;
     if(window._voAudio){ try{ window._voAudio.pause(); }catch(e){} window._voAudio=null; }
+    if(window._voChainPending && window._voChainPending !== f) window._voChainPending = null;
     window._voPending = f;
     var url = (window.PPContent && window.PPContent.audioUrl)
         ? window.PPContent.audioUrl(f)
@@ -179,14 +184,14 @@ function _hideVoHint(){ var h = document.getElementById('voHint'); if(h) h.remov
 var journeyContext=new URL(window.location).searchParams.get('context')||'8th-day';
 var BANNERS_8TH={
 'panorama_73D8B866_7C54_4D8A_41D3_BF331164945C':{
-  title:'🕌 8th Day of Dhul-Hijjah — Yawm at-Tarwiyah',
+  title:'\uD83D\uDD4C 8th Day of Dhul-Hijjah — Yawm at-Tarwiyah',
   html:'<p class="bb">On this day, the 8th day of Dhul-Hijjah, known as Yawm at-Tarwiyah, you have arrived at Mina where you will spend the day in worship. Arrival is before noon.</p><p class="bb">You will offer the following prayers, but some are shortened to two rak\'ahs — the likes of Zuhr, Asr &amp; Isha.</p><p class="bb">Throughout the day, continue reciting the Talbiyah and prepare for the Day of Arafah.</p>'}
 };
 var BANNERS_TENTS_11TH={
 'panorama_72AD4A6A_7C54_4D9A_41DC_AA69EFBD3C52':{
   title:'⛺ Return to Your Tent in Mina',
   html:'<p class="bb">After completing Tawaf al-Ifadah, you have travelled back to your tent in Mina to rest.</p>'+
-  '<p class="bb">Tomorrow, the 11th of Dhul-Hijjah, you will perform Rami al-Jamarat at all three pillars: Sughra, Wusta, and ʿAqabah — seven pebbles each, saying <em>Bismillāhi Allāhu Akbar</em> with every throw.</p>'+
+  '<p class="bb">Tomorrow, the 11th of Dhul-Hijjah, you will perform Rami al-Jamarat at all three pillars: Sughra, Wusta, and ʿAqabah — seven pebbles each, saying <em>Bismillahi Allahu Akbar</em> with every throw.</p>'+
   '<p class="bb">Use this time to rest, hydrate, and remember Allah.</p>'}
 };
 var BANNERS_TENTS_12TH={
@@ -217,10 +222,60 @@ if(window.PPContent && window.PPContent.hasData){
 }
 function chk(id){var b=BANNERS[id];if(!b||shown[id])return;shown[id]=true;if(b.title||b.html)openBanner(b.title,b.html);
 if(_VO_MAP_MINA[id])playVO(_VO_MAP_MINA[id]);
-// Signal to journey nav that last panorama is reached
-if(id==='panorama_73D8B866_7C54_4D8A_41D3_BF331164945C'&&typeof window!=='undefined'){window.journeyIsLastPanorama=true;if(typeof showJourneyNextButton==='function'){setTimeout(showJourneyNextButton,300);}}
-// In tent mode, surface the 'Continue to Jamarat' button immediately when banner opens
-if(IS_TENT_MODE&&id===TENT_PANO){var btn=document.getElementById('minaContinue');if(btn)btn.style.display='inline-flex';}}
+// 8th-day end panorama: surface the standard Next-Stop button directly
+// (the previous "I'm done exploring" intermediate button has been removed).
+if(id==='panorama_73D8B866_7C54_4D8A_41D3_BF331164945C'&&typeof window!=='undefined'){
+  window.journeyIsLastPanorama=true;
+  if(typeof showJourneyNextButton==='function'){ setTimeout(showJourneyNextButton,300); }
+}
+// In tent mode, the 'Continue to Jamarat' button is NO LONGER auto-shown.
+// It will be surfaced only on specific panoramas (to be wired per the
+// user's instructions). The button itself + its onclick wiring above
+// remain in place; just the auto-show on TENT_PANO has been removed.
+}
+function _showMinaDoneBtn(){
+  if(document.getElementById('minaDoneBtn')) return;
+  var b=document.createElement('button');
+  b.id='minaDoneBtn';
+  b.innerHTML='\u2713 I\u2019m done exploring \u25b8';
+  b.style.cssText='position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:10005;'
+    +'background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;border:none;border-radius:999px;'
+    +'padding:11px 24px;font-size:13px;font-weight:700;letter-spacing:.3px;'
+    +'font-family:Poppins,\'DM Sans\',Arial,sans-serif;cursor:pointer;'
+    +'box-shadow:0 6px 24px rgba(201,168,76,.55);transition:transform .15s,box-shadow .15s;';
+  b.onmouseover=function(){b.style.transform='translateX(-50%) scale(1.05)';};
+  b.onmouseout=function(){b.style.transform='translateX(-50%) scale(1)';};
+  b.onclick=_showMinaEndModal;
+  document.body.appendChild(b);
+}
+function _showMinaEndModal(){
+  var prev=document.getElementById('minaEndModal'); if(prev) prev.remove();
+  var bd=document.createElement('div'); bd.id='minaEndBackdrop';
+  bd.style.cssText='position:fixed;inset:0;z-index:10006;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);';
+  var m=document.createElement('div'); m.id='minaEndModal';
+  m.style.cssText='position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10007;'
+    +'background:linear-gradient(180deg,#FFF8E7 0%,#F5E9C8 100%);color:#3D2B1F;'
+    +'border:2px solid #C9A84C;border-radius:18px;padding:28px 32px;max-width:440px;width:92vw;'
+    +'font-family:Poppins,\'DM Sans\',Arial,sans-serif;text-align:center;'
+    +'box-shadow:0 24px 60px rgba(0,0,0,.45);';
+  m.innerHTML=
+    '<h3 style="color:#8B6914;margin:0 0 10px;font-size:22px;">Day at Mina complete</h3>'
+    +'<p style="color:#3D2B1F;font-size:14px;line-height:1.45;margin:0 0 20px;">'
+    +'You may now continue to the next scene, keep exploring Mina, or restart from the beginning.</p>'
+    +'<div style="display:flex;flex-direction:column;gap:10px;">'
+    +'<button id="mnEndContinue" style="background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;border:none;border-radius:999px;padding:12px 22px;font-size:14px;font-weight:700;cursor:pointer;">Continue to Next Scene \u25b8</button>'
+    +'<button id="mnEndExplore" style="background:transparent;color:#8B6914;border:1.5px solid #C9A84C;border-radius:999px;padding:11px 22px;font-size:13px;font-weight:600;cursor:pointer;">Keep Exploring</button>'
+    +'<button id="mnEndRestart" style="background:transparent;color:#6B5B4F;border:1px solid rgba(107,91,79,.4);border-radius:999px;padding:10px 22px;font-size:12px;font-weight:600;cursor:pointer;">\u21bb Restart Scene</button>'
+    +'</div>';
+  document.body.appendChild(bd); document.body.appendChild(m);
+  function close(){ try{bd.remove();m.remove();}catch(_){}}
+  document.getElementById('mnEndExplore').onclick=close;
+  document.getElementById('mnEndRestart').onclick=function(){ location.reload(); };
+  document.getElementById('mnEndContinue').onclick=function(){
+    close();
+    if(typeof showJourneyNextButton==='function'){ showJourneyNextButton(); }
+  };
+}
 try{var po=new PerformanceObserver(function(l){l.getEntries().forEach(function(e){det(e.name);});});po.observe({type:'resource',buffered:false});}catch(e){}
 var OI=window.Image;window.Image=function(w,h){var img=new OI(w,h);var os=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src').set;Object.defineProperty(img,'src',{set:function(v){det(v);os.call(this,v);},get:function(){return Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src').get.call(this);}});return img;};window.Image.prototype=OI.prototype;
 function hookTDV(){if(typeof TDV==='undefined'||!TDV.Tour||!TDV.Tour.Script)return setTimeout(hookTDV,500);var o1=TDV.Tour.Script.setPlayListSelectedIndex;if(o1){TDV.Tour.Script.setPlayListSelectedIndex=function(a,b){try{var id=a.get('items')[b].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}catch(e){}return o1.apply(this,arguments);};}var o2=TDV.Tour.Script.setMainMediaByIndex;if(o2){TDV.Tour.Script.setMainMediaByIndex=function(a){try{var items=this.mainPlayList.get('items');if(a>=0&&a<items.length){var id=items[a].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}}catch(e){}return o2.apply(this,arguments);};}console.log('[Mina] banner hooks installed (ctx='+journeyContext+')');}
@@ -237,17 +292,17 @@ if(IS_TENT_MODE){
 </script>
 
 <!-- Journey Navigation -->
-<script src="../../journey-manager.js?v=3" defer></script>
-<script src="../../quiz-content.js?v=1" defer></script>
-<script src="../../journey-nav.js?v=10" defer></script>
+<script src="../../journey-manager.js?v=8" defer></script>
+<script src="../../quiz-content.js?v=6" defer></script>
+<script src="../../journey-nav.js?v=26" defer></script>
 
 <!-- Meta Pixel VR Event -->
 <script>
 if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Mina VR Scene",content_category:"VR Hajj Tour",content_type:"vr_360_scene"});}
 </script>
 <script src="../../../meta-capi.js" defer></script>
-<!-- ═══ Scene Navigation Overlay ═══ -->
+<!-- --- Scene Navigation Overlay --- -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='mina';</script>
-<script src="../../scene-nav-overlay.js?v=7" defer></script>
+<script src="../../scene-nav-overlay.js?v=8" defer></script>
 </body>
 </html>

@@ -1,8 +1,9 @@
-<!DOCTYPE html>
+?<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Arafah</title>
-    <script src="/journey-content-loader.js?v=3"></script>
+    <script src="/admin-journey-content.js?v=11"></script>
+    <script src="/journey-content-loader.js?v=23"></script>
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -50,7 +51,7 @@
     <div id="preloadContainer" class="fill-viewport"><div style="z-index: 4; position: absolute; overflow: hidden; left: 0%; top: 50%; width: 100.00%; height: 10.00%" ><div style="text-align:left; color:#000; "><DIV STYLE="text-align:center;font-size:1.6666666666666663vmin;"><SPAN STYLE="display:inline-block; letter-spacing:0vmin; white-space:pre-wrap;color:#777777;font-size:1.67vmin;font-family:Arial, Helvetica, sans-serif;">Loading virtual tour. Please wait...</SPAN></DIV></div></div></div>
     <div id="viewer" class="fill-viewport"></div>
 
-<!-- ═══ Scene Guide Banners ═══ -->
+<!-- --- Scene Guide Banners --- -->
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
 #sceneBanner{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10003;
@@ -89,12 +90,15 @@ transition:transform .15s;box-shadow:0 4px 12px rgba(201,168,76,0.32);align-self
 <script>
 var _bannerPager={title:'',pages:[],index:0};
 function _splitBannerHtml(html){var segs=html.match(/<h3[\s\S]*?<\/h3>|<p[\s\S]*?<\/p>|<div class="sep"><\/div>|<br\s*\/?\s*>/gi)||[html];var pages=[];var cur=[];var chars=0;for(var i=0;i<segs.length;i++){var s=segs[i];var txt=s.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();var len=txt.length;if(cur.length&&(chars+len>620||cur.length>=6)){pages.push(cur.join(''));cur=[];chars=0;}cur.push(s);chars+=len;}if(cur.length)pages.push(cur.join(''));return pages.length?pages:[html];}
-function _renderBannerPage(){var el=document.getElementById('sceneBanner');if(!el)return;var isLast=_bannerPager.index>=_bannerPager.pages.length-1;var btn=isLast?'Continue ▸':'Next ▸';el.innerHTML='<div class="sceneBannerBody"><h3>'+_bannerPager.title+'</h3>'+_bannerPager.pages[_bannerPager.index]+'<button onclick="dismissBanner()">'+btn+'</button></div>';el.style.display='block';}
+function _renderBannerPage(){var el=document.getElementById('sceneBanner');if(!el)return;var isLast=_bannerPager.index>=_bannerPager.pages.length-1;var btn=isLast?'Continue \u25b8':'Next \u25b8';el.innerHTML='<div class="sceneBannerBody"><h3>'+_bannerPager.title+'</h3>'+_bannerPager.pages[_bannerPager.index]+'<button onclick="dismissBanner()">'+btn+'</button></div>';el.style.display='block';}
 function openBanner(title,html){_bannerPager.title=title;_bannerPager.pages=_splitBannerHtml(html);_bannerPager.index=0;_renderBannerPage();}
 function dismissBanner(){if(_bannerPager.pages.length&&_bannerPager.index<_bannerPager.pages.length-1){_bannerPager.index++;_renderBannerPage();return;}_bannerPager={title:'',pages:[],index:0};document.getElementById('sceneBanner').style.display='none';}
 function playVO(f){
     if(!f) return;
+    if(window._voCurrentFile===f && window._voAudio && !window._voAudio.paused && !window._voAudio.ended) return;
+    window._voCurrentFile = f;
     if(window._voAudio){ try{ window._voAudio.pause(); }catch(e){} window._voAudio=null; }
+    if(window._voChainPending && window._voChainPending !== f) window._voChainPending = null;
     window._voPending = f;
     var url = (window.PPContent && window.PPContent.audioUrl)
         ? window.PPContent.audioUrl(f)
@@ -147,13 +151,13 @@ function _showVoHint(){
 function _hideVoHint(){ var h = document.getElementById('voHint'); if(h) h.remove(); }
 (function(){
 var _arafahSeq=[
-  {title:'🤲 9th Day of Dhul-Hijjah — Day of Arafah',
+  {title:'\uD83E\uDD32 9th Day of Dhul-Hijjah — Day of Arafah',
    html:'<p class="bb">On this day, the 9th day — the Day of Arafah — we have now arrived on the plains of Arafat. Walk your way to the summit as this is a pivotal moment, where your supplications are answered.</p>',
    audio:'English Arafah 1.mp3'},
-  {title:'🌙 Travelling to Muzdalifah',
+  {title:'\uD83C\uDF19 Travelling to Muzdalifah',
    html:'<p class="bb">You will now be taken to Muzdalifah. Here, pray Maghrib and Isha together, shortened and combined, with one Adhan and two Iqamahs. At Muzdalifah go collect at least 49 or 70 pebbles for the stoning ritual for the next day.</p>',
    audio:'English Arafah 2.mp3'},
-  {title:'🎉 Congratulations',
+  {title:'\uD83C\uDF89 Congratulations',
    html:'<p class="bb">Congratulations — you may now proceed to any resting area under the open sky.</p>',
    audio:'English Arafah 3.mp3'}
 ];
@@ -163,11 +167,74 @@ if(window.PPContent && window.PPContent.hasData){
     _arafahSeq = _ovSeq.map(function(s,i){return {title:s.title||_arafahSeq[i]&&_arafahSeq[i].title||'',html:s.html||_arafahSeq[i]&&_arafahSeq[i].html||'',audio:s.audio||_arafahSeq[i]&&_arafahSeq[i].audio||''};});
   }
 }
-var _arafahIdx=0;
-function _showArafahBanner(idx){
+/* Only the first banner plays at intro. After dismissing it the standard
+   Next-Stop button surfaces so the user can proceed to Muzdalifah whenever
+   they're ready. Banners 2 & 3 are NOT auto-played here — their content is
+   about leaving Arafah / arriving at Muzdalifah and would feel out of
+   place while the user is still exploring this panorama. */
+function _showArafahIntro(){
+  var s=_arafahSeq[0]; if(!s) return;
+  openBanner(s.title,s.html);
+  playVO(s.audio);
+  setTimeout(function(){
+    var el=document.getElementById('sceneBanner');if(!el)return;
+    var btn=el.querySelector('button');if(!btn)return;
+    btn.textContent='Continue \u25b8';
+    btn.onclick=function(){
+      _bannerPager.index=_bannerPager.pages.length;dismissBanner();
+      window.journeyIsLastPanorama=true;
+      if(typeof showJourneyNextButton==='function'){ setTimeout(showJourneyNextButton,300); }
+    };
+  },50);
+}
+function _showArafahDoneBtn(){
+  if(document.getElementById('arafahDoneBtn')) return;
+  var b=document.createElement('button');
+  b.id='arafahDoneBtn';
+  b.innerHTML='\u2713 I\u2019m done exploring \u25b8';
+  b.style.cssText='position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:10005;'
+    +'background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;border:none;border-radius:999px;'
+    +'padding:11px 24px;font-size:13px;font-weight:700;letter-spacing:.3px;'
+    +'font-family:Poppins,\'DM Sans\',Arial,sans-serif;cursor:pointer;'
+    +'box-shadow:0 6px 24px rgba(201,168,76,.55);transition:transform .15s,box-shadow .15s;';
+  b.onmouseover=function(){b.style.transform='translateX(-50%) scale(1.05)';};
+  b.onmouseout=function(){b.style.transform='translateX(-50%) scale(1)';};
+  b.onclick=_showArafahEndModal;
+  document.body.appendChild(b);
+}
+function _showArafahEndModal(){
+  var prev=document.getElementById('arafahEndModal'); if(prev) prev.remove();
+  var bd=document.createElement('div'); bd.id='arafahEndBackdrop';
+  bd.style.cssText='position:fixed;inset:0;z-index:10006;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);';
+  var m=document.createElement('div'); m.id='arafahEndModal';
+  m.style.cssText='position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10007;'
+    +'background:linear-gradient(180deg,#FFF8E7 0%,#F5E9C8 100%);color:#3D2B1F;'
+    +'border:2px solid #C9A84C;border-radius:18px;padding:28px 32px;max-width:440px;width:92vw;'
+    +'font-family:Poppins,\'DM Sans\',Arial,sans-serif;text-align:center;'
+    +'box-shadow:0 24px 60px rgba(0,0,0,.45);';
+  m.innerHTML=
+    '<h3 style="color:#8B6914;margin:0 0 10px;font-size:22px;">Day of Arafah complete</h3>'
+    +'<p style="color:#3D2B1F;font-size:14px;line-height:1.45;margin:0 0 20px;">'
+    +'You may now continue to Muzdalifah, keep exploring this scene, or restart from the beginning.</p>'
+    +'<div style="display:flex;flex-direction:column;gap:10px;">'
+    +'<button id="arEndContinue" style="background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;border:none;border-radius:999px;padding:12px 22px;font-size:14px;font-weight:700;cursor:pointer;">Continue to Muzdalifah \u25b8</button>'
+    +'<button id="arEndExplore" style="background:transparent;color:#8B6914;border:1.5px solid #C9A84C;border-radius:999px;padding:11px 22px;font-size:13px;font-weight:600;cursor:pointer;">Keep Exploring</button>'
+    +'<button id="arEndRestart" style="background:transparent;color:#6B5B4F;border:1px solid rgba(107,91,79,.4);border-radius:999px;padding:10px 22px;font-size:12px;font-weight:600;cursor:pointer;">\u21bb Restart Scene</button>'
+    +'</div>';
+  document.body.appendChild(bd); document.body.appendChild(m);
+  function close(){ try{bd.remove();m.remove();}catch(_){}}
+  document.getElementById('arEndExplore').onclick=close;
+  document.getElementById('arEndRestart').onclick=function(){ try{sessionStorage.removeItem('muzPebbles');}catch(_){}; location.reload(); };
+  document.getElementById('arEndContinue').onclick=function(){
+    close();
+    var done=document.getElementById('arafahDoneBtn'); if(done) done.remove();
+    _playRemainingArafahNarration(1);
+  };
+}
+function _playRemainingArafahNarration(idx){
   if(idx>=_arafahSeq.length){
     window.journeyIsLastPanorama=true;
-    if(typeof showJourneyNextButton==='function'){setTimeout(showJourneyNextButton,300);}
+    if(typeof showJourneyNextButton==='function'){ setTimeout(showJourneyNextButton,300); }
     return;
   }
   var s=_arafahSeq[idx];
@@ -176,26 +243,19 @@ function _showArafahBanner(idx){
   setTimeout(function(){
     var el=document.getElementById('sceneBanner');if(!el)return;
     var btn=el.querySelector('button');if(!btn)return;
-    if(idx<_arafahSeq.length-1){
-      btn.textContent='Next \u25b8';
-      btn.onclick=function(){
-        _bannerPager.index=_bannerPager.pages.length;dismissBanner();
-        _arafahIdx++;_showArafahBanner(_arafahIdx);
-      };
-    } else {
-      btn.onclick=function(){
-        dismissBanner();
-        window.journeyIsLastPanorama=true;
-        if(typeof showJourneyNextButton==='function'){setTimeout(showJourneyNextButton,300);}
-      };
-    }
+    var isLast=(idx>=_arafahSeq.length-1);
+    btn.textContent=isLast?'Continue \u25b8':'Next \u25b8';
+    btn.onclick=function(){
+      _bannerPager.index=_bannerPager.pages.length;dismissBanner();
+      _playRemainingArafahNarration(idx+1);
+    };
   },50);
 }
 var shown={},lastId='';
 var RE=/(panorama_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+)_0\//i;
 function det(u){if(typeof u!=='string')return;var m=u.match(RE);if(m&&m[1]!==lastId){lastId=m[1];chk(m[1]);}}
 function chk(id){
-  if(id.indexOf('84B0CD28')!==-1&&!shown[id]){shown[id]=true;_arafahIdx=0;_showArafahBanner(0);}
+  if(id.indexOf('84B0CD28')!==-1&&!shown[id]){shown[id]=true;_showArafahIntro();}
 }
 try{var po=new PerformanceObserver(function(l){l.getEntries().forEach(function(e){det(e.name);});});po.observe({type:'resource',buffered:false});}catch(e){}
 var OI=window.Image;window.Image=function(w,h){var img=new OI(w,h);var os=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src').set;Object.defineProperty(img,'src',{set:function(v){det(v);os.call(this,v);},get:function(){return Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src').get.call(this);}});return img;};window.Image.prototype=OI.prototype;
@@ -205,17 +265,17 @@ hookTDV();setTimeout(function(){chk('panorama_84B0CD28_8BC4_4A0E_4196_9526145973
 </script>
 
 <!-- Journey Navigation -->
-<script src="../../journey-manager.js?v=3" defer></script>
-<script src="../../quiz-content.js?v=1" defer></script>
-<script src="../../journey-nav.js?v=10" defer></script>
+<script src="../../journey-manager.js?v=6" defer></script>
+<script src="../../quiz-content.js?v=6" defer></script>
+<script src="../../journey-nav.js?v=26" defer></script>
 
 <!-- Meta Pixel VR Event -->
 <script>
 if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Arafah VR Scene",content_category:"VR Hajj Tour",content_type:"vr_360_scene"});}
 </script>
 <script src="../../../meta-capi.js" defer></script>
-<!-- ═══ Scene Navigation Overlay ═══ -->
+<!-- --- Scene Navigation Overlay --- -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='arafah';</script>
-<script src="../../scene-nav-overlay.js?v=7" defer></script>
+<script src="../../scene-nav-overlay.js?v=8" defer></script>
 </body>
 </html>

@@ -1,45 +1,86 @@
 /* ═══════════════════════════════════════════════════════════════════
-   PILGRIM'S PATH — Journey Content Loader
+   PILGRIM'S PATH — Journey Content Loader (v4)
    Reads admin overrides from localStorage and exposes them to scenes.
-   Same-origin localStorage is shared between /admin.html and the VR scenes
-   so any save from the admin tab is visible (with live reload via storage event).
+
+   v4 additions:
+   • Per-language audio folder (loader picks the right MP3 for the
+     pilgrim's chosen language).
+   • Floating user-facing language switcher (top-right pill).
+   • Generic button-trigger wiring: any banner whose trigger='button'
+     and buttonId is set is auto-bound to the matching DOM button.
+   • Completion banner wrapper: when a scene calls
+     showJourneyNextButton(), an admin-defined completion banner +
+     voice-over plays first, then the Next Stop button appears.
    ═══════════════════════════════════════════════════════════════════ */
 (function(){
 'use strict';
 var KEY = 'pp_journey_content_v1';
 var LANG_KEY = 'pp_user_lang';
-var AUDIO_BASE = '/Hajj%20Voice%20Over/';
+var AUDIO_BASE_ROOT = '/hajj%20voiceover%20english/';
+var DEFAULT_LANG_FOLDERS = {en:'English/',ar:'Arabic/',fr:'French/',ur:'Urdu/',tr:'Turkish/',id:'Indonesian/',ms:'Malay/',es:'Spanish/',fa:'Persian/'};
 var data = null;
 try{ data = JSON.parse(localStorage.getItem(KEY)); }catch(e){}
+// Self-seed defaults from admin script (if present) so first-time visitors
+// who haven't opened admin still get full content + correct audio file names.
+if(!data && window.PPJourneyContent && typeof window.PPJourneyContent.get === 'function'){
+  try{
+    window.PPJourneyContent.get('tawaf-initial','tw-guide-0','en'); // triggers admin's load() which seeds localStorage with DEFAULT_DATA
+    data = JSON.parse(localStorage.getItem(KEY));
+    console.log('[PPContent v4] auto-seeded defaults from admin DEFAULT_DATA');
+  }catch(e){ console.warn('[PPContent v4] auto-seed failed', e); }
+}
 var lang = localStorage.getItem(LANG_KEY) || 'en';
 
-// Diagnostics so the user can verify in DevTools that the latest admin data is loaded
 try{
   var sv = (data && data.seedVersion) || 0;
   var sc = (data && data.scenes) ? data.scenes.length : 0;
-  console.log('[PPContent] loaded localStorage data — seedVersion='+sv+', scenes='+sc+', lang='+lang+(data?'':' (no admin data, falling back to scene HTML)'));
+  console.log('[PPContent v4] loaded — seedVersion='+sv+', scenes='+sc+', lang='+lang+(data?'':' (no admin data, falling back to scene HTML)'));
 }catch(_){ }
 
+/* ─── Helpers ─── */
 function getScene(k){ if(!data||!data.scenes) return null; return data.scenes.find(function(s){return s.key===k;}); }
-function pick(obj){ if(!obj) return null; return obj[lang] || obj.en || null; }
+function pick(obj){
+  if(!obj) return null;
+  // Per-language with smart fallback to English so scenes never go silent
+  return obj[lang] || obj.en || (Object.keys(obj).length?obj[Object.keys(obj)[0]]:null);
+}
 function audioFile(b){ return pick(b&&b.audio); }
 function audioChainFile(b){ return pick(b&&b.audioChain); }
 function textFor(b){ return pick(b&&b.text); }
-function audioUrl(file){ if(!file) return ''; if(/^(https?:|data:|blob:)/i.test(file)) return file; return AUDIO_BASE + encodeURIComponent(file); }
 
+function langEntry(code){
+  var ls = (data && data.languages) || [];
+  return ls.find(function(l){return l.code===code;}) || (code==='en'?{code:'en',name:'English',folder:'English/'}:null);
+}
+function langFolder(code){
+  var L = langEntry(code);
+  var f = (L && L.folder) || DEFAULT_LANG_FOLDERS[code] || 'English/';
+  if(f && !/\/$/.test(f)) f += '/';
+  return f;
+}
+function audioUrl(file, optLang){
+  if(!file) return '';
+  if(/^(https?:|data:|blob:)/i.test(file)) return file;
+  var folder = langFolder(optLang || lang);
+  return AUDIO_BASE_ROOT + folder.split('/').filter(Boolean).map(encodeURIComponent).join('/') + '/' + encodeURIComponent(file);
+}
+
+/* ─── Public maps ─── */
 function audioMapByPano(sceneKey){
   var s=getScene(sceneKey); if(!s) return {};
   var m={};
-  // Include ALL panorama-trigger banners — even if audio is empty — so admin
-  // "cleared" audio properly overrides hardcoded scene fallbacks (Object.assign-merge semantics).
   s.banners.forEach(function(b){ if(b.trigger==='panorama' && b.panorama){ m[b.panorama]=audioFile(b)||''; } });
+  return m;
+}
+function audioChainMapByPano(sceneKey){
+  var s=getScene(sceneKey); if(!s) return {};
+  var m={};
+  s.banners.forEach(function(b){ if(b.trigger==='panorama' && b.panorama){ m[b.panorama]=audioChainFile(b)||''; } });
   return m;
 }
 function bannerMapByPano(sceneKey){
   var s=getScene(sceneKey); if(!s) return {};
   var m={};
-  // Include ALL panorama-trigger banners so admin edits (including clearing
-  // text) propagate. Scenes can skip rendering empty banners themselves.
   s.banners.forEach(function(b){ if(b.trigger==='panorama' && b.panorama){ var t=textFor(b)||{}; m[b.panorama]={title:t.title||'',html:t.body||'',template:b.template||'classic-gold',position:b.position||{x:50,y:50}}; } });
   return m;
 }
@@ -47,7 +88,7 @@ function byId(sceneKey,id){
   var s=getScene(sceneKey); if(!s) return null;
   var b=s.banners.find(function(x){return x.id===id;}); if(!b) return null;
   var t=textFor(b)||{};
-  return { title:t.title||'', html:t.body||'', audio:audioFile(b)||'', audioChain:audioChainFile(b)||'', template:b.template||'classic-gold', position:b.position||{x:50,y:50} };
+  return { title:t.title||'', html:t.body||'', audio:audioFile(b)||'', audioChain:audioChainFile(b)||'', template:b.template||'classic-gold', position:b.position||{x:50,y:50}, buttonId:b.buttonId||'', buttonLabel:b.buttonLabel||'' };
 }
 function bySequence(sceneKey){
   var s=getScene(sceneKey); if(!s) return [];
@@ -56,13 +97,24 @@ function bySequence(sceneKey){
     .sort(function(a,b){return a.trigger.localeCompare(b.trigger);})
     .map(function(b){var t=textFor(b)||{}; return {title:t.title||'',html:t.body||'',audio:audioFile(b)||'',template:b.template||'classic-gold',position:b.position||{x:50,y:50}};});
 }
+function byButton(sceneKey){
+  var s=getScene(sceneKey); if(!s) return [];
+  return s.banners
+    .filter(function(b){return b.trigger==='button';})
+    .map(function(b){var t=textFor(b)||{}; return {id:b.id,buttonId:b.buttonId||'',buttonLabel:b.buttonLabel||'',title:t.title||'',html:t.body||'',audio:audioFile(b)||'',audioChain:audioChainFile(b)||'',template:b.template||'classic-gold',position:b.position||{x:50,y:50}};});
+}
+function byCompletion(sceneKey){
+  var s=getScene(sceneKey); if(!s) return null;
+  var candidates = s.banners.filter(function(b){return b.trigger==='completion';});
+  var b = candidates.find(function(x){ var t=textFor(x)||{}; return audioFile(x) || t.body || t.title; }) || candidates[0];
+  if(!b) return null;
+  var t=textFor(b)||{};
+  return { id:b.id, title:t.title||'', html:t.body||'', audio:audioFile(b)||'', template:b.template||'sunrise-gold', position:b.position||{x:50,y:50} };
+}
 
-/* Apply a banner template + position to the scene's banner element.
-   Call this after rendering the banner. The template CSS is read from
-   PPJourneyContent.templates (loaded from admin-journey-content.js) but
-   when running outside admin we ship a minimal inline registry below. */
+/* ─── Templates ─── */
 var SCENE_TEMPLATES = {
-  'classic-gold': '', // fallback to scene's own #sceneBanner CSS
+  'classic-gold': '',
   'parchment-frame': 'background:radial-gradient(ellipse at center,#f7ecd0 0%,#e8d8a8 70%,#d4be7d 100%) !important;border:none !important;border-radius:6px !important;font-family:Georgia,serif !important;color:#3a2410 !important;clip-path:polygon(2% 0,98% 1%,100% 50%,99% 99%,1% 98%,0 50%)',
   'minimal-glass': 'background:rgba(255,255,255,.12) !important;backdrop-filter:blur(18px) !important;-webkit-backdrop-filter:blur(18px) !important;border:1px solid rgba(255,255,255,.25) !important;border-radius:18px !important;color:#fff !important',
   'ornate-arabesque': 'background:#0d1421 !important;border:2px solid #D4AF37 !important;border-radius:0 !important;color:#f4ead5 !important;font-family:"Amiri",Georgia,serif !important',
@@ -72,7 +124,7 @@ var SCENE_TEMPLATES = {
   'side-card': 'background:linear-gradient(180deg,#fffbe9,#f5edd0) !important;border:none !important;border-left:4px solid #C9A84C !important;border-radius:8px !important;color:#2C1810 !important;width:auto !important;max-width:380px !important;min-height:auto !important;padding:18px 22px !important;text-align:left !important',
   'midnight-blue': 'background:radial-gradient(ellipse at top,#1e3a5f,#0d1b2a) !important;border:1px solid #D4AF37 !important;border-radius:14px !important;color:#e8eef4 !important',
   'sunrise-gold': 'background:linear-gradient(135deg,#FFE5B4 0%,#FFD98A 50%,#E8B860 100%) !important;border:2px solid #B8941F !important;border-radius:16px !important;color:#3D2B1F !important',
-  'ihram-guide': '' // ihram screens use their own card CSS
+  'ihram-guide': ''
 };
 
 function applyTemplate(elementSelector, tplId, pos){
@@ -81,14 +133,11 @@ function applyTemplate(elementSelector, tplId, pos){
     var styles = SCENE_TEMPLATES[tplId]||'';
     if(styles){
       el.setAttribute('data-pp-tpl', tplId);
-      // Append/replace style attribute additions
       var existing = el.getAttribute('style')||'';
-      // Remove previous template styles
       existing = existing.replace(/\/\*PPTPL\*\/[^]*?\/\*\/PPTPL\*\//g,'');
       el.setAttribute('style', existing + '/*PPTPL*/'+styles+'/*\/PPTPL*/');
     }
     if(pos && (pos.x!=null||pos.y!=null)){
-      // Override default centering with absolute % position
       var pStyles = ';left:'+(pos.x||50)+'% !important;top:'+(pos.y||50)+'% !important;transform:translate(-50%,-50%) !important;';
       var cur = el.getAttribute('style')||'';
       cur = cur.replace(/\/\*PPPOS\*\/[^]*?\/\*\/PPPOS\*\//g,'');
@@ -97,20 +146,440 @@ function applyTemplate(elementSelector, tplId, pos){
   }, 60);
 }
 
+/* ─── Scene-key auto-detection from URL path ─── */
+var SCENE_PATH_MAP = [
+  {re:/Jamarat Base 2/i,                key:'jamarat-12th'},
+  {re:/Jamarat rooftop basement/i,      key:'jamarat-11th'},
+  {re:/Jamarat rooftop/i,               key:'jamarat-10th'},
+  {re:/Jamarat Aqabah/i,                key:'jamarat-10th'},
+  {re:/jamarat base/i,                  key:'jamarat-11th'},
+  {re:/Muzdalifah/i,                    key:'arafah-9th'},
+  {re:/4 Arafah/i,                      key:'arafah-9th'},
+  {re:/3 Mina/i,                        key:'mina-8th'},
+  {re:/2 Safa and Marwa/i,              key:'safa-marwa'},
+  {re:/qurbani-scene/i,                 key:'qurbani-10th'},
+  {re:/barber-scene/i,                  key:'barber-hajj'},
+  {re:/0 Ihram\/rest-scene/i,           key:'rest-umrah'},
+  {re:/0 Ihram\/ihram-scene/i,          key:'reenter-ihram'},
+  {re:/0 Ihram/i,                       key:'tawaf-initial'},
+  {re:/1 Tawaf/i,                       key:'tawaf-initial'}
+];
+function detectSceneKey(){
+  try{
+    var path = decodeURIComponent(location.pathname);
+    var ctx = (location.search.match(/[?&]context=([^&]+)/)||[])[1];
+    // Also fall back to journeyState.currentContext when URL has no context (e.g., direct nav)
+    if(!ctx){
+      try{ var js=JSON.parse(localStorage.getItem('journeyState')||'{}'); if(js&&js.currentContext) ctx=js.currentContext; }catch(_){ }
+    }
+    if(/1 Tawaf/i.test(path)){
+      if(ctx==='ifadha') return 'tawaf-ifadha';
+      if(ctx==='farewell') return 'tawaf-farewell';
+    }
+    if(/3 Mina/i.test(path) && ctx==='tents-12th') return 'mina-tents-12';
+    if(/2 Safa and Marwa/i.test(path) && ctx==='umrah-trim') return 'barber-umrah';
+    // Dedicated step-3 file always maps to barber-umrah (Umrah trim).
+    if(/umrah-trim-scene/i.test(path)) return 'barber-umrah';
+    // Disambiguate barber-scene by context — step 3 (umrah-trim) vs step 11 (halaq)
+    if(/barber-scene/i.test(path)){
+      if(ctx==='umrah-trim') return 'barber-umrah';
+      return 'barber-hajj';
+    }
+    for(var i=0;i<SCENE_PATH_MAP.length;i++){ if(SCENE_PATH_MAP[i].re.test(path)) return SCENE_PATH_MAP[i].key; }
+  }catch(_){ }
+  return null;
+}
+
+/* ═══════════════════════════════════════════════
+   USER-FACING LANGUAGE SWITCHER (floating pill)
+   Only shown on the welcome / landing pages — NEVER inside a scene.
+   Pilgrims pick their language once at the start; on scene pages the pill
+   would overlap our hamburger / HUD and is intentionally suppressed.
+   ═══════════════════════════════════════════════ */
+function isScenePage(){
+  try{
+    var p = (window.location && window.location.pathname) || '';
+    p = decodeURIComponent(p).toLowerCase();
+    // Every VR scene lives under /pilgrimspath-vr/pilgrims path main/...
+    if(p.indexOf('/pilgrims path main/') !== -1) return true;
+    if(p.indexOf('/pilgrimspath-vr/') !== -1) return true;
+    // Defensive: the 3DVista player exposes a global `tour` object
+    if(typeof window.tour !== 'undefined') return true;
+    if(document.getElementById('viewer')) return true;
+  }catch(_){}
+  return false;
+}
+function injectLangSwitcher(){
+  if(isScenePage()) return; // never on scene pages
+  if(document.getElementById('ppLangSwitcher')) return;
+  if(!data || !data.languages || data.languages.length<1) return;
+  var css = ''+
+    '#ppLangSwitcher{position:fixed;top:14px;right:14px;z-index:99999;font-family:"DM Sans",Arial,sans-serif;user-select:none}'+
+    '#ppLangBtn{display:inline-flex;align-items:center;gap:6px;background:rgba(20,12,4,.85);color:#FFD98A;border:1px solid rgba(212,175,55,.55);border-radius:999px;padding:7px 14px;font-size:.78rem;font-weight:600;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(0,0,0,.45);transition:transform .15s,border-color .15s}'+
+    '#ppLangBtn:hover{border-color:#FFD98A;transform:translateY(-1px)}'+
+    '#ppLangBtn .ppGlobe{font-size:.95rem}'+
+    '#ppLangMenu{position:absolute;top:calc(100% + 6px);right:0;min-width:180px;background:rgba(15,18,28,.97);border:1px solid rgba(212,175,55,.45);border-radius:10px;padding:6px;box-shadow:0 12px 32px rgba(0,0,0,.55);display:none;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}'+
+    '#ppLangSwitcher.open #ppLangMenu{display:block}'+
+    '#ppLangMenu .ppLangItem{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;border-radius:6px;color:#f4ead5;font-size:.8rem;cursor:pointer;transition:background .12s}'+
+    '#ppLangMenu .ppLangItem:hover{background:rgba(212,175,55,.14);color:#FFD98A}'+
+    '#ppLangMenu .ppLangItem.active{background:rgba(212,175,55,.22);color:#FFD98A;font-weight:600}'+
+    '#ppLangMenu .ppLangItem small{opacity:.55;font-size:.65rem;font-family:Monaco,monospace;margin-left:8px}'+
+    '@media (max-width:600px){#ppLangSwitcher{top:10px;right:10px}#ppLangBtn{padding:6px 11px;font-size:.72rem}}';
+  var st = document.createElement('style'); st.id='ppLangSwitcherCss'; st.textContent = css; document.head.appendChild(st);
+
+  var current = langEntry(lang) || data.languages[0];
+  var wrap = document.createElement('div'); wrap.id='ppLangSwitcher';
+  wrap.innerHTML =
+    '<button id="ppLangBtn" type="button" aria-haspopup="listbox" aria-expanded="false" title="Choose language">'+
+      '<span class="ppGlobe">\uD83C\uDF10</span>'+
+      '<span id="ppLangBtnLabel">'+(current.name||current.code.toUpperCase())+'</span>'+
+      '<span style="opacity:.6;font-size:.65rem">\u25BE</span>'+
+    '</button>'+
+    '<div id="ppLangMenu" role="listbox">'+
+      data.languages.map(function(L){
+        return '<div class="ppLangItem'+(L.code===lang?' active':'')+'" data-code="'+L.code+'" role="option">'+
+          '<span>'+(L.name||L.code)+'</span><small>'+L.code.toUpperCase()+(L.dir==='rtl'?' \u00b7 RTL':'')+'</small>'+
+        '</div>';
+      }).join('')+
+    '</div>';
+  document.body.appendChild(wrap);
+
+  var btn = wrap.querySelector('#ppLangBtn');
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    wrap.classList.toggle('open');
+    btn.setAttribute('aria-expanded', wrap.classList.contains('open')?'true':'false');
+  });
+  document.addEventListener('click', function(){ wrap.classList.remove('open'); btn.setAttribute('aria-expanded','false'); });
+  wrap.querySelectorAll('.ppLangItem').forEach(function(it){
+    it.addEventListener('click', function(e){
+      e.stopPropagation();
+      var c = it.getAttribute('data-code');
+      if(c===lang){ wrap.classList.remove('open'); return; }
+      try{ if(window._voAudio){ window._voAudio.pause(); } }catch(_){ }
+      try{ if(window._pbVORef){ window._pbVORef.pause(); } }catch(_){ }
+      localStorage.setItem(LANG_KEY, c);
+      location.reload();
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════════
+   BUTTON-TRIGGER AUTO-WIRING
+   ═══════════════════════════════════════════════ */
+function safeCssEscape(s){
+  if(window.CSS && CSS.escape) return CSS.escape(s);
+  return String(s).replace(/[^a-zA-Z0-9_-]/g, '\\$&');
+}
+// Normalize button labels for matching: strip emoji/arrows/punctuation,
+// collapse whitespace, normalize curly→straight quotes, lowercase.
+function normLabel(s){
+  if(!s) return '';
+  return String(s)
+    .replace(/[\u2018\u2019\u201A\u201B]/g,"'")          // curly single → straight
+    .replace(/[\u201C\u201D\u201E\u201F]/g,'"')          // curly double → straight
+    .replace(/[\u2190-\u21FF\u25B6\u25C0\u25B8\u25C2\u27A1\u27A4\u2B05\u2B06\u2B07]/g,' ') // arrows
+    .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g,' ')      // emoji surrogate pairs
+    .replace(/[\u2700-\u27BF]/g,' ')                     // dingbats
+    .replace(/[\u2600-\u26FF]/g,' ')                     // misc symbols (incl. 🕋 area? no, that's astral)
+    .replace(/[^\w\s'"-]/g,' ')                          // other non-word punct
+    .replace(/\s+/g,' ')
+    .trim()
+    .toLowerCase();
+}
+function findButtonElement(buttonId, buttonLabel){
+  if(!buttonId && !buttonLabel) return null;
+  var el;
+  if(buttonId){
+    el = document.getElementById(buttonId);
+    if(el) return el;
+    try{ el = document.querySelector('[data-pp-button="'+safeCssEscape(buttonId)+'"]'); if(el) return el; }catch(_){ }
+    // class match if user typed ".some-class"
+    if(/^\./.test(buttonId)){
+      try{ el = document.querySelector(buttonId); if(el) return el; }catch(_){ }
+    }
+    try{ el = document.querySelector(buttonId); if(el && (el.tagName==='BUTTON'||el.tagName==='A'||el.getAttribute('role')==='button')) return el; }catch(_){ }
+  }
+  // Robust label matching — normalize both sides
+  var target = normLabel(buttonLabel||buttonId||'');
+  if(!target) return null;
+  var candidates = document.querySelectorAll('button, a[role="button"], [role="button"], .button, .btn');
+  // Pass 1: exact normalized match
+  for(var i=0;i<candidates.length;i++){
+    if(normLabel(candidates[i].textContent||'') === target) return candidates[i];
+  }
+  // Pass 2: substring (target inside candidate text)
+  for(var j=0;j<candidates.length;j++){
+    var t = normLabel(candidates[j].textContent||'');
+    if(t && t.indexOf(target)>=0) return candidates[j];
+  }
+  // Pass 3: substring (candidate text inside target — handles overlong target)
+  for(var k=0;k<candidates.length;k++){
+    var t2 = normLabel(candidates[k].textContent||'');
+    if(t2 && target.indexOf(t2)>=0 && t2.length>=4) return candidates[k];
+  }
+  return null;
+}
+
+function ppPlayVOAuto(file){
+  if(!file) return;
+  // Cancel any in-flight VO + leftover chain so a new track always wins
+  try{ if(window._voAudio){ window._voAudio.pause(); window._voAudio = null; } }catch(_){ }
+  try{ if(window._ppFallbackVO){ window._ppFallbackVO.pause(); window._ppFallbackVO = null; } }catch(_){ }
+  if(window._voChainPending && window._voChainPending !== file) window._voChainPending = null;
+  if(typeof window.playVO==='function'){ try{ window.playVO(file); return; }catch(_){ } }
+  try{
+    var a = new Audio(audioUrl(file));
+    window._ppFallbackVO = a;
+    var p = a.play();
+    if(p && p.catch){ p.catch(function(){
+      var unlock = function(){
+        document.removeEventListener('click', unlock, true);
+        document.removeEventListener('touchend', unlock, true);
+        a.play().catch(function(){});
+      };
+      document.addEventListener('click', unlock, true);
+      document.addEventListener('touchend', unlock, true);
+    }); }
+  }catch(_){ }
+}
+
+function showAdminBanner(opts){
+  var el = document.getElementById('sceneBanner');
+  var freshlyCreated = false;
+  if(!el){
+    el = document.createElement('div');
+    el.id = 'sceneBanner';
+    el.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.92);z-index:99000;background:#1a1a2e;color:#f4ead5;border:2px solid #D4AF37;border-radius:14px;padding:24px 32px;max-width:min(94vw,640px);font-family:Georgia,serif;box-shadow:0 18px 44px rgba(0,0,0,.55);display:none;opacity:0;transition:opacity .35s ease, transform .35s cubic-bezier(.2,.9,.3,1.2);will-change:opacity,transform';
+    document.body.appendChild(el);
+    freshlyCreated = true;
+  }
+  // Inject backdrop once (soft scrim that fades in with the banner)
+  var bd = document.getElementById('sceneBannerBackdrop');
+  if(!bd){
+    bd = document.createElement('div');
+    bd.id = 'sceneBannerBackdrop';
+    bd.style.cssText = 'position:fixed;inset:0;z-index:98999;background:rgba(8,6,12,.32);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:opacity .35s ease;display:none';
+    document.body.appendChild(bd);
+  }
+  var title = opts.title||'';
+  var html = opts.html||'';
+  el.innerHTML = '<div class="sceneBannerBody">'+(title?'<h3 style="margin:0 0 12px;color:#D4AF37">'+title+'</h3>':'')+html+
+    '<div style="margin-top:14px;text-align:center"><button onclick="(function(){var e=document.getElementById(\'sceneBanner\');var b=document.getElementById(\'sceneBannerBackdrop\');if(e){e.style.opacity=\'0\';e.style.transform=\'translate(-50%,-50%) scale(.92)\';setTimeout(function(){e.style.display=\'none\';},340);}if(b){b.style.opacity=\'0\';setTimeout(function(){b.style.display=\'none\';},340);}try{if(typeof window.dismissBanner===\'function\')window.dismissBanner();}catch(_){}})()" style="background:#D4AF37;color:#1a1a2e;border:none;padding:8px 22px;border-radius:6px;font-weight:700;cursor:pointer;font-size:.85rem">Continue \u25b8</button></div>'+
+    '</div>';
+  // Make sure starting state is reset before showing (handles re-show case)
+  el.style.display = 'block';
+  bd.style.display = 'block';
+  if(opts.template) applyTemplate('#sceneBanner', opts.template, opts.position||{x:50,y:50});
+  // Reset any template-injected transform so our scale animation works
+  el.style.opacity = '0';
+  el.style.transform = (el.style.transform.replace(/scale\([^)]*\)/,'').trim() || 'translate(-50%,-50%)') + ' scale(.92)';
+  bd.style.opacity = '0';
+  // Animate in on next frame
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      el.style.opacity = '1';
+      el.style.transform = el.style.transform.replace(/scale\([^)]*\)/,'scale(1)');
+      bd.style.opacity = '1';
+    });
+  });
+}
+
+function autoWireButtons(){
+  var key = detectSceneKey();
+  if(!key) return;
+  var btns = byButton(key);
+  if(!btns.length) return;
+  btns.forEach(function(b){
+    if(!b.buttonId && !b.buttonLabel) {
+      console.warn('[PPContent] button banner "'+(b.id||'?')+'" has no buttonId or buttonLabel — skipping');
+      return;
+    }
+    var el = findButtonElement(b.buttonId, b.buttonLabel);
+    if(!el){
+      // Only warn once per (banner,scene) load to avoid log spam from MutationObserver retries
+      var k = 'pp_btn_warn_'+key+'_'+b.id;
+      if(!window[k]){
+        window[k] = 1;
+        console.warn('[PPContent] button not found for banner "'+(b.id||'?')+'"  — buttonId="'+(b.buttonId||'')+'", buttonLabel="'+(b.buttonLabel||'')+'". Tip: add data-pp-button="'+(b.buttonId||b.buttonLabel||'')+'" to your <button> element, or check the spelling.');
+      }
+      return;
+    }
+    if(el.dataset.ppBound==='1') return;
+    el.dataset.ppBound = '1';
+    console.log('[PPContent] wired button: "'+(el.textContent||'').trim().slice(0,40)+'" → '+(b.audio||'(no audio)')+(b.audioChain?' → '+b.audioChain:''));
+    el.addEventListener('click', function(){
+      // Suppress the first-interaction welcome VO so admin's button audio wins cleanly
+      window._welcomeVoStarted = true;
+      if(b.audio){ ppPlayVOAuto(b.audio); if(b.audioChain) window._voChainPending = b.audioChain; }
+      if(b.title || b.html){ showAdminBanner({title:b.title, html:b.html, template:b.template, position:b.position}); }
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════════
+   COMPLETION BANNER WRAPPER
+   ═══════════════════════════════════════════════ */
+function wrapCompletionTrigger(){
+  var orig = window.showJourneyNextButton;
+  if(!orig || orig.__ppWrapped) return;
+  var wrapped = function(){
+    try{
+      if(!wrapped.__fired){
+        wrapped.__fired = true;
+        var key = detectSceneKey();
+        var comp = key && byCompletion(key);
+        if(comp){
+          if(comp.audio){ ppPlayVOAuto(comp.audio); }
+          if(comp.title || comp.html){
+            var html = comp.html || '';
+            html += '<p style="margin-top:14px;font-size:.85rem;color:#FFD98A;text-align:center;font-style:italic">\u270e Tap <strong>Continue</strong>, then use the <strong>Next Stop \u2192</strong> button to proceed.</p>';
+            showAdminBanner({title:comp.title, html:html, template:comp.template, position:comp.position});
+          }
+        }
+      }
+    }catch(e){ console.warn('[PPContent] completion banner failed', e); }
+    return orig.apply(this, arguments);
+  };
+  wrapped.__ppWrapped = true;
+  window.showJourneyNextButton = wrapped;
+}
+
+function waitForCompletionHook(){
+  var tries = 0;
+  var iv = setInterval(function(){
+    tries++;
+    if(typeof window.showJourneyNextButton === 'function'){
+      wrapCompletionTrigger();
+      clearInterval(iv);
+    } else if(tries>40){ clearInterval(iv); }
+  }, 250);
+}
+
+/* ═══════════════════════════════════════════════
+   FIRST-INTERACTION UNLOCK
+   Browsers block autoplay until the user interacts with the page.
+   On the first click/tap/keypress anywhere, fire the scene's primary VO
+   (welcome / first guide screen). After this, all subsequent VOs work.
+   This means the VO begins on the user's first action — typically the
+   "Let's Begin" button — without any extra UI.
+   ═══════════════════════════════════════════════ */
+function getCurrentSceneVO(){
+  var key = detectSceneKey();
+  if(!key) return null;
+  var s = getScene(key);
+  if(!s || !s.banners || !s.banners.length) return null;
+  var guide = s.banners.find(function(b){return /^guide-screen-/.test(b.trigger||'') && audioFile(b);});
+  if(guide) return { audio:audioFile(guide), chain:audioChainFile(guide) };
+  var any = s.banners.find(function(b){return audioFile(b);});
+  if(any) return { audio:audioFile(any), chain:audioChainFile(any) };
+  return null;
+}
+function installFirstInteractionVO(){
+  if(window._ppFirstVOArmed) return;
+  window._ppFirstVOArmed = true;
+  var fired = false;
+  var fire = function(){
+    if(fired) return; fired = true;
+    document.removeEventListener('click', fire, true);
+    document.removeEventListener('touchend', fire, true);
+    document.removeEventListener('keydown', fire, true);
+    document.removeEventListener('pointerdown', fire, true);
+    // If the scene's own VO is already playing (e.g. "Let's Begin" handler
+    // started it), don't double-fire.
+    if(window._voAudio && !window._voAudio.paused) return;
+    if(window._welcomeVoStarted) return;
+    var v = getCurrentSceneVO();
+    if(!v || !v.audio) return;
+    if(v.chain) window._voChainPending = v.chain;
+    ppPlayVOAuto(v.audio);
+  };
+  document.addEventListener('click', fire, true);
+  document.addEventListener('touchend', fire, true);
+  document.addEventListener('keydown', fire, true);
+  document.addEventListener('pointerdown', fire, true);
+}
+
+/* ═══════════════════════════════════════════════
+   SCENE-LOAD AUTOPLAY
+   For non-VR scenes (barber-scene, qurbani-scene, rest, re-enter Ihram,
+   Muzdalifah briefing, etc.) — banners with trigger='scene-load' fire
+   their banner + VO immediately on page load. We attempt autoplay; if the
+   browser blocks it (no prior interaction), the existing first-interaction
+   VO handler will pick it up on the next click anywhere.
+   ═══════════════════════════════════════════════ */
+function getSceneLoadBanner(){
+  var key = detectSceneKey();
+  if(!key) return null;
+  var s = getScene(key);
+  if(!s || !s.banners) return null;
+  return s.banners.find(function(b){return b.trigger==='scene-load';}) || null;
+}
+function fireSceneLoad(){
+  if(window._ppSceneLoadFired) return;
+  var b = getSceneLoadBanner();
+  if(!b) return;
+  window._ppSceneLoadFired = true;
+  var t = textFor(b)||{};
+  var audio = audioFile(b);
+  // Show banner with smooth transition
+  if(t.title || t.body){
+    showAdminBanner({title:t.title||'', html:t.body||'', template:b.template, position:b.position});
+  }
+  if(audio){
+    // Mark so first-interaction handler doesn't fire again
+    window._welcomeVoStarted = true;
+    ppPlayVOAuto(audio);
+  }
+}
+
+/* ─── DOM-ready bootstrap ─── */
+function boot(){
+  injectLangSwitcher();
+  // Try scene-load FIRST so its banner+VO appears immediately. If autoplay
+  // is blocked the first-interaction handler is still armed as a fallback.
+  fireSceneLoad();
+  installFirstInteractionVO();
+  autoWireButtons();
+  try{
+    var mo = new MutationObserver(function(){
+      if(boot._t) return;
+      boot._t = setTimeout(function(){ boot._t=null; autoWireButtons(); }, 400);
+    });
+    mo.observe(document.body, {childList:true, subtree:true});
+  }catch(_){ }
+  waitForCompletionHook();
+}
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded', boot);
+} else { boot(); }
+
+/* ─── Public API ─── */
 window.PPContent = {
   lang: lang,
   hasData: !!data,
   getScene: getScene,
   audioMapByPano: audioMapByPano,
+  audioChainMapByPano: audioChainMapByPano,
   bannerMapByPano: bannerMapByPano,
   byId: byId,
   bySequence: bySequence,
+  byButton: byButton,
+  byCompletion: byCompletion,
   audioUrl: audioUrl,
   applyTemplate: applyTemplate,
+  detectSceneKey: detectSceneKey,
+  showCompletionBanner: function(sceneKey){
+    var k = sceneKey || detectSceneKey();
+    var comp = k && byCompletion(k);
+    if(!comp) return false;
+    if(comp.audio) ppPlayVOAuto(comp.audio);
+    if(comp.title || comp.html) showAdminBanner({title:comp.title, html:comp.html, template:comp.template, position:comp.position});
+    return true;
+  },
   setLang: function(l){ localStorage.setItem(LANG_KEY,l); location.reload(); }
 };
 
-// Live preview: reload scene when admin saves changes
 window.addEventListener('storage', function(e){
   if(e.key===KEY || e.key===LANG_KEY){
     if(window._voAudio){ try{window._voAudio.pause();}catch(_){} }

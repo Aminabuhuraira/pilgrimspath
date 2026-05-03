@@ -10,6 +10,10 @@ if(typeof jm === 'undefined'){
   return;
 }
 
+// Overlay root — #viewer is what 3DVista calls requestFullscreen() on, so
+// elements appended here stay visible in both normal and fullscreen modes.
+var _overlayRoot = document.getElementById('viewer') || document.body;
+
 // ── CSS for navigation UI ──
 const journeyNavCSS = `
 /* Journey Navigation Container */
@@ -27,7 +31,7 @@ const journeyNavCSS = `
   position: fixed;
   top: 14px;
   right: 14px;
-  z-index: 10020;
+  z-index: 99502;
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -66,11 +70,19 @@ body.ppMenuOpen #ppPauseBtn .ppPauseIcon span {
 }
 body.ppMenuOpen #ppPauseBtn .ppPauseIcon span:nth-child(1){ transform: translate(-50%,-50%) rotate(45deg); }
 body.ppMenuOpen #ppPauseBtn .ppPauseIcon span:nth-child(2){ transform: translate(-50%,-50%) rotate(-45deg); }
+/* Fullscreen-safe duplicates (class may be on the fullscreen element instead of body) */
+.ppMenuOpen #ppPauseBtn .ppPauseIcon { gap: 0; position: relative; width: 18px; height: 18px; }
+.ppMenuOpen #ppPauseBtn .ppPauseIcon span {
+  position: absolute; top: 50%; left: 50%; width: 20px; height: 2px;
+  background: #8B6914; border-radius: 2px;
+}
+.ppMenuOpen #ppPauseBtn .ppPauseIcon span:nth-child(1){ transform: translate(-50%,-50%) rotate(45deg); }
+.ppMenuOpen #ppPauseBtn .ppPauseIcon span:nth-child(2){ transform: translate(-50%,-50%) rotate(-45deg); }
 
 #ppMenuBackdrop {
   position: fixed;
   inset: 0;
-  z-index: 10018;
+  z-index: 99500;
   background: rgba(8,5,2,0.55);
   backdrop-filter: blur(2px);
   opacity: 0;
@@ -78,11 +90,12 @@ body.ppMenuOpen #ppPauseBtn .ppPauseIcon span:nth-child(2){ transform: translate
   transition: opacity .18s;
 }
 body.ppMenuOpen #ppMenuBackdrop { opacity: 1; pointer-events: auto; }
+.ppMenuOpen #ppMenuBackdrop { opacity: 1; pointer-events: auto; }
 
 #ppMenuPanel {
   position: fixed;
   top: 0; right: 0; bottom: 0;
-  z-index: 10019;
+  z-index: 99501;
   width: min(340px, 88vw);
   background: linear-gradient(180deg, #FFFDF7 0%, #F4EBD2 100%);
   border-left: 1.5px solid #C9A84C;
@@ -96,6 +109,7 @@ body.ppMenuOpen #ppMenuBackdrop { opacity: 1; pointer-events: auto; }
   overflow-y: auto;
 }
 body.ppMenuOpen #ppMenuPanel { transform: translateX(0); }
+.ppMenuOpen #ppMenuPanel { transform: translateX(0); }
 
 .ppMenuHead {
   display: flex;
@@ -190,6 +204,64 @@ body.ppMenuOpen #ppMenuPanel { transform: translateX(0); }
 
 /* Hide legacy dots if any older copy lingers */
 .journey-dots { display: none !important; }
+
+/* Hide 3DVista built-in language switcher / locale UI in every scene.
+   These selectors target the player's IconButton + popup menu used for locale. */
+.TDVPlayer-LanguageButton,
+[class*="LanguageMenu"],
+[class*="LanguageButton"],
+.TDVPlayer-Menu[data-locale],
+.locale-switcher,
+[id*="LanguageSelect"],
+[id*="languageSelect"] { display: none !important; visibility: hidden !important; }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Hide 3DVista academic / "Created by 3DVista Academic" watermark.
+
+   The watermark is rendered by the AcademicWatermark module inside
+   lib/tdvplayer.js. Reading the module reveals two facts we exploit here:
+
+     (1) The watermark image is hard-coded as a base64 data: URI assigned to
+         the 'g.xUa' symbol. It begins with the unique signature
+            iVBORw0KGgoAAAANSUhEUgAAAcwAAACWCAMAAABkZ0iRAAAC/V
+         which CANNOT appear in any other element on the page (no other asset
+         is embedded as base64 inline). Matching on this substring inside the
+         element's 'style' attribute is therefore 100% reliable and will
+         never hit a false positive.
+
+     (2) The element's lifecycle is:
+            createElement('div') → set styles → append → setInterval(8s) that
+            toggles 'opacity: 0/1' and re-inserts the node at a random
+            position among its parent's children.
+         Crucially, the interval ONLY re-applies the keys defined in the
+         'y' lookup map: backgroundImage, position, z-index, width, height,
+         backgroundPosition, backgroundRepeat, backgroundSize, opacity,
+         pointerEvents, transition. It does NOT touch 'display', so once we
+         hide via 'display:none !important' it stays hidden forever. Removing
+         the element via .remove() does NOT work — the player just re-inserts
+         it on the next 8-second tick.
+
+   We use CSS-only suppression keyed on the data-URL signature for maximum
+   robustness. No JS observer / interval is needed for this. The legacy
+   z-index/background-image fallback below is kept for safety. */
+[data-pp-watermark],
+div[style*="iVBORw0KGgoAAAANSUhEUgAAAcw"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+/* NOTE: A previous, broader fallback (div:not([class]):not([id])[style*="z-index:1000"][style*="background-image"])
+   was removed because it could match legitimate 3DVista player containers,
+   including ones that visually parent our hamburger / Next Stop buttons.
+   The data-URL signature match above is fully specific and sufficient. */
+
+/* ═══ When paused: lift the entire #viewer stacking context above body-level
+   banners (e.g. #sceneBanner z=10003), so the pause panel and the bottom
+   scene-strip render IN FRONT of any open banner. The base #viewer { z-index:1 }
+   set in scene CSS would otherwise trap the panel below body-level overlays. ═══ */
+body.ppMenuOpen #viewer { z-index: 99490 !important; }
+.ppMenuOpen #viewer { z-index: 99490 !important; }
 
 /* Next Stop Button */
 #nextStopBtn {
@@ -488,18 +560,90 @@ function initJourneyNav() {
 function quizEnabled(){
   try{ return localStorage.getItem('pp_quiz_enabled') === '1'; }catch(e){ return false; }
 }
+// Aggregate quiz performance across all answered steps.
+// Returns {answered, totalQuestions, correct, percent} where percent is 0-100.
+function quizAggregateScore(){
+  var out = { answered: 0, totalQuestions: 0, correct: 0, percent: 0 };
+  try{
+    var all = JSON.parse(localStorage.getItem('pp_quiz_scores') || '{}');
+    Object.keys(all).forEach(function(k){
+      var s = all[k]; if(!s) return;
+      out.answered++;
+      out.totalQuestions += (s.total || 0);
+      out.correct       += (s.score || 0);
+    });
+    if(out.totalQuestions > 0){
+      out.percent = Math.round((out.correct / out.totalQuestions) * 100);
+    }
+  }catch(e){}
+  return out;
+}
+// Total number of quiz questions defined across all 16 steps (used for "covered" %).
+function quizTotalAvailable(){
+  try{
+    if(!window.PPQuiz || !window.PPQuiz.questions) return 0;
+    var t = 0;
+    Object.keys(window.PPQuiz.questions).forEach(function(k){
+      var qs = window.PPQuiz.questions[k]; if(qs && qs.length) t += qs.length;
+    });
+    return t;
+  }catch(e){ return 0; }
+}
+function certificateEarned(){
+  var s = quizAggregateScore();
+  // Earn the cert once the user has answered at least 80% of all available
+  // questions AND scored 80% on what they answered.
+  var avail = quizTotalAvailable();
+  var coverage = avail ? (s.totalQuestions / avail) : 0;
+  return s.percent >= 80 && coverage >= 0.8;
+}
+try{ window.quizAggregateScore = quizAggregateScore; window.certificateEarned = certificateEarned; }catch(e){}
 function loadQuizContent(cb){
   if(window.PPQuiz && window.PPQuiz.questions){ cb(); return; }
   var s = document.createElement('script');
-  s.src = '/pilgrimspath-vr/quiz-content.js?v=1';
+  s.src = '/pilgrimspath-vr/quiz-content.js?v=5';
   s.onload = cb;
   s.onerror = function(){ console.warn('[Quiz] failed to load content'); cb(); };
   document.head.appendChild(s);
 }
+function _resolveCurrentQuizStep(){
+  // PRIORITY 1: explicit ?journey=N URL param (most reliable per-page indicator)
+  try{
+    var p = new URLSearchParams(window.location.search);
+    var j = parseInt(p.get('journey') || '0', 10);
+    if(j >= 1 && j <= 16) return j;
+  }catch(e){}
+  // PRIORITY 2: jm.currentStep (may be stale if scene was opened without ?journey=)
+  if(window.jm && jm.currentStep) return jm.currentStep;
+  return 0;
+}
 function showQuizForCurrentStep(onDone){
-  var step = (window.jm && jm.currentStep) ? jm.currentStep : 0;
-  var qs = (window.PPQuiz && window.PPQuiz.questions && window.PPQuiz.questions[step]) || null;
-  if(!qs || !qs.length){ onDone(); return; }
+  var step = _resolveCurrentQuizStep();
+  var pool = (window.PPQuiz && window.PPQuiz.questions && window.PPQuiz.questions[step]) || null;
+  if(!pool || !pool.length){
+    console.warn('[Quiz] no pool for resolved step='+step+' \u2014 skipping quiz');
+    onDone(); return;
+  }
+  // --- Shuffle pool (Fisher-Yates) and pick N for this session ---
+  var perSession = (window.PPQuiz && window.PPQuiz.questionsPerSession) || 5;
+  function _shuffle(arr){
+    var a = arr.slice();
+    for(var i=a.length-1;i>0;i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  var sessionQs = _shuffle(pool).slice(0, Math.min(perSession, pool.length));
+  // Also shuffle each question's answer choices and remap correct index.
+  var qs = sessionQs.map(function(orig){
+    var pairs = orig.a.map(function(opt,i){ return { opt: opt, isCorrect: (i === orig.correct) }; });
+    var shuffledPairs = _shuffle(pairs);
+    var newCorrect = 0;
+    var newA = shuffledPairs.map(function(p,i){ if(p.isCorrect) newCorrect = i; return p.opt; });
+    return { q: orig.q, a: newA, correct: newCorrect, why: orig.why };
+  });
+  console.log('[Quiz] step '+step+' \u2014 pool='+pool.length+' picked='+qs.length);
   // Build modal
   var ov = document.createElement('div');
   ov.id = 'ppQuizOverlay';
@@ -509,7 +653,7 @@ function showQuizForCurrentStep(onDone){
     '<div class="ppQuizBody"></div>'+
     '<footer><div class="ppQuizDots"></div><button type="button" class="ppQuizPrimary">Next \u203a</button></footer>'+
     '</div>';
-  document.body.appendChild(ov);
+  _overlayRoot.appendChild(ov);
   var bodyEl = ov.querySelector('.ppQuizBody');
   var dotsEl = ov.querySelector('.ppQuizDots');
   var primary = ov.querySelector('.ppQuizPrimary');
@@ -517,6 +661,7 @@ function showQuizForCurrentStep(onDone){
   var idx = 0, score = 0, picked = -1, revealed = false;
 
   function done(){
+    var earnedBefore = certificateEarned();
     try{
       var key = 'pp_quiz_scores';
       var all = {}; try{ all = JSON.parse(localStorage.getItem(key) || '{}'); }catch(e){}
@@ -524,6 +669,16 @@ function showQuizForCurrentStep(onDone){
       localStorage.setItem(key, JSON.stringify(all));
     }catch(e){}
     if(ov && ov.parentNode) ov.parentNode.removeChild(ov);
+    var earnedNow = certificateEarned();
+    if(!earnedBefore && earnedNow){
+      // First-time achievement — show certificate, then continue when dismissed.
+      try{ localStorage.setItem('pp_cert_awarded_at', String(Date.now())); }catch(e){}
+      showHajjReadinessCertificate();
+      var poll = setInterval(function(){
+        if(!document.getElementById('ppCertOverlay')){ clearInterval(poll); onDone(); }
+      }, 300);
+      return;
+    }
     onDone();
   }
   function renderDots(){
@@ -586,6 +741,48 @@ window.proceedWithQuiz = function(after){
   if(!quizEnabled()){ after(); return; }
   loadQuizContent(function(){ showQuizForCurrentStep(after); });
 };
+
+// ── Hajj Readiness Certificate modal ───────────────────────────────────────
+function showHajjReadinessCertificate(){
+  try{
+    var u = (typeof readUser==='function') ? readUser() : {};
+    var name = u.name || (u.email ? u.email.split('@')[0] : 'Pilgrim');
+    var s = quizAggregateScore();
+    var dateStr = new Date().toLocaleDateString(undefined, { year:'numeric', month:'long', day:'numeric' });
+    var existing = document.getElementById('ppCertOverlay'); if(existing) existing.remove();
+    var ov = document.createElement('div');
+    ov.id = 'ppCertOverlay';
+    ov.style.cssText = 'position:fixed;inset:0;z-index:10060;background:rgba(20,12,4,0.78);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;font-family:\'DM Sans\',Arial,sans-serif;padding:20px;';
+    ov.innerHTML =
+      '<div style="width:min(94vw,640px);max-height:92vh;overflow:auto;background:linear-gradient(145deg,#FFFDF7,#F4EBD2);border:3px double #C9A84C;border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,0.55);padding:32px 28px;text-align:center;color:#3D2B1F;position:relative;">'+
+        '<button type="button" id="ppCertClose" aria-label="Close" style="position:absolute;top:10px;right:14px;background:transparent;border:none;font-size:26px;line-height:1;color:#8B6914;cursor:pointer;">&times;</button>'+
+        '<div style="font-size:40px;line-height:1;margin-bottom:6px;">🏆</div>'+
+        '<div style="font-family:\'Playfair Display\',serif;font-size:13px;letter-spacing:3px;color:#8B6914;text-transform:uppercase;">Pilgrim\'s Path · Hajj VR</div>'+
+        '<h2 style="font-family:\'Playfair Display\',serif;font-size:30px;margin:6px 0 2px;color:#3D2B1F;">Hajj Readiness Certificate</h2>'+
+        '<div style="height:2px;width:60px;background:#C9A84C;margin:12px auto 18px;"></div>'+
+        '<p style="font-size:14px;margin:0 0 4px;color:#5a4530;">This is to certify that</p>'+
+        '<p style="font-family:\'Playfair Display\',serif;font-size:26px;margin:6px 0 6px;color:#8B6914;font-weight:700;">'+ name +'</p>'+
+        '<p style="font-size:14px;margin:6px 0 18px;color:#5a4530;line-height:1.55;">has successfully completed the <strong>Pilgrim\'s Path Hajj VR Journey</strong> and demonstrated knowledge of the rites of Hajj by scoring</p>'+
+        '<div style="font-family:\'Playfair Display\',serif;font-size:38px;color:#22c55e;font-weight:700;margin:4px 0 2px;">'+ s.percent +'%</div>'+
+        '<p style="font-size:12px;color:#8B6914;margin:0 0 22px;">('+ s.correct +' of '+ s.totalQuestions +' reflection questions answered correctly)</p>'+
+        '<p style="font-size:13px;color:#5a4530;font-style:italic;margin:0 0 18px;">May Allah accept your intention and grant you a blessed pilgrimage.</p>'+
+        '<div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:24px;font-size:12px;color:#5a4530;">'+
+          '<div style="text-align:left;"><div style="border-top:1px solid #8B6914;padding-top:4px;min-width:140px;">Date issued</div><div style="margin-top:2px;font-weight:600;">'+ dateStr +'</div></div>'+
+          '<div style="text-align:right;"><div style="border-top:1px solid #8B6914;padding-top:4px;min-width:140px;">Pilgrim\'s Path</div><div style="margin-top:2px;font-weight:600;">Hajj VR Program</div></div>'+
+        '</div>'+
+        '<div style="margin-top:22px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">'+
+          '<button type="button" id="ppCertPrint" style="background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;border:none;border-radius:10px;padding:10px 22px;font-size:13px;font-weight:600;cursor:pointer;">🖨  Print / Save PDF</button>'+
+          '<button type="button" id="ppCertDone" style="background:rgba(139,105,20,0.12);color:#8B6914;border:1px solid #C9A84C;border-radius:10px;padding:10px 22px;font-size:13px;font-weight:600;cursor:pointer;">Close</button>'+
+        '</div>'+
+      '</div>';
+    (_overlayRoot || document.body).appendChild(ov);
+    function close(){ if(ov && ov.parentNode) ov.parentNode.removeChild(ov); }
+    ov.querySelector('#ppCertClose').addEventListener('click', close);
+    ov.querySelector('#ppCertDone').addEventListener('click', close);
+    ov.querySelector('#ppCertPrint').addEventListener('click', function(){ try{ window.print(); }catch(e){} });
+  }catch(e){ console.warn('[Cert] failed to render', e); }
+}
+try{ window.showHajjReadinessCertificate = showHajjReadinessCertificate; }catch(e){}
 
 // ── Toggle 360° panorama auto-rotation on the active TDV tour script ──
 // Returns true once at least one PanoramaPlayer was found and updated.
@@ -653,23 +850,47 @@ function initPauseMenu(){
   btn.setAttribute('aria-label','Pause and open menu');
   btn.title = 'Pause / Menu';
   btn.innerHTML = '<span class="ppPauseIcon" aria-hidden="true"><span></span><span></span></span>';
-  document.body.appendChild(btn);
+  _overlayRoot.appendChild(btn);
 
   var backdrop = document.createElement('div');
   backdrop.id = 'ppMenuBackdrop';
-  document.body.appendChild(backdrop);
+  _overlayRoot.appendChild(backdrop);
 
   var panel = document.createElement('aside');
   panel.id = 'ppMenuPanel';
   panel.setAttribute('role','dialog');
   panel.setAttribute('aria-label','User menu');
-  document.body.appendChild(panel);
+  _overlayRoot.appendChild(panel);
 
   function renderPanel(){
     var u = readUser();
     var initial = (u.name || u.email || 'P').trim().charAt(0).toUpperCase();
     var displayName = u.name || (u.email ? u.email.split('@')[0] : 'Pilgrim');
     var progress = (window.jm && jm.getJourneyProgress) ? jm.getJourneyProgress() : {currentStep:0,totalSteps:16,percentage:0};
+    var qz = quizAggregateScore();
+    var earned = certificateEarned();
+    var quizBlock = '';
+    if(quizEnabled() || qz.totalQuestions > 0){
+      var pct = qz.percent;
+      var barColor = earned ? 'linear-gradient(90deg,#22c55e,#16a34a)' : (pct>=80 ? 'linear-gradient(90deg,#22c55e,#16a34a)' : (pct>=50 ? 'linear-gradient(90deg,#C9A84C,#8B6914)' : 'linear-gradient(90deg,#94a3b8,#64748b)'));
+      var statusLine;
+      if(earned){
+        statusLine = '🏆 Hajj Readiness Certificate earned!';
+      } else if(qz.totalQuestions === 0){
+        statusLine = 'Answer questions after each scene to earn your certificate.';
+      } else {
+        statusLine = 'Score 80%+ on 80% of questions to earn your certificate.';
+      }
+      quizBlock =
+        '<div class="ppMenuProgress" style="margin-top:0;">' +
+          '<div class="ppMenuProgLbl"><span>📝 Quiz score</span><span>' + qz.correct + ' / ' + qz.totalQuestions + ' &middot; ' + pct + '%</span></div>' +
+          '<div class="ppMenuProgBar"><div class="ppMenuProgFill" style="width:' + pct + '%;background:' + barColor + ';"></div></div>' +
+          '<div style="font-size:11px;color:' + (earned ? '#16a34a' : '#8B6914') + ';margin-top:6px;font-weight:' + (earned ? '700' : '500') + ';">' + statusLine + '</div>' +
+        '</div>';
+    }
+    var certBtn = earned
+      ? '<button type="button" data-act="cert" style="background:linear-gradient(135deg,#22c55e,#16a34a) !important;color:#fff !important;font-weight:700 !important;">🏆  View Hajj Readiness Certificate</button>'
+      : '';
     panel.innerHTML =
       '<header class="ppMenuHead">' +
         '<div class="ppMenuAvatar">' + initial + '</div>' +
@@ -683,12 +904,14 @@ function initPauseMenu(){
         '<div class="ppMenuProgLbl"><span>Journey progress</span><span>' + progress.currentStep + ' / ' + progress.totalSteps + '</span></div>' +
         '<div class="ppMenuProgBar"><div class="ppMenuProgFill" style="width:' + progress.percentage + '%"></div></div>' +
       '</div>' +
+      quizBlock +
       '<nav class="ppMenuList">' +
         '<button type="button" data-act="resume">▶  Resume Tour</button>' +
         '<button type="button" data-act="next">⏭  Next Stop</button>' +
         '<button type="button" data-act="rotate">🔄  Panorama Rotation  <span class="ppMenuMeta">' + (window._ppRotationFrozen ? 'OFF' : 'ON') + '</span></button>' +
         '<button type="button" data-act="quiz">📝  End-of-scene Quiz  <span class="ppMenuMeta">' + (quizEnabled() ? 'ON' : 'OFF') + '</span></button>' +
-        '<button type="button" data-act="lang">🌐  Language  <span class="ppMenuMeta">' + u.lang.toUpperCase() + '</span></button>' +
+        certBtn +
+        '<button type="button" data-act="restart">↻  Restart Scene</button>' +
         '<button type="button" data-act="reset">↺  Reset Progress</button>' +
         '<button type="button" data-act="exit">⏏  Exit to Dashboard</button>' +
       '</nav>' +
@@ -727,12 +950,14 @@ function initPauseMenu(){
   function open(){
     renderPanel();
     document.body.classList.add('ppMenuOpen');
+    var _fs = document.fullscreenElement || document.webkitFullscreenElement; if(_fs) _fs.classList.add('ppMenuOpen');
     pauseAllAudio();
     // Also freeze panorama auto-rotation while menu/pause is open
     try{ window._ppPauseRotated = !window._ppRotationFrozen; if(window._ppPauseRotated) setPanoramaRotation(false); }catch(e){}
   }
   function close(){
     document.body.classList.remove('ppMenuOpen');
+    var _fs = document.fullscreenElement || document.webkitFullscreenElement; if(_fs) _fs.classList.remove('ppMenuOpen');
     resumeAllAudio();
     // Restore rotation only if pause was the one that froze it (don't override user-toggled OFF)
     try{ if(window._ppPauseRotated){ window._ppPauseRotated = false; setPanoramaRotation(true); } }catch(e){}
@@ -757,14 +982,49 @@ function initPauseMenu(){
       renderPanel();
       return;
     }
-    if(act==='lang'){
-      var cur = (localStorage.getItem('pp_user_lang') || 'en');
-      var order = ['en','ar','fr','ur','tr','id','ms','sw','ha'];
-      var nxt = order[(order.indexOf(cur)+1) % order.length];
-      try{ localStorage.setItem('pp_user_lang', nxt); }catch(e){}
-      renderPanel();
-      // Soft reload current scene so audio/text picks the new lang
-      setTimeout(function(){ window.location.reload(); }, 250);
+    if(act==='cert'){
+      close();
+      showHajjReadinessCertificate();
+      return;
+    }
+    if(act==='restart'){
+      // Replay the current scene from scratch.
+      // Strategy: wipe in-memory + ALL sessionStorage (banner/VO/guide gates
+      // live there under many different prefixes: jamar*, muz*, sai*, tawaf*,
+      // pp_shown_*, etc.), then HARD navigate to the canonical step URL with
+      // a fresh ?rs= so Chrome cannot short-circuit the navigation.
+      // NOTE: localStorage is preserved (that holds journeyState + user prefs).
+      try{
+        if(window._voAudio){ try{ window._voAudio.pause(); }catch(_){} window._voAudio=null; }
+        window._voCurrentFile=null; window._voPending=null; window._voChainPending=null;
+        window._enforceLanded=false; window._stopEnforce=false;
+        try{ sessionStorage.clear(); }catch(_){}
+      }catch(_){}
+      close();
+      // HARD navigate. Build the URL from jm's step definition so we always
+      // get the canonical scene URL (incl. ?journey & ?context), then add a
+      // fresh ?rs= so the URL differs from the one already in the address bar.
+      setTimeout(function(){
+        try{
+          var target;
+          if(window.jm && jm.currentStep && typeof jm.getCurrentStep === 'function'){
+            var step = jm.getCurrentStep();
+            if(step && step.url){
+              var sep1 = step.url.indexOf('?')>=0 ? '&' : '?';
+              target = step.url + sep1 + 'journey=' + jm.currentStep +
+                       (step.context ? '&context=' + encodeURIComponent(step.context) : '') +
+                       '&rs=' + Date.now().toString(36);
+            }
+          }
+          if(!target){
+            var u = new URL(window.location.href);
+            u.searchParams.delete('rs');
+            u.searchParams.set('rs', Date.now().toString(36));
+            target = u.toString();
+          }
+          window.location.replace(target);
+        }catch(_){ window.location.reload(); }
+      }, 80);
       return;
     }
     if(act==='reset'){
@@ -781,11 +1041,15 @@ function initPauseMenu(){
   }
 
   btn.addEventListener('click', function(){
-    if(document.body.classList.contains('ppMenuOpen')) close(); else open();
+    var _fs = document.fullscreenElement || document.webkitFullscreenElement;
+    var isOpen = document.body.classList.contains('ppMenuOpen') || (_fs && _fs.classList.contains('ppMenuOpen'));
+    if(isOpen) close(); else open();
   });
   backdrop.addEventListener('click', close);
   document.addEventListener('keydown', function(e){
-    if(e.key === 'Escape' && document.body.classList.contains('ppMenuOpen')) close();
+    var _fs = document.fullscreenElement || document.webkitFullscreenElement;
+    var isOpen = document.body.classList.contains('ppMenuOpen') || (_fs && _fs.classList.contains('ppMenuOpen'));
+    if(e.key === 'Escape' && isOpen) close();
   });
 }
 
@@ -793,6 +1057,172 @@ function initPauseMenu(){
 const styleEl = document.createElement('style');
 styleEl.textContent = journeyNavCSS;
 document.head.appendChild(styleEl);
+
+// ── Hide TDV's built-in "Choose Language" / locale switcher icon ─────────────
+// 3DVista renders a corner button that overlaps our pause button. There's no
+// stable id for it, so we identify it by its title / aria-label / visible text.
+// We run an initial sweep + a MutationObserver to catch late-mounted elements.
+(function hideLanguageUI(){
+  var LANG_RE = /(choose\s*language|select\s*language|^language$|cambiar\s*idioma|elegir\s*idioma)/i;
+  function matches(el){
+    if(!el || el.nodeType !== 1) return false;
+    var t = (el.getAttribute && (el.getAttribute('title') || el.getAttribute('aria-label'))) || '';
+    if(LANG_RE.test(t)) return true;
+    // Also check direct text content for icon-only buttons that have a tooltip span
+    var txt = (el.textContent || '').trim();
+    if(txt && txt.length < 40 && LANG_RE.test(txt)) return true;
+    return false;
+  }
+  function hide(el){
+    try{
+      el.style.setProperty('display','none','important');
+      el.style.setProperty('visibility','hidden','important');
+      el.style.setProperty('pointer-events','none','important');
+      el.setAttribute('data-pp-hidden-lang','1');
+    }catch(_){}
+  }
+  function sweep(root){
+    try{
+      var nodes = (root || document).querySelectorAll('[title],[aria-label],button,div,span,a');
+      for(var i=0;i<nodes.length;i++){
+        if(matches(nodes[i])) hide(nodes[i]);
+      }
+    }catch(_){}
+  }
+  // Initial sweeps (TDV mounts UI asynchronously)
+  sweep(document);
+  setTimeout(function(){ sweep(document); }, 500);
+  setTimeout(function(){ sweep(document); }, 1500);
+  setTimeout(function(){ sweep(document); }, 3500);
+  // Live observer
+  try{
+    var mo = new MutationObserver(function(muts){
+      for(var i=0;i<muts.length;i++){
+        var m = muts[i];
+        if(m.type === 'childList'){
+          m.addedNodes && m.addedNodes.forEach(function(n){
+            if(n.nodeType !== 1) return;
+            if(matches(n)) hide(n);
+            sweep(n);
+          });
+        } else if(m.type === 'attributes' && m.target && matches(m.target)){
+          hide(m.target);
+        }
+      }
+    });
+    mo.observe(document.documentElement, {
+      childList: true, subtree: true,
+      attributes: true, attributeFilter: ['title','aria-label']
+    });
+  }catch(_){}
+})();
+
+// ── Tear down any pre-mounted Pilgrims Path language pill on scene pages ────
+// `journey-content-loader.js` historically mounted a floating #ppLangSwitcher
+// on every page including scenes, where it overlapped the hamburger menu.
+// The loader has been patched to skip scene pages, but this removes any
+// instance left over from a cached older loader.
+(function purgePpLangSwitcher(){
+  function nuke(){
+    try{
+      var el = document.getElementById('ppLangSwitcher');
+      if(el && el.parentNode) el.parentNode.removeChild(el);
+      var st = document.getElementById('ppLangSwitcherCss');
+      if(st && st.parentNode) st.parentNode.removeChild(st);
+    }catch(_){}
+  }
+  nuke();
+  setTimeout(nuke, 250);
+  setTimeout(nuke, 1000);
+  setTimeout(nuke, 3000);
+  try{
+    var mo = new MutationObserver(function(muts){
+      for(var i=0;i<muts.length;i++){
+        var m = muts[i];
+        if(m.type !== 'childList') continue;
+        m.addedNodes && m.addedNodes.forEach(function(n){
+          if(n.nodeType === 1 && (n.id === 'ppLangSwitcher' || n.id === 'ppLangSwitcherCss')){
+            try{ n.parentNode && n.parentNode.removeChild(n); }catch(_){}
+          }
+        });
+      }
+    });
+    mo.observe(document.documentElement, { childList: true, subtree: true });
+  }catch(_){}
+})();
+
+// ── Hide 3DVista's "Created by 3DVista Academic" watermark ──────────────────
+// PRIMARY suppression is CSS (see journeyNavCSS) keyed on the unique base64
+// data-URL signature `iVBORw0KGgoAAAANSUhEUgAAAcw`. This JS layer is a belt-
+// and-braces backup that:
+//   • Tags any matching node with [data-pp-watermark] (second CSS hook)
+//   • Forces display:none inline with !important so even if the player's
+//     8-second style-refresh interval runs, our hide rule wins
+//   • Watches for late mounts via MutationObserver
+//
+// We deliberately do NOT remove the node from the DOM, because the player's
+// internal interval calls Q.insertBefore(vt, ...) every 8s and would just
+// re-attach it. Setting display:none is permanent (the player never touches
+// the `display` property in its style refresh loop).
+(function hideAcademicWatermark(){
+  // Unique fingerprint from lib/tdvplayer.js → AcademicWatermark.g.xUa
+  var WM_SIG = 'iVBORw0KGgoAAAANSUhEUgAAAcw';
+  function isWatermark(el){
+    if(!el || el.nodeType !== 1 || el.tagName !== 'DIV') return false;
+    // Primary check: inline background-image contains the watermark base64 prefix
+    var bg = el.style && el.style.backgroundImage;
+    if(bg && bg.indexOf(WM_SIG) !== -1) return true;
+    // Secondary check: classless/idless absolute div with z-index 1000 + bg-image
+    if(!el.id && !(el.className && typeof el.className === 'string' && el.className.length)){
+      var s = el.style;
+      if(s && String(s.zIndex) === '1000' && bg && bg !== 'none' && bg !== '') return true;
+    }
+    return false;
+  }
+  function tag(el){
+    try{
+      el.setAttribute('data-pp-watermark','1');
+      el.style.setProperty('display','none','important');
+      el.style.setProperty('opacity','0','important');
+      el.style.setProperty('visibility','hidden','important');
+      el.style.setProperty('pointer-events','none','important');
+    }catch(_){}
+  }
+  function sweep(){
+    try{
+      var divs = document.querySelectorAll('div');
+      for(var i=0;i<divs.length;i++){ if(isWatermark(divs[i])) tag(divs[i]); }
+    }catch(_){}
+  }
+  sweep();
+  setTimeout(sweep, 250);
+  setTimeout(sweep, 1000);
+  setTimeout(sweep, 3000);
+  setTimeout(sweep, 8500); // catch the player's first 8-second toggle
+  try{
+    var mo = new MutationObserver(function(muts){
+      for(var i=0;i<muts.length;i++){
+        var m = muts[i];
+        if(m.type === 'childList'){
+          m.addedNodes && m.addedNodes.forEach(function(n){
+            if(n.nodeType !== 1) return;
+            if(isWatermark(n)) tag(n);
+            if(n.querySelectorAll){
+              var inner = n.querySelectorAll('div');
+              for(var j=0;j<inner.length;j++){ if(isWatermark(inner[j])) tag(inner[j]); }
+            }
+          });
+        } else if(m.type === 'attributes' && m.target && isWatermark(m.target)){
+          tag(m.target);
+        }
+      }
+    });
+    mo.observe(document.documentElement, {
+      childList: true, subtree: true,
+      attributes: true, attributeFilter: ['style']
+    });
+  }catch(_){}
+})();
 
 // ── Global functions for scenes to call ──
 window.showJourneyNextButton = function() {
@@ -818,7 +1248,7 @@ window.showJourneyNextButton = function() {
     });
   });
   
-  document.body.appendChild(btn);
+  _overlayRoot.appendChild(btn);
 };
 
 // ── Activity-required notice (toast near the Next button) ──
@@ -827,7 +1257,7 @@ function showActivityNotice(msg){
   if(!el){
     el = document.createElement('div');
     el.id = 'activityNotice';
-    document.body.appendChild(el);
+    _overlayRoot.appendChild(el);
   }
   el.textContent = '\u26A0\uFE0F  ' + msg;
   el.classList.add('visible');
@@ -860,7 +1290,7 @@ function showPathCue(){
     var t = document.createElement('div');
     t.id = 'pathCueToast';
     t.textContent = msg;
-    document.body.appendChild(t);
+    _overlayRoot.appendChild(t);
     // Show after a short delay so it doesn't collide with banner opening
     setTimeout(function(){ t.classList.add('visible'); }, 1400);
     // Persist until the user navigates to a new panorama in this scene.
@@ -920,7 +1350,7 @@ window.showJourneyComplete = function() {
     <button onclick="window.jm.resetJourney()">Return Home</button>
   `;
   
-  document.body.appendChild(complete);
+  _overlayRoot.appendChild(complete);
 };
 
 // ── Initialize on DOM content loaded ──
@@ -953,5 +1383,27 @@ setInterval(function() {
 }, 600);
 
 console.log('[JourneyNav] Initialized');
+
+// ── Fullscreen overlay bridge ──
+// JS-created overlays are already appended to _overlayRoot (#viewer) above,
+// so they survive fullscreen without re-parenting. This bridge only needs to
+// catch any fixed-position elements that scene HTML placed directly in <body>
+// (e.g. #sceneBanner, #jamarHUD, scene-specific banners).
+(function(){
+  function onFsChange(){
+    var viewer = document.getElementById('viewer');
+    if(!viewer || !document.fullscreenElement) return;
+    var kids = Array.prototype.slice.call(document.body.children);
+    kids.forEach(function(el){
+      try{
+        if(window.getComputedStyle(el).position === 'fixed'){
+          viewer.appendChild(el);
+        }
+      }catch(e){}
+    });
+  }
+  document.addEventListener('fullscreenchange', onFsChange);
+  document.addEventListener('webkitfullscreenchange', onFsChange);
+})();
 
 })();

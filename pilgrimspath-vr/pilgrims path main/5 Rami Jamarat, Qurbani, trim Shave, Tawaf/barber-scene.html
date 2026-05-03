@@ -20,14 +20,15 @@ src="https://www.facebook.com/tr?id=1199634958501931&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Barber Scene — Trim / Shave (Halq &amp; Taqsir)</title>
-<script src="/journey-content-loader.js?v=2"></script>
+<title>Halaq — Shave the Head (Step 11, Day 10)</title>
+<script src="/admin-journey-content.js?v=11"></script>
+<script src="/journey-content-loader.js?v=23"></script>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overflow:hidden}
 
-/* ═══ Scene Container ═══ */
+/* --- Scene Container --- */
 .scene-wrap{
     position:relative;width:100%;height:100vh;
     display:flex;align-items:center;justify-content:center;
@@ -38,7 +39,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overfl
     position:absolute;inset:0;overflow:hidden;opacity:0.03;pointer-events:none;
 }
 .scene-bg::before{
-    content:'﷽';position:absolute;font-size:180px;
+    content:'?';position:absolute;font-size:180px;
     color:#1a1a2e;white-space:nowrap;
     animation:bgScroll 60s linear infinite;
 }
@@ -55,7 +56,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overfl
 }
 @keyframes cardIn{0%{opacity:0;transform:translateY(20px) scale(0.97)}100%{opacity:1;transform:none}}
 
-/* ═══ Header ═══ */
+/* --- Header --- */
 .scene-icon{font-size:2.8rem;margin-bottom:6px;opacity:0;animation:fadeUp 0.5s 0.2s ease forwards}
 .scene-label{
     font-size:0.7rem;text-transform:uppercase;letter-spacing:2.5px;
@@ -73,7 +74,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overfl
 }
 @keyframes fadeUp{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:none}}
 
-/* ═══ SVG Scene ═══ */
+/* --- SVG Scene --- */
 .barber-scene{
     position:relative;width:100%;max-width:560px;height:220px;
     margin:0 auto 20px;border-radius:18px;overflow:hidden;
@@ -117,7 +118,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overfl
 .pilgrim-seated{animation:gentleBob 3s ease-in-out infinite}
 @keyframes gentleBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
 
-/* ═══ Options ═══ */
+/* --- Options --- */
 .options-row{
     display:flex;gap:16px;justify-content:center;margin:0 auto 20px;
     opacity:0;animation:fadeUp 0.5s 0.5s ease forwards;
@@ -143,7 +144,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overfl
 }
 .option-desc{font-size:0.78rem;color:#6a6a7c;line-height:1.5}
 
-/* ═══ Info note ═══ */
+/* --- Info note --- */
 .info-note{
     display:inline-block;padding:10px 20px;border-radius:12px;
     background:linear-gradient(135deg,rgba(212,175,55,0.06),rgba(201,162,39,0.02));
@@ -153,7 +154,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overfl
 }
 .info-note strong{color:#B8941F;font-weight:600}
 
-/* ═══ Dua Section ═══ */
+/* --- Dua Section --- */
 .dua-block{
     margin-top:16px;padding:14px 20px;border-radius:14px;
     background:rgba(26,26,46,0.02);text-align:center;
@@ -174,16 +175,59 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overfl
     .options-row{flex-direction:column;align-items:center}
     .option-card{max-width:100%}
 }
+
+/* --- Fit-to-screen overrides (no page scroll) --- */
+html,body{height:100%;overflow:hidden}
+.scene-wrap{height:100vh;height:100dvh;overflow:hidden;padding:14px 10px;align-items:flex-start;justify-content:center}
+.scene-card{width:100%;max-width:740px;max-height:calc(100vh - 28px);max-height:calc(100dvh - 28px);overflow-y:auto;overflow-x:hidden;padding:18px 22px;scrollbar-width:thin;scrollbar-color:#D4AF37 transparent}
+.scene-card::-webkit-scrollbar{width:6px}
+.scene-card::-webkit-scrollbar-thumb{background:#D4AF37;border-radius:3px}
+.scene-icon{font-size:1.9rem;margin-bottom:2px}
+.scene-title{font-size:1.3rem;margin-bottom:4px}
+.scene-divider{margin:0 auto 10px}
+.barber-scene{height:200px;margin:0 auto 14px}
+.options-row{gap:12px;margin:0 auto 14px}
+.option-card{padding:14px 12px 12px}
+.option-icon{font-size:1.6rem;margin-bottom:4px}
+.option-name{font-size:1.05rem}
+.option-arabic{font-size:1.15rem;margin-bottom:2px}
+.option-desc{font-size:.74rem;line-height:1.4}
+.info-note{padding:8px 16px;font-size:.78rem}
+.dua-block{margin-top:12px;padding:12px 16px}
+.dua-arabic{font-size:1.2rem;line-height:1.6}
+@media(max-height:760px){
+  .scene-card{padding:14px 18px}
+  .scene-icon{font-size:1.55rem;margin-bottom:0}
+  .scene-title{font-size:1.15rem}
+  .barber-scene{height:160px;margin-bottom:10px}
+  .option-card{padding:10px 10px 8px}
+  .option-icon{font-size:1.4rem}
+  .option-name{font-size:.95rem}
+  .option-arabic{font-size:1.05rem}
+  .dua-arabic{font-size:1.05rem;line-height:1.5}
+  .info-note{padding:7px 14px;font-size:.74rem}
+}
+@media(max-height:580px){
+  .scene-wrap{padding:8px}
+  .scene-card{padding:10px 14px;border-radius:16px}
+  .scene-title{font-size:1rem}
+  .barber-scene{height:120px;margin-bottom:8px}
+  .options-row{margin-bottom:8px}
+  .option-card{padding:8px 8px 6px}
+  .dua-block{margin-top:8px;padding:9px 12px}
+  .dua-arabic{font-size:.95rem}
+  .dua-translit,.dua-translation{font-size:.72rem}
+}
 </style>
 </head>
 <body>
 <div class="scene-wrap">
     <div class="scene-bg"></div>
     <div class="scene-card">
-        <!-- Header -->
-        <div class="scene-icon">✂️</div>
-        <p class="scene-label">Step 8 of Hajj</p>
-        <h1 class="scene-title">Halq or Taqsir — Hair Trimming</h1>
+        <!-- Header (context-aware: filled by JS) -->
+        <div class="scene-icon" id="bsIcon">??</div>
+        <p class="scene-label" id="bsLabel">Step 11 of 16 · Day of Sacrifice</p>
+        <h1 class="scene-title" id="bsTitle">Halaq — Shaving the Head</h1>
         <div class="scene-divider"></div>
 
         <!-- Animated barber SVG -->
@@ -324,27 +368,30 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overfl
         <!-- Two options: Halq vs Taqsir -->
         <div class="options-row">
             <div class="option-card">
-                <div class="option-icon">💈</div>
+                <div class="option-icon">??</div>
                 <div class="option-name">Halq</div>
-                <div class="option-arabic">حَلْق</div>
-                <p class="option-desc">Complete head shaving — considered the more virtuous option. The Prophet ﷺ made dua thrice for those who shave.</p>
+                <div class="option-arabic">?????</div>
+                <p class="option-desc">Complete head shaving — considered the more virtuous option. The Prophet ? made dua thrice for those who shave.</p>
             </div>
             <div class="option-card">
-                <div class="option-icon">✂️</div>
+                <div class="option-icon">??</div>
                 <div class="option-name">Taqsir</div>
-                <div class="option-arabic">تَقْصِير</div>
+                <div class="option-arabic">????????</div>
                 <p class="option-desc">Trimming at least a fingertip's length of hair from all over the head. Required option for women.</p>
             </div>
         </div>
 
-        <!-- Important note -->
-        <p class="info-note">
-            <strong>After trimming you exit the state of Ihram</strong> — all restrictions of Ihram are now lifted.
+        <!-- Important note (Step 11 — partial exit from Ihram) -->
+        <p class="info-note" id="bsInfoNote">
+            <strong>This is the partial exit from Ihram (Tahallul al-Awwal).</strong> All restrictions are lifted except marital relations — those resume only after Tawaf al-Ifadah.
         </p>
+
+        <!-- Hidden — step-3 only banner is not used here anymore -->
+        <div id="bsUmrahDone" style="display:none;"></div>
 
         <!-- Dua -->
         <div class="dua-block">
-            <p class="dua-arabic">اللَّهُمَّ اغْفِرْ لِلْمُحَلِّقِينَ وَالْمُقَصِّرِينَ</p>
+            <p class="dua-arabic">?????????? ??????? ???????????????? ?????????????????</p>
             <p class="dua-translit">"Allahumma-ghfir lil-muhalliqeena wal-muqasssireen"</p>
             <p class="dua-translation">"O Allah, forgive those who shave their heads and those who trim their hair."</p>
         </div>
@@ -352,9 +399,9 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overfl
 </div>
 
 <!-- Journey Navigation -->
-<script src="../../journey-manager.js?v=3" defer></script>
-<script src="../../quiz-content.js?v=1" defer></script>
-<script src="../../journey-nav.js?v=10" defer></script>
+<script src="../../journey-manager.js?v=8" defer></script>
+<script src="../../quiz-content.js?v=6" defer></script>
+<script src="../../journey-nav.js?v=26" defer></script>
 <script>
 // Show next button for this step
 document.addEventListener('DOMContentLoaded', function(){
@@ -365,7 +412,7 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
-<!-- ═══ Continue button (context-aware) ═══ -->
+<!-- --- Continue button (context-aware) --- -->
 <style>
 #barberContinue{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:10005;
   background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;border:none;
@@ -377,23 +424,21 @@ document.addEventListener('DOMContentLoaded', function(){
 #barberContinue .bcIcon{font-size:18px;}
 @media(max-width:480px){#barberContinue{font-size:13px;padding:12px 22px;bottom:90px;}}
 </style>
-<button id="barberContinue"><span class="bcIcon">🕋</span> <span id="barberContinueLabel">Continue ▸</span></button>
+<button id="barberContinue"><span class="bcIcon">??</span> <span id="barberContinueLabel">Continue to Tawaf al-Ifadah ?</span></button>
 <script>
 (function(){
-  var ctx = new URL(window.location).searchParams.get('context') || 'barber';
+  // This scene is now Step 11 (post-Hajj Halaq) ONLY. Step 3 lives in umrah-trim-scene.html.
+  console.log('[Barber] Step 11 (halaq) scene loaded');
   var btn = document.getElementById('barberContinue');
-  var lbl = document.getElementById('barberContinueLabel');
-  if (ctx === 'umrah-trim') {
-    // Step 5 → Step 6: Rest & Pray
-    lbl.textContent = 'Continue: Rest & Pray ▸';
-    btn.querySelector('.bcIcon').textContent = '🌙';
-    btn.onclick = function(){ window.location.href = '../../0%20Ihram/rest-scene.html'; };
-  } else {
-    // Step 13 (post-Hajj halaq) → Step 14: Tawaf al-Ifadah
-    lbl.textContent = 'Continue to Tawaf al-Ifadah ▸';
-    btn.querySelector('.bcIcon').textContent = '🕋';
-    btn.onclick = function(){ window.location.href = '../1%20Tawaf/index.htm?context=ifadha'; };
-  }
+  if(!btn) return;
+  btn.addEventListener('click', function(){
+    var nav = function(){
+      if(window.jm && typeof window.jm.goToStep==='function') window.jm.goToStep(12);
+      else window.location.href = '../1%20Tawaf/index.htm?journey=12&context=ifadha';
+    };
+    if(typeof window.proceedWithQuiz === 'function') window.proceedWithQuiz(nav);
+    else nav();
+  });
 })();
 </script>
 
@@ -406,19 +451,9 @@ fbq('track', 'ViewContent', {
 });
 </script>
 <script src="../../../meta-capi.js" defer></script>
-<!-- ═══ Scene Navigation Overlay ═══ -->
+<!-- --- Scene Navigation Overlay --- -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='barber';</script>
-<script src="../../scene-nav-overlay.js?v=7" defer></script>
-<script>
-(function(){
-  var ctx=new URL(window.location).searchParams.get('context')||'';
-  function _pbVO(f){var url=(window.PPContent&&window.PPContent.audioUrl(f))||('/Hajj%20Voice%20Over/'+encodeURIComponent(f));var a=new Audio(url);a.play().catch(function(){});}
-  var sk = ctx==='umrah-trim'?'barber-umrah':(ctx==='barber'?'barber-hajj':null);
-  var bid = ctx==='umrah-trim'?'bu-load':(ctx==='barber'?'bh-load':null);
-  var ov=(sk&&bid&&window.PPContent&&window.PPContent.byId(sk,bid))||{};
-  if(ctx==='umrah-trim'){setTimeout(function(){_pbVO(ov.audio||'English Halaq.mp3');},800);}
-  else if(ctx==='barber'){setTimeout(function(){_pbVO(ov.audio||'English Day 10-3.mp3');},800);}
-})();
-</script>
+<script src="../../scene-nav-overlay.js?v=8" defer></script>
+<!-- VO autoplay handled by /journey-content-loader.js?v=23 (fireSceneLoad ? bu-load / bh-load) -->
 </body>
 </html>
