@@ -1176,7 +1176,26 @@ window._currentPanoId = id; // publish for HUD gating
 // banner/VO mapping uses a different set of panorama IDs, so we guard the
 // counter so it can't accidentally fire from a stale/shared trigger.
 if(journeyContext==='initial' && id.indexOf('7F92625E')!==-1){if(!_tawafFirstVisitSeen){_tawafFirstVisitSeen=true;}else if(typeof window.tawafLapInc==='function'){window.tawafLapInc();}}
+// Farewell Tawaf also needs lap-counting so the Hajj-Complete celebration
+// only appears after the pilgrim actually completes seven circuits. The
+// scene reuses the same 3D model, so the same starting-area panorama
+// (7F92625E) signals a completed lap. The lap counter (window.tawafLapInc)
+// writes to its own namespaced sessionStorage key (tawafLaps_farewell), so
+// it cannot interfere with the initial Tawaf scoring.
+if(journeyContext==='farewell' && id.indexOf('7F92625E')!==-1){if(!_tawafFirstVisitSeen){_tawafFirstVisitSeen=true;}else if(typeof window.tawafLapInc==='function'){window.tawafLapInc();}}
+// Track unique panorama visits per page-load so we can gate end-of-Tawaf
+// celebratory banners until the user has actually visited the prior stops.
+window._tawafPanoVisits = window._tawafPanoVisits || {};
+window._tawafPanoVisits[id] = (window._tawafPanoVisits[id]||0) + 1;
 var key=(journeyContext==='initial'&&typeof idx==='number')?('idx:'+idx):id;var b=_pickBanner(id,idx);if(!b||shown[key])return;
+// Farewell-context Hajj-Complete celebration banner ('8AC63E8D') must only
+// fire after the pilgrim has actually completed all seven circuits. Without
+// this gate, simply walking into the last panorama would pop the
+// "Hajj Complete \u2014 Mabrook!" banner long before the rite is finished.
+if(journeyContext==='farewell' && id.indexOf('8AC63E8D')!==-1){
+  var _laps=parseInt(sessionStorage.getItem('tawafLaps_farewell')||'0',10);
+  if(_laps<7){return;}
+}
 // Don't show if Ihram guide is still visible
 var g=document.getElementById('ihramGuide');if(g&&g.style.display!=='none'&&!g.classList.contains('hidden'))return;
 openBanner(b.title,b.html);
