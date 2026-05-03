@@ -176,12 +176,12 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ba
 
 <!-- Throw Button -->
 <button id="jamarThrowBtn" onclick="throwStone()">
-  <span class="icon">??</span> Throw Stone <span id="throwLabel">(1/7)</span>
+  <span class="icon">&#x1FAA8;</span> Throw Stone <span id="throwLabel">(1/7)</span>
 </button>
 
 <!-- Counter HUD -->
 <div id="jamarHUD">
-  <h4>? Rami al-Jamarat</h4>
+  <h4>&#x2B22; Rami al-Jamarat</h4>
   <div class="hud-pillar">
     <span class="name">Sughra (Small)</span>
     <span class="count" id="hudSmall">0/7</span>
@@ -207,35 +207,35 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ba
 <div id="jamarGlow"></div>
 
 <!-- Directional arrow -->
-<div id="jamarArrow">?</div>
+<div id="jamarArrow">&#x25C0;</div>
 
 <!-- Aim hint -->
-<div id="jamarAimHint">? Turn towards the pillar to throw</div>
+<div id="jamarAimHint">&#x21BB; Turn towards the pillar to throw</div>
 
 <!-- Debug yaw -->
 <div id="jamarDebugYaw">yaw: --</div>
 
 <!-- Activity Guide -->
 <div id="jamarGuide">
-  <h3>?? Rami al-Jamarat</h3>
-  <p class="subtitle">The Stoning of the Pillars — Sunnah of Ibrahim (AS)</p>
+  <h3>&#x1FAA8; Rami al-Jamarat</h3>
+  <p class="subtitle">The Stoning of the Pillars &mdash; Sunnah of Ibrahim (AS)</p>
   <ul class="steps">
-    <li><span class="num">1.</span> Turn to face the Jamrah (pillar) — follow the arrow</li>
+    <li><span class="num">1.</span> Turn to face the Jamrah (pillar) &mdash; follow the arrow</li>
     <li><span class="num">2.</span> Tap "Throw Stone" when the screen glows green</li>
     <li><span class="num">3.</span> Throw 7 stones at each of the 3 pillars</li>
-    <li><span class="num">4.</span> Start with Sughra (small) ? Wusta (middle) ? Aqaba (large)</li>
+    <li><span class="num">4.</span> Start with Sughra (small) &rarr; Wusta (middle) &rarr; Aqaba (large)</li>
   </ul>
-  <div class="dua">?????? ??????? ??????? ????????</div>
+  <div class="dua">&#x628;&#x650;&#x633;&#x652;&#x645;&#x650; &#x627;&#x644;&#x644;&#x64E;&#x651;&#x647;&#x650; &#x627;&#x644;&#x644;&#x64E;&#x651;&#x647;&#x615; &#x623;&#x64E;&#x643;&#x652;&#x628;&#x64E;&#x631;&#x615;</div>
   <p style="color:#8B95A5;font-size:12px;margin:0 0 14px;">Say this with each throw: "In the name of Allah, Allah is the Greatest"</p>
-  <button onclick="dismissGuide()">Begin Stoning ?</button>
+  <button onclick="dismissGuide()">Begin Stoning &#x25B8;</button>
 </div>
 
 <!-- Bismillah overlay -->
-<div id="jamarBismillah">?????? ??????? ??????? ????????</div>
+<div id="jamarBismillah">&#x628;&#x650;&#x633;&#x652;&#x645;&#x650; &#x627;&#x644;&#x644;&#x64E;&#x651;&#x647;&#x650; &#x627;&#x644;&#x644;&#x64E;&#x651;&#x647;&#x615; &#x623;&#x64E;&#x643;&#x652;&#x628;&#x64E;&#x631;&#x615;</div>
 
 <!-- Completion banner -->
 <div id="jamarComplete">
-  <h3>?? MashaAllah!</h3>
+  <h3>&#x1F54B; MashaAllah!</h3>
   <p>You have completed all 21 throws.<br>May Allah accept your Hajj.</p>
   <button onclick="resetJamarat()">Reset &amp; Repeat</button>
 </div>
@@ -779,11 +779,11 @@ var _jbChk;
 (function(){
 var BANNERS={
 'panorama_6F591A67_7C4B_CD8A_41C0_0DCF04356022':{
-  title:'\u{1f54b} 10th Day of Dhul-Hijjah — Yawm an-Nahr',
-  html:'<p class="bb">Today is the 10th day, Yawm an-Nahr. After completing Fajr prayer, we have now arrived at Rami al-Jamarat where we will perform four key actions:</p><p class="bb">\u2022 Rami al-Jamarat<br>\u2022 Sacrifice (Qurbani)<br>\u2022 Shaving or Trimming the Hair<br>\u2022 Travel back to Al-Masjid Al-Haram in Makkah</p>'},
+  title:'\u{1f54b} 12th Day of Dhul-Hijjah \u2014 Final Day of Tashreeq',
+  html:'<p class="bb">Today is the 12th of Dhul-Hijjah, the third (and for most pilgrims final) day of the Days of Tashreeq. After Fajr you have returned to Rami al-Jamarat to perform the day\u2019s stoning.</p><p class="bb">Stone all three pillars in order with seven pebbles each, totalling 21 throws:</p><p class="bb">\u2022 Jamrah as-Sughra (small)<br>\u2022 Jamrah al-Wusta (middle)<br>\u2022 Jamrah al-\u2018Aqaba (large)</p><p class="bb">If leaving Mina before sunset (nafr al-awwal), you must complete this stoning beforehand.</p>'},
 'panorama_6F596864_7C4C_CD8E_41BB_4AD5C09CF432':{
-  title:'\u{1f3af} Stoning Jamarat al-Aqabah',
-  html:'<p class="bb">You will now begin by stoning Jamarat al-Aqabah with seven pebbles, reciting with each throw:</p><p class="ba">Bismillahi Allahu Akbar</p>'}
+  title:'\u{1f3af} Stoning the Three Pillars',
+  html:'<p class="bb">Begin with Jamrah as-Sughra (small), then al-Wusta (middle), then al-\u2018Aqaba (large) \u2014 seven pebbles at each, reciting with every throw:</p><p class="ba">Bismillahi Allahu Akbar</p>'}
 };
 var shown={};
 _jbChk=function(id){var b=BANNERS[id];if(!b||shown[id])return;shown[id]=true;if(b.title||b.html)openBanner(b.title,b.html);};
