@@ -633,7 +633,11 @@
         const btn = document.getElementById('loginBtn');
         const email = document.getElementById('loginEmail').value.trim();
         const password = document.getElementById('loginPassword').value;
-        
+        const remember = document.getElementById('rememberMe').checked;
+
+        // Tell auth.js which storage to use BEFORE signIn writes the session.
+        if (typeof setSessionPersistence === 'function') setSessionPersistence(remember);
+
         clearMessage();
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';

@@ -5,28 +5,39 @@
 
 const https = require('https');
 
+const { applyCors, rateLimit } = require('./_security');
+
 const PAYSTACK_SECRET = process.env.PAYSTACK_SECRET_KEY || '';
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 module.exports = async function handler(req, res) {
-  // CORS
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') return res.status(204).end();
+  if (!applyCors(req, res, 'POST, OPTIONS')) return;
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  // 5 init attempts per minute per IP — well above legit usage, blocks scrapers.
+  if (!rateLimit(req, res, { windowMs: 60_000, max: 5 })) return;
 
   try {
-    const { email, amount, metadata, callback_url } = req.body;
+    const { email, amount, metadata, callback_url } = req.body || {};
 
     if (!email || !amount) {
       return res.status(400).json({ error: 'email and amount are required' });
+    }
+    if (typeof email !== 'string' || !EMAIL_RE.test(email) || email.length > 254) {
+      return res.status(400).json({ error: 'Invalid email' });
+    }
+    const amt = Number(amount);
+    if (!Number.isFinite(amt) || amt <= 0 || amt > 10000) {
+      return res.status(400).json({ error: 'Invalid amount' });
+    }
+    // Strip out any callback_url that points off-site to prevent open-redirect abuse.
+    if (callback_url && !/^https:\/\/(www\.)?pilgrimspath\.io\//i.test(callback_url)) {
+      return res.status(400).json({ error: 'Invalid callback_url' });
     }
 
     // Initialize transaction via Paystack API
     const payload = JSON.stringify({
       email,
-      amount: Math.round(amount * 100), // Paystack uses kobo/cents
+      amount: Math.round(amt * 100), // Paystack uses kobo/cents
       currency: 'USD',
       callback_url: callback_url || 'https://www.pilgrimspath.io/dashboard.html?payment=success',
       metadata: {

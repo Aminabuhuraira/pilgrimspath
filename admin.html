@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
     <meta name="theme-color" content="#0A0F1E">
+    <script>
+    if(window.location.protocol === 'http:' && window.location.hostname === 'localhost' && window.location.port === '3000'){
+        window.location.replace('http://127.0.0.1:3000' + window.location.pathname + window.location.search + window.location.hash);
+    }
+    </script>
     <title>Admin Dashboard | Pilgrim's Path</title>
     <link rel="stylesheet" href="admin-dashboard.css?v=2">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -141,25 +146,25 @@
         <div class="stat-card gold">
             <div class="stat-icon"><i class="fas fa-users"></i></div>
             <div class="stat-label">Total Users</div>
-            <div class="stat-value" id="statTotalUsers">—</div>
+            <div class="stat-value" id="statTotalUsers">â€”</div>
             <div class="stat-trend up"><i class="fas fa-arrow-up"></i> <span id="statUsersTrend">0%</span> this month</div>
         </div>
         <div class="stat-card blue">
             <div class="stat-icon"><i class="fas fa-vr-cardboard"></i></div>
             <div class="stat-label">VR Sessions</div>
-            <div class="stat-value" id="statVRSessions">—</div>
+            <div class="stat-value" id="statVRSessions">â€”</div>
             <div class="stat-trend up"><i class="fas fa-arrow-up"></i> <span id="statVRTrend">0%</span> this week</div>
         </div>
         <div class="stat-card green">
             <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
             <div class="stat-label">Revenue (MTD)</div>
-            <div class="stat-value" id="statRevenue">—</div>
+            <div class="stat-value" id="statRevenue">â€”</div>
             <div class="stat-trend up"><i class="fas fa-arrow-up"></i> <span id="statRevTrend">0%</span> vs last month</div>
         </div>
         <div class="stat-card orange">
             <div class="stat-icon"><i class="fas fa-envelope-open"></i></div>
             <div class="stat-label">Email Leads</div>
-            <div class="stat-value" id="statLeads">—</div>
+            <div class="stat-value" id="statLeads">â€”</div>
             <div class="stat-trend up"><i class="fas fa-arrow-up"></i> <span id="statLeadsTrend">0%</span> this week</div>
         </div>
     </div>
@@ -225,22 +230,22 @@
         <div class="stat-card gold">
             <div class="stat-icon"><i class="fas fa-user-plus"></i></div>
             <div class="stat-label">New This Week</div>
-            <div class="stat-value" id="usersNewWeek">—</div>
+            <div class="stat-value" id="usersNewWeek">â€”</div>
         </div>
         <div class="stat-card green">
             <div class="stat-icon"><i class="fas fa-user-check"></i></div>
             <div class="stat-label">Active (30d)</div>
-            <div class="stat-value" id="usersActive30">—</div>
+            <div class="stat-value" id="usersActive30">â€”</div>
         </div>
         <div class="stat-card blue">
             <div class="stat-icon"><i class="fas fa-crown"></i></div>
             <div class="stat-label">Premium Users</div>
-            <div class="stat-value" id="usersPremium">—</div>
+            <div class="stat-value" id="usersPremium">â€”</div>
         </div>
         <div class="stat-card orange">
             <div class="stat-icon"><i class="fas fa-building"></i></div>
             <div class="stat-label">Agency Accounts</div>
-            <div class="stat-value" id="usersAgency">—</div>
+            <div class="stat-value" id="usersAgency">â€”</div>
         </div>
     </div>
 
@@ -816,7 +821,7 @@ Example: Write 5 Instagram captions for promoting our VR Hajj experience during 
         <h1>Journey Content Manager</h1>
         <p>Edit banner text, audio voiceovers, and translations across the entire 16-step VR Hajj journey</p>
     </div>
-    <div id="journeyContentMount"><div style="padding:40px;text-align:center;color:var(--text-muted)">Loading…</div></div>
+    <div id="journeyContentMount"><div style="padding:40px;text-align:center;color:var(--text-muted)">Loadingâ€¦</div></div>
 </section>
 
 <!-- ============================================ -->
@@ -983,7 +988,7 @@ function showDashboard(){
 </script>
 <script src="admin-dashboard.js?v=4"></script>
 <script src="panorama-catalog.js?v=1"></script>
-<script src="button-catalog.js?v=1"></script>
-<script src="admin-journey-content.js?v=11"></script>
+<script src="button-catalog.js?v=2"></script>
+<script src="admin-journey-content.js?v=15"></script>
 </body>
 </html>

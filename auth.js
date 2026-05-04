@@ -6,10 +6,56 @@
 const SUPABASE_URL = 'https://giftctxrqvlfekhzpcaa.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpZnRjdHhycXZsZmVraHpwY2FhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3MTg0NjQsImV4cCI6MjA4ODI5NDQ2NH0.Dm4tb6lvLMf9CDLo04qA9msYVLjBT-Web48pgk0BOYc';
 
-// Initialize Supabase client
+// ===== SESSION PERSISTENCE (powers the "Remember me" checkbox) =====
+// We use a custom storage proxy so we can swap between localStorage (persistent)
+// and sessionStorage (tab-only) BEFORE the session is written by Supabase.
+// The decision is made at login time via setSessionPersistence(); returning
+// users keep their previous preference stored in localStorage under pp_remember_me.
+const _sessionPref = {
+    persistent: localStorage.getItem('pp_remember_me') !== '0'  // default: persist
+};
+
+const _sbStorage = {
+    getItem(key) {
+        // Check sessionStorage first (non-persistent session), then localStorage.
+        const ss = window.sessionStorage.getItem(key);
+        return ss !== null ? ss : window.localStorage.getItem(key);
+    },
+    setItem(key, value) {
+        if (_sessionPref.persistent) {
+            window.localStorage.setItem(key, value);
+            window.sessionStorage.removeItem(key); // clean up old non-persistent token
+        } else {
+            window.sessionStorage.setItem(key, value);
+            window.localStorage.removeItem(key); // don't persist across browser restarts
+        }
+    },
+    removeItem(key) {
+        window.localStorage.removeItem(key);
+        window.sessionStorage.removeItem(key);
+    }
+};
+
+/**
+ * Call this BEFORE signIn() to set whether the session should survive
+ * a browser restart. The login form calls this based on the checkbox.
+ */
+function setSessionPersistence(persist) {
+    _sessionPref.persistent = !!persist;
+    localStorage.setItem('pp_remember_me', persist ? '1' : '0');
+}
+
+// Initialize Supabase client with the custom storage adapter.
 // NOTE: the CDN UMD bundle declares `var supabase` globally, so we use a
 // different name here to avoid a SyntaxError from redeclaring with const.
-const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: {
+        storage: _sbStorage,
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+    }
+});
 
 // ===== AUTH FUNCTIONS =====
 

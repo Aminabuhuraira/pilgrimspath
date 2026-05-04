@@ -21,8 +21,8 @@ src="https://www.facebook.com/tr?id=1199634958501931&ev=PageView&noscript=1"
 <!-- End Meta Pixel Code -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Halaq — Shave the Head (Step 11, Day 10)</title>
-<script src="/admin-journey-content.js?v=11"></script>
-<script src="/journey-content-loader.js?v=28"></script>
+<script src="/admin-journey-content.js?v=15"></script>
+<script src="/journey-content-loader.js?v=33"></script>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -225,7 +225,7 @@ html,body{height:100%;overflow:hidden}
     <div class="scene-bg"></div>
     <div class="scene-card">
         <!-- Header (context-aware: filled by JS) -->
-        <div class="scene-icon" id="bsIcon">??</div>
+        <div class="scene-icon" id="bsIcon">✂️</div>
         <p class="scene-label" id="bsLabel">Step 11 of 16 · Day of Sacrifice</p>
         <h1 class="scene-title" id="bsTitle">Halaq — Shaving the Head</h1>
         <div class="scene-divider"></div>
@@ -368,15 +368,15 @@ html,body{height:100%;overflow:hidden}
         <!-- Two options: Halq vs Taqsir -->
         <div class="options-row">
             <div class="option-card">
-                <div class="option-icon">??</div>
+                <div class="option-icon">🪒</div>
                 <div class="option-name">Halq</div>
-                <div class="option-arabic">?????</div>
-                <p class="option-desc">Complete head shaving — considered the more virtuous option. The Prophet ? made dua thrice for those who shave.</p>
+                <div class="option-arabic">حَلْق</div>
+                <p class="option-desc">Complete head shaving — considered the more virtuous option. The Prophet ﷺ made dua thrice for those who shave.</p>
             </div>
             <div class="option-card">
-                <div class="option-icon">??</div>
+                <div class="option-icon">✂️</div>
                 <div class="option-name">Taqsir</div>
-                <div class="option-arabic">????????</div>
+                <div class="option-arabic">تَقْصِير</div>
                 <p class="option-desc">Trimming at least a fingertip's length of hair from all over the head. Required option for women.</p>
             </div>
         </div>
@@ -391,8 +391,8 @@ html,body{height:100%;overflow:hidden}
 
         <!-- Dua -->
         <div class="dua-block">
-            <p class="dua-arabic">?????????? ??????? ???????????????? ?????????????????</p>
-            <p class="dua-translit">"Allahumma-ghfir lil-muhalliqeena wal-muqasssireen"</p>
+            <p class="dua-arabic">اللَّهُمَّ اغْفِرْ لِلْمُحَلِّقِينَ وَالْمُقَصِّرِينَ</p>
+            <p class="dua-translit">"Allahumma-ghfir lil-muhalliqeena wal-muqassireen"</p>
             <p class="dua-translation">"O Allah, forgive those who shave their heads and those who trim their hair."</p>
         </div>
     </div>
@@ -424,7 +424,7 @@ document.addEventListener('DOMContentLoaded', function(){
 #barberContinue .bcIcon{font-size:18px;}
 @media(max-width:480px){#barberContinue{font-size:13px;padding:12px 22px;bottom:90px;}}
 </style>
-<button id="barberContinue"><span class="bcIcon">??</span> <span id="barberContinueLabel">Continue to Tawaf al-Ifadah ?</span></button>
+<button id="barberContinue" data-pp-button="barberContinue"><span class="bcIcon">🕋</span> <span id="barberContinueLabel">Continue to Tawaf al-Ifadah ▸</span></button>
 <script>
 (function(){
   // This scene is now Step 11 (post-Hajj Halaq) ONLY. Step 3 lives in umrah-trim-scene.html.
@@ -432,6 +432,10 @@ document.addEventListener('DOMContentLoaded', function(){
   var btn = document.getElementById('barberContinue');
   if(!btn) return;
   btn.addEventListener('click', function(){
+    // If journey-content-loader has bound this button (admin banner/VO),
+    // yield to it on the first click so the banner/voiceover plays.
+    // The loader will re-dispatch the click with ppAllowNative='1'.
+    if(btn.dataset.ppBound === '1' && btn.dataset.ppAllowNative !== '1') return;
     var nav = function(){
       if(window.jm && typeof window.jm.goToStep==='function') window.jm.goToStep(12);
       else window.location.href = '../1%20Tawaf/index.htm?journey=12&context=ifadha';
@@ -454,6 +458,6 @@ fbq('track', 'ViewContent', {
 <!-- --- Scene Navigation Overlay --- -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='barber';</script>
 <script src="../../scene-nav-overlay.js?v=10" defer></script>
-<!-- VO autoplay handled by /journey-content-loader.js?v=28 (fireSceneLoad ? bu-load / bh-load) -->
+<!-- VO autoplay handled by /journey-content-loader.js?v=33 (fireSceneLoad ? bu-load / bh-load) -->
 </body>
 </html>

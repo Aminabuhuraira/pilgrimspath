@@ -4,8 +4,9 @@
 
 const https = require('https');
 const crypto = require('crypto');
+const { applyCors, rateLimit } = require('./_security');
 
-const DATASET_ID = '1267382605021300';
+const DATASET_ID = process.env.META_DATASET_ID || '1267382605021300';
 const ACCESS_TOKEN = process.env.META_CAPI_TOKEN || '';
 const API_VERSION = 'v19.0';
 
@@ -81,19 +82,10 @@ function postToMeta(event) {
 }
 
 module.exports = async function handler(req, res) {
-  // CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  // Preflight
-  if (req.method === 'OPTIONS') {
-    return res.status(204).end();
-  }
-
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+  if (!applyCors(req, res, 'POST, OPTIONS')) return;
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  // 60 events / minute / IP — generous for legit page traffic, blocks floods.
+  if (!rateLimit(req, res, { windowMs: 60_000, max: 60 })) return;
 
   try {
     const data = req.body;

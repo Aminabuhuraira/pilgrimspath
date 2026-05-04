@@ -179,19 +179,19 @@
     },
     {
       "id": "",
-      "text": "↺ Reset",
+      "text": "&#x21BA;",
       "cls": "scReset",
       "onclick": "saiLapReset()"
     },
     {
-      "id": "",
-      "text": "Next Scene ▸",
+      "id": "saiNextSceneBtn",
+      "text": "Next Scene &#x25B8;",
       "cls": "",
-      "onclick": "sessionStorage.removeItem('saiLaps');document.getElementById('saiComplete').style.display='none';if(typeof showJourneyNextButton==='function'){showJourneyNextButton();}"
+      "onclick": ""
     },
     {
       "id": "",
-      "text": "↺ Restart Sa'i",
+      "text": "&#x21BA; Restart Sa'i",
       "cls": "scReset",
       "onclick": "saiLapReset();document.getElementById('saiComplete').style.display='none';location.reload()"
     }
@@ -199,7 +199,7 @@
   "mina-8th": [
     {
       "id": "minaContinue",
-      "text": "🗺️ Continue to Jamarat ▸",
+      "text": "🕋 Continue to Jamarat ▸",
       "cls": "",
       "onclick": ""
     },
@@ -208,12 +208,30 @@
       "text": "'+btn+'",
       "cls": "",
       "onclick": "dismissBanner()"
+    },
+    {
+      "id": "mnEndContinue",
+      "text": "Continue to Next Scene \\u25b8",
+      "cls": "",
+      "onclick": ""
+    },
+    {
+      "id": "mnEndExplore",
+      "text": "Keep Exploring",
+      "cls": "",
+      "onclick": ""
+    },
+    {
+      "id": "mnEndRestart",
+      "text": "\\u21bb Restart Scene",
+      "cls": "",
+      "onclick": ""
     }
   ],
   "mina-tents-12": [
     {
       "id": "minaContinue",
-      "text": "🗺️ Continue to Jamarat ▸",
+      "text": "🕋 Continue to Jamarat ▸",
       "cls": "",
       "onclick": ""
     },
@@ -222,6 +240,24 @@
       "text": "'+btn+'",
       "cls": "",
       "onclick": "dismissBanner()"
+    },
+    {
+      "id": "mnEndContinue",
+      "text": "Continue to Next Scene \\u25b8",
+      "cls": "",
+      "onclick": ""
+    },
+    {
+      "id": "mnEndExplore",
+      "text": "Keep Exploring",
+      "cls": "",
+      "onclick": ""
+    },
+    {
+      "id": "mnEndRestart",
+      "text": "\\u21bb Restart Scene",
+      "cls": "",
+      "onclick": ""
     }
   ],
   "arafah-9th": [
@@ -230,9 +266,33 @@
       "text": "'+btn+'",
       "cls": "",
       "onclick": "dismissBanner()"
+    },
+    {
+      "id": "arEndContinue",
+      "text": "Continue to Muzdalifah \\u25b8",
+      "cls": "",
+      "onclick": ""
+    },
+    {
+      "id": "arEndExplore",
+      "text": "Keep Exploring",
+      "cls": "",
+      "onclick": ""
+    },
+    {
+      "id": "arEndRestart",
+      "text": "\\u21bb Restart Scene",
+      "cls": "",
+      "onclick": ""
     }
   ],
   "muzdalifah-9th": [
+    {
+      "id": "",
+      "text": "Collect Again",
+      "cls": "",
+      "onclick": "resetPebbles()"
+    },
     {
       "id": "",
       "text": "Begin Collecting ▸",
@@ -240,10 +300,22 @@
       "onclick": "dismissMuzGuide()"
     },
     {
-      "id": "",
-      "text": "Collect Again",
+      "id": "pbContinue",
+      "text": "Continue to Next Scene ▸",
       "cls": "",
-      "onclick": "resetPebbles()"
+      "onclick": ""
+    },
+    {
+      "id": "pbExplore",
+      "text": "Keep Exploring",
+      "cls": "",
+      "onclick": ""
+    },
+    {
+      "id": "pbRestart",
+      "text": "\\u21bb Restart Scene",
+      "cls": "",
+      "onclick": ""
     }
   ],
   "jamarat-10th": [
@@ -317,13 +389,13 @@
   "jamarat-11th": [
     {
       "id": "jamarThrowBtn",
-      "text": "🪨 Throw Stone (1/7)",
+      "text": "?? Throw Stone (1/7)",
       "cls": "",
       "onclick": "throwStone()"
     },
     {
       "id": "",
-      "text": "Begin Stoning ▸",
+      "text": "Begin Stoning &#x25B8;",
       "cls": "",
       "onclick": "dismissGuide()"
     },
@@ -343,13 +415,13 @@
   "jamarat-12th": [
     {
       "id": "jamarThrowBtn",
-      "text": "🪨 Throw Stone (1/7)",
+      "text": "?? Throw Stone (1/7)",
       "cls": "",
       "onclick": "throwStone()"
     },
     {
       "id": "",
-      "text": "Begin Stoning ▸",
+      "text": "Begin Stoning &#x25B8;",
       "cls": "",
       "onclick": "dismissGuide()"
     },
@@ -368,8 +440,8 @@
   ],
   "barber-umrah": [
     {
-      "id": "barberContinue",
-      "text": "🕋 Continue ▸",
+      "id": "umrahTrimContinue",
+      "text": "🌙 Continue: Rest &amp; Prepare ▸",
       "cls": "",
       "onclick": ""
     }
@@ -378,7 +450,7 @@
   "barber-hajj": [
     {
       "id": "barberContinue",
-      "text": "🕋 Continue ▸",
+      "text": "🕋 Continue to Tawaf al-Ifadah",
       "cls": "",
       "onclick": ""
     }

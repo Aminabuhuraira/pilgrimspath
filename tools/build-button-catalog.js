@@ -29,7 +29,7 @@ const SCENE_KEY_TO_FILE = {
   'jamarat-10th':   'Jamarat Aqabah/index.htm',
   'jamarat-11th':   'Jamarat Base 2/index.htm',
   'jamarat-12th':   'Jamarat Base 2/index.htm',
-  'barber-umrah':   '5 Rami Jamarat, Qurbani, trim Shave, Tawaf/barber-scene.html',
+  'barber-umrah':   '5 Rami Jamarat, Qurbani, trim Shave, Tawaf/umrah-trim-scene.html',
   'qurbani-10th':   '5 Rami Jamarat, Qurbani, trim Shave, Tawaf/qurbani-scene.html',
   'barber-hajj':    '5 Rami Jamarat, Qurbani, trim Shave, Tawaf/barber-scene.html',
   'rest-umrah':     '0 Ihram/rest-scene.html',

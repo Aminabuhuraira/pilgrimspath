@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════
-   PILGRIM'S PATH — Journey Content Loader (v4)
+  PILGRIM'S PATH — Journey Content Loader (v5)
    Reads admin overrides from localStorage and exposes them to scenes.
 
    v4 additions:
@@ -14,12 +14,24 @@
    ═══════════════════════════════════════════════════════════════════ */
 (function(){
 'use strict';
+if(window.location && window.location.protocol === 'http:' && window.location.hostname === 'localhost' && window.location.port === '3000'){
+  window.location.replace('http://127.0.0.1:3000' + window.location.pathname + window.location.search + window.location.hash);
+  return;
+}
 var KEY = 'pp_journey_content_v1';
 var LANG_KEY = 'pp_user_lang';
 var AUDIO_BASE_ROOT = '/hajj%20voiceover%20english/';
 var DEFAULT_LANG_FOLDERS = {en:'English/',ar:'Arabic/',fr:'French/',ur:'Urdu/',tr:'Turkish/',id:'Indonesian/',ms:'Malay/',es:'Spanish/',fa:'Persian/'};
 var data = null;
 try{ data = JSON.parse(localStorage.getItem(KEY)); }catch(e){}
+// If the admin content script is present, force its load/resync path to run so
+// seed-version updates and newly added default banners propagate into existing data.
+if(window.PPJourneyContent && typeof window.PPJourneyContent.get === 'function'){
+  try{
+    window.PPJourneyContent.get('tawaf-initial','tw-guide-0','en');
+    data = JSON.parse(localStorage.getItem(KEY));
+  }catch(e){ console.warn('[PPContent v5] admin sync failed', e); }
+}
 function migrateMistakenStep15CompletionData(){
   if(!data || !data.scenes) return;
   var scene = data.scenes.find(function(s){ return s.key === 'jamarat-12th'; });
@@ -397,7 +409,7 @@ function showAdminBanner(opts){
   var title = opts.title||'';
   var html = opts.html||'';
   el.innerHTML = '<div class="sceneBannerBody">'+(title?'<h3 style="margin:0 0 12px;color:#D4AF37">'+title+'</h3>':'')+html+
-    '<div style="margin-top:14px;text-align:center"><button onclick="(function(){var e=document.getElementById(\'sceneBanner\');var b=document.getElementById(\'sceneBannerBackdrop\');if(e){e.style.opacity=\'0\';e.style.transform=\'translate(-50%,-50%) scale(.92)\';setTimeout(function(){e.style.display=\'none\';},340);}if(b){b.style.opacity=\'0\';setTimeout(function(){b.style.display=\'none\';},340);}try{if(typeof window.dismissBanner===\'function\')window.dismissBanner();}catch(_){}})()" style="background:#D4AF37;color:#1a1a2e;border:none;padding:8px 22px;border-radius:6px;font-weight:700;cursor:pointer;font-size:.85rem">Continue \u25b8</button></div>'+
+    '<div style="margin-top:14px;text-align:center"><button onclick="(function(){var e=document.getElementById(\'sceneBanner\');var b=document.getElementById(\'sceneBannerBackdrop\');if(e){e.style.opacity=\'0\';e.style.transform=\'translate(-50%,-50%) scale(.92)\';setTimeout(function(){e.style.display=\'none\';},340);}if(b){b.style.opacity=\'0\';setTimeout(function(){b.style.display=\'none\';},340);}try{if(typeof window.dismissBanner===\'function\')window.dismissBanner();}catch(_){}try{if(typeof window.__ppSceneBannerAfterClose===\'function\'){var fn=window.__ppSceneBannerAfterClose;window.__ppSceneBannerAfterClose=null;fn();}}catch(_){window.__ppSceneBannerAfterClose=null;}})()" style="background:#D4AF37;color:#1a1a2e;border:none;padding:8px 22px;border-radius:6px;font-weight:700;cursor:pointer;font-size:.85rem">Continue \u25b8</button></div>'+
     '</div>';
   // Make sure starting state is reset before showing (handles re-show case)
   el.style.display = 'block';
@@ -422,6 +434,22 @@ function autoWireButtons(){
   if(!key) return;
   var btns = byButton(key);
   if(!btns.length) return;
+  function resumeButtonAction(el){
+    if(!el || el.dataset.ppResumePending==='1') return;
+    el.dataset.ppResumePending = '1';
+    setTimeout(function(){
+      el.dataset.ppAllowNative = '1';
+      try{
+        if(typeof el.click === 'function') el.click();
+        else if(typeof el.onclick === 'function') el.onclick();
+      }finally{
+        setTimeout(function(){
+          delete el.dataset.ppAllowNative;
+          delete el.dataset.ppResumePending;
+        }, 0);
+      }
+    }, 0);
+  }
   btns.forEach(function(b){
     if(!b.buttonId && !b.buttonLabel) {
       console.warn('[PPContent] button banner "'+(b.id||'?')+'" has no buttonId or buttonLabel — skipping');
@@ -440,12 +468,21 @@ function autoWireButtons(){
     if(el.dataset.ppBound==='1') return;
     el.dataset.ppBound = '1';
     console.log('[PPContent] wired button: "'+(el.textContent||'').trim().slice(0,40)+'" → '+(b.audio||'(no audio)')+(b.audioChain?' → '+b.audioChain:''));
-    el.addEventListener('click', function(){
+    el.addEventListener('click', function(e){
+      if(el.dataset.ppAllowNative==='1') return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
       // Suppress the first-interaction welcome VO so admin's button audio wins cleanly
       window._welcomeVoStarted = true;
+      var resume = function(){ resumeButtonAction(el); };
       if(b.audio){ ppPlayVOAuto(b.audio); if(b.audioChain) window._voChainPending = b.audioChain; }
-      if(b.title || b.html){ showAdminBanner({title:b.title, html:b.html, template:b.template, position:b.position}); }
-    });
+      if(b.title || b.html){
+        window.__ppSceneBannerAfterClose = resume;
+        showAdminBanner({title:b.title, html:b.html, template:b.template, position:b.position});
+        return;
+      }
+      resume();
+    }, true);
   });
 }
 

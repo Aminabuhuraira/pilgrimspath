@@ -1,16 +1,20 @@
 // api/claude.js — Claude AI proxy for Admin Dashboard
 // Vercel Serverless Function (Node.js runtime)
-// Streams Anthropic API responses to the client
+// Streams Anthropic API responses to the client.
+//
+// SECURITY: requires ADMIN_API_TOKEN bearer (admin dashboard sends it from
+// sessionStorage after login) AND a same-origin/allow-list CORS check, plus
+// per-IP rate limiting. Without these, anyone could drain the Anthropic key.
+
+const { applyCors, requireAdminToken, rateLimit } = require('./_security');
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || '';
 
 module.exports = async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') return res.status(204).end();
+  if (!applyCors(req, res, 'POST, OPTIONS')) return;
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  if (!rateLimit(req, res, { windowMs: 60_000, max: 20 })) return;
+  if (!requireAdminToken(req, res)) return;
 
   if (!ANTHROPIC_API_KEY) {
     return res.status(500).json({ error: 'ANTHROPIC_API_KEY not configured in environment variables' });

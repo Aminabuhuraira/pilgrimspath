@@ -11,7 +11,7 @@
 
 var STORAGE_KEY = 'pp_journey_content_v1';
 var AUDIO_BASE_ROOT = '/hajj%20voiceover%20english/';
-var SEED_VERSION = 13; // bump to force re-sync of banner text/audio from DEFAULT_DATA
+var SEED_VERSION = 16; // bump to force re-sync of banner text/audio from DEFAULT_DATA
 // Banner IDs whose text/audio MUST be force-overwritten from DEFAULT_DATA on the next
 // SEED_VERSION bump (overrides the "preserve user customisations" rule for these
 // specific banners). Use sparingly — only when admin defaults were wrong and user-edited
@@ -289,6 +289,9 @@ var DEFAULT_DATA = {
         defB({ id:'bh-load', trigger:'scene-load', label:'Scene load — Halaq', template:'side-card',
           text:{en:{title:'✂️ Halaq — Shaving the Head',body:'<p class="bb">Men fully shave or trim their hair. Women trim a fingertip\'s length. This marks the end of most Ihram restrictions.</p>'}},
           audio:{en:'22 English 10th day Dhul Hijjah 4.mp3'} })
+        ,defB({ id:'bh-continue', trigger:'button', label:'Button — Continue to Tawaf al-Ifadah', template:'midnight-blue', buttonId:'barberContinue', buttonLabel:'Continue to Tawaf al-Ifadah',
+          text:{en:{title:'🕋 Tawaf al-Ifadah',body:'<p class="bb">You will now proceed to Tawaf al-Ifadah, the obligatory circumambulation performed after the sacrifice and Halaq.</p><p class="bb">When you press Continue, you will enter the Haram and begin this next essential rite of Hajj.</p>'}},
+          audio:{en:'23 English 10th day Dhul Hijjah 5.mp3'} })
       ]},
 
     /* ──────────── Step 12 — Tawaf al-Ifadha ──────────── */
@@ -304,8 +307,11 @@ var DEFAULT_DATA = {
         defB({ id:'ti-pano-3', trigger:'panorama', panorama:'panorama_8AF67A73_955C_4E01_41DA_44BCCE2B395A', label:'Ifadha progress',
           text:{en:{title:'🕋 Journey Back to Mina',body:'<p class="bb">You are returning to Mina after completing Tawaf al-Ifadha. Prepare for the overnight stay at Mina and the remaining days of Tashreeq.</p>'}},
           audio:{en:'25 English 10th day Dhul Hijjah 7.mp3'} }),
-        defB({ id:'ti-pano-4', trigger:'panorama', panorama:'panorama_8AC63E8D_9544_C601_41E0_0A05A67E5557', label:'Ifadha completion',
+        defB({ id:'ti-pano-4', trigger:'panorama', panorama:'panorama_8AC63E8D_9544_C601_41E0_0A05A67E5557', label:'Ifadha progress — back at Mina',
           text:{en:{title:'🧎 Preparing for Mina Nights',body:'<p class="bb">You are now back at Mina. Rest, pray, and prepare for the remaining days of Tashreeq — the 11th and 12th (or 13th) of Dhul-Hijjah.</p>'}},
+          audio:{en:''} }),
+        defB({ id:'ti-complete', trigger:'completion', label:'Completion — Tawaf al-Ifadha finished (7 circuits)', template:'sunrise-gold',
+          text:{en:{title:'🎉 Tawaf al-Ifadha Complete',body:'<p class="bb">MashaAllah — you have completed Tawaf al-Ifadha, an essential pillar of Hajj.</p><p class="bb">After this Tawaf, all remaining Ihram restrictions are lifted (Tahallul al-Thani). When you are ready, tap <strong>Next Stop →</strong> to return to Mina for the nights of Tashreeq.</p>'}},
           audio:{en:''} })
       ]},
 
@@ -463,6 +469,9 @@ function resyncFromDefaults(){
       if(!lb.trigger && db.trigger) lb.trigger = db.trigger;
       if(!lb.panorama && db.panorama) lb.panorama = db.panorama;
       if(!lb.label && db.label) lb.label = db.label;
+      // Fill in button wiring fields if missing — critical for button-trigger banners
+      if(!lb.buttonId && db.buttonId) lb.buttonId = db.buttonId;
+      if(!lb.buttonLabel && db.buttonLabel) lb.buttonLabel = db.buttonLabel;
     });
   });
 }

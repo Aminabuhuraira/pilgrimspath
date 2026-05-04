@@ -684,11 +684,28 @@ function populateTransactions() {
 }
 
 // ===== CLAUDE AI INTEGRATION =====
+// The /api/claude endpoint requires a bearer token (ADMIN_API_TOKEN on server).
+// The admin sets this once via the "AI Settings" prompt; it is kept in
+// sessionStorage and never written to the page DOM.
+function getAdminApiToken() {
+    let t = sessionStorage.getItem('pp_admin_api_token') || '';
+    if (!t) {
+        t = (window.prompt('Enter the ADMIN_API_TOKEN (set on the server in .env):') || '').trim();
+        if (t) sessionStorage.setItem('pp_admin_api_token', t);
+    }
+    return t;
+}
+
 async function callClaude(messages, systemPrompt) {
     try {
+        const token = getAdminApiToken();
+        if (!token) throw new Error('Admin API token required');
         const res = await fetch(CLAUDE_PROXY, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
             body: JSON.stringify({
                 messages,
                 system: systemPrompt || 'You are an expert Islamic travel and pilgrimage marketing strategist for Pilgrim\'s Path, a virtual 360° Hajj & Umrah VR experience platform. Pricing: Free tier, $19/year Individual, $999/year Agency. Always provide actionable, culturally sensitive marketing advice.',
@@ -696,16 +713,20 @@ async function callClaude(messages, systemPrompt) {
             })
         });
 
+        if (res.status === 401) {
+            sessionStorage.removeItem('pp_admin_api_token');
+            throw new Error('Invalid admin token — cleared, try again');
+        }
         if (!res.ok) {
-            const err = await res.json();
-            throw new Error(err.detail || err.error || 'API error');
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.detail || err.error || ('API error ' + res.status));
         }
 
         const data = await res.json();
         return data.content?.[0]?.text || data.content || 'No response generated.';
     } catch (e) {
         console.error('Claude API error:', e);
-        return `⚠️ AI Error: ${e.message}\n\nIf running locally, ensure ANTHROPIC_API_KEY is set in your environment. The Claude AI proxy at /api/claude must be available.`;
+        return `⚠️ AI Error: ${e.message}\n\nIf running locally, ensure ANTHROPIC_API_KEY and ADMIN_API_TOKEN are set in the server environment. The Claude AI proxy at /api/claude must be available.`;
     }
 }
 

@@ -5,3 +5,32 @@ capi-server.py
 images/Tawaf area/
 pilgrimspath vr/
 netlify/
+# === Secrets — NEVER commit ===
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+secrets/
+.secrets/
+.config/
+*.crt
+hostinger-*.txt
+**/serviceAccount*.json
+
+# === Local server / build artifacts ===
+*.log
+dist/
+build/
+coverage/
+.cache/
+.idea/
+.vscode/
+
+# === OS junk ===
+Thumbs.db
+desktop.ini
