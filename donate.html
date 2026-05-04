@@ -432,22 +432,45 @@
                 ]
             },
             onSuccess: function(transaction) {
-                // Fire Meta events
-                if (typeof fbq !== 'undefined') {
-                    fbq('track', 'Donate', { value: selectedAmount, currency: 'USD' });
+                var tx = Promise.resolve();
+                if (typeof recordTransaction === 'function') {
+                    tx = recordTransaction({
+                        reference: transaction.reference,
+                        email: email,
+                        amount: selectedAmount,
+                        currency: 'USD',
+                        status: 'completed',
+                        type: 'donation',
+                        plan: 'Donation',
+                        source: 'donate',
+                        metadata: {
+                            custom_fields: [
+                                { display_name: 'Type', variable_name: 'type', value: 'Donation' },
+                                { display_name: 'Amount', variable_name: 'amount', value: '$' + selectedAmount }
+                            ]
+                        }
+                    }).catch(function(err) {
+                        console.warn('[Donation] transaction log skipped', err && err.message);
+                    });
                 }
-                if (typeof MetaCAPI !== 'undefined') {
-                    MetaCAPI.purchase({ value: selectedAmount, currency: 'USD', content_name: 'Donation' }, { em: email });
-                }
-                // Show thank you
-                document.querySelector('.donate-container').innerHTML =
-                    '<div style="text-align:center;padding:60px 20px;">' +
-                        '<div style="font-size:3rem;margin-bottom:16px;">💚</div>' +
-                        '<h2 style="font-family:\'Playfair Display\',serif;font-size:1.8rem;color:#2A2A3C;margin-bottom:12px;">JazakAllahu Khairan!</h2>' +
-                        '<p style="color:#666;font-size:1rem;line-height:1.8;max-width:400px;margin:0 auto 24px;">Your $' + selectedAmount + ' donation has been received. May Allah reward you abundantly and accept your good deeds.</p>' +
-                        '<p style="color:#999;font-size:.85rem;">Receipt: ' + transaction.reference + '</p>' +
-                        '<a href="index.html" style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;padding:14px 28px;border-radius:50px;background:linear-gradient(135deg,#C9A227,#8B7355);color:white;text-decoration:none;font-weight:600;">Return Home <i class="fas fa-arrow-right"></i></a>' +
-                    '</div>';
+                tx.finally(function() {
+                    // Fire Meta events
+                    if (typeof fbq !== 'undefined') {
+                        fbq('track', 'Donate', { value: selectedAmount, currency: 'USD' });
+                    }
+                    if (typeof MetaCAPI !== 'undefined') {
+                        MetaCAPI.purchase({ value: selectedAmount, currency: 'USD', content_name: 'Donation' }, { em: email });
+                    }
+                    // Show thank you
+                    document.querySelector('.donate-container').innerHTML =
+                        '<div style="text-align:center;padding:60px 20px;">' +
+                            '<div style="font-size:3rem;margin-bottom:16px;">💚</div>' +
+                            '<h2 style="font-family:\'Playfair Display\',serif;font-size:1.8rem;color:#2A2A3C;margin-bottom:12px;">JazakAllahu Khairan!</h2>' +
+                            '<p style="color:#666;font-size:1rem;line-height:1.8;max-width:400px;margin:0 auto 24px;">Your $' + selectedAmount + ' donation has been received. May Allah reward you abundantly and accept your good deeds.</p>' +
+                            '<p style="color:#999;font-size:.85rem;">Receipt: ' + transaction.reference + '</p>' +
+                            '<a href="index.html" style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;padding:14px 28px;border-radius:50px;background:linear-gradient(135deg,#C9A227,#8B7355);color:white;text-decoration:none;font-weight:600;">Return Home <i class="fas fa-arrow-right"></i></a>' +
+                        '</div>';
+                });
             },
             onCancel: function() {
                 btn.disabled = false;

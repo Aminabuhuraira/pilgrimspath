@@ -20,6 +20,35 @@ var AUDIO_BASE_ROOT = '/hajj%20voiceover%20english/';
 var DEFAULT_LANG_FOLDERS = {en:'English/',ar:'Arabic/',fr:'French/',ur:'Urdu/',tr:'Turkish/',id:'Indonesian/',ms:'Malay/',es:'Spanish/',fa:'Persian/'};
 var data = null;
 try{ data = JSON.parse(localStorage.getItem(KEY)); }catch(e){}
+function migrateMistakenStep15CompletionData(){
+  if(!data || !data.scenes) return;
+  var scene = data.scenes.find(function(s){ return s.key === 'jamarat-12th'; });
+  if(!scene || !scene.banners) return;
+  var day13 = scene.banners.find(function(b){ return b.id === 'jm12-day13-option'; });
+  var complete = scene.banners.find(function(b){ return b.id === 'jm12-complete'; });
+  if(!day13 || !complete) return;
+  var wrongTitle = 'Well-done on completing the stoning ritual';
+  var wrongBody = '<p class="bb">Well-done on completing the stoning ritual on this day, you have the choice to either:</p><p class="bb">Leave Mina to perform your final tawaf early.</p><p class="bb">or</p><p class="bb">Remain in Mina to continue the ritual on the 13th day.</p>';
+  var wrongAudio = '29 English 12th day dhul hijjah 2.mp3';
+  var oldDay13Title = (((day13.text||{}).en||{}).title) || '';
+  var oldDay13Body = (((day13.text||{}).en||{}).body) || '';
+  var oldDay13Audio = ((day13.audio||{}).en) || '';
+  if(oldDay13Title !== wrongTitle || oldDay13Body !== wrongBody || oldDay13Audio !== wrongAudio) return;
+  day13.text = day13.text || {};
+  day13.text.en = day13.text.en || {};
+  day13.audio = day13.audio || {};
+  day13.text.en.title = '🌙 Decision: Stay or Leave Mina';
+  day13.text.en.body = '<p class="bb">You have two options:</p><p class="bb"><strong>Option 1 — Depart today (12th):</strong> You may leave Mina before sunset and proceed to Masjid al-Haram for Tawaf al-Wida.</p><p class="bb"><strong>Option 2 — Stay until 13th:</strong> If you remain at Mina until after sunrise on the 13th, you must perform the stoning again (21 pebbles across the three pillars) before departing.</p>';
+  day13.audio.en = '30 English Day 13 dhul hijjah 1.mp3';
+  complete.text = complete.text || {};
+  complete.text.en = complete.text.en || {};
+  complete.audio = complete.audio || {};
+  complete.template = 'midnight-blue';
+  complete.text.en.title = wrongTitle;
+  complete.text.en.body = wrongBody;
+  complete.audio.en = wrongAudio;
+  try{ localStorage.setItem(KEY, JSON.stringify(data)); }catch(_){ }
+}
 // Self-seed defaults from admin script (if present) so first-time visitors
 // who haven't opened admin still get full content + correct audio file names.
 if(!data && window.PPJourneyContent && typeof window.PPJourneyContent.get === 'function'){
@@ -29,6 +58,7 @@ if(!data && window.PPJourneyContent && typeof window.PPJourneyContent.get === 'f
     console.log('[PPContent v4] auto-seeded defaults from admin DEFAULT_DATA');
   }catch(e){ console.warn('[PPContent v4] auto-seed failed', e); }
 }
+migrateMistakenStep15CompletionData();
 var lang = localStorage.getItem(LANG_KEY) || 'en';
 
 try{
@@ -106,7 +136,9 @@ function byButton(sceneKey){
 function byCompletion(sceneKey){
   var s=getScene(sceneKey); if(!s) return null;
   var candidates = s.banners.filter(function(b){return b.trigger==='completion';});
-  var b = candidates.find(function(x){ var t=textFor(x)||{}; return audioFile(x) || t.body || t.title; }) || candidates[0];
+  var b = candidates.find(function(x){ return /-complete$/i.test(x.id||''); })
+    || candidates.find(function(x){ var t=textFor(x)||{}; return audioFile(x) || t.body || t.title; })
+    || candidates[0];
   if(!b) return null;
   var t=textFor(b)||{};
   return { id:b.id, title:t.title||'', html:t.body||'', audio:audioFile(b)||'', template:b.template||'sunrise-gold', position:b.position||{x:50,y:50} };
@@ -148,12 +180,12 @@ function applyTemplate(elementSelector, tplId, pos){
 
 /* ─── Scene-key auto-detection from URL path ─── */
 var SCENE_PATH_MAP = [
+  {re:/jamarat base update 2/i,         key:'jamarat-12th'},
   {re:/Jamarat Base 2/i,                key:'jamarat-12th'},
   {re:/Jamarat rooftop basement/i,      key:'jamarat-11th'},
   {re:/Jamarat rooftop/i,               key:'jamarat-10th'},
   {re:/Jamarat Aqabah/i,                key:'jamarat-10th'},
-  {re:/jamarat base/i,                  key:'jamarat-11th'},
-  {re:/Muzdalifah/i,                    key:'arafah-9th'},
+  {re:/Muzdalifah/i,                    key:'muzdalifah-9th'},
   {re:/4 Arafah/i,                      key:'arafah-9th'},
   {re:/3 Mina/i,                        key:'mina-8th'},
   {re:/2 Safa and Marwa/i,              key:'safa-marwa'},
@@ -359,7 +391,7 @@ function showAdminBanner(opts){
   if(!bd){
     bd = document.createElement('div');
     bd.id = 'sceneBannerBackdrop';
-    bd.style.cssText = 'position:fixed;inset:0;z-index:98999;background:rgba(8,6,12,.32);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:opacity .35s ease;display:none';
+      bd.style.cssText = 'position:fixed;inset:0;z-index:98999;background:rgba(8,6,12,.12);opacity:0;pointer-events:none;transition:opacity .35s ease;display:none';
     document.body.appendChild(bd);
   }
   var title = opts.title||'';
@@ -425,7 +457,8 @@ function wrapCompletionTrigger(){
   if(!orig || orig.__ppWrapped) return;
   var wrapped = function(){
     try{
-      if(!wrapped.__fired){
+      var completionReady = window.journeyActivityComplete === true || window.journeyIsLastPanorama === true;
+      if(completionReady && !wrapped.__fired){
         wrapped.__fired = true;
         var key = detectSceneKey();
         var comp = key && byCompletion(key);

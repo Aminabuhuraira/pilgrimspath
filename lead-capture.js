@@ -16,7 +16,7 @@
     var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpZnRjdHhycXZsZmVraHpwY2FhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3MTg0NjQsImV4cCI6MjA4ODI5NDQ2NH0.Dm4tb6lvLMf9CDLo04qA9msYVLjBT-Web48pgk0BOYc';
 
     // Don't show on login/register/dashboard pages
-    var skip = ['/login.html', '/dashboard.html', '/admin.html'];
+    var skip = ['/login.html', '/dashboard.html', '/admin.html', '/sanctum-admin-7f3k9q2m'];
     if (skip.some(function(p) { return location.pathname.indexOf(p) !== -1; })) return;
 
     // Check if user is already logged in

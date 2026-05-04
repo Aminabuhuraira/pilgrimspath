@@ -6,6 +6,7 @@
     <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, width=device-width, viewport-fit=cover" data-tdv-general-scale="0.5"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <script src="/journey-content-loader.js?v=28"></script>
     <script src="lib/tdvplayer.js?v=1777651137952"></script>
     <link rel="preload" href="locale/en.txt?v=1777651137952" as="fetch" crossorigin="anonymous"/>
 	<link rel="preload" href="script.js?v=1777651137952" as="script"/>
@@ -266,6 +267,13 @@ const JAMAR_GUIDE_KEY = 'jamarGuideShown_base_d12';
 let jamarState = JSON.parse(sessionStorage.getItem(JAMAR_KEY) || 'null') || {
   small: 0, medium: 0, large: 0
 };
+// Do not reopen the scene in a permanently completed state. If a previous
+// session finished all 21 throws, start step 15 fresh so the entry banner/VO
+// remains the first thing users get on open.
+if ((jamarState.small + jamarState.medium + jamarState.large) >= 21) {
+  jamarState = { small: 0, medium: 0, large: 0 };
+  sessionStorage.setItem(JAMAR_KEY, JSON.stringify(jamarState));
+}
 let currentPillar = null;
 let throwAnimating = false;
 let isAimedAtPillar = false;
@@ -290,6 +298,16 @@ const tcx = throwCanvas.getContext('2d');
 // -- Save state --
 function saveState() {
   sessionStorage.setItem(JAMAR_KEY, JSON.stringify(jamarState));
+}
+
+function triggerJourneyCompletion() {
+  if (window._jamarCompletionFired) return;
+  window._jamarCompletionFired = true;
+  completeEl.style.display = 'none';
+  window.journeyActivityComplete = true;
+  if (typeof showJourneyNextButton === 'function') {
+    try { showJourneyNextButton(); } catch(e) {}
+  }
 }
 
 // -- Update HUD --
@@ -396,13 +414,6 @@ function checkPanorama(panoramaId) {
     debugYaw.style.display = 'none';
   }
 
-  if (total >= 21) {
-    throwBtn.style.display = 'none';
-    glow.style.display = 'none';
-    arrow.style.display = 'none';
-    aimHint.style.display = 'none';
-    completeEl.style.display = 'block';
-  }
 }
 
 // -- THROW ANIMATION --
@@ -500,7 +511,7 @@ function throwStone() {
         glow.style.display = 'none';
         arrow.style.display = 'none';
         aimHint.style.display = 'none';
-        if (total >= 21) { completeEl.style.display = 'block'; }
+        if (total >= 21) { triggerJourneyCompletion(); }
       } else {
         glow.style.display = 'block';
         arrow.style.display = 'block';
@@ -514,6 +525,7 @@ function throwStone() {
 // -- RESET --
 function resetJamarat() {
   jamarState = { small: 0, medium: 0, large: 0 };
+  window._jamarCompletionFired = false;
   saveState();
   updateHUD();
   completeEl.style.display = 'none';
@@ -779,14 +791,38 @@ var _jbChk;
 (function(){
 var BANNERS={
 'panorama_6F591A67_7C4B_CD8A_41C0_0DCF04356022':{
-  title:'\u{1f54b} 12th Day of Dhul-Hijjah \u2014 Final Day of Tashreeq',
-  html:'<p class="bb">Today is the 12th of Dhul-Hijjah, the third (and for most pilgrims final) day of the Days of Tashreeq. After Fajr you have returned to Rami al-Jamarat to perform the day\u2019s stoning.</p><p class="bb">Stone all three pillars in order with seven pebbles each, totalling 21 throws:</p><p class="bb">\u2022 Jamrah as-Sughra (small)<br>\u2022 Jamrah al-Wusta (middle)<br>\u2022 Jamrah al-\u2018Aqaba (large)</p><p class="bb">If leaving Mina before sunset (nafr al-awwal), you must complete this stoning beforehand.</p>'},
+  title:'\u{1f54b} 12th Day of Dhul-Hijjah',
+  html:'<p class="bb">Once again, you\u2019re at Mina and ready to perform the stoning ritual of Rami al-Jamarat on the 12th day of Dhul-Hijjah.</p>'+
+  '<p class="bb">For each pillar, throw <strong>seven pebbles</strong>, saying <em>Bismillahi Allahu Akbar</em> with every throw, in this order:</p>'+
+  '<p class="bb">\u2022 Jamarat al-Ula<br>\u2022 Jamarat al-Wusta<br>\u2022 Jamarat al-\u02BBAqabah</p>'},
 'panorama_6F596864_7C4C_CD8E_41BB_4AD5C09CF432':{
   title:'\u{1f3af} Stoning the Three Pillars',
   html:'<p class="bb">Begin with Jamrah as-Sughra (small), then al-Wusta (middle), then al-\u2018Aqaba (large) \u2014 seven pebbles at each, reciting with every throw:</p><p class="ba">Bismillahi Allahu Akbar</p>'}
 };
 var shown={};
-_jbChk=function(id){var b=BANNERS[id];if(!b||shown[id])return;shown[id]=true;if(b.title||b.html)openBanner(b.title,b.html);};
+// PPContent (Journey Content Manager) override: admin edits in admin.html for sceneKey 'jamarat-12th'
+// flow into this scene's BANNERS map. Re-merged on storage events so live admin saves take effect.
+function _ppMerge(){
+  try{
+    if(!window.PPContent || !window.PPContent.hasData) return;
+    var oB=window.PPContent.bannerMapByPano('jamarat-12th')||{};
+    Object.keys(oB).forEach(function(k){ BANNERS[k]=oB[k]; });
+    var oA=window.PPContent.audioMapByPano('jamarat-12th')||{};
+    window._jb12VOMap=oA;
+  }catch(_){}
+}
+_ppMerge();
+window.addEventListener('storage',function(e){if(e&&e.key==='pp_journey_content_v1'){_ppMerge();}});
+_jbChk=function(id){var b=BANNERS[id];if(!b||shown[id])return;shown[id]=true;if(b.title||b.html)openBanner(b.title,b.html);
+  try{
+    var f=(window._jb12VOMap||{})[id];
+    if(f && window.PPContent && typeof window.PPContent.audioUrl==='function'){
+      var url=window.PPContent.audioUrl(f);
+      try{if(window._voAudio){window._voAudio.pause();window._voAudio=null;}}catch(_){}
+      var a=new Audio(url); window._voAudio=a; window._welcomeVoStarted=true;
+      a.play().catch(function(){});
+    }
+  }catch(_){}};
 setTimeout(function(){_jbChk('panorama_6F591A67_7C4B_CD8A_41C0_0DCF04356022');},2500);
 })();
 </script>
@@ -883,8 +919,7 @@ setTimeout(function(){_jbChk('panorama_6F591A67_7C4B_CD8A_41C0_0DCF04356022');},
       var t=(jamarState.small||0)+(jamarState.medium||0)+(jamarState.large||0);
       if(t>=21){
         done=true;
-        window.journeyActivityComplete=true;
-        if(typeof showJourneyNextButton==='function'){ try{ showJourneyNextButton(); }catch(e){} }
+        triggerJourneyCompletion();
       }
     }
   },500);
@@ -894,9 +929,9 @@ setTimeout(function(){_jbChk('panorama_6F591A67_7C4B_CD8A_41C0_0DCF04356022');},
 <!-- Journey Navigation -->
 <script src="../../journey-manager.js?v=6" defer></script>
 <script src="../../quiz-content.js?v=6" defer></script>
-<script src="../../journey-nav.js?v=26" defer></script>
+<script src="../../journey-nav.js?v=29" defer></script>
 <!-- --- Scene Navigation Overlay --- -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='jamarat-12th';</script>
-<script src="../../scene-nav-overlay.js?v=8" defer></script>
+<script src="../../scene-nav-overlay.js?v=10" defer></script>
 </body>
 </html>

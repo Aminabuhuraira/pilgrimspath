@@ -152,3 +152,46 @@ CREATE POLICY "Authenticated users can update leads"
 -- ✅ Leads table ready.
 -- Run this in Supabase Dashboard → SQL Editor.
 -- =============================================================
+
+
+-- =============================================================
+-- Pilgrim's Path — Transactions Table (Payments / Donations)
+-- =============================================================
+-- Stores verified Paystack purchases and donations so the admin
+-- dashboard can show revenue history and recent transactions.
+-- =============================================================
+
+CREATE TABLE IF NOT EXISTS public.transactions (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    reference TEXT NOT NULL UNIQUE,
+    email TEXT NOT NULL,
+    amount NUMERIC(10,2) NOT NULL,
+    currency TEXT NOT NULL DEFAULT 'USD',
+    status TEXT NOT NULL DEFAULT 'completed',
+    type TEXT NOT NULL DEFAULT 'purchase',
+    plan TEXT,
+    source TEXT,
+    provider TEXT NOT NULL DEFAULT 'paystack',
+    user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    paid_at TIMESTAMPTZ DEFAULT NOW(),
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS transactions_paid_at_idx ON public.transactions (paid_at DESC);
+CREATE INDEX IF NOT EXISTS transactions_email_idx ON public.transactions (email);
+
+ALTER TABLE public.transactions ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Anyone can insert transactions"
+    ON public.transactions FOR INSERT
+    WITH CHECK (true);
+
+CREATE POLICY "Authenticated users can read transactions"
+    ON public.transactions FOR SELECT
+    USING (auth.role() = 'authenticated');
+
+-- =============================================================
+-- ✅ Transactions table ready.
+-- Verified Paystack payments can now be recorded for admin reporting.
+-- =============================================================

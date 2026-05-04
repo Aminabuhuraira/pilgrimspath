@@ -348,9 +348,31 @@
                     .then(function(r) { return r.json(); })
                     .then(function(data) {
                         if (data.data && data.data.status === 'success') {
+                            var tx = Promise.resolve();
+                            if (typeof recordTransaction === 'function') {
+                                tx = recordTransaction({
+                                    reference: response.reference,
+                                    email: email,
+                                    amount: 19,
+                                    currency: 'USD',
+                                    status: 'completed',
+                                    type: 'subscription',
+                                    plan: 'Full VR Experience',
+                                    source: 'umrah-journey',
+                                    metadata: {
+                                        gateway_response: data.data.gateway_response || '',
+                                        channel: data.data.channel || '',
+                                        paid_at: data.data.paid_at || ''
+                                    }
+                                }).catch(function(err) {
+                                    console.warn('[Payment] transaction log skipped', err && err.message);
+                                });
+                            }
+                            tx.finally(function() {
                             if (typeof MetaCAPI !== 'undefined') MetaCAPI.purchase({ content_name: 'Full VR Experience', value: 19, currency: 'USD' }, { em: email });
                             if (typeof fbq !== 'undefined') fbq('track', 'Purchase', { value: 19, currency: 'USD' });
                             window.location.href = 'dashboard.html?payment=success';
+                            });
                         }
                     }).catch(function() { window.location.href = 'dashboard.html?payment=success'; });
             },

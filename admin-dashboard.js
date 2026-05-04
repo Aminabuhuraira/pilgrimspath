@@ -28,8 +28,8 @@ const LIVE = {
     users: [],            // profiles table rows
     leads: 0,             // count of leads table rows
     vrSessions: null,     // no telemetry table yet → empty state
-    revenue: null,        // no transactions table yet → empty state
-    revenueHistory: [],   // requires transactions history
+    revenue: null,
+    revenueHistory: [],
     months: [],
     trafficData: { labels: [], visitors: [], sessions: [], pageViews: [] },
     countries: [],        // aggregated from profiles.country
@@ -165,6 +165,33 @@ async function loadLiveData() {
     // 2. Leads count
     const leads = await supabaseFetch('leads', '?select=id&limit=1');
     LIVE.leads = (leads && typeof leads._count === 'number') ? leads._count : (leads ? leads.length : 0);
+
+    // 2b. Transactions / revenue
+    const transactions = await supabaseFetch('transactions', '?select=reference,email,amount,currency,status,type,plan,source,paid_at,created_at&order=paid_at.desc&limit=200');
+    LIVE.transactions = (transactions || []).map(t => ({
+        date: (t.paid_at || t.created_at || '').split('T')[0] || '—',
+        user: t.email || 'Unknown',
+        type: (t.type || 'purchase').replace(/(^.|-.)/g, function(v){ return v.replace('-', ' ').toUpperCase(); }),
+        plan: t.plan || '—',
+        amount: `${t.currency || 'USD'} ${Number(t.amount || 0).toFixed(2)}`,
+        status: (t.status || 'completed').toLowerCase()
+    }));
+    const completedTransactions = (transactions || []).filter(t => String(t.status || '').toLowerCase() === 'completed');
+    LIVE.revenue = completedTransactions.reduce((sum, t) => sum + Number(t.amount || 0), 0);
+    const monthlyRevenue = {};
+    completedTransactions.forEach(t => {
+        const paidAt = new Date(t.paid_at || t.created_at || Date.now());
+        if (Number.isNaN(paidAt.getTime())) return;
+        const key = `${paidAt.getFullYear()}-${String(paidAt.getMonth() + 1).padStart(2, '0')}`;
+        monthlyRevenue[key] = (monthlyRevenue[key] || 0) + Number(t.amount || 0);
+    });
+    const revenueKeys = Object.keys(monthlyRevenue).sort();
+    LIVE.months = revenueKeys.map(key => {
+        const parts = key.split('-');
+        const date = new Date(Number(parts[0]), Number(parts[1]) - 1, 1);
+        return date.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+    });
+    LIVE.revenueHistory = revenueKeys.map(key => Number(monthlyRevenue[key].toFixed(2)));
 
     // 3. Aggregate countries from profiles
     const countryCounts = {};
@@ -379,7 +406,7 @@ function initRevenueCharts() {
         destroyChart('revenue');
         const history = LIVE.revenueHistory || [];
         if(history.length === 0){
-            const wrap = ctx1.parentElement; if(wrap) wrap.innerHTML = '<div style="padding:48px;text-align:center;color:var(--text-muted);font-size:0.82rem"><i class="fas fa-chart-line" style="font-size:2rem;display:block;margin-bottom:10px;opacity:.5"></i>Revenue chart will populate once a Supabase <code>transactions</code> table is added and Paystack webhooks log payments.</div>';
+            const wrap = ctx1.parentElement; if(wrap) wrap.innerHTML = '<div style="padding:48px;text-align:center;color:var(--text-muted);font-size:0.82rem"><i class="fas fa-chart-line" style="font-size:2rem;display:block;margin-bottom:10px;opacity:.5"></i>Revenue chart will populate after the first verified payment is stored in <code>transactions</code>.</div>';
         } else {
             charts.revenue = new Chart(ctx1, {
                 type: 'line',
@@ -641,7 +668,7 @@ function populateTransactions() {
     if (!el) return;
     const txs = LIVE.transactions || [];
     if(txs.length === 0){
-        el.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted)"><i class="fas fa-receipt" style="font-size:1.6rem;display:block;margin-bottom:8px;opacity:.5"></i>No transactions yet. Connect Paystack webhooks to a Supabase <code>transactions</code> table to populate this view.</td></tr>';
+        el.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted)"><i class="fas fa-receipt" style="font-size:1.6rem;display:block;margin-bottom:8px;opacity:.5"></i>No transactions yet. Verified payments will appear here once the first checkout completes.</td></tr>';
         return;
     }
     el.innerHTML = txs.map(t => `

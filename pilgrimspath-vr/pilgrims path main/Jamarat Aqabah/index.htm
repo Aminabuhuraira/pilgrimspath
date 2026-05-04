@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>jamarat Aqabah</title>
-    <script src="/journey-content-loader.js?v=23"></script>
+    <script src="/journey-content-loader.js?v=28"></script>
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -251,8 +251,9 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ro
 // NOTE: 10th-day Rami is at Aqabah pillar ONLY. All panoramas in this scene
 // are mapped to 'large' so any throw counts toward Aqabah.
 const JAMAR_PANORAMAS = {
-  'panorama_92A5C87D_8C55_D2F6_41BD_CABD1E84B587': 'large',
-  'panorama_91BCCD88_8C4C_721C_41D8_71D5CA4654E5': 'large',
+  'panorama_691BD7D8_7C54_C286_41D8_87DAB3A1DC93': 'large',
+  'panorama_691BD070_7C54_DD86_41D9_025F4E408EDC': 'large',
+  'panorama_691B992A_7C54_CF9A_41A0_CFAD0184B4D8': 'large',
   'panorama_691B217E_7C54_3E7A_41D3_35A255D72204': 'large'
 };
 
@@ -379,7 +380,7 @@ function checkPanorama(panoramaId) {
     glow.style.display = 'block';
     arrow.style.display = 'block';
     aimHint.style.display = 'block';
-    debugYaw.style.display = 'block';
+    debugYaw.style.display = 'none';
     throwLabel.textContent = '(' + (jamarState[pillar] + 1) + '/7)';
     updateAimState();
   } else if (pillar && jamarState[pillar] >= 7) {
@@ -569,7 +570,7 @@ function resetJamarat() {
     glow.style.display = 'block';
     arrow.style.display = 'block';
     aimHint.style.display = 'block';
-    debugYaw.style.display = 'block';
+    debugYaw.style.display = 'none';
     throwLabel.textContent = '(1/7)';
     updateAimState();
   }
@@ -855,8 +856,7 @@ if(window.PPContent && window.PPContent.hasData){
 var shown={};
 _jbChk=function(id){var b=BANNERS[id];if(!b||shown[id])return;shown[id]=true;if(b.title||b.html)openBanner(b.title,b.html);
 if(_jVoCtx[id])playVO(_jVoCtx[id]);
-// Signal to journey nav that last activity is complete (after stoning complete)
-if(typeof window!=='undefined'&&id==='panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1'){window.journeyActivityComplete=true;if(typeof showJourneyNextButton==='function'){setTimeout(showJourneyNextButton,300);}}};
+};
 setTimeout(function(){_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},2500);
 })();
 </script>
@@ -881,10 +881,18 @@ setTimeout(function(){_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},
 
   var AQABAH_ID='panorama_691B217E_7C54_3E7A_41D3_35A255D72204';
   var AQABAH_ALT='panorama_691BD7D8_7C54_C286_41D8_87DAB3A1DC93';
+  var AQABAH_AMBIENT_AUDIO_IDS=[
+    'audio_843EC6CC_95BC_C606_41DE_2C6428CF9943',
+    'audio_8438B7ED_95BC_C606_41C6_D9EE446B58F2',
+    'audio_98CE2D1A_8D4C_4A02_41DB_D1F2F2FA9F50',
+    'audio_84585F65_95BC_C606_41E0_CFCA4A8C38FA',
+    'audio_846580F4_95BC_BA06_41C4_24AF98EA425A'
+  ];
 
   // Tell journey-nav this scene requires an activity (7 throws) before "Next Stop"
   window.journeyRequiresActivity = true;
   window.journeyActivityLabel = 'Throw all 7 stones at Jamrah al-\u02bbAqabah';
+  window.journeyActivityComplete = false;
 
   // Widen the large-pillar tolerance so BOTH visible stoning areas in this panorama count
   // (the new Aqabah panorama shows two valid stoning bays — left and right of the pillar)
@@ -892,6 +900,26 @@ setTimeout(function(){_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},
     PILLAR_TARGET.large.yaw = -47.85;
     PILLAR_TARGET.large.tolerance = 110; // covers both stoning spots
   }
+
+  function reduceAqabahAmbientGain(retries){
+    retries=retries||0;
+    try{
+      if(typeof tour!=='undefined' && tour && typeof tour._getRootPlayer==='function'){
+        var rp=tour._getRootPlayer();
+        if(rp){
+          AQABAH_AMBIENT_AUDIO_IDS.forEach(function(id){
+            var audio=rp[id];
+            if(audio && typeof audio.set==='function'){
+              try{ audio.set('gain',0.7); }catch(e){}
+            }
+          });
+          return;
+        }
+      }
+    }catch(e){}
+    if(retries<40) setTimeout(function(){reduceAqabahAmbientGain(retries+1);},250);
+  }
+  setTimeout(function(){ reduceAqabahAmbientGain(0); }, 1500);
 
   // Aim the camera at the stoning area on first load
   function aimAtStoning(retries){
@@ -920,11 +948,6 @@ setTimeout(function(){_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},
   // 1⃣ Inject CSS overrides: hide non-Aqabah HUD rows + retitle counter
   var s=document.createElement('style');
   s.textContent=[
-    '#jamarHUD .hud-pillar:nth-of-type(1),',
-    '#jamarHUD .hud-pillar:nth-of-type(2),',
-    '#jamarHUD .hud-pillar:nth-of-type(3) ~ .hud-divider:nth-of-type(2),',
-    '#jamarHUD .hud-divider:nth-of-type(1),',
-    '#jamarHUD .hud-divider:nth-of-type(2){display:none !important;}',
     '#jamarHUD .hud-total{display:none !important;}',
     '#jamarHUD h4{font-size:13px !important;}'
   ].join('');
@@ -988,6 +1011,7 @@ setTimeout(function(){_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},
       var glow=document.getElementById('jamarGlow');if(glow)glow.style.display='none';
       var arrow=document.getElementById('jamarArrow');if(arrow)arrow.style.display='none';
       var hint=document.getElementById('jamarAimHint');if(hint)hint.style.display='none';
+      var dbg=document.getElementById('jamarDebugYaw');if(dbg)dbg.style.display='none';
     }
   },400);
 })();
@@ -1067,12 +1091,12 @@ setTimeout(function(){_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},
 </script>
 
 <!-- Journey Navigation -->
-<script src="../journey-manager.js?v=3" defer></script>
-<script src="../quiz-content.js?v=6" defer></script>
-<script src="../journey-nav.js?v=26" defer></script>
+<script src="../../journey-manager.js?v=3" defer></script>
+<script src="../../quiz-content.js?v=6" defer></script>
+<script src="../../journey-nav.js?v=29" defer></script>
 <!-- ═══ Scene Navigation Overlay ═══ -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='jamarat-10th';</script>
-<script src="../../scene-nav-overlay.js?v=8" defer></script>
+<script src="../../scene-nav-overlay.js?v=10" defer></script>
 
 </body>
 </html>

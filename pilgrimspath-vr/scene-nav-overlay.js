@@ -146,6 +146,11 @@
         '#tawafCounter{left:calc(50% + 27px) !important;}',
         '#sceneBanner{left:calc(50% + 27px) !important;width:min(92vw,560px) !important;max-width:calc(100vw - 64px) !important;}',
         '#pathCueToast{left:calc(50% + 27px);max-width:calc(100vw - 80px);}',
+        '#jamarThrowBtn,#jamarAimHint,#jamarGuide,#jamarComplete,#journeyComplete{left:calc(50% + 27px) !important;}',
+        '#jamarHUD{right:8px !important;max-width:calc(100vw - 72px) !important;}',
+        '#ppQuizOverlay{padding-left:60px;box-sizing:border-box;}',
+        '#ppQuizOverlay .ppQuizCard{margin-left:27px;max-width:calc(100vw - 74px) !important;}',
+        'body.ppOverlayActive #scnRail,.ppOverlayActive #scnRail{display:none !important;opacity:0 !important;pointer-events:none !important;}',
         /* pause button stays top-right and next stop button stays bottom-right - both already clear of the 54px left rail */
       '}'
     ].join('');

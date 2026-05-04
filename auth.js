@@ -151,6 +151,38 @@ async function upsertProfile(user) {
 }
 
 /**
+ * Record a verified payment for admin reporting.
+ * Best-effort only so checkout never fails because analytics storage is down.
+ */
+async function recordTransaction(transaction = {}) {
+    const reference = (transaction.reference || '').trim();
+    if (!reference) throw new Error('Payment reference is required');
+
+    const user = await getCurrentUser().catch(() => null);
+    const payload = {
+        reference,
+        email: (transaction.email || user?.email || '').trim(),
+        amount: Number(transaction.amount || 0),
+        currency: (transaction.currency || 'USD').trim().toUpperCase(),
+        status: (transaction.status || 'completed').trim().toLowerCase(),
+        type: (transaction.type || 'purchase').trim().toLowerCase(),
+        plan: (transaction.plan || '').trim(),
+        source: (transaction.source || '').trim(),
+        provider: (transaction.provider || 'paystack').trim().toLowerCase(),
+        paid_at: transaction.paidAt || new Date().toISOString(),
+        user_id: user?.id || null,
+        metadata: transaction.metadata || {}
+    };
+
+    if (!payload.email) throw new Error('Payment email is required');
+    if (!Number.isFinite(payload.amount) || payload.amount <= 0) throw new Error('Payment amount is invalid');
+
+    const { data, error } = await _sb.from('transactions').insert(payload).select().maybeSingle();
+    if (error && !/duplicate key|unique/i.test(error.message || '')) throw error;
+    return data || payload;
+}
+
+/**
  * Require authentication — redirects to login if not signed in.
  * Call this at the top of protected pages (e.g. dashboard).
  */

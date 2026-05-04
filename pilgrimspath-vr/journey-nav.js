@@ -544,6 +544,187 @@ body.ppMenuOpen #viewer { z-index: 99490 !important; }
     font-size: 14px;
   }
 }
+
+@media (max-width: 640px) {
+  #ppPauseBtn {
+    top: max(10px, env(safe-area-inset-top));
+    right: max(10px, env(safe-area-inset-right));
+  }
+
+  body.ppOverlayActive #ppPauseBtn,
+  body.ppOverlayActive #nextStopBtn,
+  body.ppOverlayActive #activityNotice,
+  body.ppOverlayActive #pathCueToast,
+  body.ppOverlayActive #jamarHUD,
+  body.ppOverlayActive #jamarThrowBtn,
+  body.ppOverlayActive #jamarAimHint,
+  body.ppOverlayActive #minaContinue,
+  body.ppOverlayActive #umrahTrimContinue,
+  body.ppOverlayActive #barberContinue,
+  body.ppOverlayActive #muzdHud,
+  body.ppOverlayActive #muzdPouch,
+  body.ppOverlayActive #tawafCounter,
+  body.ppOverlayActive #saiCounter,
+  .ppOverlayActive #ppPauseBtn,
+  .ppOverlayActive #nextStopBtn,
+  .ppOverlayActive #activityNotice,
+  .ppOverlayActive #pathCueToast,
+  .ppOverlayActive #jamarHUD,
+  .ppOverlayActive #jamarThrowBtn,
+  .ppOverlayActive #jamarAimHint,
+  .ppOverlayActive #minaContinue,
+  .ppOverlayActive #umrahTrimContinue,
+  .ppOverlayActive #barberContinue,
+  .ppOverlayActive #muzdHud,
+  .ppOverlayActive #muzdPouch,
+  .ppOverlayActive #tawafCounter,
+  .ppOverlayActive #saiCounter {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  #nextStopBtn {
+    right: max(10px, env(safe-area-inset-right));
+    bottom: max(12px, env(safe-area-inset-bottom));
+    max-width: calc(100vw - 20px);
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  #activityNotice {
+    right: max(10px, env(safe-area-inset-right));
+    bottom: calc(56px + env(safe-area-inset-bottom));
+    max-width: min(72vw, 250px);
+    font-size: 12px;
+  }
+
+  #ppQuizOverlay {
+    padding: 12px;
+    box-sizing: border-box;
+  }
+
+  #ppQuizOverlay .ppQuizCard {
+    width: min(100%, 460px);
+    max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
+    border-radius: 18px;
+  }
+
+  #ppQuizOverlay .ppQuizBody {
+    padding: 16px 16px 12px;
+  }
+
+  #ppQuizOverlay footer,
+  #ppQuizOverlay header {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  #sceneBanner,
+  #jamarGuide,
+  #jamarComplete,
+  #journeyComplete {
+    width: min(92vw, 420px) !important;
+    max-width: calc(100vw - 18px) !important;
+    max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px) !important;
+    overflow-y: auto !important;
+    box-sizing: border-box;
+  }
+
+  #jamarGuide,
+  #jamarComplete,
+  #journeyComplete {
+    padding: 20px 18px !important;
+    border-radius: 16px !important;
+  }
+
+  #jamarGuide h3,
+  #jamarComplete h3,
+  #journeyComplete h2 {
+    font-size: clamp(18px, 5vw, 22px) !important;
+  }
+
+  #jamarGuide .steps li,
+  #jamarComplete p,
+  #journeyComplete p {
+    font-size: 13px !important;
+    line-height: 1.45 !important;
+  }
+
+  #jamarThrowBtn,
+  #minaContinue,
+  #umrahTrimContinue,
+  #barberContinue {
+    bottom: max(12px, env(safe-area-inset-bottom)) !important;
+    max-width: calc(100vw - 20px) !important;
+    width: min(92vw, 360px);
+    padding: 12px 18px !important;
+    font-size: 14px !important;
+    gap: 8px !important;
+    box-sizing: border-box;
+    justify-content: center;
+  }
+
+  #jamarAimHint {
+    bottom: calc(66px + env(safe-area-inset-bottom)) !important;
+    max-width: calc(100vw - 24px);
+    font-size: 12px !important;
+    padding: 6px 12px !important;
+    box-sizing: border-box;
+  }
+
+  #pathCueToast {
+    max-width: calc(100vw - 92px);
+  }
+
+  #jamarHUD,
+  #muzdHud,
+  #muzdPouch,
+  #tawafCounter,
+  #saiCounter {
+    max-width: calc(100vw - 86px) !important;
+    box-sizing: border-box;
+  }
+
+  #jamarHUD {
+    top: calc(env(safe-area-inset-top) + 56px) !important;
+    right: max(8px, env(safe-area-inset-right)) !important;
+    min-width: 0 !important;
+    width: min(220px, calc(100vw - 86px)) !important;
+    padding: 10px 12px !important;
+  }
+}
+
+@media (max-width: 640px) and (max-height: 520px) {
+  #sceneBanner,
+  #jamarGuide,
+  #jamarComplete,
+  #journeyComplete,
+  #ppQuizOverlay .ppQuizCard {
+    max-height: calc(100vh - 18px) !important;
+  }
+
+  #jamarThrowBtn,
+  #nextStopBtn,
+  #minaContinue,
+  #umrahTrimContinue,
+  #barberContinue {
+    padding: 10px 14px !important;
+    font-size: 12.5px !important;
+  }
+
+  #nextStopBtn {
+    bottom: calc(62px + env(safe-area-inset-bottom)) !important;
+  }
+
+  #activityNotice {
+    bottom: calc(108px + env(safe-area-inset-bottom)) !important;
+  }
+
+  #jamarAimHint {
+    bottom: calc(112px + env(safe-area-inset-bottom)) !important;
+  }
+}
 `;
 
 // ── Initialize UI on DOM Ready ──
@@ -551,7 +732,58 @@ function initJourneyNav() {
   // Right-side progress dots have been removed per UX request — the bottom
   // step icon strip (scene-nav-overlay.js) now serves as the sole progress UI.
   // Inject the pause / user-menu instead.
+  initOverlayStateBridge();
   initPauseMenu();
+}
+
+function initOverlayStateBridge(){
+  if(window.__ppOverlayBridgeReady) return;
+  window.__ppOverlayBridgeReady = true;
+
+  var overlayIds = ['sceneBanner', 'jamarGuide', 'jamarComplete', 'journeyComplete', 'ppQuizOverlay'];
+  var classTargets = [];
+
+  function collectTargets(){
+    classTargets = [document.body, document.documentElement, _overlayRoot];
+    var fs = document.fullscreenElement || document.webkitFullscreenElement;
+    if(fs) classTargets.push(fs);
+  }
+
+  function isVisible(el){
+    if(!el) return false;
+    var style = window.getComputedStyle(el);
+    if(style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') return false;
+    var rect = el.getBoundingClientRect();
+    return rect.width > 0 && rect.height > 0;
+  }
+
+  function syncOverlayState(){
+    collectTargets();
+    var active = overlayIds.some(function(id){ return isVisible(document.getElementById(id)); });
+    classTargets.forEach(function(node){
+      if(!node || !node.classList) return;
+      node.classList.toggle('ppOverlayActive', active);
+    });
+  }
+
+  window.__ppSyncOverlayState = syncOverlayState;
+  syncOverlayState();
+
+  try{
+    var observer = new MutationObserver(syncOverlayState);
+    observer.observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['style', 'class', 'open']
+    });
+  }catch(_){ }
+
+  document.addEventListener('fullscreenchange', syncOverlayState);
+  document.addEventListener('webkitfullscreenchange', syncOverlayState);
+  window.addEventListener('resize', syncOverlayState);
+  setTimeout(syncOverlayState, 250);
+  setTimeout(syncOverlayState, 1000);
 }
 
 // ═══ QUIZ — Optional post-scene reflection ═══

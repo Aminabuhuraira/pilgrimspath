@@ -11,5 +11,18 @@
         { "key": "Access-Control-Allow-Headers", "value": "Content-Type" }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/sanctum-admin-7f3k9q2m",
+      "destination": "/admin.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/admin.html",
+      "destination": "/sanctum-admin-7f3k9q2m",
+      "permanent": false
+    }
   ]
 }
