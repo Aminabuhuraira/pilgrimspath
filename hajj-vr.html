@@ -708,6 +708,56 @@
     </div>
 
     <!-- ═══════════════════════════════════════
+         SCREEN 0: Umrah-First Gate
+         (hidden if pp_umrah_completed is set)
+         ═══════════════════════════════════════ -->
+    <div class="screen" id="screenUmrahGate">
+        <div class="screen-inner">
+            <div class="brand-logo anim">
+                <img src="images/logo.png" alt="Pilgrim's Path">
+            </div>
+            <div class="screen-tag anim anim-d1">
+                <i class="fas fa-route"></i> Your Path Begins Here
+            </div>
+
+            <h1 class="anim anim-d2">Begin with <span class="gold">Umrah</span> First</h1>
+
+            <div class="verse-box anim anim-d3">
+                <div class="verse-arabic">وَأَتِمُّوا الْحَجَّ وَالْعُمْرَةَ لِلَّهِ</div>
+                <div class="verse-translation">"Complete the Hajj and Umrah for Allah." — Quran 2:196</div>
+            </div>
+
+            <p class="subtitle anim anim-d3" style="margin-top:0;">Umrah is the foundation of the pilgrimage — it teaches you Tawaf, Sa'i, and the sacred rites that Hajj builds upon. Complete the <strong>Umrah Journey</strong> first, then return here ready for the full Hajj experience.</p>
+
+            <!-- Path comparison cards -->
+            <div class="anim anim-d3" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:560px;margin:0 auto 28px;text-align:left;">
+                <div style="background:rgba(201,162,39,0.08);border:1px solid rgba(201,162,39,0.25);border-radius:16px;padding:20px;">
+                    <div style="font-size:1.4rem;margin-bottom:8px;">🕋</div>
+                    <div style="font-weight:700;font-size:.95rem;margin-bottom:6px;color:var(--text-dark);">Umrah First</div>
+                    <div style="font-size:.82rem;color:var(--text-mid);line-height:1.6;">4 steps · 30–60 min · Builds your foundation</div>
+                </div>
+                <div style="background:rgba(192,192,192,0.1);border:1px solid rgba(192,192,192,0.25);border-radius:16px;padding:20px;opacity:0.65;">
+                    <div style="font-size:1.4rem;margin-bottom:8px;">🔒</div>
+                    <div style="font-weight:700;font-size:.95rem;margin-bottom:6px;color:var(--text-dark);">Hajj Journey</div>
+                    <div style="font-size:.82rem;color:var(--text-mid);line-height:1.6;">14 steps · Unlocks after Umrah</div>
+                </div>
+            </div>
+
+            <div class="btn-row anim anim-d4">
+                <a href="/umrah-journey" class="btn btn-gold" onclick="localStorage.setItem('pp_umrah_completed','1')">
+                    <i class="fas fa-kaaba"></i>
+                    <span>Start Umrah Journey</span>
+                </a>
+            </div>
+
+            <p class="anim anim-d5" style="margin-top:20px;font-size:.8rem;color:var(--text-mid);">
+                Already completed Umrah?
+                <button onclick="skipUmrahGate()" style="background:none;border:none;color:var(--gold);font-weight:600;cursor:pointer;font-size:.8rem;font-family:inherit;text-decoration:underline;">Continue to Hajj →</button>
+            </p>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════
          SCREEN 1: Language Selection
          ═══════════════════════════════════════ -->
     <div class="screen" id="screenLang">
@@ -769,7 +819,7 @@
     <!-- ═══════════════════════════════════════
          SCREEN 2: Welcome
          ═══════════════════════════════════════ -->
-    <div class="screen active" id="screenWelcome">
+    <div class="screen" id="screenWelcome">
         <div class="screen-inner">
             <div class="bismillah anim">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
 
@@ -978,6 +1028,23 @@
     <script>
         // ── State ──
         let selectedLang = 'en';
+
+        // ── On load: show Umrah gate if not yet completed ──
+        (function() {
+            var umrahDone = localStorage.getItem('pp_umrah_completed');
+            var startScreen = umrahDone ? 'screenLang' : 'screenUmrahGate';
+            document.querySelectorAll('.screen').forEach(function(s) {
+                s.classList.remove('active');
+            });
+            var gate = document.getElementById(startScreen);
+            if (gate) gate.classList.add('active');
+        })();
+
+        // ── Skip the Umrah gate (user already did Umrah) ──
+        function skipUmrahGate() {
+            localStorage.setItem('pp_umrah_completed', '1');
+            goToScreen('screenLang');
+        }
 
         // ── Language selection ──
         function selectLang(el) {

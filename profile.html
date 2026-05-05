@@ -593,16 +593,18 @@
             });
             if (error) throw error;
 
-            // Also upsert profiles table
-            await sb.from('profiles').upsert({
-                id: _currentUser.id,
-                email: _currentUser.email,
-                first_name: firstName,
-                last_name: lastName,
-                display_name: (firstName + ' ' + lastName).trim(),
-                country: country,
-                updated_at: new Date().toISOString()
-            }, { onConflict: 'id' }).catch(function(){});
+            // Also upsert profiles table (silent fail — table may not have all columns yet)
+            try {
+                await sb.from('profiles').upsert({
+                    id: _currentUser.id,
+                    email: _currentUser.email,
+                    first_name: firstName,
+                    last_name: lastName,
+                    display_name: (firstName + ' ' + lastName).trim(),
+                    country: country,
+                    updated_at: new Date().toISOString()
+                }, { onConflict: 'id' });
+            } catch(e) {}
 
             // Update header display
             var displayName = (firstName + ' ' + lastName).trim() || firstName || 'Pilgrim';
@@ -640,11 +642,13 @@
             try {
                 var sb = getSupabaseClient();
                 await sb.auth.updateUser({ data: { avatar_url: dataUrl } });
-                await sb.from('profiles').upsert({
-                    id: _currentUser.id,
-                    avatar_url: dataUrl,
-                    updated_at: new Date().toISOString()
-                }, { onConflict: 'id' }).catch(function(){});
+                try {
+                    await sb.from('profiles').upsert({
+                        id: _currentUser.id,
+                        avatar_url: dataUrl,
+                        updated_at: new Date().toISOString()
+                    }, { onConflict: 'id' });
+                } catch(e) {}
                 showToast('✓ Profile photo updated', 2500);
             } catch(err) {
                 showToast('Photo saved locally (sync failed)', 3000);
