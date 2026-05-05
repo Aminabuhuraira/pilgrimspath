@@ -150,23 +150,10 @@ function _showVoHint(){
 }
 function _hideVoHint(){ var h = document.getElementById('voHint'); if(h) h.remove(); }
 (function(){
-var _arafahSeq=[
-  {title:'\uD83E\uDD32 9th Day of Dhul-Hijjah — Day of Arafah',
-   html:'<p class="bb">On this day, the 9th day — the Day of Arafah — we have now arrived on the plains of Arafat. Walk your way to the summit as this is a pivotal moment, where your supplications are answered.</p>',
-   audio:'English Arafah 1.mp3'},
-  {title:'\uD83C\uDF19 Travelling to Muzdalifah',
-   html:'<p class="bb">You will now be taken to Muzdalifah. Here, pray Maghrib and Isha together, shortened and combined, with one Adhan and two Iqamahs. At Muzdalifah go collect at least 49 or 70 pebbles for the stoning ritual for the next day.</p>',
-   audio:'English Arafah 2.mp3'},
-  {title:'\uD83C\uDF89 Congratulations',
-   html:'<p class="bb">Congratulations — you may now proceed to any resting area under the open sky.</p>',
-   audio:'English Arafah 3.mp3'}
-];
-if(window.PPContent && window.PPContent.hasData){
-  var _ovSeq = window.PPContent.bySequence('arafah-9th');
-  if(_ovSeq && _ovSeq.length){
-    _arafahSeq = _ovSeq.map(function(s,i){return {title:s.title||_arafahSeq[i]&&_arafahSeq[i].title||'',html:s.html||_arafahSeq[i]&&_arafahSeq[i].html||'',audio:s.audio||_arafahSeq[i]&&_arafahSeq[i].audio||''};});
-  }
-}
+// ── Read sequential banner content from JCM (single source of truth) ──────
+var _arafahSeq = (window.PPContent && window.PPContent.hasData)
+  ? (window.PPContent.bySequence('arafah-9th') || [])
+  : [];
 /* Only the first banner plays at intro. After dismissing it the standard
    Next-Stop button surfaces so the user can proceed to Muzdalifah whenever
    they're ready. Banners 2 & 3 are NOT auto-played here — their content is
@@ -251,14 +238,11 @@ function _playRemainingArafahNarration(idx){
     };
   },50);
 }
-var shown={},lastId='';
-var RE=/(panorama_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+)_0\//i;
-function det(u){if(typeof u!=='string')return;var m=u.match(RE);if(m&&m[1]!==lastId){lastId=m[1];chk(m[1]);}}
-function chk(id){
-  if(id.indexOf('84B0CD28')!==-1&&!shown[id]){shown[id]=true;_showArafahIntro();}
+// ── TDV hook only — no PerformanceObserver/Image hijack ─────────────────
+var shown = {}, lastId = '';
+function chk(id) {
+  if (id.indexOf('84B0CD28') !== -1 && !shown[id]) { shown[id] = true; _showArafahIntro(); }
 }
-try{var po=new PerformanceObserver(function(l){l.getEntries().forEach(function(e){det(e.name);});});po.observe({type:'resource',buffered:false});}catch(e){}
-var OI=window.Image;window.Image=function(w,h){var img=new OI(w,h);var os=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src').set;Object.defineProperty(img,'src',{set:function(v){det(v);os.call(this,v);},get:function(){return Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src').get.call(this);}});return img;};window.Image.prototype=OI.prototype;
 function hookTDV(){if(typeof TDV==='undefined'||!TDV.Tour||!TDV.Tour.Script)return setTimeout(hookTDV,500);var o1=TDV.Tour.Script.setPlayListSelectedIndex;if(o1){TDV.Tour.Script.setPlayListSelectedIndex=function(a,b){try{var id=a.get('items')[b].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}catch(e){}return o1.apply(this,arguments);};}var o2=TDV.Tour.Script.setMainMediaByIndex;if(o2){TDV.Tour.Script.setMainMediaByIndex=function(a){try{var items=this.mainPlayList.get('items');if(a>=0&&a<items.length){var id=items[a].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}}catch(e){}return o2.apply(this,arguments);};}console.log('[Arafah] banner hooks installed');}
 hookTDV();setTimeout(function(){chk('panorama_84B0CD28_8BC4_4A0E_4196_9526145973A3');},2500);
 })();

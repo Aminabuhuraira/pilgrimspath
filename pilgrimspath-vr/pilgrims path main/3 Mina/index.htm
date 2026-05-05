@@ -1,4 +1,4 @@
-?<!DOCTYPE html>
+﻿?<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Mina tents </title>
@@ -181,59 +181,41 @@ function _showVoHint(){
 }
 function _hideVoHint(){ var h = document.getElementById('voHint'); if(h) h.remove(); }
 (function(){
-var journeyContext=new URL(window.location).searchParams.get('context')||'8th-day';
-var BANNERS_8TH={
-'panorama_73D8B866_7C54_4D8A_41D3_BF331164945C':{
-  title:'\uD83D\uDD4C 8th Day of Dhul-Hijjah — Yawm at-Tarwiyah',
-  html:'<p class="bb">On this day, the 8th day of Dhul-Hijjah, known as Yawm at-Tarwiyah, you have arrived at Mina where you will spend the day in worship. Arrival is before noon.</p><p class="bb">You will offer the following prayers, but some are shortened to two rak\'ahs — the likes of Zuhr, Asr &amp; Isha.</p><p class="bb">Throughout the day, continue reciting the Talbiyah and prepare for the Day of Arafah.</p>'}
-};
-var BANNERS_TENTS_11TH={
-'panorama_72AD4A6A_7C54_4D9A_41DC_AA69EFBD3C52':{
-  title:'⛺ Return to Your Tent in Mina',
-  html:'<p class="bb">After completing Tawaf al-Ifadah, you have travelled back to your tent in Mina to rest.</p>'+
-  '<p class="bb">Tomorrow, the 11th of Dhul-Hijjah, you will perform Rami al-Jamarat at all three pillars: Sughra, Wusta, and ʿAqabah — seven pebbles each, saying <em>Bismillahi Allahu Akbar</em> with every throw.</p>'+
-  '<p class="bb">Use this time to rest, hydrate, and remember Allah.</p>'}
-};
-var BANNERS_TENTS_12TH={
-'panorama_72AD4A6A_7C54_4D9A_41DC_AA69EFBD3C52':{
-  title:'\uD83D\uDD4B 12th Day of Dhul-Hijjah',
-  html:'<p class="bb">Once again, you\u2019re at Mina and ready to perform the stoning ritual of Rami al-Jamarat on the 12th day of Dhul-Hijjah.</p>'+
-  '<p class="bb">For each pillar, throw <strong>seven pebbles</strong>, saying <em>Bismillahi Allahu Akbar</em> with every throw, in this order:</p>'+
-  '<p class="bb">\u2022 Jamarat al-Ula<br>\u2022 Jamarat al-Wusta<br>\u2022 Jamarat al-\u02BBAqabah</p>'}
-};
-var BANNERS_TENTS_13TH={
-'panorama_72AD4A6A_7C54_4D9A_41DC_AA69EFBD3C52':{
-  title:'⛺ Back at Your Mina Tent (13th Day)',
-  html:'<p class="bb">You have chosen to stay for the 13th day. Tomorrow you will perform your final Rami al-Jamarat at the three pillars: Sughra → Wusta → ʿAqabah, seven pebbles each.</p>'+
-  '<p class="bb">After completing the 13th day stoning, you will proceed directly to Al-Masjid Al-Haram for the Farewell Tawaf (Tawaf al-Wida’).</p>'}
-};
-var BANNERS=journeyContext==='tents-11th'?BANNERS_TENTS_11TH:(journeyContext==='tents-12th'?BANNERS_TENTS_12TH:(journeyContext==='tents-13th'?BANNERS_TENTS_13TH:BANNERS_8TH));
-var TENT_PANO='panorama_72AD4A6A_7C54_4D9A_41DC_AA69EFBD3C52';
-var IS_TENT_MODE=(journeyContext==='tents-11th'||journeyContext==='tents-12th'||journeyContext==='tents-13th');
-var shown={},lastId='';
-var RE=/(panorama_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+)_0\//i;
-function det(u){if(typeof u!=='string')return;var m=u.match(RE);if(m&&m[1]!==lastId){lastId=m[1];chk(m[1]);}}
-var _VO_MAP_MINA={'panorama_73D8B866_7C54_4D8A_41D3_BF331164945C':'English 8th Day of Dhul-Hijjah .mp3','panorama_72AD4A6A_7C54_4D9A_41DC_AA69EFBD3C52':(journeyContext==='tents-12th'?'English Day 12-Dhul hijjah.mp3':null)};
-if(window.PPContent && window.PPContent.hasData){
-  var _mSk = journeyContext==='tents-12th'?'mina-tents-12':'mina-8th';
-  var _oB=window.PPContent.bannerMapByPano(_mSk);
-  Object.keys(_oB).forEach(function(k){BANNERS[k]=_oB[k];});
-  var _oA=window.PPContent.audioMapByPano(_mSk);
-  Object.keys(_oA).forEach(function(k){_VO_MAP_MINA[k]=_oA[k];});
+var journeyContext = new URL(window.location).searchParams.get('context') || '8th-day';
+
+// ── Map context → JCM scene key ──────────────────────────────────────────
+var _sceneKey = journeyContext === 'tents-11th' ? 'mina-tents-11'
+              : journeyContext === 'tents-12th' ? 'mina-tents-12'
+              : journeyContext === 'tents-13th' ? 'mina-tents-13'
+              :                                  'mina-8th';
+
+// ── Read banner + VO data from JCM (single source of truth) ──────────────
+var _bannerMap = {};
+var _audioMap  = {};
+if (window.PPContent && window.PPContent.hasData) {
+  _bannerMap = window.PPContent.bannerMapByPano(_sceneKey) || {};
+  _audioMap  = window.PPContent.audioMapByPano(_sceneKey)  || {};
 }
-function chk(id){var b=BANNERS[id];if(!b||shown[id])return;shown[id]=true;if(b.title||b.html)openBanner(b.title,b.html);
-if(_VO_MAP_MINA[id])playVO(_VO_MAP_MINA[id]);
-// 8th-day end panorama: surface the standard Next-Stop button directly
-// (the previous "I'm done exploring" intermediate button has been removed).
-if(id==='panorama_73D8B866_7C54_4D8A_41D3_BF331164945C'&&typeof window!=='undefined'){
-  window.journeyIsLastPanorama=true;
-  if(typeof showJourneyNextButton==='function'){ setTimeout(showJourneyNextButton,300); }
+
+var TENT_PANO = 'panorama_72AD4A6A_7C54_4D9A_41DC_AA69EFBD3C52';
+var IS_TENT_MODE = (journeyContext === 'tents-11th' || journeyContext === 'tents-12th' || journeyContext === 'tents-13th');
+var shown = {}, lastId = '';
+
+function chk(id) {
+  if (shown[id]) return;
+  var b  = _bannerMap[id];
+  var vo = _audioMap[id];
+  if (!b && !vo) return;
+  shown[id] = true;
+  if (b && (b.title || b.html)) openBanner(b.title, b.html);
+  if (vo) playVO(vo);
+  // 8th-day end panorama: surface the Next-Stop button
+  if (id === 'panorama_73D8B866_7C54_4D8A_41D3_BF331164945C') {
+    window.journeyIsLastPanorama = true;
+    if (typeof showJourneyNextButton === 'function') { setTimeout(showJourneyNextButton, 300); }
+  }
 }
-// In tent mode, the 'Continue to Jamarat' button is NO LONGER auto-shown.
-// It will be surfaced only on specific panoramas (to be wired per the
-// user's instructions). The button itself + its onclick wiring above
-// remain in place; just the auto-show on TENT_PANO has been removed.
-}
+
 function _showMinaDoneBtn(){
   if(document.getElementById('minaDoneBtn')) return;
   var b=document.createElement('button');
@@ -277,8 +259,9 @@ function _showMinaEndModal(){
     if(typeof showJourneyNextButton==='function'){ showJourneyNextButton(); }
   };
 }
-try{var po=new PerformanceObserver(function(l){l.getEntries().forEach(function(e){det(e.name);});});po.observe({type:'resource',buffered:false});}catch(e){}
-var OI=window.Image;window.Image=function(w,h){var img=new OI(w,h);var os=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src').set;Object.defineProperty(img,'src',{set:function(v){det(v);os.call(this,v);},get:function(){return Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src').get.call(this);}});return img;};window.Image.prototype=OI.prototype;
+// PerformanceObserver + Image.src hijack removed — fires on adjacent-pano
+// preloads causing banners/VOs to play before user actually navigates there.
+// TDV hook below is the only trigger.
 function hookTDV(){if(typeof TDV==='undefined'||!TDV.Tour||!TDV.Tour.Script)return setTimeout(hookTDV,500);var o1=TDV.Tour.Script.setPlayListSelectedIndex;if(o1){TDV.Tour.Script.setPlayListSelectedIndex=function(a,b){try{var id=a.get('items')[b].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}catch(e){}return o1.apply(this,arguments);};}var o2=TDV.Tour.Script.setMainMediaByIndex;if(o2){TDV.Tour.Script.setMainMediaByIndex=function(a){try{var items=this.mainPlayList.get('items');if(a>=0&&a<items.length){var id=items[a].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}}catch(e){}return o2.apply(this,arguments);};}console.log('[Mina] banner hooks installed (ctx='+journeyContext+')');}
 hookTDV();
 // Force-jump to tent panorama in tent modes; otherwise just trigger first banner
@@ -287,7 +270,7 @@ if(IS_TENT_MODE){
   setTimeout(jumpToTent,1500);
   setTimeout(function(){chk(TENT_PANO);},2500);
 } else {
-  setTimeout(function(){var k=Object.keys(BANNERS);if(k.length)chk(k[0]);},2500);
+  setTimeout(function(){var k=Object.keys(_bannerMap);if(k.length)chk(k[0]);},2500);
 }
 })();
 </script>

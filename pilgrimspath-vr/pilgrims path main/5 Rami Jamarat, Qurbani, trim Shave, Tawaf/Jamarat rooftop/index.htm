@@ -831,53 +831,36 @@ function _showVoHint(){
 function _hideVoHint(){ var h = document.getElementById('voHint'); if(h) h.remove(); }
 var _jbChk;
 (function(){
-var BANNERS_10TH={'panorama_691B217E_7C54_3E7A_41D3_35A255D72204':{
-  title:'\u{1f54b} 10th Day \u2014 Rami al-Jamrah al-\u02bbAqabah',
-  html:'<p class="bb">It is the morning of the 10th of Dhul-Hijjah \u2014 <strong>Yawm an-Nahr</strong>. After leaving Muzdalifah you arrive at Mina to perform the first stoning of Hajj.</p>'+
-  '<p class="bb"><strong>Today only one pillar is stoned:</strong> Jamrah al-\u02bbAqabah (the largest). You will throw <strong>seven pebbles</strong>, one at a time, with each throw saying:</p>'+
-  '<p class="ba">Bismill\u0101h, All\u0101hu Akbar.</p>'+
-  '<p class="bt">In the name of Allah, Allah is the Greatest.</p>'+
-  '<div class="sep"></div>'+
-  '<p class="bb">Turn until the screen glows green and the pillar is in view, then tap <strong>Throw Stone</strong>. After the seventh throw you will continue to the Qurbani (sacrifice).</p>',
-  // also accept the alternate angle of the same pillar
-  _aliases:['panorama_691B7A27_7C54_4D8A_4199_B128B8AEBDE4']
-},
-// fallback for the original pillar overview panorama (in case journey lands here first)
-'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':{
-  title:'\u{1f54b} 10th Day of Dhul-Hijjah — Yawm an-Nahr',
-  html:'<p class="bb">Today is the 10th day, Yawm an-Nahr. After completing Fajr prayer, we have now arrived at Rami al-Jamarat where we will perform the full ritual:</p><p class="bb">\u2022 Stone Jamrah al-Aqaba (the large pillar) only once with 7 pebbles<br>\u2022 Perform Qurbani (animal sacrifice)<br>\u2022 Shave or trim your hair<br>\u2022 Return to Al-Masjid Al-Haram for Tawaf al-Ifadha</p>'}
-};
-var BANNERS_11TH={
-'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':{
-  title:'\u{1f54b} 11th Day of Dhul-Hijjah — Days of Tashreeq',
-  html:'<p class="bb">On the 11th day, you return to Rami al-Jamarat. Today you will stone all three pillars in order:</p><p class="bb">\u2022 Jamrah as-Sughra (small) — 7 pebbles<br>\u2022 Jamrah al-Wusta (middle) — 7 pebbles<br>\u2022 Jamrah al-Aqaba (large) — 7 pebbles<br><br>Total: 21 pebbles. After completing the stoning, you may rest at your lodging in Mina or proceed to Muzdalifah if leaving on this day.</p>'}
-};
-var BANNERS_12TH={
-'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':{
-  title:'\u{1f54b} 12th Day of Dhul-Hijjah — Days of Tashreeq',
-  html:'<p class="bb">On the 12th day, you return again to Rami al-Jamarat. Today you will stone all three pillars:</p><p class="bb">\u2022 Jamrah as-Sughra (small) — 7 pebbles<br>\u2022 Jamrah al-Wusta (middle) — 7 pebbles<br>\u2022 Jamrah al-Aqaba (large) — 7 pebbles<br><br>After completing today\'s stoning, you may choose to depart Mina (though you can also stay until the 13th). If you depart, perform Tawaf al-Wida before leaving.</p>'}
-};
-var BANNERS_13TH={
-'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':{
-  title:'\u{1f54b} 13th Day of Dhul-Hijjah — Final Optional Day',
-  html:'<p class="bb">On the 13th day, stoning is optional but encouraged for those who have the time and ability. If you choose to stone today:</p><p class="bb">\u2022 Jamrah as-Sughra (small) — 7 pebbles<br>\u2022 Jamrah al-Wusta (middle) — 7 pebbles<br>\u2022 Jamrah al-Aqaba (large) — 7 pebbles<br><br>After completing today\'s stoning (or if you choose not to stone), proceed directly to Al-Masjid Al-Haram to perform your Farewell Tawaf (Tawaf al-Wida), which marks the conclusion of your Hajj.</p>'}
-};
-var journeyContext=new URL(window.location).searchParams.get('context')||'10th-day';
-var BANNERS=journeyContext==='11th-day'?BANNERS_11TH:(journeyContext==='12th-day'?BANNERS_12TH:(journeyContext==='13th-day'?BANNERS_13TH:BANNERS_10TH));
-var _jVoMap={'10th-day':{'panorama_691B217E_7C54_3E7A_41D3_35A255D72204':'English Day 10 Yawn An Nahr 1.mp3','panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':'English Day 10 Yawn An Nahr 1.mp3'},'11th-day':{'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':'English Day 11- dhul hijja.mp3'},'12th-day':{'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':'English Day 13 dhul hijjah.mp3'},'13th-day':{'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':'English Day 13 dhul hijjah.mp3'}};
-var _jVoCtx=_jVoMap[journeyContext]||{};
-if(window.PPContent && window.PPContent.hasData){
-  var _jSk = journeyContext==='11th-day'?'jamarat-11th':(journeyContext==='12th-day'||journeyContext==='13th-day')?'jamarat-12th':'jamarat-10th';
-  var _oB=window.PPContent.bannerMapByPano(_jSk);
-  Object.keys(_oB).forEach(function(k){BANNERS[k]=_oB[k];});
-  var _oA=window.PPContent.audioMapByPano(_jSk);
-  Object.keys(_oA).forEach(function(k){_jVoCtx[k]=_oA[k];});
+// ── Journey context + JCM scene key ──────────────────────────────────────
+var journeyContext = new URL(window.location).searchParams.get('context') || '10th-day';
+var _sceneKey = journeyContext === '11th-day' ? 'jamarat-11th'
+              : journeyContext === '12th-day'  ? 'jamarat-12th'
+              : journeyContext === '13th-day'  ? 'jamarat-13th'
+              :                                 'jamarat-10th';
+
+// ── Read banner + VO data from JCM (single source of truth) ──────────────
+var _bannerMap = {};
+var _audioMap  = {};
+if (window.PPContent && window.PPContent.hasData) {
+  _bannerMap = window.PPContent.bannerMapByPano(_sceneKey) || {};
+  _audioMap  = window.PPContent.audioMapByPano(_sceneKey)  || {};
 }
-var shown={};
-_jbChk=function(id){var b=BANNERS[id];if(!b||shown[id])return;shown[id]=true;if(b.title||b.html)openBanner(b.title,b.html);
-if(_jVoCtx[id])playVO(_jVoCtx[id]);
-// Signal to journey nav that last activity is complete (after stoning complete)
-if(typeof window!=='undefined'&&id==='panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1'){window.journeyActivityComplete=true;if(typeof showJourneyNextButton==='function'){setTimeout(showJourneyNextButton,300);}}};
+
+var shown = {};
+_jbChk = function(id) {
+  if (shown[id]) return;
+  var b  = _bannerMap[id];
+  var vo = _audioMap[id];
+  if (!b && !vo) return;
+  shown[id] = true;
+  if (b && (b.title || b.html)) openBanner(b.title, b.html);
+  if (vo) playVO(vo);
+  // Signal journey nav that the entry overview panorama has been seen
+  if (id === 'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1') {
+    window.journeyActivityComplete = true;
+    if (typeof showJourneyNextButton === 'function') { setTimeout(showJourneyNextButton, 300); }
+  }
+};
 setTimeout(function(){_jbChk('panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1');},2500);
 })();
 </script>

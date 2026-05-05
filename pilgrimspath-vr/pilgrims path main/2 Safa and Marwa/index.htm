@@ -150,64 +150,54 @@ function _showVoHint(){
 }
 function _hideVoHint(){ var h = document.getElementById('voHint'); if(h) h.remove(); }
 (function(){
-var BANNERS={
-// sm 1 — Beginning of Sa'i
-'panorama_740A042A_7348_ED6D_41CA_00F715E5C1F1':{
-  title:'\u{1f54b} Sa\'i Between Safa and Marwa',
-  html:'<p class="bb">You will now perform Sa\'i, walking between Safa and Marwa. Begin at Safa, facing the Kaaba, and recite:</p>'+
-  '<p class="ba">Inna as-safa wal-marwata min sha\'a\'irillah.</p>'+
-  '<p class="bt">Translation: "Indeed, Safa and Marwa are among the symbols of Allah."</p>'+
-  '<div class="sep"></div>'+
-  '<p class="bb">You may also recite:</p>'+
-  '<p class="ba">Abda\'u bim\u0101 bad\u0101\' All\u0101hu bih.</p>'+
-  '<p class="bt">Translation: "I begin with that which Allah has begun with."</p>'+
-  '<p class="ba">L\u0101 il\u0101ha illa All\u0101hu wa\u1e25dahu l\u0101 shar\u012bka lah, lahu l-mulku wa lahu l-\u1e25amd, yu\u1e25y\u012b wa yum\u012bt, wa huwa \u02bfal\u0101 kulli shay\'in qad\u012br.</p>'+
-  '<p class="bt">Translation: "There is no deity except Allah, alone without a partner. To Him belongs the Dominion, and to Him belongs all praise. He gives life and death, and He has power over everything."</p>'+
-  '<p class="ba">L\u0101 il\u0101ha illa All\u0101hu wa\u1e25dah, anjaza wa\u02bfdahu wa na\u1e63ara \u02bfabdahu wa hazama l-a\u1e25z\u0101ba wa\u1e25dah.</p>'+
-  '<p class="bt">Translation: "There is no deity except Allah alone. He fulfilled His promise, supported His slave and defeated the Confederates alone."</p>'},
-// sm 2 — Walking between the two hills
-'panorama_740A504C_7348_2525_41D3_C8D1BB48BC81':{
-  title:'\u{1f6b6} Walking Between Safa and Marwa',
-  html:'<p class="bb">As you walk between the two hills seven times, recite dhikr and personal duas.</p>'+
-  '<p class="bb">When you reach the green markers, hasten your pace (men only), then resume walking at a normal pace after passing them.</p>'+
-  '<p class="bb">Complete Sa\'i by reaching Marwa for the seventh time.</p>'},
-// sm21 — Halaq or Qasar (final ritual) + Congratulations
-'panorama_77BBA118_7348_272D_41C8_26E405934981':{
-  title:'\u2702\ufe0f Halaq or Qasar',
-  html:'<p class="bb"><strong>Voice-over:</strong> Upon completing Sa\'i, men get their heads shaved or trimmed, while women only get their hair trimmed.</p>'+
-  '<p class="bb">This now signifies you are out of the boundaries of Ihram and will await the 8th of Dhul-Hijjah.</p>'+
-  '<div class="sep"></div>'+
-  '<h3 style="color:#22c55e;">\u{1f389} Congratulations</h3>'+
-  '<p class="bb">You have now completed Umrah.</p>'}
-};
-var shown={},lastId='';
-// --- Persist dedupe across reloads in same browser session ---
-var _shownKey='pp_shown_safa_marwa';
-try{var _ss=sessionStorage.getItem(_shownKey);if(_ss){var _p=JSON.parse(_ss);if(_p&&typeof _p==='object'){shown=_p;}}}catch(_e){}
-function _persistShown(){try{sessionStorage.setItem(_shownKey,JSON.stringify(shown));}catch(_e){}}
-// Halaq panorama (final ritual + congrats) — gated to fire only AFTER all 7 circuits are done
-var HALAQ_PANO='panorama_77BBA118_7348_272D_41C8_26E405934981';
-var _VO_MAP={'panorama_740A042A_74AC_0DF9_41CC_5E0AB90618E2':'English Safa and Marwa.mp3','panorama_740A504C_74AC_0D19_41D9_9C8CE3F3A7A0':'Safaandmarwa3.mp3','panorama_77BBA118_7348_272D_41C8_26E405934981':'English Congratulations Umrah.mp3'};
-if(window.PPContent && window.PPContent.hasData){
-  var _oB=window.PPContent.bannerMapByPano('safa-marwa');
-  Object.keys(_oB).forEach(function(k){BANNERS[k]=_oB[k];});
-  var _oA=window.PPContent.audioMapByPano('safa-marwa');
-  Object.keys(_oA).forEach(function(k){_VO_MAP[k]=_oA[k];});
+// ── Read banner + VO data from JCM (single source of truth) ──────────────
+var _bannerMap = {};
+var _audioMap  = {};
+if (window.PPContent && window.PPContent.hasData) {
+  _bannerMap = window.PPContent.bannerMapByPano('safa-marwa') || {};
+  _audioMap  = window.PPContent.audioMapByPano('safa-marwa')  || {};
 }
-function chk(id){
-// Auto-count Sa'i lap when reaching sm 6 (Marwa) or sm21 (back to Safa side)
-if((id.indexOf('740A3162')!==-1||id.indexOf('77BBA118')!==-1)&&typeof window.saiLapInc==='function'){window.saiLapInc();}
-// Gate the Halaq / Congratulations banner: only fire after all 7 circuits are complete
-if(id===HALAQ_PANO){var _laps=parseInt(sessionStorage.getItem('saiLaps')||'0',10);if(_laps<7){return;}}
-var b=BANNERS[id];if(!b||shown[id])return;shown[id]=true;_persistShown();if(b.title||b.html)openBanner(b.title,b.html);
-if(_VO_MAP[id])playVO(_VO_MAP[id]);
-// Signal to journey nav that last panorama is reached (Halaq is the last step)
-if(id===HALAQ_PANO&&typeof window!=='undefined'){window.journeyIsLastPanorama=true;if(typeof showJourneyNextButton==='function'){setTimeout(showJourneyNextButton,300);}}}
-// TDV-hook only detection (PerformanceObserver was racing on adjacent-pano preloads)
+
+// ── Deduplication — persisted across same-session reloads ─────────────────
+var shown = {}, lastId = '';
+var _shownKey = 'pp_shown_safa_marwa';
+try { var _ss = sessionStorage.getItem(_shownKey); if (_ss) { var _p = JSON.parse(_ss); if (_p && typeof _p === 'object') { shown = _p; } } } catch(_e) {}
+function _persistShown() { try { sessionStorage.setItem(_shownKey, JSON.stringify(shown)); } catch(_e) {} }
+
+// ── Gate: Halaq/Qasar banner only fires after 7 Sa'i circuits ─────────────
+var HALAQ_PANO = 'panorama_77BBA118_7348_272D_41C8_26E405934981';
+
+function chk(id) {
+  // Sa'i lap counting
+  if ((id.indexOf('740A3162') !== -1 || id.indexOf('77BBA118') !== -1) && typeof window.saiLapInc === 'function') {
+    window.saiLapInc();
+  }
+  // Gate: Halaq only after 7 laps
+  if (id === HALAQ_PANO) {
+    var _laps = parseInt(sessionStorage.getItem('saiLaps') || '0', 10);
+    if (_laps < 7) return;
+  }
+  if (shown[id]) return;
+  var b  = _bannerMap[id];
+  var vo = _audioMap[id];
+  if (!b && !vo) return;
+  shown[id] = true;
+  _persistShown();
+  if (b && (b.title || b.html)) openBanner(b.title, b.html);
+  if (vo) playVO(vo);
+  // Signal journey nav: last panorama reached
+  if (id === HALAQ_PANO) {
+    window.journeyIsLastPanorama = true;
+    if (typeof showJourneyNextButton === 'function') { setTimeout(showJourneyNextButton, 300); }
+  }
+}
+
+// TDV hook only — no PerformanceObserver/Image hijack (fires on adjacent-pano preloads)
 function hookTDV(){if(typeof TDV==='undefined'||!TDV.Tour||!TDV.Tour.Script)return setTimeout(hookTDV,500);var o1=TDV.Tour.Script.setPlayListSelectedIndex;if(o1){TDV.Tour.Script.setPlayListSelectedIndex=function(a,b){try{var id=a.get('items')[b].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}catch(e){}return o1.apply(this,arguments);};}var o2=TDV.Tour.Script.setMainMediaByIndex;if(o2){TDV.Tour.Script.setMainMediaByIndex=function(a){try{var items=this.mainPlayList.get('items');if(a>=0&&a<items.length){var id=items[a].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}}catch(e){}return o2.apply(this,arguments);};}console.log('[SafaMarwa] banner hooks installed');}
 hookTDV();
-// Fallback: after tour init, look up the actually visible panorama and trigger its banner
-setTimeout(function(){try{var t=TDV.PlayerAPI.getCurrentPlayer();var pl=t&&t.mainPlayList;if(!pl)return;var idx=pl.get('selectedIndex');var id=pl.get('items')[idx].get('media').get('id');if(id&&id!==lastId){lastId=id;chk(id);}}catch(e){var k=Object.keys(BANNERS);if(k.length)chk(k[0]);}},3000);
+
+// Fallback: after tour init, trigger banner for currently visible panorama
+setTimeout(function(){try{var t=TDV.PlayerAPI.getCurrentPlayer();var pl=t&&t.mainPlayList;if(!pl)return;var idx=pl.get('selectedIndex');var id=pl.get('items')[idx].get('media').get('id');if(id&&id!==lastId){lastId=id;chk(id);}}catch(e){var k=Object.keys(_bannerMap);if(k.length)chk(k[0]);}},3000);
 })();
 </script>
 
