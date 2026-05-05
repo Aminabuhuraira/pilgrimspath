@@ -129,54 +129,90 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Muzdalifah
   50%{ filter:drop-shadow(0 0 20px rgba(201,168,76,0.7)) brightness(1.1); transform:scale(1.04); }
 }
 
-/* Activity Guide — frame banner */
+/* Activity Guide banner */
 #muzGuide{
   display:none; position:fixed; left:50%; top:50%; transform:translate(-50%,-50%);
   z-index:10003;
-  width:min(96vw,900px); min-height:clamp(200px,44vh,420px);
-  background:url('../../media/banner-frame.png') no-repeat center/100% 100%;
+  width:min(96vw,860px);
+  max-height:90vh;
+  overflow-y:auto;
+  /* Pure CSS card — no background-image so it never distorts or clips on desktop */
+  background:linear-gradient(150deg,#FDFBF4 0%,#F6EDDA 55%,#FDFBF4 100%);
+  border:2.5px solid #C9A84C;
+  border-radius:20px;
+  box-shadow:0 0 0 7px rgba(201,168,76,0.12),0 28px 70px rgba(0,0,0,0.38);
   font-family:'DM Sans',Arial,sans-serif;
+  position:relative;
+}
+#muzGuide::before{
+  content:'';
+  position:absolute;
+  inset:8px;
+  border:1px solid rgba(201,168,76,0.38);
+  border-radius:13px;
+  pointer-events:none;
+  z-index:0;
 }
 .muzGuideBody{
-  box-sizing:border-box; width:100%; height:100%;
-  padding:clamp(30px,4vw,56px) clamp(80px,11vw,130px);
-  display:flex; flex-direction:column; justify-content:center; align-items:center;
-  overflow-y:auto; overflow-x:hidden; text-align:center;
+  box-sizing:border-box; width:100%; position:relative; z-index:1;
+  padding:clamp(32px,4vw,56px) clamp(56px,7vw,100px);
+  display:flex; flex-direction:column; align-items:center;
+  text-align:center;
 }
-#muzGuide h3{ color:#8B6914; font-size:clamp(16px,2vw,26px); margin:0 0 4px; font-weight:700; }
-#muzGuide .subtitle{ color:#6B5B4F; font-size:clamp(10px,1.1vw,15px); margin:0 0 10px; font-style:italic; }
-#muzGuide .steps{ text-align:left; margin:0 0 10px; padding:0; list-style:none; width:min(100%,480px); }
-#muzGuide .steps li{ padding:4px 0; font-size:clamp(10px,1.1vw,15px); color:#3D2B1F; display:flex; gap:8px; align-items:flex-start; }
-#muzGuide .steps li .num{ color:#8B6914; font-weight:700; min-width:20px; }
-#muzGuide .dua{ font-size:clamp(14px,1.5vw,20px); color:#8B6914; margin:6px 0 4px; direction:rtl; line-height:1.6; }
-#muzGuide .pebble-img{ width:56px; margin:0 auto 10px; display:block; opacity:0.85; }
+#muzGuide h3{ color:#8B6914; font-size:clamp(18px,2.2vw,28px); margin:0 0 4px; font-weight:700; }
+#muzGuide .subtitle{ color:#6B5B4F; font-size:clamp(13px,1.4vw,17px); margin:0 0 14px; font-style:italic; }
+#muzGuide .steps{ text-align:left; margin:0 0 12px; padding:0; list-style:none; width:min(100%,540px); }
+#muzGuide .steps li{ padding:5px 0; font-size:clamp(13px,1.4vw,16px); color:#3D2B1F; display:flex; gap:8px; align-items:flex-start; border-bottom:1px solid rgba(201,168,76,0.12); }
+#muzGuide .steps li:last-child{ border-bottom:none; }
+#muzGuide .steps li .num{ color:#C9A84C; font-weight:700; min-width:20px; flex-shrink:0; }
+#muzGuide .dua{ font-size:clamp(16px,1.9vw,24px); color:#8B6914; margin:10px 0 6px; direction:rtl; line-height:1.8; }
+#muzGuide .pebble-img{ width:clamp(44px,6vw,64px); margin:0 auto 14px; display:block; opacity:0.9; }
 #muzGuide button{
   background:linear-gradient(135deg,#C9A84C,#8B6914); color:#fff;
-  border:none; border-radius:10px; padding:10px 32px; font-size:clamp(12px,1.2vw,16px);
-  font-weight:600; cursor:pointer; transition:transform .15s; margin-top:4px;
+  border:none; border-radius:50px; padding:clamp(10px,1.2vw,13px) clamp(28px,4vw,44px);
+  font-size:clamp(13px,1.4vw,17px);
+  font-weight:700; cursor:pointer; transition:transform .15s,box-shadow .15s;
+  margin-top:10px; box-shadow:0 4px 18px rgba(201,168,76,0.35);
 }
-#muzGuide button:hover{ transform:scale(1.03); }
+#muzGuide button:hover{ transform:scale(1.04); box-shadow:0 6px 24px rgba(201,168,76,0.55); }
 
 /* Completion */
 #pebbleComplete{
   display:none; position:fixed; left:50%; top:50%; transform:translate(-50%,-50%);
   z-index:10001;
-  width:min(96vw,700px); min-height:clamp(180px,36vh,340px);
-  background:url('../../media/banner-frame.png') no-repeat center/100% 100%;
+  width:min(96vw,660px);
+  max-height:88vh;
+  overflow-y:auto;
+  background:linear-gradient(150deg,#FDFBF4 0%,#F6EDDA 55%,#FDFBF4 100%);
+  border:2.5px solid #C9A84C;
+  border-radius:20px;
+  box-shadow:0 0 0 7px rgba(201,168,76,0.12),0 28px 70px rgba(0,0,0,0.38);
   font-family:'DM Sans',Arial,sans-serif; text-align:center;
+  position:relative;
+}
+#pebbleComplete::before{
+  content:'';
+  position:absolute;
+  inset:8px;
+  border:1px solid rgba(201,168,76,0.38);
+  border-radius:13px;
+  pointer-events:none;
 }
 #pebbleComplete .pcBody{
-  box-sizing:border-box; width:100%; height:100%;
-  padding:clamp(30px,4vw,56px) clamp(80px,11vw,130px);
+  box-sizing:border-box; width:100%; position:relative; z-index:1;
+  padding:clamp(32px,4vw,52px) clamp(56px,7vw,100px);
   display:flex; flex-direction:column; justify-content:center; align-items:center;
 }
-#pebbleComplete h3{color:#8B6914;font-size:clamp(16px,2vw,24px);margin:0 0 8px;}
-#pebbleComplete p{color:#3D2B1F;font-size:clamp(11px,1.2vw,15px);margin:0 0 14px;}
+#pebbleComplete h3{color:#8B6914;font-size:clamp(18px,2.2vw,26px);margin:0 0 10px;font-weight:700;}
+#pebbleComplete p{color:#3D2B1F;font-size:clamp(13px,1.4vw,16px);margin:0 0 18px;line-height:1.6;}
 #pebbleComplete button{
   background:linear-gradient(135deg,#C9A84C,#8B6914); color:#fff;
-  border:none; border-radius:8px; padding:10px 28px; font-size:clamp(12px,1.2vw,15px);
-  font-weight:600; cursor:pointer;
+  border:none; border-radius:50px; padding:clamp(10px,1.2vw,13px) clamp(24px,3.5vw,40px);
+  font-size:clamp(13px,1.4vw,16px);
+  font-weight:700; cursor:pointer; box-shadow:0 4px 18px rgba(201,168,76,0.35);
+  transition:transform .15s;
 }
+#pebbleComplete button:hover{ transform:scale(1.04); }
 </style>
 
 <!-- Pebble HUD -->
