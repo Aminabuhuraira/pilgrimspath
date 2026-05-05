@@ -187,6 +187,7 @@ async function upsertProfile(user) {
             last_name: meta.last_name || '',
             display_name: meta.display_name || '',
             country: meta.country || '',
+            avatar_url: meta.avatar_url || '',
             created_at: user.created_at,
             last_sign_in_at: user.last_sign_in_at || new Date().toISOString(),
             updated_at: new Date().toISOString()

@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#C9A227">
+    <meta name="robots" content="noindex, nofollow">
+    <title>My Profile | Pilgrim's Path</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap"></noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+    /* ── Profile-specific styles ── */
+    .profile-wrap {
+        max-width: 820px;
+        margin: 0 auto;
+        padding: 32px 24px 80px;
+    }
+    .profile-header-card {
+        background: var(--white);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow-md);
+        padding: 36px 32px;
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+    }
+    .profile-avatar-wrap {
+        position: relative;
+        flex-shrink: 0;
+    }
+    .profile-avatar-large {
+        width: 100px;
+        height: 100px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+        color: #fff;
+        font-weight: 700;
+        font-size: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border: 3px solid var(--gold-light);
+    }
+    .profile-avatar-large img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .avatar-upload-btn {
+        position: absolute;
+        bottom: -8px;
+        right: -8px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--gold);
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: .75rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,.2);
+        transition: var(--transition);
+    }
+    .avatar-upload-btn:hover { background: var(--gold-dark); transform: scale(1.1); }
+    #avatarFileInput { display: none; }
+    .profile-header-info { flex: 1; min-width: 0; }
+    .profile-header-info h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.6rem;
+        color: var(--text);
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .profile-header-info .profile-email {
+        color: var(--text-secondary);
+        font-size: .9rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 8px;
+    }
+    .profile-meta-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .profile-tag {
+        background: var(--gold-light);
+        color: var(--gold-dark);
+        border-radius: 999px;
+        padding: 3px 12px;
+        font-size: .78rem;
+        font-weight: 500;
+    }
+    .profile-section {
+        background: var(--white);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow-sm);
+        padding: 28px 32px;
+        margin-bottom: 20px;
+    }
+    .profile-section h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .profile-section h3 i { color: var(--gold); }
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+    @media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label {
+        font-size: .82rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+    }
+    .form-group input,
+    .form-group select {
+        padding: 11px 14px;
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
+        font-family: 'Poppins', sans-serif;
+        font-size: .9rem;
+        color: var(--text);
+        background: var(--bg);
+        transition: var(--transition);
+        outline: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+        border-color: var(--gold);
+        background: var(--white);
+        box-shadow: 0 0 0 3px rgba(201,162,39,.12);
+    }
+    .form-group input[readonly] {
+        background: rgba(0,0,0,.03);
+        color: var(--text-secondary);
+        cursor: not-allowed;
+    }
+    .profile-save-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 12px 28px;
+        font-family: 'Poppins', sans-serif;
+        font-size: .9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        margin-top: 8px;
+    }
+    .profile-save-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-gold); }
+    .profile-save-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .save-success {
+        display: none;
+        align-items: center;
+        gap: 6px;
+        color: #27ae60;
+        font-size: .85rem;
+        font-weight: 500;
+        margin-top: 12px;
+    }
+    .save-success.show { display: flex; }
+    .save-error {
+        display: none;
+        align-items: center;
+        gap: 6px;
+        color: #e74c3c;
+        font-size: .85rem;
+        font-weight: 500;
+        margin-top: 12px;
+    }
+    .save-error.show { display: flex; }
+    /* Progress summary */
+    .progress-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+    @media (max-width: 480px) { .progress-summary-grid { grid-template-columns: 1fr 1fr; } }
+    .prog-stat {
+        background: var(--bg);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        padding: 16px;
+        text-align: center;
+    }
+    .prog-stat-num {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--gold-dark);
+        line-height: 1;
+        margin-bottom: 4px;
+    }
+    .prog-stat-lbl {
+        font-size: .75rem;
+        color: var(--text-secondary);
+    }
+    .password-section-note {
+        font-size: .82rem;
+        color: var(--text-secondary);
+        margin-bottom: 16px;
+    }
+    /* Danger zone */
+    .danger-zone {
+        border-color: rgba(231,76,60,.2) !important;
+    }
+    .danger-zone h3 { color: #c0392b; }
+    .danger-zone h3 i { color: #c0392b; }
+    .danger-btn {
+        background: none;
+        border: 1.5px solid #e74c3c;
+        color: #e74c3c;
+        border-radius: 10px;
+        padding: 9px 20px;
+        font-family: 'Poppins', sans-serif;
+        font-size: .85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    .danger-btn:hover { background: rgba(231,76,60,.06); }
+    /* Back link */
+    .profile-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: .85rem;
+        margin-bottom: 20px;
+        transition: var(--transition);
+    }
+    .profile-back:hover { color: var(--gold); }
+    /* Toast */
+    #ppToast {
+        position: fixed; bottom: 24px; left: 50%;
+        transform: translateX(-50%);
+        background: rgba(30,24,14,.92); color: #fff;
+        border-radius: 24px; padding: 10px 22px;
+        font-size: .82rem; font-family: 'Poppins',sans-serif;
+        z-index: 10010; pointer-events: none;
+        opacity: 0; transition: opacity .3s;
+        white-space: nowrap; box-shadow: 0 4px 20px rgba(0,0,0,.4);
+    }
+    #ppToast.show { opacity: 1; }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <header class="dash-topbar">
+        <div class="topbar-left">
+            <a href="dashboard.html" class="dash-logo">
+                <img src="images/logo.png" alt="Pilgrim's Path" class="dash-logo-img">
+            </a>
+        </div>
+        <div class="topbar-right">
+            <div class="topbar-user" id="userDropdownToggle">
+                <div class="user-avatar" id="topbarAvatar">PP</div>
+                <span class="user-name" id="topbarName">Pilgrim</span>
+                <i class="fas fa-chevron-down"></i>
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                    <a href="dashboard.html"><i class="fas fa-gauge"></i> Dashboard</a>
+                    <hr>
+                    <a href="#" onclick="signOut(); return false;" class="logout-link"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main style="padding-top: var(--topbar-h);">
+        <div class="profile-wrap">
+            <a href="dashboard.html" class="profile-back">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+
+            <!-- Header card: avatar + name -->
+            <div class="profile-header-card">
+                <div class="profile-avatar-wrap">
+                    <div class="profile-avatar-large" id="profileAvatarDisplay">
+                        <span id="profileAvatarInitials">PP</span>
+                    </div>
+                    <button class="avatar-upload-btn" title="Change profile photo" onclick="document.getElementById('avatarFileInput').click()">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                    <input type="file" id="avatarFileInput" accept="image/*">
+                </div>
+                <div class="profile-header-info">
+                    <h2 id="profileDisplayName">Loading…</h2>
+                    <div class="profile-email">
+                        <i class="fas fa-envelope"></i>
+                        <span id="profileEmailDisplay">—</span>
+                    </div>
+                    <div class="profile-meta-tags">
+                        <span class="profile-tag" id="profileCountryTag"><i class="fas fa-globe"></i> —</span>
+                        <span class="profile-tag" id="profileJoinedTag"><i class="fas fa-calendar"></i> —</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit profile section -->
+            <div class="profile-section">
+                <h3><i class="fas fa-user-pen"></i> Personal Information</h3>
+                <form id="profileForm" onsubmit="saveProfile(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="pfFirstName">First Name</label>
+                            <input type="text" id="pfFirstName" placeholder="First name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pfLastName">Last Name</label>
+                            <input type="text" id="pfLastName" placeholder="Last name">
+                        </div>
+                        <div class="form-group full">
+                            <label for="pfEmail">Email Address</label>
+                            <input type="email" id="pfEmail" readonly placeholder="—">
+                        </div>
+                        <div class="form-group full">
+                            <label for="pfCountry">Country</label>
+                            <select id="pfCountry">
+                                <option value="">Select your country</option>
+                                <option value="Saudi Arabia">Saudi Arabia</option>
+                                <option value="Pakistan">Pakistan</option>
+                                <option value="Bangladesh">Bangladesh</option>
+                                <option value="Indonesia">Indonesia</option>
+                                <option value="India">India</option>
+                                <option value="Malaysia">Malaysia</option>
+                                <option value="Nigeria">Nigeria</option>
+                                <option value="Egypt">Egypt</option>
+                                <option value="Turkey">Turkey</option>
+                                <option value="Morocco">Morocco</option>
+                                <option value="United Kingdom">United Kingdom</option>
+                                <option value="United States">United States</option>
+                                <option value="Canada">Canada</option>
+                                <option value="Australia">Australia</option>
+                                <option value="Germany">Germany</option>
+                                <option value="France">France</option>
+                                <option value="Netherlands">Netherlands</option>
+                                <option value="UAE">United Arab Emirates</option>
+                                <option value="Qatar">Qatar</option>
+                                <option value="Kuwait">Kuwait</option>
+                                <option value="Bahrain">Bahrain</option>
+                                <option value="Oman">Oman</option>
+                                <option value="Jordan">Jordan</option>
+                                <option value="Lebanon">Lebanon</option>
+                                <option value="Tunisia">Tunisia</option>
+                                <option value="Algeria">Algeria</option>
+                                <option value="Libya">Libya</option>
+                                <option value="Sudan">Sudan</option>
+                                <option value="Somalia">Somalia</option>
+                                <option value="Ethiopia">Ethiopia</option>
+                                <option value="Tanzania">Tanzania</option>
+                                <option value="Kenya">Kenya</option>
+                                <option value="Uganda">Uganda</option>
+                                <option value="Ghana">Ghana</option>
+                                <option value="Senegal">Senegal</option>
+                                <option value="Iran">Iran</option>
+                                <option value="Iraq">Iraq</option>
+                                <option value="Afghanistan">Afghanistan</option>
+                                <option value="Kazakhstan">Kazakhstan</option>
+                                <option value="Uzbekistan">Uzbekistan</option>
+                                <option value="Azerbaijan">Azerbaijan</option>
+                                <option value="Philippines">Philippines</option>
+                                <option value="Singapore">Singapore</option>
+                                <option value="South Africa">South Africa</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="profile-save-btn" id="saveBtn">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                    <div class="save-success" id="saveSuccess">
+                        <i class="fas fa-check-circle"></i> Profile updated successfully
+                    </div>
+                    <div class="save-error" id="saveError">
+                        <i class="fas fa-exclamation-circle"></i> <span id="saveErrorMsg">Failed to save. Please try again.</span>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Journey progress summary -->
+            <div class="profile-section">
+                <h3><i class="fas fa-route"></i> Journey Progress</h3>
+                <div class="progress-summary-grid">
+                    <div class="prog-stat">
+                        <span class="prog-stat-num" id="psScenesCompleted">0</span>
+                        <span class="prog-stat-lbl">Scenes Completed</span>
+                    </div>
+                    <div class="prog-stat">
+                        <span class="prog-stat-num" id="psHajjPct">0%</span>
+                        <span class="prog-stat-lbl">Hajj Progress</span>
+                    </div>
+                    <div class="prog-stat">
+                        <span class="prog-stat-num" id="psQuizScore">—</span>
+                        <span class="prog-stat-lbl">Best Quiz Score</span>
+                    </div>
+                </div>
+                <div style="margin-top:16px;">
+                    <a href="dashboard.html" style="display:inline-flex;align-items:center;gap:6px;color:var(--gold-dark);font-size:.85rem;text-decoration:none;font-weight:500;">
+                        <i class="fas fa-gauge"></i> View full dashboard →
+                    </a>
+                </div>
+            </div>
+
+            <!-- Change password -->
+            <div class="profile-section">
+                <h3><i class="fas fa-lock"></i> Change Password</h3>
+                <p class="password-section-note">We'll send a password reset link to your registered email address.</p>
+                <button class="profile-save-btn" onclick="sendPasswordReset()" id="pwResetBtn" style="background:linear-gradient(135deg,#5a7abf,#2c4a8c);">
+                    <i class="fas fa-envelope"></i> Send Reset Email
+                </button>
+                <div class="save-success" id="pwSuccess">
+                    <i class="fas fa-check-circle"></i> Reset email sent — check your inbox
+                </div>
+            </div>
+
+            <!-- Danger zone -->
+            <div class="profile-section danger-zone">
+                <h3><i class="fas fa-triangle-exclamation"></i> Account</h3>
+                <p style="font-size:.85rem;color:var(--text-secondary);margin-bottom:16px;">
+                    Reset your journey progress or sign out of your account.
+                </p>
+                <div style="display:flex;flex-wrap:wrap;gap:12px;">
+                    <button class="danger-btn" onclick="confirmResetProgress()">
+                        <i class="fas fa-rotate-left"></i> Reset Journey Progress
+                    </button>
+                    <button class="danger-btn" onclick="signOut()" style="border-color:#7d5a45;color:#7d5a45;">
+                        <i class="fas fa-sign-out-alt"></i> Sign Out
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="ppToast"></div>
+
+    <!-- Supabase Auth -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
+
+    <script>
+    var _currentUser = null;
+
+    function showToast(msg, dur) {
+        var t = document.getElementById('ppToast');
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(t._t);
+        t._t = setTimeout(function(){ t.classList.remove('show'); }, dur || 3000);
+    }
+
+    function setAvatarDisplay(src, initials) {
+        var wrap = document.getElementById('profileAvatarDisplay');
+        var span = document.getElementById('profileAvatarInitials');
+        if (src) {
+            wrap.innerHTML = '<img src="' + src + '" alt="Profile photo">';
+        } else {
+            wrap.innerHTML = '<span id="profileAvatarInitials">' + (initials || 'PP') + '</span>';
+        }
+        // Also update topbar
+        var topbarAv = document.getElementById('topbarAvatar');
+        if (topbarAv) {
+            if (src) {
+                topbarAv.innerHTML = '<img src="' + src + '" alt="" style="width:36px;height:36px;border-radius:10px;object-fit:cover;">';
+            } else {
+                topbarAv.textContent = initials || 'PP';
+            }
+        }
+    }
+
+    // Load journey progress stats
+    function loadProgressStats() {
+        try {
+            var state = JSON.parse(localStorage.getItem('journeyState') || '{}');
+            var completedSteps = state.completedSteps || [];
+            var current = state.currentStep || 0;
+            // Infer completed count
+            var doneCount = completedSteps.length > 0 ? completedSteps.length : Math.max(0, current - 1);
+            var pct = Math.min(100, Math.round(doneCount / 14 * 100));
+
+            document.getElementById('psScenesCompleted').textContent = doneCount;
+            document.getElementById('psHajjPct').textContent = pct + '%';
+
+            // Best quiz score
+            var scores = JSON.parse(localStorage.getItem('pp_quiz_scores') || '{}');
+            var vals = Object.values(scores);
+            if (vals.length > 0) {
+                var best = Math.max.apply(null, vals.map(function(v){ return typeof v === 'object' ? (v.score || 0) : v; }));
+                document.getElementById('psQuizScore').textContent = Math.round(best) + '%';
+            }
+        } catch(e) {}
+    }
+
+    // Initialize page with user data
+    (async function init() {
+        var user = await requireAuth();
+        if (!user) return;
+        _currentUser = user;
+
+        var meta = user.user_metadata || {};
+        var firstName = meta.first_name || '';
+        var lastName  = meta.last_name  || '';
+        var country   = meta.country   || '';
+        var displayName = getUserDisplayName(user);
+        var initials    = getUserInitials(user);
+        var email       = user.email || '';
+        var joinDate    = user.created_at ? new Date(user.created_at).toLocaleDateString('en-GB', {month:'long',year:'numeric'}) : '';
+        var avatarUrl   = meta.avatar_url || localStorage.getItem('pp_avatar_b64') || '';
+
+        // Header card
+        document.getElementById('profileDisplayName').textContent = displayName || 'Pilgrim';
+        document.getElementById('profileEmailDisplay').textContent = email;
+        document.getElementById('profileCountryTag').innerHTML = '<i class="fas fa-globe"></i> ' + (country || 'Country not set');
+        document.getElementById('profileJoinedTag').innerHTML  = '<i class="fas fa-calendar"></i> Joined ' + (joinDate || '—');
+        setAvatarDisplay(avatarUrl, initials);
+
+        // Topbar
+        document.getElementById('topbarName').textContent = (firstName || displayName).split(' ')[0];
+
+        // Form fields
+        document.getElementById('pfFirstName').value = firstName;
+        document.getElementById('pfLastName').value  = lastName;
+        document.getElementById('pfEmail').value     = email;
+        var countrySelect = document.getElementById('pfCountry');
+        // Try to match the stored country
+        for (var i = 0; i < countrySelect.options.length; i++) {
+            if (countrySelect.options[i].value === country || countrySelect.options[i].text === country) {
+                countrySelect.selectedIndex = i;
+                break;
+            }
+        }
+
+        // Progress stats
+        loadProgressStats();
+    })();
+
+    // Save profile changes
+    async function saveProfile(e) {
+        e.preventDefault();
+        var btn = document.getElementById('saveBtn');
+        var successEl = document.getElementById('saveSuccess');
+        var errorEl   = document.getElementById('saveError');
+        successEl.classList.remove('show');
+        errorEl.classList.remove('show');
+
+        var firstName = document.getElementById('pfFirstName').value.trim();
+        var lastName  = document.getElementById('pfLastName').value.trim();
+        var country   = document.getElementById('pfCountry').value;
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…';
+
+        try {
+            var sb = getSupabaseClient();
+            var avatarUrl = (_currentUser.user_metadata || {}).avatar_url || localStorage.getItem('pp_avatar_b64') || '';
+
+            var { error } = await sb.auth.updateUser({
+                data: {
+                    first_name: firstName,
+                    last_name: lastName,
+                    display_name: (firstName + ' ' + lastName).trim(),
+                    country: country,
+                    avatar_url: avatarUrl
+                }
+            });
+            if (error) throw error;
+
+            // Also upsert profiles table
+            await sb.from('profiles').upsert({
+                id: _currentUser.id,
+                email: _currentUser.email,
+                first_name: firstName,
+                last_name: lastName,
+                display_name: (firstName + ' ' + lastName).trim(),
+                country: country,
+                updated_at: new Date().toISOString()
+            }, { onConflict: 'id' }).catch(function(){});
+
+            // Update header display
+            var displayName = (firstName + ' ' + lastName).trim() || firstName || 'Pilgrim';
+            document.getElementById('profileDisplayName').textContent = displayName;
+            document.getElementById('profileCountryTag').innerHTML = '<i class="fas fa-globe"></i> ' + (country || 'Country not set');
+            document.getElementById('topbarName').textContent = firstName || displayName;
+
+            successEl.classList.add('show');
+            setTimeout(function(){ successEl.classList.remove('show'); }, 4000);
+        } catch(err) {
+            document.getElementById('saveErrorMsg').textContent = err.message || 'Failed to save. Please try again.';
+            errorEl.classList.add('show');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+        }
+    }
+
+    // Profile picture upload
+    document.getElementById('avatarFileInput').addEventListener('change', function(e) {
+        var file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 5 * 1024 * 1024) {
+            showToast('Image too large — max 5 MB', 3000);
+            return;
+        }
+        var reader = new FileReader();
+        reader.onload = async function(ev) {
+            var dataUrl = ev.target.result;
+            // Show immediately
+            setAvatarDisplay(dataUrl, null);
+            // Save to localStorage for instant access
+            try { localStorage.setItem('pp_avatar_b64', dataUrl); } catch(e) {}
+            // Persist to Supabase user metadata
+            try {
+                var sb = getSupabaseClient();
+                await sb.auth.updateUser({ data: { avatar_url: dataUrl } });
+                await sb.from('profiles').upsert({
+                    id: _currentUser.id,
+                    avatar_url: dataUrl,
+                    updated_at: new Date().toISOString()
+                }, { onConflict: 'id' }).catch(function(){});
+                showToast('✓ Profile photo updated', 2500);
+            } catch(err) {
+                showToast('Photo saved locally (sync failed)', 3000);
+            }
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // Send password reset
+    async function sendPasswordReset() {
+        var btn = document.getElementById('pwResetBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
+        try {
+            await resetPassword(_currentUser.email);
+            document.getElementById('pwSuccess').classList.add('show');
+            showToast('✓ Reset email sent!', 3000);
+        } catch(err) {
+            showToast('Failed to send reset email: ' + err.message, 4000);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-envelope"></i> Send Reset Email';
+        }
+    }
+
+    // Reset journey progress
+    function confirmResetProgress() {
+        if (!confirm('Reset all journey progress? This cannot be undone.')) return;
+        try {
+            localStorage.removeItem('journeyState');
+            localStorage.removeItem('pp_quiz_scores');
+            localStorage.removeItem('pp_quiz_enabled');
+            localStorage.removeItem('pp_cert_awarded_at');
+            showToast('Journey progress reset', 2500);
+            loadProgressStats();
+        } catch(e) {
+            showToast('Failed to reset progress', 2500);
+        }
+    }
+
+    // Dropdown toggle
+    document.getElementById('userDropdownToggle').addEventListener('click', function(e) {
+        e.stopPropagation();
+        document.getElementById('userDropdown').classList.toggle('show');
+    });
+    document.addEventListener('click', function() {
+        document.getElementById('userDropdown').classList.remove('show');
+    });
+    </script>
+</body>
+</html>

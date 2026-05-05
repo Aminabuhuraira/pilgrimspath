@@ -74,9 +74,23 @@ class JourneyManager {
     return null;
   }
 
+  markComplete(stepId){
+    if(stepId && this.completedSteps.indexOf(stepId) === -1){
+      this.completedSteps.push(stepId);
+      this.saveState();
+    }
+  }
+
   goToStep(index){
     if(index >= 1 && index <= HAJJ_JOURNEY.length){
       const step = HAJJ_JOURNEY[index - 1];
+      // Mark the current step as completed before advancing
+      if(this.currentStep > 0){
+        const prev = HAJJ_JOURNEY[this.currentStep - 1];
+        if(prev && this.completedSteps.indexOf(prev.id) === -1){
+          this.completedSteps.push(prev.id);
+        }
+      }
       this.currentStep = index;
       this.currentContext = step.context;
       this.saveState();

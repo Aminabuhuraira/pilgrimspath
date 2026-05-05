@@ -67,7 +67,7 @@
                 <span class="user-name">Pilgrim</span>
                 <i class="fas fa-chevron-down"></i>
                 <div class="user-dropdown" id="userDropdown">
-                    <a href="#"><i class="fas fa-user"></i> Profile</a>
+                    <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
                     <a href="#"><i class="fas fa-gear"></i> Settings</a>
                     <hr>
                     <a href="#" onclick="signOut(); return false;" class="logout-link"><i class="fas fa-sign-out-alt"></i> Log Out</a>
@@ -405,9 +405,17 @@
             const welcomeEl = document.querySelector('.welcome-text h1');
             const name = getUserDisplayName(user);
             const initials = getUserInitials(user);
+            const meta = user.user_metadata || {};
+            const avatarUrl = meta.avatar_url || localStorage.getItem('pp_avatar_b64') || '';
 
             if (nameEl) nameEl.textContent = name.split(' ')[0];
-            if (avatarEl) avatarEl.textContent = initials;
+            if (avatarEl) {
+                if (avatarUrl) {
+                    avatarEl.innerHTML = '<img src="' + avatarUrl + '" alt="" style="width:36px;height:36px;border-radius:10px;object-fit:cover;">';
+                } else {
+                    avatarEl.textContent = initials;
+                }
+            }
             if (welcomeEl) welcomeEl.innerHTML = 'Assalamu Alaikum, <span class="highlight">' + name.split(' ')[0] + '</span> ☪';
         }
     })();
@@ -697,9 +705,10 @@
 
         // ── Helpers ─────────────────────────────────────────────────────────
         function done(step) {
-            // step 0 = "Ihram" — treat as done if user has started any journey step
-            if (step === 0) return completedSteps.indexOf(1) !== -1;
-            return completedSteps.indexOf(step) !== -1;
+            // A step is "done" if it's in completedSteps, OR if the current step
+            // has advanced past it (for backward-compatible state without completedSteps populated).
+            if (step === 0) return completedSteps.indexOf(1) !== -1 || current > 1;
+            return completedSteps.indexOf(step) !== -1 || (current > 1 && step < current);
         }
         function inProgress(step) {
             if (step === 0) return current === 1 || (current === 0 && completedSteps.length === 0);
@@ -725,7 +734,11 @@
         }
 
         // ── Hajj ring ────────────────────────────────────────────────────────
-        var hajjPct  = Math.round(completedSteps.length / 14 * 100);
+        // Count completed steps: use completedSteps length if populated, else infer from currentStep
+        var hajjDoneCount = completedSteps.length > 0
+            ? completedSteps.length
+            : (current > 0 ? current - 1 : 0);
+        var hajjPct  = Math.min(100, Math.round(hajjDoneCount / 14 * 100));
         var hFill = document.querySelector('#hajjProgress .progress-ring-fill');
         var hPct  = document.getElementById('hajjPct');
         if (hFill) hFill.style.strokeDashoffset = C * (1 - hajjPct / 100);
@@ -758,7 +771,7 @@
 
         // ── Umrah ring ───────────────────────────────────────────────────────
         var umrahTracked = [1, 2, 8];
-        var umrahDone = umrahTracked.filter(function(s){ return completedSteps.indexOf(s) !== -1; }).length;
+        var umrahDone = umrahTracked.filter(function(s){ return done(s); }).length;
         var umrahPct = Math.round(umrahDone / umrahTracked.length * 100);
         var uFill = document.querySelector('#umrahProgress .progress-ring-fill');
         var uPctEl = document.getElementById('umrahPct');
