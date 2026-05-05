@@ -2,23 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- Meta Pixel Code -->
-    <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1199634958501931');
-    fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=1199634958501931&ev=PageView&noscript=1"
-    /></noscript>
-    <!-- End Meta Pixel Code -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="theme-color" content="#C9A227">
     <meta name="robots" content="noindex, nofollow">
@@ -26,11 +9,36 @@
     <meta name="keywords" content="pilgrimspath dashboard, VR hajj progress, hajj journey tracker, umrah progress dashboard, pilgrimage analytics, hajj VR user dashboard, virtual pilgrimage progress, pilgrimspath user panel">
     <title>Dashboard | Pilgrim's Path</title>
     <link rel="canonical" href="https://www.pilgrimspath.io/dashboard.html">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Resource hints -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <!-- Fonts — non-blocking -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap"></noscript>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
+    <!-- Page loader (inline to prevent flash) -->
+    <style>
+    #ppLoader{position:fixed;inset:0;z-index:9999;background:#FAF7F0;display:flex;align-items:center;justify-content:center;transition:opacity .5s ease}
+    #ppLoader.done{opacity:0;pointer-events:none}
+    .pp-ring{width:52px;height:52px;transform:rotate(-90deg);display:block;margin:12px auto 0}
+    .pp-ring-bg{fill:none;stroke:rgba(201,162,39,.2);stroke-width:3}
+    .pp-ring-fg{fill:none;stroke:#C9A227;stroke-width:3;stroke-linecap:round;stroke-dasharray:150.8;stroke-dashoffset:150.8;transition:stroke-dashoffset .25s ease}
+    </style>
 </head>
 <body>
+    <!-- Page Loader -->
+    <div id="ppLoader">
+        <div style="text-align:center">
+            <img src="images/logo.png" alt="" style="height:44px;opacity:.8;display:block;margin:0 auto">
+            <svg class="pp-ring" viewBox="0 0 52 52">
+                <circle class="pp-ring-bg" cx="26" cy="26" r="24"/>
+                <circle class="pp-ring-fg" cx="26" cy="26" r="24" id="ppRingFg"/>
+            </svg>
+        </div>
+    </div>
     <!-- Top Bar -->
     <header class="dash-topbar">
         <div class="topbar-left">
@@ -83,16 +91,16 @@
                     <div class="progress-circle-wrap">
                         <svg class="progress-ring" viewBox="0 0 120 120">
                             <circle class="progress-ring-bg" cx="60" cy="60" r="52" />
-                            <circle class="progress-ring-fill" cx="60" cy="60" r="52" stroke-dasharray="326.73" stroke-dashoffset="228.71" />
+                            <circle class="progress-ring-fill" cx="60" cy="60" r="52" stroke-dasharray="326.73" stroke-dashoffset="326.73" />
                         </svg>
-                        <div class="progress-percent">30%</div>
+                        <div class="progress-percent" id="hajjPct">0%</div>
                     </div>
                     <span class="progress-title">Hajj Completion</span>
-                    <div class="progress-steps-mini">
-                        <div class="mini-step done"><i class="fas fa-check"></i> Ihram</div>
-                        <div class="mini-step done"><i class="fas fa-check"></i> Mina (8th)</div>
-                        <div class="mini-step done"><i class="fas fa-check"></i> Arafah</div>
-                        <div class="mini-step current"><i class="fas fa-circle"></i> Muzdalifah</div>
+                    <div class="progress-steps-mini" id="hajjMiniSteps">
+                        <div class="mini-step"><i class="fas fa-lock"></i> Ihram</div>
+                        <div class="mini-step"><i class="fas fa-lock"></i> Mina (8th)</div>
+                        <div class="mini-step"><i class="fas fa-lock"></i> Arafah</div>
+                        <div class="mini-step"><i class="fas fa-lock"></i> Muzdalifah</div>
                         <div class="mini-step"><i class="fas fa-lock"></i> Rami</div>
                         <div class="mini-step"><i class="fas fa-lock"></i> Sacrifice</div>
                         <div class="mini-step"><i class="fas fa-lock"></i> Halq</div>
@@ -106,15 +114,15 @@
                     <div class="progress-circle-wrap">
                         <svg class="progress-ring" viewBox="0 0 120 120">
                             <circle class="progress-ring-bg" cx="60" cy="60" r="52" />
-                            <circle class="progress-ring-fill umrah-ring" cx="60" cy="60" r="52" stroke-dasharray="326.73" stroke-dashoffset="163.37" />
+                            <circle class="progress-ring-fill umrah-ring" cx="60" cy="60" r="52" stroke-dasharray="326.73" stroke-dashoffset="326.73" />
                         </svg>
-                        <div class="progress-percent">50%</div>
+                        <div class="progress-percent" id="umrahPct">0%</div>
                     </div>
                     <span class="progress-title">Umrah Completion</span>
-                    <div class="progress-steps-mini">
-                        <div class="mini-step done"><i class="fas fa-check"></i> Ihram</div>
-                        <div class="mini-step done"><i class="fas fa-check"></i> Tawaf</div>
-                        <div class="mini-step current"><i class="fas fa-circle"></i> Sa'i</div>
+                    <div class="progress-steps-mini" id="umrahMiniSteps">
+                        <div class="mini-step"><i class="fas fa-lock"></i> Ihram</div>
+                        <div class="mini-step"><i class="fas fa-lock"></i> Tawaf</div>
+                        <div class="mini-step"><i class="fas fa-lock"></i> Sa'i</div>
                         <div class="mini-step"><i class="fas fa-lock"></i> Halq/Taqsir</div>
                     </div>
                 </div>
@@ -498,8 +506,84 @@
     })();
     </script>
 
-<!-- Meta Pixel Conversion Event -->
-<script>fbq('track', 'ViewContent', {content_name: 'User Dashboard', content_type: 'dashboard'});</script>
-<script src="meta-capi.js" defer></script>
+    <!-- Page loader JS -->
+    <script>
+    (function(){
+        var fg = document.getElementById('ppRingFg');
+        var loader = document.getElementById('ppLoader');
+        if (!fg || !loader) return;
+        var C = 150.8, prog = 0;
+        function setP(p){ fg.style.strokeDashoffset = C * (1 - p / 100); }
+        var t = setInterval(function(){
+            prog = Math.min(prog + (90 - prog) * 0.12 + 0.8, 90);
+            setP(prog);
+        }, 40);
+        window.addEventListener('load', function(){
+            clearInterval(t);
+            setP(100);
+            setTimeout(function(){
+                loader.classList.add('done');
+                setTimeout(function(){ loader.style.display = 'none'; }, 500);
+            }, 200);
+        });
+    })();
+    </script>
+
+    <!-- Journey progress restoration from localStorage -->
+    <script>
+    (function(){
+        var state = {};
+        try { state = JSON.parse(localStorage.getItem('journeyState') || '{}'); } catch(e) {}
+        var completed = (state.completedSteps || []).length;
+        var current   = state.currentStep || 0;
+        var total     = 14;
+        var pct       = Math.round(completed / total * 100);
+        var C         = 326.73;
+
+        // Update Hajj ring
+        var hFill = document.querySelector('#hajjProgress .progress-ring-fill');
+        var hPct  = document.getElementById('hajjPct');
+        if (hFill) hFill.style.strokeDashoffset = C * (1 - pct / 100);
+        if (hPct)  hPct.textContent = pct + '%';
+
+        // Update Hajj mini-steps
+        // Mini-step index → HAJJ_JOURNEY step number (0 = Ihram, not in journey array)
+        var hjMap = [0, 3, 4, 5, 6, 7, 8, 9, 2, 13];
+        var hjMini = document.querySelectorAll('#hajjMiniSteps .mini-step');
+        hjMini.forEach(function(el, i){
+            var sn = hjMap[i];
+            el.querySelector('i').className = 'fas fa-lock';
+            el.className = 'mini-step';
+            if (sn && state.completedSteps && state.completedSteps.indexOf(sn) !== -1) {
+                el.className = 'mini-step done';
+                el.querySelector('i').className = 'fas fa-check';
+            } else if (sn && sn === current) {
+                el.className = 'mini-step current';
+                el.querySelector('i').className = 'fas fa-circle';
+            }
+        });
+    })();
+    </script>
+
+    <!-- Deferred analytics (non-blocking) -->
+    <script>
+    (function(){
+        function loadPixel(){
+            !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window,document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init','1199634958501931');
+            fbq('track','PageView');
+            fbq('track','ViewContent',{content_name:'User Dashboard',content_type:'dashboard'});
+        }
+        if (document.readyState === 'complete') loadPixel();
+        else window.addEventListener('load', loadPixel);
+    })();
+    </script>
+    <script src="meta-capi.js" defer></script>
 </body>
 </html>
