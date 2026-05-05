@@ -480,7 +480,7 @@
 
     // ─── Journey Card Navigation ──────────────────────────────────
     var HAJJ_CARD_URLS = {
-        1:  '/pilgrimspath-vr/pilgrims%20path%20main/0%20Ihram/ihram-scene.html',
+        1:  '/pilgrimspath-vr/pilgrims%20path%20main/1%20Tawaf/index.htm?journey=1&context=initial',
         2:  '/pilgrimspath-vr/pilgrims%20path%20main/3%20Mina/index.htm?journey=3&context=8th-day',
         3:  '/pilgrimspath-vr/pilgrims%20path%20main/4%20Arafah/index.htm?journey=4&context=9th-day',
         4:  '/pilgrimspath-vr/pilgrims%20path%20main/Muzdalifah/index.htm?journey=5&context=pebbles',
@@ -493,7 +493,7 @@
         11: '/pilgrimspath-vr/pilgrims%20path%20main/1%20Tawaf/index.htm?journey=13&context=farewell'
     };
     var UMRAH_CARD_URLS = {
-        1:  '/pilgrimspath-vr/pilgrims%20path%20main/0%20Ihram/ihram-scene.html',
+        1:  '/pilgrimspath-vr/pilgrims%20path%20main/1%20Tawaf/index.htm?journey=1&context=initial',
         2:  '/pilgrimspath-vr/pilgrims%20path%20main/1%20Tawaf/index.htm?journey=1&context=initial',
         3:  '/pilgrimspath-vr/pilgrims%20path%20main/2%20Safa%20and%20Marwa/index.htm?journey=2&context=sa-i',
         4:  '/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat,%20Qurbani,%20trim%20Shave,%20Tawaf/barber-scene.html?journey=8&context=barber'
@@ -623,8 +623,9 @@
         var hajjCards = document.querySelectorAll('#hajjTab .ritual-card-dash');
         [1,2,3,4,5,6,7,8,9,10,11].forEach(function(n, i) {
             if (hajjCards[i]) {
-                hajjCards[i].style.cursor = 'pointer';
-                hajjCards[i].addEventListener('click', function() { goToHajjCard(n); });
+                hajjCards[i].addEventListener('click', function() {
+                    if (!hajjCards[i].classList.contains('locked')) goToHajjCard(n);
+                });
                 if (hasSW && HAJJ_CARD_URLS[n]) _addDlBtn(hajjCards[i], HAJJ_CARD_URLS[n]);
             }
         });
@@ -632,8 +633,9 @@
         var umrahCards = document.querySelectorAll('#umrahTab .ritual-card-dash');
         [1,2,3,4].forEach(function(n, i) {
             if (umrahCards[i]) {
-                umrahCards[i].style.cursor = 'pointer';
-                umrahCards[i].addEventListener('click', function() { goToUmrahCard(n); });
+                umrahCards[i].addEventListener('click', function() {
+                    if (!umrahCards[i].classList.contains('locked')) goToUmrahCard(n);
+                });
                 if (hasSW && UMRAH_CARD_URLS[n]) _addDlBtn(umrahCards[i], UMRAH_CARD_URLS[n]);
             }
         });

@@ -294,7 +294,9 @@ body {
     background: var(--white); border-radius: 16px; padding: 20px;
     border: 1px solid var(--border); position: relative; transition: var(--transition);
 }
-.ritual-card-dash:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.ritual-card-dash:not(.locked) { cursor: pointer; }
+.ritual-card-dash:not(.locked):hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.ritual-card-dash.locked { cursor: default; }
 .ritual-status {
     position: absolute; top: 14px; right: 14px;
     font-size: .9rem;
@@ -302,7 +304,7 @@ body {
 .ritual-card-dash.completed .ritual-status { color: #27ae60; }
 .ritual-card-dash.current .ritual-status { color: var(--gold); }
 .ritual-card-dash.locked .ritual-status { color: #ccc; }
-.ritual-card-dash.locked { opacity: .55; }
+.ritual-card-dash.locked { opacity: .55; pointer-events: none; }
 .ritual-icon {
     width: 44px; height: 44px; border-radius: 12px;
     background: var(--gold-light); color: var(--gold);
