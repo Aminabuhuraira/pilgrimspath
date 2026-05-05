@@ -770,6 +770,17 @@
       if(ctx === 'ifadha' || ctx === 'farewell') {
         var g = document.getElementById('ihramGuide');
         if(g){ g.style.display='none'; }
+      } else {
+        // context=initial: pause panorama auto-rotation while the guide is visible
+        (function pausePanoOnReady(){
+          try{
+            if(typeof TDV === 'undefined' || !TDV.PlayerAPI) return setTimeout(pausePanoOnReady, 600);
+            var _p = TDV.PlayerAPI.getCurrentPlayer();
+            if(!_p) return setTimeout(pausePanoOnReady, 600);
+            _p.__ppIhramOrigAuto = _p.get('automaticRotationSpeed');
+            _p.set('automaticRotationSpeed', 0);
+          }catch(_e){ setTimeout(pausePanoOnReady, 600); }
+        })();
       }
     })();
 
@@ -898,6 +909,11 @@
     }
 
     function ihramSkip() {
+        // Resume panorama auto-rotation now that the guide is dismissed
+        try{
+            var _p = TDV && TDV.PlayerAPI && TDV.PlayerAPI.getCurrentPlayer();
+            if(_p && typeof _p.__ppIhramOrigAuto !== 'undefined') _p.set('automaticRotationSpeed', _p.__ppIhramOrigAuto);
+        }catch(_e){}
         // Don't replay any ihram step audio here — it already played when user
         // advanced to that step. Cancelling it now lets the upcoming panorama
         // banner audio (set in admin) play cleanly without overlap.
@@ -937,15 +953,22 @@ transition:transform .15s;box-shadow:0 4px 12px rgba(201,168,76,0.32);align-self
     .pp-lite #ihramGuide *, .pp-lite #sceneBanner * {animation:none !important; transition:none !important; opacity:1 !important; transform:none !important;}
 .pp-lite .ihram-bg-pattern::before, .pp-lite .ihram-particle, .pp-lite .miqat-plane-lottie {display:none !important;}
 @media(max-width:520px){
-#sceneBanner{width:96vw;}
-#sceneBanner .sceneBannerBody{padding:36px 50px 22px;}
+#sceneBanner{width:96vw;min-height:auto;}
+#sceneBanner .sceneBannerBody{padding:clamp(30px,7vh,48px) clamp(20px,6.5vw,40px) clamp(16px,4vh,24px);max-height:82vh;justify-content:flex-start;overflow-y:auto;}
 #sceneBanner .sceneBannerBody > *{width:100%;}
 #sceneBanner .sceneBannerBody > button{width:auto;}
-#sceneBanner h3{font-size:16px;margin-bottom:8px;}
-#sceneBanner .bb{font-size:11.5px;line-height:1.35;}
-#sceneBanner .ba{font-size:12px;line-height:1.35;}
-#sceneBanner .bt{font-size:10.5px;line-height:1.33;}
-#sceneBanner button{padding:9px 18px;font-size:13px;margin-top:6px;}
+#sceneBanner h3{font-size:clamp(15px,4.2vw,20px);margin-bottom:8px;}
+#sceneBanner .bb{font-size:clamp(13px,3.2vw,15px);line-height:1.5;}
+#sceneBanner .ba{font-size:clamp(14px,3.6vw,17px);line-height:1.5;}
+#sceneBanner .bt{font-size:clamp(12px,2.8vw,14px);line-height:1.42;}
+#sceneBanner button{padding:11px 24px;font-size:14px;margin-top:10px;}
+}
+@media(max-width:380px){
+#sceneBanner .sceneBannerBody{padding:26px 14px 14px;}
+#sceneBanner h3{font-size:14px;}
+#sceneBanner .bb{font-size:12.5px;}
+#sceneBanner .ba{font-size:13.5px;}
+#sceneBanner .bt{font-size:11.5px;}
 }
 </style>
 <div id="sceneBanner"></div>
@@ -1175,14 +1198,14 @@ window._currentPanoId = id; // publish for HUD gating
 // al-Ifadha and Tawaf al-Wida are physically the same circuits but the
 // banner/VO mapping uses a different set of panorama IDs, so we guard the
 // counter so it can't accidentally fire from a stale/shared trigger.
-if(journeyContext==='initial' && id.indexOf('7F92625E')!==-1){if(!_tawafFirstVisitSeen){_tawafFirstVisitSeen=true;}else if(typeof window.tawafLapInc==='function'){window.tawafLapInc();}}
+if(journeyContext==='initial' && id.indexOf('7F92625E')!==-1 && typeof idx==='number'){if(!_tawafFirstVisitSeen){_tawafFirstVisitSeen=true;}else if(typeof window.tawafLapInc==='function'){window.tawafLapInc();}}
 // Farewell Tawaf also needs lap-counting so the Hajj-Complete celebration
 // only appears after the pilgrim actually completes seven circuits. The
 // scene reuses the same 3D model, so the same starting-area panorama
 // (7F92625E) signals a completed lap. The lap counter (window.tawafLapInc)
 // writes to its own namespaced sessionStorage key (tawafLaps_farewell), so
 // it cannot interfere with the initial Tawaf scoring.
-if(journeyContext==='farewell' && id.indexOf('7F92625E')!==-1){if(!_tawafFirstVisitSeen){_tawafFirstVisitSeen=true;}else if(typeof window.tawafLapInc==='function'){window.tawafLapInc();}}
+if(journeyContext==='farewell' && id.indexOf('7F92625E')!==-1 && typeof idx==='number'){if(!_tawafFirstVisitSeen){_tawafFirstVisitSeen=true;}else if(typeof window.tawafLapInc==='function'){window.tawafLapInc();}}
 // Track unique panorama visits per page-load so we can gate end-of-Tawaf
 // celebratory banners until the user has actually visited the prior stops.
 window._tawafPanoVisits = window._tawafPanoVisits || {};
@@ -1353,6 +1376,13 @@ border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:point
   var _lapKey='tawafLaps_'+ctx;
   // One-time migration: clear the legacy shared key.
   try{ sessionStorage.removeItem('tawafLaps'); }catch(_e){}
+  // Reset lap counter on fresh navigation (not on reload) — prevents stale
+  // counts from a previous visit in the same browser session.
+  try{
+    var _nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+    var _isReload = _nav ? _nav.type === 'reload' : (performance.navigation && performance.navigation.type === 1);
+    if(!_isReload) sessionStorage.removeItem(_lapKey);
+  }catch(_e){}
   var laps = parseInt(sessionStorage.getItem(_lapKey)||'0',10);
   var hud = document.getElementById('tawafCounter');
   var countEl = document.getElementById('tawafCount');
