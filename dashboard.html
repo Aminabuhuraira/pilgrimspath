@@ -201,33 +201,33 @@
 
             <!-- Ritual Cards Grid -->
             <div class="rituals-grid">
-                <div class="ritual-card-dash completed">
-                    <div class="ritual-status"><i class="fas fa-check-circle"></i></div>
+                <div class="ritual-card-dash locked">
+                    <div class="ritual-status"><i class="fas fa-lock"></i></div>
                     <div class="ritual-icon"><i class="fas fa-shirt"></i></div>
                     <h4>1. Ihram</h4>
                     <p>Enter the sacred state</p>
-                    <span class="ritual-badge done-badge">Completed</span>
+                    <span class="ritual-badge locked-badge">Locked</span>
                 </div>
-                <div class="ritual-card-dash completed">
-                    <div class="ritual-status"><i class="fas fa-check-circle"></i></div>
+                <div class="ritual-card-dash locked">
+                    <div class="ritual-status"><i class="fas fa-lock"></i></div>
                     <div class="ritual-icon"><i class="fas fa-campground"></i></div>
                     <h4>2. Mina (8th Dhul Hijjah)</h4>
                     <p>Stay in Mina & pray</p>
-                    <span class="ritual-badge done-badge">Completed</span>
+                    <span class="ritual-badge locked-badge">Locked</span>
                 </div>
-                <div class="ritual-card-dash completed">
-                    <div class="ritual-status"><i class="fas fa-check-circle"></i></div>
+                <div class="ritual-card-dash locked">
+                    <div class="ritual-status"><i class="fas fa-lock"></i></div>
                     <div class="ritual-icon"><i class="fas fa-mountain-sun"></i></div>
                     <h4>3. Day of Arafah</h4>
                     <p>Stand at Arafah</p>
-                    <span class="ritual-badge done-badge">Completed</span>
+                    <span class="ritual-badge locked-badge">Locked</span>
                 </div>
-                <div class="ritual-card-dash current">
-                    <div class="ritual-status"><i class="fas fa-play-circle"></i></div>
+                <div class="ritual-card-dash locked">
+                    <div class="ritual-status"><i class="fas fa-lock"></i></div>
                     <div class="ritual-icon"><i class="fas fa-moon"></i></div>
                     <h4>4. Muzdalifah</h4>
                     <p>Night under the stars</p>
-                    <span class="ritual-badge current-badge">In Progress</span>
+                    <span class="ritual-badge locked-badge">Locked</span>
                 </div>
                 <div class="ritual-card-dash locked">
                     <div class="ritual-status"><i class="fas fa-lock"></i></div>
@@ -311,26 +311,26 @@
 
             <!-- Ritual Cards Grid -->
             <div class="rituals-grid umrah-grid">
-                <div class="ritual-card-dash completed">
-                    <div class="ritual-status"><i class="fas fa-check-circle"></i></div>
+                <div class="ritual-card-dash locked">
+                    <div class="ritual-status"><i class="fas fa-lock"></i></div>
                     <div class="ritual-icon"><i class="fas fa-shirt"></i></div>
                     <h4>1. Ihram</h4>
                     <p>Enter the sacred state at the Miqat. Perform ghusl, wear Ihram garments, and recite the Talbiyah.</p>
-                    <span class="ritual-badge done-badge">Completed</span>
+                    <span class="ritual-badge locked-badge">Locked</span>
                 </div>
-                <div class="ritual-card-dash completed">
-                    <div class="ritual-status"><i class="fas fa-check-circle"></i></div>
+                <div class="ritual-card-dash locked">
+                    <div class="ritual-status"><i class="fas fa-lock"></i></div>
                     <div class="ritual-icon"><i class="fas fa-kaaba"></i></div>
                     <h4>2. Tawaf</h4>
                     <p>Circle the Kaaba seven times counter-clockwise, starting from the Black Stone.</p>
-                    <span class="ritual-badge done-badge">Completed</span>
+                    <span class="ritual-badge locked-badge">Locked</span>
                 </div>
-                <div class="ritual-card-dash current">
-                    <div class="ritual-status"><i class="fas fa-play-circle"></i></div>
+                <div class="ritual-card-dash locked">
+                    <div class="ritual-status"><i class="fas fa-lock"></i></div>
                     <div class="ritual-icon"><i class="fas fa-person-walking"></i></div>
                     <h4>3. Sa'i</h4>
                     <p>Walk seven times between the hills of Safa and Marwa, commemorating Hajar's search for water.</p>
-                    <span class="ritual-badge current-badge">In Progress</span>
+                    <span class="ritual-badge locked-badge">Locked</span>
                 </div>
                 <div class="ritual-card-dash locked">
                     <div class="ritual-status"><i class="fas fa-lock"></i></div>
@@ -346,19 +346,19 @@
         <div class="achievements-row">
             <h3><i class="fas fa-trophy"></i> Recent Achievements</h3>
             <div class="badges-wrap">
-                <div class="badge-item earned">
+                <div class="badge-item">
                     <div class="badge-icon"><i class="fas fa-star"></i></div>
                     <span>First Step</span>
                 </div>
-                <div class="badge-item earned">
+                <div class="badge-item">
                     <div class="badge-icon"><i class="fas fa-book-quran"></i></div>
                     <span>Dua Learner</span>
                 </div>
-                <div class="badge-item earned">
+                <div class="badge-item">
                     <div class="badge-icon"><i class="fas fa-kaaba"></i></div>
                     <span>Tawaf Starter</span>
                 </div>
-                <div class="badge-item earned">
+                <div class="badge-item">
                     <div class="badge-icon"><i class="fas fa-mountain-sun"></i></div>
                     <span>Arafah Day</span>
                 </div>
@@ -639,34 +639,147 @@
     (function(){
         var state = {};
         try { state = JSON.parse(localStorage.getItem('journeyState') || '{}'); } catch(e) {}
-        var completed = (state.completedSteps || []).length;
-        var current   = state.currentStep || 0;
-        var total     = 14;
-        var pct       = Math.round(completed / total * 100);
-        var C         = 326.73;
+        var completedSteps = state.completedSteps || [];
+        var current        = state.currentStep  || 0;
+        var C              = 326.73;
 
-        // Update Hajj ring
+        // ── Helpers ─────────────────────────────────────────────────────────
+        function done(step) {
+            // step 0 = "Ihram" — treat as done if user has started any journey step
+            if (step === 0) return completedSteps.indexOf(1) !== -1;
+            return completedSteps.indexOf(step) !== -1;
+        }
+        function inProgress(step) {
+            if (step === 0) return current === 1 || (current === 0 && completedSteps.length === 0);
+            return current === step;
+        }
+        function applyState(card, step) {
+            var statusI = card.querySelector('.ritual-status i');
+            var badge   = card.querySelector('.ritual-badge');
+            card.classList.remove('completed','current','locked');
+            if (done(step)) {
+                card.classList.add('completed');
+                if (statusI) statusI.className = 'fas fa-check-circle';
+                if (badge)   { badge.className = 'ritual-badge done-badge'; badge.textContent = 'Completed'; }
+            } else if (inProgress(step)) {
+                card.classList.add('current');
+                if (statusI) statusI.className = 'fas fa-play-circle';
+                if (badge)   { badge.className = 'ritual-badge current-badge'; badge.textContent = 'In Progress'; }
+            } else {
+                card.classList.add('locked');
+                if (statusI) statusI.className = 'fas fa-lock';
+                if (badge)   { badge.className = 'ritual-badge locked-badge'; badge.textContent = 'Locked'; }
+            }
+        }
+
+        // ── Hajj ring ────────────────────────────────────────────────────────
+        var hajjPct  = Math.round(completedSteps.length / 14 * 100);
         var hFill = document.querySelector('#hajjProgress .progress-ring-fill');
         var hPct  = document.getElementById('hajjPct');
-        if (hFill) hFill.style.strokeDashoffset = C * (1 - pct / 100);
-        if (hPct)  hPct.textContent = pct + '%';
+        if (hFill) hFill.style.strokeDashoffset = C * (1 - hajjPct / 100);
+        if (hPct)  hPct.textContent = hajjPct + '%';
 
-        // Update Hajj mini-steps
-        // Mini-step index → HAJJ_JOURNEY step number (0 = Ihram, not in journey array)
-        var hjMap = [0, 3, 4, 5, 6, 7, 8, 9, 2, 13];
+        // ── Hajj mini-steps ──────────────────────────────────────────────────
+        // Dashboard sidebar order → journey step IDs
+        var hjMap  = [0, 3, 4, 5, 6, 7, 8, 9, 2, 13];
         var hjMini = document.querySelectorAll('#hajjMiniSteps .mini-step');
         hjMini.forEach(function(el, i){
             var sn = hjMap[i];
             el.querySelector('i').className = 'fas fa-lock';
             el.className = 'mini-step';
-            if (sn && state.completedSteps && state.completedSteps.indexOf(sn) !== -1) {
+            if (done(sn)) {
                 el.className = 'mini-step done';
                 el.querySelector('i').className = 'fas fa-check';
-            } else if (sn && sn === current) {
+            } else if (inProgress(sn)) {
                 el.className = 'mini-step current';
                 el.querySelector('i').className = 'fas fa-circle';
             }
         });
+
+        // ── Hajj ritual cards ────────────────────────────────────────────────
+        // Dashboard card index → journey step ID
+        // 0=Ihram(special), 3=Mina, 4=Arafah, 5=Muzdalifah, 6=Jamarat,
+        // 7=Qurbani, 8=Barber, 9=Tawaf Ifadah, 2=Sa'i, 10=Days@Mina, 13=Wida
+        var hjCardSteps = [0, 3, 4, 5, 6, 7, 8, 9, 2, 10, 13];
+        var hjCards = document.querySelectorAll('#hajjTab .ritual-card-dash');
+        hjCards.forEach(function(card, i){ applyState(card, hjCardSteps[i]); });
+
+        // ── Umrah ring ───────────────────────────────────────────────────────
+        var umrahTracked = [1, 2, 8];
+        var umrahDone = umrahTracked.filter(function(s){ return completedSteps.indexOf(s) !== -1; }).length;
+        var umrahPct = Math.round(umrahDone / umrahTracked.length * 100);
+        var uFill = document.querySelector('#umrahProgress .progress-ring-fill');
+        var uPctEl = document.getElementById('umrahPct');
+        if (uFill) uFill.style.strokeDashoffset = C * (1 - umrahPct / 100);
+        if (uPctEl) uPctEl.textContent = umrahPct + '%';
+
+        // ── Umrah ritual cards ───────────────────────────────────────────────
+        var umCardSteps = [0, 1, 2, 8];
+        var umCards = document.querySelectorAll('#umrahTab .ritual-card-dash');
+        umCards.forEach(function(card, i){ applyState(card, umCardSteps[i]); });
+
+        // ── Achievements ─────────────────────────────────────────────────────
+        // [badge index, condition]
+        var achConditions = [
+            completedSteps.length >= 1,                                      // First Step
+            completedSteps.indexOf(2) !== -1,                                // Dua Learner (Safa & Marwa)
+            completedSteps.indexOf(1) !== -1,                                // Tawaf Starter
+            completedSteps.indexOf(4) !== -1,                                // Arafah Day
+            completedSteps.indexOf(6) !== -1,                                // Rami Master
+            completedSteps.indexOf(13) !== -1 || completedSteps.length >= 14 // Hajj Complete
+        ];
+        document.querySelectorAll('.badge-item').forEach(function(b, i){
+            if (typeof achConditions[i] !== 'undefined') {
+                b.classList.toggle('earned', achConditions[i]);
+            }
+        });
+
+        // ── Continue card (Hajj) ─────────────────────────────────────────────
+        var contMeta = {
+            0:  {icon:'fa-shirt',          title:'Ihram — Enter the Sacred State',       desc:'Put on your Ihram garments and make your intention for Hajj.', time:'~10 min', meta:'First step'},
+            1:  {icon:'fa-kaaba',          title:'Tawaf — Circle the Kaaba',             desc:'Begin with 7 circuits around the Kaaba, starting from the Black Stone.', time:'~25 min', meta:'Starting point'},
+            3:  {icon:'fa-campground',     title:'Mina — 8th of Dhul Hijjah',            desc:'Travel to Mina and spend the day and night in prayer and remembrance.', time:'~20 min', meta:'Day 1 of Hajj'},
+            4:  {icon:'fa-mountain-sun',   title:'Arafah — The Day of Standing',         desc:'Stand on the plain of Arafah in supplication — the very heart of Hajj.', time:'~25 min', meta:'Day 2 of Hajj'},
+            5:  {icon:'fa-moon',           title:'Muzdalifah — Night under the Stars',   desc:'Collect pebbles and spend the night at Muzdalifah in worship.', time:'~20 min', meta:'Day 3 of Hajj'},
+            6:  {icon:'fa-circle-dot',     title:'Rami al-Jamarat — Stone the Devil',    desc:'Pelt the three Jamarat pillars with pebbles collected from Muzdalifah.', time:'~15 min', meta:'Day of Eid'},
+            7:  {icon:'fa-cow',            title:'Qurbani — Animal Sacrifice',           desc:'Complete the sacrifice as an act of worship and gratitude to Allah.', time:'~10 min', meta:'Day of Eid'},
+            8:  {icon:'fa-scissors',       title:'Halq / Taqsir — Hair Cutting',         desc:'Shave your head or trim your hair, exiting the state of Ihram.', time:'~10 min', meta:'Day of Eid'},
+            9:  {icon:'fa-kaaba',          title:'Tawaf al-Ifadah',                      desc:'Perform the obligatory Tawaf of Hajj after returning from Mina.', time:'~25 min', meta:'Obligatory Tawaf'},
+            2:  {icon:'fa-person-walking', title:"Sa'i — Safa to Marwa",                 desc:"Walk 7 laps between Safa and Marwa, retracing the steps of Hajar (AS).", time:'~15 min', meta:'3.15 km total'},
+            10: {icon:'fa-campground',     title:'Days at Mina — 11th–13th',             desc:'Continue the days of Tashriq, pelting the Jamarat pillars each day.', time:'~15 min/day', meta:'Days of Tashriq'},
+            13: {icon:'fa-flag-checkered', title:'Tawaf al-Wida — Farewell Tawaf',       desc:'Complete your Hajj with the farewell circumambulation of the Kaaba.', time:'~25 min', meta:'Final step'}
+        };
+        // Canonical Hajj order — find the first step not yet completed
+        var hjOrder = [0, 1, 3, 4, 5, 6, 7, 8, 9, 2, 10, 13];
+        var nextStep = null;
+        if (current > 0 && !done(current)) {
+            nextStep = current;
+        } else {
+            for (var oi = 0; oi < hjOrder.length; oi++) {
+                if (!done(hjOrder[oi])) { nextStep = hjOrder[oi]; break; }
+            }
+        }
+        if (nextStep !== null && contMeta[nextStep]) {
+            var cd = contMeta[nextStep];
+            var contIcon  = document.querySelector('#hajjTab .continue-icon i');
+            var contTitle = document.querySelector('#hajjTab .continue-info h3');
+            var contDesc  = document.querySelector('#hajjTab .continue-info p');
+            var contMetaEl = document.querySelector('#hajjTab .continue-meta');
+            if (contIcon)   contIcon.className = 'fas ' + cd.icon;
+            if (contTitle)  contTitle.textContent = cd.title;
+            if (contDesc)   contDesc.textContent  = cd.desc;
+            if (contMetaEl) contMetaEl.innerHTML  =
+                '<span><i class="fas fa-clock"></i> ' + cd.time + '</span>' +
+                '<span><i class="fas fa-info-circle"></i> ' + cd.meta + '</span>';
+            // Wire the continue button to the right card
+            var hjOrderCard = [0,1,3,4,5,6,7,8,9,2,10,13];
+            var hjOrderDash = [0,1,2,3,4,5,6,7,8,9,10,11]; // dashboard card number (1-based)
+            var stepToDash  = {0:1, 1:1, 3:2, 4:3, 5:4, 6:5, 7:6, 8:7, 9:8, 2:9, 10:10, 13:11};
+            var contBtn = document.querySelector('#hajjTab .continue-btn');
+            if (contBtn && stepToDash[nextStep]) {
+                contBtn.onclick = function(){ goToHajjCard(stepToDash[nextStep]); };
+            }
+        }
     })();
     </script>
 
