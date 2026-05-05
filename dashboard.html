@@ -175,7 +175,7 @@
                         <span><i class="fas fa-calendar"></i> Day 3 of Hajj</span>
                     </div>
                 </div>
-                <button class="continue-btn" onclick="alert('Launching VR Experience...')">
+                <button class="continue-btn" onclick="goToHajjCard(4)">
                     <i class="fas fa-play"></i>
                     <span>Continue</span>
                 </button>
@@ -285,7 +285,7 @@
                         <span><i class="fas fa-shoe-prints"></i> 3.15 km total</span>
                     </div>
                 </div>
-                <button class="continue-btn" onclick="alert('Launching VR Experience...')">
+                <button class="continue-btn" onclick="goToUmrahCard(3)">
                     <i class="fas fa-play"></i>
                     <span>Continue</span>
                 </button>
@@ -370,6 +370,9 @@
     </script>
     <!--End of Tawk.to Script-->
 
+    <!-- Journey Navigation -->
+    <script src="/journey-manager.js"></script>
+
     <!-- Supabase Auth -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="auth.js"></script>
@@ -434,6 +437,65 @@
     });
     // Session & visit tracking for admin analytics
     (function(){try{var st=Date.now();window.addEventListener('beforeunload',function(){var d=Math.floor((Date.now()-st)/1000);var s=JSON.parse(localStorage.getItem('pp_sessions')||'[]');s.push(d);if(s.length>100)s.splice(0,s.length-100);localStorage.setItem('pp_sessions',JSON.stringify(s));});var v=JSON.parse(localStorage.getItem('pp_visits')||'[]');v.push({time:new Date().toISOString(),referrer:document.referrer||'direct',page:location.pathname});if(v.length>500)v.splice(0,v.length-500);localStorage.setItem('pp_visits',JSON.stringify(v));}catch(e){}})();
+
+    // ─── Journey Card Navigation ──────────────────────────────────
+    var HAJJ_CARD_URLS = {
+        1:  '/pilgrimspath-vr/pilgrims%20path%20main/0%20Ihram/ihram-scene.html',
+        2:  '/pilgrimspath-vr/pilgrims%20path%20main/3%20Mina/index.htm?journey=3&context=8th-day',
+        3:  '/pilgrimspath-vr/pilgrims%20path%20main/4%20Arafah/index.htm?journey=4&context=9th-day',
+        4:  '/pilgrimspath-vr/pilgrims%20path%20main/Muzdalifah/index.htm?journey=5&context=pebbles',
+        5:  '/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat,%20Qurbani,%20trim%20Shave,%20Tawaf/Jamarat%20rooftop/index.htm?journey=6&context=10th-day',
+        6:  '/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat,%20Qurbani,%20trim%20Shave,%20Tawaf/qurbani-scene.html?journey=7&context=sacrifice',
+        7:  '/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat,%20Qurbani,%20trim%20Shave,%20Tawaf/barber-scene.html?journey=8&context=barber',
+        8:  '/pilgrimspath-vr/pilgrims%20path%20main/1%20Tawaf/index.htm?journey=9&context=ifadha',
+        9:  '/pilgrimspath-vr/pilgrims%20path%20main/2%20Safa%20and%20Marwa/index.htm?journey=2&context=sa-i',
+        10: '/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat,%20Qurbani,%20trim%20Shave,%20Tawaf/Jamarat%20rooftop/index.htm?journey=10&context=11th-day',
+        11: '/pilgrimspath-vr/pilgrims%20path%20main/1%20Tawaf/index.htm?journey=13&context=farewell'
+    };
+    var UMRAH_CARD_URLS = {
+        1:  '/pilgrimspath-vr/pilgrims%20path%20main/0%20Ihram/ihram-scene.html',
+        2:  '/pilgrimspath-vr/pilgrims%20path%20main/1%20Tawaf/index.htm?journey=1&context=initial',
+        3:  '/pilgrimspath-vr/pilgrims%20path%20main/2%20Safa%20and%20Marwa/index.htm?journey=2&context=sa-i',
+        4:  '/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat,%20Qurbani,%20trim%20Shave,%20Tawaf/barber-scene.html?journey=8&context=barber'
+    };
+    function goToHajjCard(n) { if (HAJJ_CARD_URLS[n]) window.location.href = HAJJ_CARD_URLS[n]; }
+    function goToUmrahCard(n) { if (UMRAH_CARD_URLS[n]) window.location.href = UMRAH_CARD_URLS[n]; }
+
+    // Wire click handlers to all ritual cards and sidebar mini-steps
+    (function initCardNav() {
+        // Hajj ritual cards (11 total)
+        var hajjCards = document.querySelectorAll('#hajjTab .ritual-card-dash');
+        [1,2,3,4,5,6,7,8,9,10,11].forEach(function(n, i) {
+            if (hajjCards[i]) {
+                hajjCards[i].style.cursor = 'pointer';
+                hajjCards[i].addEventListener('click', function() { goToHajjCard(n); });
+            }
+        });
+        // Umrah ritual cards (4 total)
+        var umrahCards = document.querySelectorAll('#umrahTab .ritual-card-dash');
+        [1,2,3,4].forEach(function(n, i) {
+            if (umrahCards[i]) {
+                umrahCards[i].style.cursor = 'pointer';
+                umrahCards[i].addEventListener('click', function() { goToUmrahCard(n); });
+            }
+        });
+        // Hajj sidebar mini-steps (Ihram→1, Mina→2, Arafah→3, Muzdalifah→4, Rami→5, Sacrifice→6, Halq→7, TawafIfadah→8, Sa'i→9, TawafWida→11)
+        var hajjMini = document.querySelectorAll('#hajjProgress .mini-step');
+        [1,2,3,4,5,6,7,8,9,11].forEach(function(n, i) {
+            if (hajjMini[i]) {
+                hajjMini[i].style.cursor = 'pointer';
+                hajjMini[i].addEventListener('click', function() { goToHajjCard(n); });
+            }
+        });
+        // Umrah sidebar mini-steps (Ihram→1, Tawaf→2, Sa'i→3, Halq→4)
+        var umrahMini = document.querySelectorAll('#umrahProgress .mini-step');
+        [1,2,3,4].forEach(function(n, i) {
+            if (umrahMini[i]) {
+                umrahMini[i].style.cursor = 'pointer';
+                umrahMini[i].addEventListener('click', function() { goToUmrahCard(n); });
+            }
+        });
+    })();
     </script>
 
 <!-- Meta Pixel Conversion Event -->
