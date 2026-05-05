@@ -659,4 +659,63 @@ window.addEventListener('storage', function(e){
     location.reload();
   }
 });
+
+/* ─── Mobile banner CSS override ────────────────────────────────────────
+   Injected here so every VR scene automatically gets the fix without
+   needing per-scene edits.  On phones ≤620 px the PNG frame image is
+   replaced with a clean CSS card (gold-accented cream panel) that looks
+   professional at any content height and font size stays readable.       */
+(function(){
+  var s = document.createElement('style');
+  s.textContent = [
+    '@media(max-width:620px){',
+    /* ── Card shell: drop the landscape PNG, use a CSS panel ── */
+    '#sceneBanner{',
+      'width:92vw!important;',
+      'min-height:auto!important;',
+      'max-height:80vh!important;',
+      'background:rgba(255,252,242,0.97)!important;',
+      'border-radius:16px!important;',
+      'border:1.5px solid rgba(201,168,76,0.55)!important;',
+      'box-shadow:0 0 0 4px rgba(201,168,76,0.12),0 20px 56px rgba(0,0,0,0.5)!important;',
+      'overflow:hidden!important;',
+      'top:50%!important;left:50%!important;',
+      'transform:translate(-50%,-50%)!important;',
+    '}',
+    /* Gold accent stripe along the top */
+    '#sceneBanner::before{',
+      'content:"";position:absolute;top:0;left:0;right:0;height:4px;pointer-events:none;',
+      'background:linear-gradient(90deg,transparent,#C9A84C 30%,#8B6914 50%,#C9A84C 70%,transparent);',
+      'border-radius:16px 16px 0 0;',
+    '}',
+    /* ── Body: sensible padding, scrollable if content is long ── */
+    '#sceneBanner .sceneBannerBody{',
+      'padding:28px 22px 22px!important;',
+      'max-height:80vh!important;min-height:0!important;',
+      'display:flex!important;flex-direction:column!important;',
+      'justify-content:flex-start!important;align-items:center!important;',
+      'overflow-y:auto!important;overflow-x:hidden!important;',
+    '}',
+    '#sceneBanner .sceneBannerBody>*{width:100%!important;text-align:center!important;}',
+    '#sceneBanner .sceneBannerBody>button{width:auto!important;align-self:center!important;display:inline-flex!important;}',
+    /* ── Typography ── */
+    '#sceneBanner h3{font-size:clamp(16px,4.8vw,22px)!important;margin:0 0 12px!important;',
+      'line-height:1.25!important;color:#8B6914!important;font-weight:700!important;text-align:center!important;}',
+    '#sceneBanner .bb{font-size:clamp(13.5px,3.7vw,16px)!important;line-height:1.6!important;',
+      'margin:0 0 10px!important;color:#3D2B1F!important;text-align:center!important;}',
+    '#sceneBanner .ba{font-size:clamp(14px,3.9vw,18px)!important;line-height:1.65!important;',
+      'margin:8px 0 6px!important;color:#8B6914!important;font-style:italic!important;text-align:center!important;}',
+    '#sceneBanner .bt{font-size:clamp(12.5px,3.3vw,15px)!important;line-height:1.55!important;',
+      'margin:0 0 10px!important;color:#6B5B4F!important;font-style:italic!important;text-align:center!important;}',
+    '#sceneBanner .sep{width:60px!important;margin:8px auto!important;}',
+    /* ── Button ── */
+    '#sceneBanner button{padding:12px 32px!important;font-size:15px!important;',
+      'margin-top:14px!important;border-radius:8px!important;min-width:120px!important;}',
+    '}'
+  ].join('');
+  document.head
+    ? document.head.appendChild(s)
+    : document.addEventListener('DOMContentLoaded', function(){ document.head.appendChild(s); });
+})();
+
 })();

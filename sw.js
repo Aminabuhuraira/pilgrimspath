@@ -154,3 +154,39 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(clients.claim());
 });
+
+// ─── Pre-fetch on demand (Dashboard "Download Experience" button) ───
+// Dashboard sends: { type:'PREFETCH_SCENE', urls:[url1, url2, ...] }
+// SW fetches each URL and caches it, then broadcasts progress back.
+self.addEventListener('message', (event) => {
+  if (!event.data || event.data.type !== 'PREFETCH_SCENE') return;
+  const urls = Array.isArray(event.data.urls) ? event.data.urls : [];
+  let done = 0;
+  const total = urls.length;
+  if (!total) return;
+
+  const notify = () => {
+    self.clients.matchAll().then(clients => {
+      clients.forEach(c => c.postMessage({
+        type: done >= total ? 'PREFETCH_DONE' : 'PREFETCH_PROGRESS',
+        done, total,
+      }));
+    });
+  };
+
+  Promise.allSettled(
+    urls.map(url =>
+      caches.match(url).then(hit => {
+        if (hit) { done++; notify(); return; }
+        return fetch(url, { credentials: 'same-origin', mode: 'no-cors' })
+          .then(res => {
+            if (res.status === 200 || res.type === 'opaque') {
+              return caches.open('pp-prefetch').then(c => c.put(url, res));
+            }
+          })
+          .catch(() => {})
+          .finally(() => { done++; notify(); });
+      })
+    )
+  );
+});

@@ -26,6 +26,14 @@
     .pp-ring{width:52px;height:52px;transform:rotate(-90deg);display:block;margin:12px auto 0}
     .pp-ring-bg{fill:none;stroke:rgba(201,162,39,.2);stroke-width:3}
     .pp-ring-fg{fill:none;stroke:#C9A227;stroke-width:3;stroke-linecap:round;stroke-dasharray:150.8;stroke-dashoffset:150.8;transition:stroke-dashoffset .25s ease}
+    /* ── Download-experience button on ritual cards ── */
+    .card-dl-btn{position:absolute;bottom:10px;right:10px;background:none;border:1.5px solid rgba(201,162,39,.45);border-radius:8px;color:rgba(201,162,39,.9);width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:.72rem;cursor:pointer;transition:all .2s;padding:0;z-index:2}
+    .card-dl-btn:hover{background:rgba(201,162,39,.12);border-color:#C9A227;color:#C9A227;transform:scale(1.08)}
+    .card-dl-btn.loading{border-color:#aaa;color:#aaa;pointer-events:none}
+    .card-dl-btn.done{border-color:#27ae60;color:#27ae60;pointer-events:none}
+    /* ── Download toast notification ── */
+    #ppDlToast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(30,24,14,.92);color:#fff;border-radius:24px;padding:10px 22px;font-size:.8rem;font-family:'Poppins',sans-serif;z-index:10010;pointer-events:none;opacity:0;transition:opacity .3s;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+    #ppDlToast.show{opacity:1}
     </style>
 </head>
 <body>
@@ -469,14 +477,81 @@
     function goToHajjCard(n) { if (HAJJ_CARD_URLS[n]) window.location.href = HAJJ_CARD_URLS[n]; }
     function goToUmrahCard(n) { if (UMRAH_CARD_URLS[n]) window.location.href = UMRAH_CARD_URLS[n]; }
 
+    // ── Download-experience pre-fetch ──────────────────────────
+    var _dlToast = null;
+    function _showToast(msg, dur) {
+        if (!_dlToast) {
+            _dlToast = document.createElement('div');
+            _dlToast.id = 'ppDlToast';
+            document.body.appendChild(_dlToast);
+        }
+        _dlToast.textContent = msg;
+        _dlToast.classList.add('show');
+        clearTimeout(_dlToast._t);
+        if (dur) _dlToast._t = setTimeout(function(){ _dlToast.classList.remove('show'); }, dur);
+    }
+    function _prefetchScene(url, btn) {
+        if (!('serviceWorker' in navigator) || !navigator.serviceWorker.controller) {
+            // SW not yet active — navigate immediately
+            return;
+        }
+        var sceneUrls = [
+            url,
+            '/journey-content-loader.js',
+            '/admin-journey-content.js',
+            '/pilgrimspath-vr/journey-nav.js'
+        ];
+        btn.classList.add('loading');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        _showToast('⬇ Downloading experience…');
+        var handler = function(e) {
+            if (e.data && e.data.type === 'PREFETCH_DONE') {
+                navigator.serviceWorker.removeEventListener('message', handler);
+                btn.classList.remove('loading');
+                btn.classList.add('done');
+                btn.innerHTML = '<i class="fas fa-check"></i>';
+                _showToast('✓ Ready — opens instantly next time', 3500);
+            } else if (e.data && e.data.type === 'PREFETCH_PROGRESS') {
+                var pct = Math.round(e.data.done / e.data.total * 100);
+                _showToast('⬇ Downloading… ' + pct + '%');
+            }
+        };
+        navigator.serviceWorker.addEventListener('message', handler);
+        navigator.serviceWorker.controller.postMessage({ type: 'PREFETCH_SCENE', urls: sceneUrls });
+        // Fallback: if no SW response in 8s mark as done
+        setTimeout(function() {
+            if (btn.classList.contains('loading')) {
+                navigator.serviceWorker.removeEventListener('message', handler);
+                btn.classList.remove('loading');
+                btn.classList.add('done');
+                btn.innerHTML = '<i class="fas fa-check"></i>';
+                _showToast('✓ Ready for offline', 3000);
+            }
+        }, 8000);
+    }
+    function _addDlBtn(card, url) {
+        var btn = document.createElement('button');
+        btn.className = 'card-dl-btn';
+        btn.title = 'Pre-download for faster loading';
+        btn.setAttribute('aria-label', 'Download experience');
+        btn.innerHTML = '<i class="fas fa-cloud-arrow-down"></i>';
+        card.appendChild(btn);
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            _prefetchScene(url, btn);
+        });
+    }
+
     // Wire click handlers to all ritual cards and sidebar mini-steps
     (function initCardNav() {
+        var hasSW = 'serviceWorker' in navigator;
         // Hajj ritual cards (11 total)
         var hajjCards = document.querySelectorAll('#hajjTab .ritual-card-dash');
         [1,2,3,4,5,6,7,8,9,10,11].forEach(function(n, i) {
             if (hajjCards[i]) {
                 hajjCards[i].style.cursor = 'pointer';
                 hajjCards[i].addEventListener('click', function() { goToHajjCard(n); });
+                if (hasSW && HAJJ_CARD_URLS[n]) _addDlBtn(hajjCards[i], HAJJ_CARD_URLS[n]);
             }
         });
         // Umrah ritual cards (4 total)
@@ -485,6 +560,7 @@
             if (umrahCards[i]) {
                 umrahCards[i].style.cursor = 'pointer';
                 umrahCards[i].addEventListener('click', function() { goToUmrahCard(n); });
+                if (hasSW && UMRAH_CARD_URLS[n]) _addDlBtn(umrahCards[i], UMRAH_CARD_URLS[n]);
             }
         });
         // Hajj sidebar mini-steps (Ihram→1, Mina→2, Arafah→3, Muzdalifah→4, Rami→5, Sacrifice→6, Halq→7, TawafIfadah→8, Sa'i→9, TawafWida→11)
@@ -503,6 +579,11 @@
                 umrahMini[i].addEventListener('click', function() { goToUmrahCard(n); });
             }
         });
+
+        // Register service worker (enables caching + pre-fetch)
+        if (hasSW) {
+            navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function() {});
+        }
     })();
     </script>
 
