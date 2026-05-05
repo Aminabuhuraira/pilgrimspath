@@ -1,7 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/png" sizes="512x512" href="/images/Pilgrims_Path-removebg-preview.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="/images/Pilgrims_Path-removebg-preview.png">
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -65,7 +67,7 @@
             <li><a href="#ambassador" onclick="closeMobile2()">Ambassador</a></li>
             <li><a href="#steps" onclick="closeMobile2()">How It Works</a></li>
         </ul>
-        <a href="login.html?tab=register" class="mobile-cta2">Start Free Journey</a>
+        <a href="/login?tab=register" class="mobile-cta2">Start Free Journey</a>
     </div>
 
     <!-- ==================== HERO ==================== -->
@@ -427,26 +429,26 @@
                 <div class="footer2-col">
                     <h4>Experience</h4>
                     <ul>
-                        <li><a href="hajj-journey.html">Hajj Journey</a></li>
-                        <li><a href="umrah-journey.html">Umrah Journey</a></li>
-                        <li><a href="vr-features.html">VR Features</a></li>
-                        <li><a href="duas.html">Duas & Prayers</a></li>
+                        <li><a href="/hajj-journey">Hajj Journey</a></li>
+                        <li><a href="/umrah-journey">Umrah Journey</a></li>
+                        <li><a href="/vr-features">VR Features</a></li>
+                        <li><a href="/duas">Duas & Prayers</a></li>
                     </ul>
                 </div>
                 <div class="footer2-col">
                     <h4>Resources</h4>
                     <ul>
-                        <li><a href="faq.html">FAQ</a></li>
-                        <li><a href="contact.html">Support</a></li>
-                        <li><a href="enterprise.html">Enterprise</a></li>
+                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/contact">Support</a></li>
+                        <li><a href="/enterprise">Enterprise</a></li>
                     </ul>
                 </div>
                 <div class="footer2-col">
                     <h4>Company</h4>
                     <ul>
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="privacy.html">Privacy Policy</a></li>
-                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
                     </ul>
                 </div>
             </div>
@@ -517,14 +519,14 @@
                 </div>
                 <div class="form2-check">
                     <input type="checkbox" id="terms2" required>
-                    <label for="terms2">I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a></label>
+                    <label for="terms2">I agree to the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a></label>
                 </div>
                 <button type="submit" class="form2-submit">
                     Create Free Account <i class="fas fa-arrow-right"></i>
                 </button>
             </form>
             <div class="modal2-footer">
-                Already have an account? <a href="login.html">Sign In</a>
+                Already have an account? <a href="/login">Sign In</a>
             </div>
         </div>
     </div>
@@ -536,7 +538,7 @@
             <div class="success2-circle"><i class="fas fa-check"></i></div>
             <h2>Welcome to Pilgrim's Path!</h2>
             <p id="successMsg2">Your account has been created successfully.</p>
-            <button class="btn-primary2" id="successBtn2" onclick="window.location.href='dashboard.html'" style="margin:24px auto 0;display:inline-flex;">
+            <button class="btn-primary2" id="successBtn2" onclick="window.location.href='/'" style="margin:24px auto 0;display:inline-flex;">
                 Go to Dashboard <i class="fas fa-arrow-right"></i>
             </button>
         </div>
@@ -689,7 +691,7 @@
                 const name = getUserDisplayName(user);
                 const initials = getUserInitials(user);
                 ctaBtn.outerHTML = `
-                    <a href="dashboard.html" class="nav2-user-btn" title="Go to Dashboard">
+                    <a href="/dashboard" class="nav2-user-btn" title="Go to Dashboard">
                         <span class="nav2-user-avatar">${initials}</span>
                         <span class="nav2-user-name">${name.split(' ')[0]}</span>
                     </a>`;

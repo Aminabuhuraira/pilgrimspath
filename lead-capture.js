@@ -96,7 +96,7 @@
                     '<div style="font-size:2rem;margin-bottom:12px;">✅</div>' +
                     '<h3 style="font-family:\'Playfair Display\',serif;font-size:1.4rem;margin-bottom:8px;color:#2A2A3C;">Check Your Inbox!</h3>' +
                     '<p style="color:#666;font-size:0.9rem;margin-bottom:20px;">Your free VR preview link is on its way.</p>' +
-                    '<a href="hajj-vr.html" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:12px;background:linear-gradient(135deg,#C9A227,#8B7355);color:white;text-decoration:none;font-weight:600;font-family:\'Poppins\',sans-serif;">Start VR Preview Now <i class="fas fa-arrow-right"></i></a>' +
+                    '<a href="/hajj-vr" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:12px;background:linear-gradient(135deg,#C9A227,#8B7355);color:white;text-decoration:none;font-weight:600;font-family:\'Poppins\',sans-serif;">Start VR Preview Now <i class="fas fa-arrow-right"></i></a>' +
                 '</div>';
         }
     };

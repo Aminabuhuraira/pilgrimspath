@@ -64,6 +64,29 @@ app.use(express.static(__dirname, {
   },
 }));
 
+// ── Clean URL support ─────────────────────────────────────────
+// Redirect /page.html → /page (301 permanent)
+app.use((req, res, next) => {
+  if (req.path.endsWith('.html') && !req.path.startsWith('/api/')) {
+    const clean = req.path.slice(0, -5) || '/';
+    const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+    return res.redirect(301, clean + qs);
+  }
+  next();
+});
+
+// Serve /page → /page.html if the file exists
+app.use((req, res, next) => {
+  if (!path.extname(req.path) && req.path !== '/') {
+    const htmlFile = path.join(__dirname, req.path + '.html');
+    if (fs.existsSync(htmlFile)) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      return res.sendFile(htmlFile);
+    }
+  }
+  next();
+});
+
 // Catch-all: unknown routes → 404 (don't serve index.html for API misses)
 app.use((req, res) => {
   res.status(404).send('Not found');

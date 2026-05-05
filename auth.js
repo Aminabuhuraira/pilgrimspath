@@ -107,7 +107,7 @@ async function signIn(email, password) {
 async function signOut() {
     const { error } = await _sb.auth.signOut();
     if (error) throw error;
-    window.location.href = 'index.html';
+    window.location.href = '/';
 }
 
 /**
@@ -131,7 +131,7 @@ async function getSession() {
  */
 async function resetPassword(email) {
     const { data, error } = await _sb.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + '/login.html'
+        redirectTo: window.location.origin + '/login'
     });
 
     if (error) throw error;
@@ -145,7 +145,7 @@ async function signInWithGoogle() {
     const { data, error } = await _sb.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: window.location.origin + '/dashboard.html'
+            redirectTo: window.location.origin + '/dashboard'
         }
     });
 
@@ -238,7 +238,7 @@ async function requireAuth() {
     if (!session) {
         // Save where they wanted to go
         sessionStorage.setItem('redirectAfterLogin', window.location.href);
-        window.location.href = 'login.html';
+        window.location.href = '/login';
         return null;
     }
     return session.user;
@@ -247,7 +247,7 @@ async function requireAuth() {
 /**
  * Redirect away from login/register if already authenticated
  */
-async function redirectIfLoggedIn(destination = 'dashboard.html') {
+async function redirectIfLoggedIn(destination = '/dashboard') {
     const session = await getSession();
     if (session) {
         window.location.href = destination;
@@ -289,7 +289,7 @@ async function updateNavForAuth() {
         const initials = getUserInitials(user);
         
         navCta.outerHTML = `
-            <a href="dashboard.html" class="nav-user-btn" title="Go to Dashboard">
+            <a href="/dashboard" class="nav-user-btn" title="Go to Dashboard">
                 <span class="nav-user-avatar">${initials}</span>
                 <span class="nav-user-name">${name.split(' ')[0]}</span>
             </a>
@@ -300,6 +300,6 @@ async function updateNavForAuth() {
     const mobileCta = document.querySelector('.mobile-cta');
     if (user && mobileCta) {
         mobileCta.textContent = 'My Dashboard';
-        mobileCta.href = 'dashboard.html';
+        mobileCta.href = '/dashboard';
     }
 }
