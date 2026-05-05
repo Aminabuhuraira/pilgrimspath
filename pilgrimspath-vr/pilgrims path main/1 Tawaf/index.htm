@@ -1075,169 +1075,109 @@ function ihramPlayCurrentVO(){ /* legacy stub — button removed */ }
 var _bannerFirstId='panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5';
 var _bannerChk;
 (function(){
-var BANNERS_INITIAL={
-// Entrance cleaned up 1 (playlist index 0)
-'panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5':{
-  title:'\u{1f54c} Entering the Haram Mosque',
-        html:'<p class="bb"><strong>Voice-over:</strong> As you approach the sacred mosque, Al-Masjid Al-Haram, enter with humility and reverence. Step forward with your right foot and recite:</p>'+
-  '<p class="ba">Bismillahi, Allahumma salli ala Muhammadin wa ali Muhammad. Allahumma ighfir li dhunubi wa iftah li abwaba rahmatika.</p>'+
-        '<p class="bt">Translation: "In the name of Allah, O Allah, send prayers upon Muhammad and his family. O Allah, forgive my sins and open the gates of Your mercy."</p>'},
-// Starting area (playlist index 1)
-'panorama_89070D75_955C_4A01_41D4_F7F58617B959':{
-  title:'\u{1f932} Dua upon Seeing the Kaaba for the First Time',
-        html:'<p class="bb"><strong>Voice-over:</strong> Upon sighting the Kaaba, raise your hands and make any personal dua you wish. This is a moment when your dua is especially powerful. You may also recite:</p>'+
-    '<p class="ba">Allahumma zid hadha al-bayt tashreefan wa ta\'dheeman wa takreeman wa mahabatan, wa zid man sharrafahu wa karramahu mimman hajjahu awi\'tamarahu tashreefan wa takreeman wa ta\'dheeman wa birran.</p>'+
-        '<p class="bt">Translation: "O Allah, increase this house (the Kaaba) in honor, nobility, and respect, and increase in honor and nobility the one who honors and respects it."</p>'},
-// main starting area (playlist index 3)
-'panorama_7F92625E_71D8_25CE_41DA_487A76BA9DE1':{
-  title:'\u{1f54b} Tawaf — Circumambulation of the Kaaba',
-        html:'<p class="bb"><strong>Voice-over:</strong> You will now begin Tawaf, circling the Kaaba seven times. Starting from the Black Stone, raise your hand towards it, and say:</p>'+
-    '<p class="ba">Bismillahi Allahu Akbar</p>'+
-    '<p class="bt">(In the name of Allah, Allah is the Greatest).</p>'+
-    '<div class="sep"></div>'+
-        '<p class="bb">You have now begun your Tawaf — you may recite any duas or dhikr that you find meaningful.</p>'},
-// st main 3 (playlist index 8) — Maqam Ibrahim
-'panorama_7F9246DB_71D8_6AD6_41DA_A3880DC6DC13':{
-  title:'\u{1f9ce} Praying at Maqam Ibrahim',
-        html:'<p class="bb"><strong>Voice-over:</strong> Here at the Maqam Ibrahim (the Station of Ibrahim), you may offer two rak\'ahs of Salah.</p>'+
-  '<p class="bb">In the first rak\'ah, recite Surah Al-Fatiha followed by Surah Al-Kafirun. In the second rak\'ah, recite Surah Al-Fatiha followed by Surah Al-Ikhlas.</p>'+
-        '<p class="bb">After completing the prayer, make any personal supplications.</p>'},
-// Yemeni Corner — al-Rukn al-Yamani (mid-tawaf panorama)
-'panorama_7F927F34_71D8_3B52_41C5_1D549449A4CF':{
-  title:'\u{1f54b} Al-Rukn al-Yamani — Yemeni Corner',
-  html:'<p class="bb">As you pass the Yemeni Corner (al-Rukn al-Yamani), touch it with your right hand if possible and say: <strong>Bismillahi Allahu Akbar</strong>.</p>'+
-  '<p class="bb">Between the Yemeni Corner and the Black Stone, recite:</p>'+
-  '<p class="ba">Rabbana atina fid-dunya hasanatan, wa fil-akhirati hasanatan, wa qina adhaban-nar.</p>'+
-  '<p class="bt">Translation: "O our Lord, give us good in this world and good in the Hereafter, and protect us from the punishment of the Fire."</p>'}
-};
-var BANNERS_IFADHA={
-'panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5':{
-  title:'\u{1f54c} Tawaf al-Ifadha (Circumambulation of Visiting)',
-  html:'<p class="bb">You now perform Tawaf al-Ifadha, the obligatory circumambulation on the 10th of Dhul-Hijjah after leaving Muzdalifah.</p>'+
-  '<p class="bb">This Tawaf comes after the animal sacrifice and hair shaving. Begin from the Black Stone and circle the Kaaba seven times with the same reverence as your initial Tawaf.</p>'+
-  '<p class="bb">Make sincere duas for yourself, your family, and the ummah as you walk around the House of Allah.</p>'},
-'panorama_7F92DC96_71D8_1D5E_41BF_87B612A8A131':{
-  title:'\u{1f932} Continuing Your Second Tawaf',
-  html:'<p class="bb">Continue your circumambulation with devotion and focus.</p>'+
-  '<p class="bb">Remember that this Tawaf is an essential pillar of Hajj on the day of Eid al-Adha.</p>'},
-'panorama_8AF67A73_955C_4E01_41DA_44BCCE2B395A':{
-  title:'\u{1f54b} Tawaf al-Ifadha Progress',
-  html:'<p class="bb">You are progressing through your Tawaf al-Ifadha. Maintain your focus and complete all seven circuits with mindfulness.</p>'+
-  '<p class="ba">Recite as you walk: Subhana\'Allah wa\'l-hamdulillah wa la ilaha illallah wa\'Allahu Akbar.</p>'},
-'panorama_8AC63E8D_9544_C601_41E0_0A05A67E5557':{
-  title:'\u{1f9ce} Salah After Tawaf al-Ifadha',
-  html:'<p class="bb">After completing your Tawaf al-Ifadha, offer two rak\'ahs of prayer at Maqam Ibrahim or nearby in the mosque.</p>'+
-  '<p class="bb">Then proceed to perform Sa\'i (the walking between Safa and Marwa) to complete the major rituals of Hajj.</p>'}
-};
-var BANNERS_FAREWELL={
-'panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5':{
-  title:'\u{1f54c} Tawaf al-Wida (Farewell Circumambulation)',
-  html:'<p class="bb">You now perform your final Tawaf, called Tawaf al-Wida (the Farewell Circumambulation), as your last ritual before departing the holy house.</p>'+
-  '<p class="bb">Circle the Kaaba seven times with devoted dua, bidding farewell to this sacred place. This is your last opportunity to make sincere supplications in the Haram before departing.</p>'},
-'panorama_7F92DC96_71D8_1D5E_41BF_87B612A8A131':{
-  title:'\u{1f932} Final Moments at the Kaaba',
-  html:'<p class="bb">As you walk in Tawaf al-Wida, reflect on your Hajj journey and the spiritual transformation you have undergone.</p>'+
-  '<p class="bb">Make heartfelt duas for your loved ones and ask Allah to accept your pilgrimage.</p>'},
-'panorama_8AF67A73_955C_4E01_41DA_44BCCE2B395A':{
-  title:'\u{1f54b} Completing Your Final Circumambulation',
-  html:'<p class="bb">Continue with devotion as you complete the final circuits of Tawaf al-Wida.</p>'+
-  '<p class="ba">May Allah accept from you and grant you the rewards of a blessed Hajj.</p>'},
-'panorama_8AC63E8D_9544_C601_41E0_0A05A67E5557':{
-  title:'\u{1f9ce} Last Prayer in the Haram',
-  html:'<p class="bb">Offer your final prayer in Al-Masjid Al-Haram, making duas and seeking Allah\'s blessings one last time.</p>'+
-  '<p class="bb">This concludes your Hajj journey. May Allah accept your pilgrimage and grant you safe travels home.</p>'}
-};
-var journeyContext=new URL(window.location).searchParams.get('context')||'initial';
-var BANNERS=journeyContext==='ifadha'?BANNERS_IFADHA:(journeyContext==='farewell'?BANNERS_FAREWELL:BANNERS_INITIAL);
-// Index-keyed mirror so we still trigger the right banner regardless of preload
-// race conditions. Indices match the mainPlayList order in script_general.js:
-//   0 = Entrance cleaned up 1   (panorama_8CE4041C…)
-//   1 = Starting area           (panorama_89070D75…)
-//   3 = main starting area      (panorama_7F92625E…)
-//   8 = st main 3 / Maqam Ibrahim (panorama_7F9246DB…)
-var BANNERS_INITIAL_BY_INDEX={
-0: BANNERS_INITIAL['panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5'],
-1: BANNERS_INITIAL['panorama_89070D75_955C_4A01_41D4_F7F58617B959'],
-3: BANNERS_INITIAL['panorama_7F92625E_71D8_25CE_41DA_487A76BA9DE1'],
-8: BANNERS_INITIAL['panorama_7F9246DB_71D8_6AD6_41DA_A3880DC6DC13']
-};
-var shown={},lastId='';
-_bannerChk=chk;
-var RE=/(panorama_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+)_0\//i;
-function det(u){if(typeof u!=='string')return;var m=u.match(RE);if(m&&m[1]!==lastId){lastId=m[1];chk(m[1],null);}}
-// ═══ Voiceover maps per context ═══
-var _VO_INITIAL={'panorama_89070D75_955C_4A01_41D4_F7F58617B959':'English Upon seeing the ka_aba.mp3','panorama_7F92625E_71D8_25CE_41DA_487A76BA9DE1':'English Tawaf.mp3','panorama_7F927F34_71D8_3B52_41C5_1D549449A4CF':'English Yemeni Corner.mp3','panorama_7F9246DB_71D8_6AD6_41DA_A3880DC6DC13':'English Maqama Ibrahim.mp3'};
-var _VO_IFADHA={'panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5':'English Day 10-4.mp3','panorama_8AC63E8D_9544_C601_41E0_0A05A67E5557':'English Day 10-5.mp3'};
-var _VO_FAREWELL={'panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5':'English Farewell Tawaf.mp3','panorama_8AC63E8D_9544_C601_41E0_0A05A67E5557':'English Farewell Tawaf Congratulations.mp3'};
-// ═══ Apply admin overrides from PPContent (live-edit support) ═══
-if(window.PPContent && window.PPContent.hasData){
-  function _ppMerge(sk,B,V){
-    var oB=window.PPContent.bannerMapByPano(sk);
-    Object.keys(oB).forEach(function(k){B[k]=oB[k];});
-    var oA=window.PPContent.audioMapByPano(sk);
-    Object.keys(oA).forEach(function(k){V[k]=oA[k];});
+// ── Journey context ───────────────────────────────────────────────────────
+var journeyContext = new URL(window.location).searchParams.get('context') || 'initial';
+var _sceneKey = journeyContext === 'ifadha'   ? 'tawaf-ifadha'
+              : journeyContext === 'farewell' ? 'tawaf-farewell'
+              :                                'tawaf-initial';
+
+// ── Read banner + VO data ONCE from JCM (single source of truth) ──────────
+// bannerMap: { panoramaId: {title, html, template, position} }
+// audioMap:  { panoramaId: 'filename.mp3' }
+var _bannerMap = {};
+var _audioMap  = {};
+if (window.PPContent && window.PPContent.hasData) {
+  _bannerMap = window.PPContent.bannerMapByPano(_sceneKey) || {};
+  _audioMap  = window.PPContent.audioMapByPano(_sceneKey)  || {};
+}
+
+// ── Deduplication — always keyed by panorama ID ───────────────────────────
+// Previously used 'idx:N' as key for initial context, which caused the TDV
+// hook and any other trigger to use different keys for the same panorama,
+// letting banners/VOs fire twice. Now a single canonical key: panorama ID.
+var shown  = {};
+var lastId = '';
+
+_bannerChk = chk;
+
+// ── Lap counter ───────────────────────────────────────────────────────────
+var _tawafFirstVisitSeen = false;
+
+// ── Main panorama handler ─────────────────────────────────────────────────
+function chk(id, idx) {
+  window._currentPanoId = id; // publish for HUD gating
+
+  // Lap counting — initial Tawaf
+  if (journeyContext === 'initial' && id.indexOf('7F92625E') !== -1 && typeof idx === 'number') {
+    if (!_tawafFirstVisitSeen) { _tawafFirstVisitSeen = true; }
+    else if (typeof window.tawafLapInc === 'function') { window.tawafLapInc(); }
   }
-  _ppMerge('tawaf-initial', BANNERS_INITIAL, _VO_INITIAL);
-  _ppMerge('tawaf-ifadha',  BANNERS_IFADHA,  _VO_IFADHA);
-  _ppMerge('tawaf-farewell',BANNERS_FAREWELL,_VO_FAREWELL);
-  // Refresh by-index lookup since BANNERS_INITIAL entries may have been replaced
-  BANNERS_INITIAL_BY_INDEX[0]=BANNERS_INITIAL['panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5'];
-  BANNERS_INITIAL_BY_INDEX[1]=BANNERS_INITIAL['panorama_89070D75_955C_4A01_41D4_F7F58617B959'];
-  BANNERS_INITIAL_BY_INDEX[3]=BANNERS_INITIAL['panorama_7F92625E_71D8_25CE_41DA_487A76BA9DE1'];
-  BANNERS_INITIAL_BY_INDEX[8]=BANNERS_INITIAL['panorama_7F9246DB_71D8_6AD6_41DA_A3880DC6DC13'];
+  // Lap counting — Farewell Tawaf (same 3D model, separate sessionStorage key)
+  if (journeyContext === 'farewell' && id.indexOf('7F92625E') !== -1 && typeof idx === 'number') {
+    if (!_tawafFirstVisitSeen) { _tawafFirstVisitSeen = true; }
+    else if (typeof window.tawafLapInc === 'function') { window.tawafLapInc(); }
+  }
+
+  // Track panorama visits for any downstream gating
+  window._tawafPanoVisits = window._tawafPanoVisits || {};
+  window._tawafPanoVisits[id] = (window._tawafPanoVisits[id] || 0) + 1;
+
+  // Deduplicate by panorama ID — one banner+VO per panorama per page-load
+  if (shown[id]) return;
+
+  // Gate: Farewell Hajj-Complete banner only fires after 7 full circuits
+  if (journeyContext === 'farewell' && id.indexOf('8AC63E8D') !== -1) {
+    var _laps = parseInt(sessionStorage.getItem('tawafLaps_farewell') || '0', 10);
+    if (_laps < 7) return;
+  }
+
+  // Gate: Ihram guide still visible
+  var g = document.getElementById('ihramGuide');
+  if (g && g.style.display !== 'none' && !g.classList.contains('hidden')) return;
+
+  // Fetch content from JCM only
+  var b  = _bannerMap[id];
+  var vo = _audioMap[id];
+  if (!b && !vo) return; // JCM has nothing for this panorama — stay silent
+
+  shown[id] = true; // mark BEFORE showing so re-entrant calls are blocked
+
+  if (b && (b.title || b.html)) {
+    openBanner(b.title, b.html);
+  }
+  if (vo) playVO(vo);
+
+  // Signal journey-nav that the last guided panorama is reached (Maqam Ibrahim)
+  if (id === 'panorama_7F9246DB_71D8_6AD6_41DA_A3880DC6DC13') {
+    window.journeyIsLastPanorama = true;
+    if (typeof showJourneyNextButton === 'function') { setTimeout(showJourneyNextButton, 300); }
+  }
 }
-var _VO_MAP=journeyContext==='ifadha'?_VO_IFADHA:journeyContext==='farewell'?_VO_FAREWELL:_VO_INITIAL;
-function _pickBanner(id,idx){
-if(journeyContext==='initial'&&typeof idx==='number') return BANNERS_INITIAL_BY_INDEX[idx]||null;
-return BANNERS[id]||null;
+
+// ── TDV hook — fires on real navigation events only ───────────────────────
+// No PerformanceObserver / Image.src hijack: those fire on tile preloads for
+// adjacent panoramas (panoramas the user hasn't navigated to yet), which was
+// the primary cause of banners and VOs playing at the wrong time or twice.
+// The TDV hook is the only reliable trigger — it fires exactly when the user
+// actually arrives at a new panorama.
+function hookTDV() {
+  if (typeof TDV === 'undefined' || !TDV.Tour || !TDV.Tour.Script) return setTimeout(hookTDV, 500);
+  var o1 = TDV.Tour.Script.setPlayListSelectedIndex;
+  if (o1) {
+    TDV.Tour.Script.setPlayListSelectedIndex = function(a, b) {
+      try { var id = a.get('items')[b].get('media').get('id'); if (id !== lastId) { lastId = id; chk(id, b); } } catch(e) {}
+      return o1.apply(this, arguments);
+    };
+  }
+  var o2 = TDV.Tour.Script.setMainMediaByIndex;
+  if (o2) {
+    TDV.Tour.Script.setMainMediaByIndex = function(a) {
+      try { var items = this.mainPlayList.get('items'); if (a >= 0 && a < items.length) { var id = items[a].get('media').get('id'); if (id !== lastId) { lastId = id; chk(id, a); } } } catch(e) {}
+      return o2.apply(this, arguments);
+    };
+  }
+  console.log('[Tawaf] banner hooks installed');
 }
-var _tawafFirstVisitSeen=false;
-function chk(id,idx){// Auto-count lap when user returns to main starting area (skip the very first arrival)
-window._currentPanoId = id; // publish for HUD gating
-// Lap-counting is panorama-specific to the INITIAL Tawaf context. Tawaf
-// al-Ifadha and Tawaf al-Wida are physically the same circuits but the
-// banner/VO mapping uses a different set of panorama IDs, so we guard the
-// counter so it can't accidentally fire from a stale/shared trigger.
-if(journeyContext==='initial' && id.indexOf('7F92625E')!==-1 && typeof idx==='number'){if(!_tawafFirstVisitSeen){_tawafFirstVisitSeen=true;}else if(typeof window.tawafLapInc==='function'){window.tawafLapInc();}}
-// Farewell Tawaf also needs lap-counting so the Hajj-Complete celebration
-// only appears after the pilgrim actually completes seven circuits. The
-// scene reuses the same 3D model, so the same starting-area panorama
-// (7F92625E) signals a completed lap. The lap counter (window.tawafLapInc)
-// writes to its own namespaced sessionStorage key (tawafLaps_farewell), so
-// it cannot interfere with the initial Tawaf scoring.
-if(journeyContext==='farewell' && id.indexOf('7F92625E')!==-1 && typeof idx==='number'){if(!_tawafFirstVisitSeen){_tawafFirstVisitSeen=true;}else if(typeof window.tawafLapInc==='function'){window.tawafLapInc();}}
-// Track unique panorama visits per page-load so we can gate end-of-Tawaf
-// celebratory banners until the user has actually visited the prior stops.
-window._tawafPanoVisits = window._tawafPanoVisits || {};
-window._tawafPanoVisits[id] = (window._tawafPanoVisits[id]||0) + 1;
-var key=(journeyContext==='initial'&&typeof idx==='number')?('idx:'+idx):id;var b=_pickBanner(id,idx);if(!b||shown[key])return;
-// Farewell-context Hajj-Complete celebration banner ('8AC63E8D') must only
-// fire after the pilgrim has actually completed all seven circuits. Without
-// this gate, simply walking into the last panorama would pop the
-// "Hajj Complete \u2014 Mabrook!" banner long before the rite is finished.
-if(journeyContext==='farewell' && id.indexOf('8AC63E8D')!==-1){
-  var _laps=parseInt(sessionStorage.getItem('tawafLaps_farewell')||'0',10);
-  if(_laps<7){return;}
-}
-// Don't show if Ihram guide is still visible
-var g=document.getElementById('ihramGuide');if(g&&g.style.display!=='none'&&!g.classList.contains('hidden'))return;
-openBanner(b.title,b.html);
-if(_VO_MAP[id])playVO(_VO_MAP[id]);
-shown[key]=true;
-// Signal to journey nav that last guided panorama is reached (Maqam Ibrahim — st main 3)
-if(id==='panorama_7F9246DB_71D8_6AD6_41DA_A3880DC6DC13'&&typeof window!=='undefined'){window.journeyIsLastPanorama=true;if(typeof showJourneyNextButton==='function'){setTimeout(showJourneyNextButton,300);}}}
-// Preload-based detection (PerformanceObserver + Image src hijack) misfires in
-// ifadha/farewell contexts: 3DVista preloads tiles for adjacent panoramas, and
-// each preload call triggers chk() for a panorama the user is NOT actually in
-// — causing banners/voiceovers to play back-to-back. In 'initial' mode this
-// was masked by the ihramGuide blocker. For ifadha/farewell rely solely on the
-// TDV hook (real navigation events) below.
-var _useFastDetect = !lowPerfMode && (journeyContext!=='ifadha' && journeyContext!=='farewell');
-if(_useFastDetect){
-try{var po=new PerformanceObserver(function(l){l.getEntries().forEach(function(e){det(e.name);});});po.observe({type:'resource',buffered:false});}catch(e){}
-var OI=window.Image;window.Image=function(w,h){var img=new OI(w,h);var os=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src').set;Object.defineProperty(img,'src',{set:function(v){det(v);os.call(this,v);},get:function(){return Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src').get.call(this);}});return img;};window.Image.prototype=OI.prototype;
-}
-function hookTDV(){if(typeof TDV==='undefined'||!TDV.Tour||!TDV.Tour.Script)return setTimeout(hookTDV,500);var o1=TDV.Tour.Script.setPlayListSelectedIndex;if(o1){TDV.Tour.Script.setPlayListSelectedIndex=function(a,b){try{var id=a.get('items')[b].get('media').get('id');if(id!==lastId){lastId=id;chk(id,b);}}catch(e){}return o1.apply(this,arguments);};}var o2=TDV.Tour.Script.setMainMediaByIndex;if(o2){TDV.Tour.Script.setMainMediaByIndex=function(a){try{var items=this.mainPlayList.get('items');if(a>=0&&a<items.length){var id=items[a].get('media').get('id');if(id!==lastId){lastId=id;chk(id,a);}}}catch(e){}return o2.apply(this,arguments);};}console.log('[Tawaf] banner hooks installed');}
 hookTDV();
 })();
 
