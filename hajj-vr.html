@@ -708,7 +708,7 @@
     <!-- ═══════════════════════════════════════
          SCREEN 1: Language Selection
          ═══════════════════════════════════════ -->
-    <div class="screen active" id="screenLang">
+    <div class="screen" id="screenLang">
         <div class="screen-inner">
             <div class="brand-logo anim">
                 <img src="images/logo.png" alt="Pilgrim's Path">
@@ -767,7 +767,7 @@
     <!-- ═══════════════════════════════════════
          SCREEN 2: Welcome
          ═══════════════════════════════════════ -->
-    <div class="screen" id="screenWelcome">
+    <div class="screen active" id="screenWelcome">
         <div class="screen-inner">
             <div class="bismillah anim">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
 
@@ -799,13 +799,21 @@
                 <div class="divider-line"></div>
             </div>
 
+            <!-- Quiz opt-in — shown here so pilgrim decides before entering -->
+            <label class="anim anim-d4" id="quizOptInWrap" style="display:flex;align-items:flex-start;gap:10px;justify-content:center;margin:14px auto 4px;padding:12px 18px;max-width:560px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.32);border-radius:12px;cursor:pointer;font-family:'DM Sans',Arial,sans-serif;color:#3D2B1F;font-size:14px;text-align:left;">
+                <input type="checkbox" id="quizOptIn" style="width:18px;height:18px;accent-color:#8B6914;cursor:pointer;margin-top:3px;flex-shrink:0;" />
+                <span>
+                    <strong>Quiz me after each scene</strong> &mdash; short reflection questions to reinforce what you've learned.<br>
+                    <span style="display:inline-block;margin-top:6px;padding:3px 9px;border-radius:999px;background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;font-size:11px;font-weight:700;letter-spacing:0.3px;">🏆 Score 80%+ to earn your Hajj Readiness Certificate</span>
+                </span>
+            </label>
+
             <div class="btn-row anim anim-d4">
-                <button class="btn btn-ghost" onclick="goToScreen('screenLang')">
-                    <i class="fas fa-arrow-left"></i>
-                    <span>Back</span>
+                <button class="btn btn-ghost" onclick="saveQuizPref();launchVR();">
+                    <span>Skip</span>
                 </button>
                 <button class="btn btn-gold" onclick="goToScreen('screenIhram')">
-                    <span>Prepare for Ihram</span>
+                    <span>Let's Begin</span>
                     <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
@@ -936,14 +944,7 @@
                 <div class="talbiyah-meaning">"Here I am, O Allah, here I am. Here I am, You have no partner, here I am. Verily all praise, grace, and sovereignty belong to You. You have no partner."</div>
             </div>
 
-            <!-- Optional quiz opt-in -->
-            <label class="anim anim-d4" id="quizOptInWrap" style="display:flex;align-items:flex-start;gap:10px;justify-content:center;margin:14px auto 4px;padding:12px 18px;max-width:560px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.32);border-radius:12px;cursor:pointer;font-family:'DM Sans',Arial,sans-serif;color:#3D2B1F;font-size:14px;text-align:left;">
-                <input type="checkbox" id="quizOptIn" style="width:18px;height:18px;accent-color:#8B6914;cursor:pointer;margin-top:3px;flex-shrink:0;" />
-                <span>
-                    <strong>Quiz me after each scene</strong> &mdash; short reflection questions to reinforce what you've learned.<br>
-                    <span style="display:inline-block;margin-top:6px;padding:3px 9px;border-radius:999px;background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;font-size:11px;font-weight:700;letter-spacing:0.3px;">🏆 Score 80%+ to earn your Hajj Readiness Certificate</span>
-                </span>
-            </label>
+            <!-- Optional quiz opt-in removed from here — moved to screenWelcome -->
 
             <div class="btn-row anim anim-d5">
                 <button class="btn btn-ghost" onclick="goToScreen('screenWelcome')">
@@ -1007,16 +1008,19 @@
             document.getElementById('ihramWomen').style.display = gender === 'women' ? 'block' : 'none';
         }
 
-        // ── Launch VR tour ──
-        function launchVR() {
-            const loader = document.getElementById('loadingOverlay');
-            loader.classList.add('active');
-
-            // Persist quiz opt-in choice for the journey
-            try{
+        // ── Save quiz preference ──
+        function saveQuizPref() {
+            try {
                 var optIn = !!document.getElementById('quizOptIn') && document.getElementById('quizOptIn').checked;
                 localStorage.setItem('pp_quiz_enabled', optIn ? '1' : '0');
-            }catch(e){}
+            } catch(e) {}
+        }
+
+        // ── Launch VR tour ──
+        function launchVR() {
+            saveQuizPref();
+            const loader = document.getElementById('loadingOverlay');
+            if (loader) loader.classList.add('active');
 
             // Navigate directly to step 1 of the VR tour (Tawaf x7)
             setTimeout(() => {

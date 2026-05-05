@@ -355,17 +355,92 @@ body {
     .continue-card { flex-direction: column; align-items: flex-start; }
     .continue-btn { width: 100%; justify-content: center; }
 }
-@media (max-width: 768px) {
-    .dash-sidebar { transform: translateX(-100%); }
-    .dash-sidebar:not(.collapsed) { transform: translateX(0); box-shadow: 10px 0 40px rgba(0,0,0,.1); }
-    .dash-main { margin-left: 0; padding: 20px 16px; }
-    .welcome-banner { flex-direction: column; gap: 20px; padding: 24px 20px; }
-    .welcome-stats { width: 100%; justify-content: space-around; }
-    .welcome-text h1 { font-size: 1.3rem; }
-    .rituals-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
-    .user-name { display: none; }
+
+/* ── Sidebar backdrop overlay (mobile) ── */
+#sidebarBackdrop {
+    display: none;
+    position: fixed; inset: 0; z-index: 89;
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    transition: opacity .3s;
+    opacity: 0;
 }
+#sidebarBackdrop.active {
+    display: block;
+    opacity: 1;
+}
+
+@media (max-width: 900px) {
+    /* Sidebar slides in from left as drawer */
+    .dash-sidebar {
+        transform: translateX(-100%);
+        z-index: 95;
+        box-shadow: none;
+        width: 280px;
+    }
+    .dash-sidebar.collapsed { transform: translateX(-100%); }
+    .dash-sidebar:not(.collapsed) {
+        transform: translateX(0);
+        box-shadow: 8px 0 40px rgba(0,0,0,.18);
+    }
+
+    /* Main always full-width on mobile */
+    .dash-main { margin-left: 0 !important; padding: 18px 14px 32px; }
+
+    /* Topbar tighter */
+    .dash-topbar { padding: 0 14px; }
+    .dash-logo-img { height: 32px; }
+
+    /* Welcome banner stacks vertically */
+    .welcome-banner {
+        flex-direction: column;
+        gap: 16px;
+        padding: 20px 18px;
+        border-radius: 16px;
+    }
+    .welcome-text h1 { font-size: 1.15rem; }
+    .welcome-text p { font-size: .82rem; }
+    .welcome-stats {
+        width: 100%;
+        justify-content: space-around;
+        border-top: 1px solid rgba(201,162,39,.15);
+        padding-top: 14px;
+        margin-top: 4px;
+    }
+    .w-stat-num { font-size: 1.4rem; }
+
+    /* Ritual grid: 2 columns */
+    .rituals-grid { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+    .ritual-card-dash { padding: 14px 12px; border-radius: 12px; }
+    .ritual-card-dash h4 { font-size: .78rem; }
+    .ritual-card-dash p { font-size: .68rem; margin-bottom: 6px; }
+    .ritual-icon { width: 36px; height: 36px; font-size: .9rem; margin-bottom: 8px; }
+    .ritual-badge { font-size: .6rem; padding: 2px 8px; }
+    .ritual-status { top: 10px; right: 10px; font-size: .8rem; }
+
+    /* Content header */
+    .content-header { margin-bottom: 14px; }
+    .content-header h2 { font-size: 1rem; }
+
+    /* Continue card */
+    .continue-card { padding: 18px 16px; margin-bottom: 16px; }
+    .continue-card h3 { font-size: .95rem; }
+    .continue-meta { flex-wrap: wrap; gap: 6px; }
+
+    /* Tabs */
+    .tab-badge { font-size: .65rem; padding: 2px 8px; }
+
+    /* Tab toggle buttons (Hajj/Umrah) shown inline at top on mobile */
+    .user-name { display: none; }
+    .notif-dot { top: 6px; right: 6px; }
+}
+
 @media (max-width: 480px) {
-    .rituals-grid { grid-template-columns: 1fr 1fr; }
-    .continue-meta { flex-direction: column; gap: 6px; }
+    .rituals-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .continue-meta { flex-direction: column; gap: 4px; }
+    .welcome-banner { padding: 16px 14px; }
+    .welcome-text h1 { font-size: 1.05rem; }
+    .w-stat-num { font-size: 1.3rem; }
+    .dash-main { padding: 14px 10px 28px; }
 }

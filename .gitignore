@@ -6,6 +6,7 @@ images/Tawaf area/
 pilgrimspath vr/
 netlify/
 # === Secrets — NEVER commit ===
+DEVLOG.md
 .env
 .env.*
 !.env.example

@@ -660,59 +660,69 @@ window.addEventListener('storage', function(e){
   }
 });
 
-/* ─── Mobile banner CSS override ────────────────────────────────────────
-   Injected here so every VR scene automatically gets the fix without
-   needing per-scene edits.  On phones ≤620 px the PNG frame image is
-   replaced with a clean CSS card (gold-accented cream panel) that looks
-   professional at any content height and font size stays readable.       */
+/* ─── Banner CSS — universally applied (no media-query) ─────────────────
+   VR scene pages have no <meta viewport> tag so any @media width query
+   would never fire on phones (browser defaults to 980px layout width).
+   Solution: always use the clean CSS card — it looks great on every
+   screen size and is far more professional than the distorted PNG frame. */
 (function(){
   var s = document.createElement('style');
-  s.textContent = [
-    '@media(max-width:620px){',
-    /* ── Card shell: drop the landscape PNG, use a CSS panel ── */
-    '#sceneBanner{',
-      'width:92vw!important;',
-      'min-height:auto!important;',
-      'max-height:80vh!important;',
-      'background:rgba(255,252,242,0.97)!important;',
-      'border-radius:16px!important;',
-      'border:1.5px solid rgba(201,168,76,0.55)!important;',
-      'box-shadow:0 0 0 4px rgba(201,168,76,0.12),0 20px 56px rgba(0,0,0,0.5)!important;',
-      'overflow:hidden!important;',
-      'top:50%!important;left:50%!important;',
-      'transform:translate(-50%,-50%)!important;',
-    '}',
-    /* Gold accent stripe along the top */
-    '#sceneBanner::before{',
-      'content:"";position:absolute;top:0;left:0;right:0;height:4px;pointer-events:none;',
-      'background:linear-gradient(90deg,transparent,#C9A84C 30%,#8B6914 50%,#C9A84C 70%,transparent);',
-      'border-radius:16px 16px 0 0;',
-    '}',
-    /* ── Body: sensible padding, scrollable if content is long ── */
-    '#sceneBanner .sceneBannerBody{',
-      'padding:28px 22px 22px!important;',
-      'max-height:80vh!important;min-height:0!important;',
-      'display:flex!important;flex-direction:column!important;',
-      'justify-content:flex-start!important;align-items:center!important;',
-      'overflow-y:auto!important;overflow-x:hidden!important;',
-    '}',
-    '#sceneBanner .sceneBannerBody>*{width:100%!important;text-align:center!important;}',
-    '#sceneBanner .sceneBannerBody>button{width:auto!important;align-self:center!important;display:inline-flex!important;}',
+  s.textContent =
+    /* ── Banner shell: cream card, gold border ── */
+    '#sceneBanner{'
+    + 'width:min(90vw,860px)!important;'
+    + 'min-height:auto!important;'
+    + 'max-height:88vh!important;'
+    + 'background:rgba(255,252,242,0.98)!important;'
+    + 'border-radius:18px!important;'
+    + 'border:1.5px solid rgba(201,168,76,0.50)!important;'
+    + 'box-shadow:0 0 0 5px rgba(201,168,76,0.10),0 24px 64px rgba(0,0,0,0.52)!important;'
+    + 'overflow:hidden!important;'
+    + 'position:fixed!important;top:50%!important;left:50%!important;'
+    + 'transform:translate(-50%,-50%)!important;'
+    + '}'
+    /* Gold accent stripe top */
+    + '#sceneBanner::before{'
+    + 'content:""!important;display:block!important;'
+    + 'position:absolute!important;top:0!important;left:0!important;right:0!important;height:4px!important;'
+    + 'background:linear-gradient(90deg,transparent,#C9A84C 25%,#8B6914 50%,#C9A84C 75%,transparent)!important;'
+    + 'border-radius:18px 18px 0 0!important;pointer-events:none!important;'
+    + '}'
+    /* ── Body ── */
+    + '#sceneBanner .sceneBannerBody{'
+    + 'box-sizing:border-box!important;width:100%!important;'
+    + 'padding:clamp(28px,4.5vh,54px) clamp(22px,7vw,90px) clamp(22px,3.5vh,40px)!important;'
+    + 'max-height:88vh!important;overflow-y:auto!important;overflow-x:hidden!important;'
+    + 'display:flex!important;flex-direction:column!important;'
+    + 'justify-content:flex-start!important;align-items:center!important;'
+    + 'scrollbar-width:thin!important;scrollbar-color:rgba(201,168,76,0.3) transparent!important;'
+    + '}'
+    + '#sceneBanner .sceneBannerBody>*{width:100%!important;text-align:center!important;}'
+    + '#sceneBanner .sceneBannerBody>button{width:auto!important;align-self:center!important;display:inline-flex!important;}'
     /* ── Typography ── */
-    '#sceneBanner h3{font-size:clamp(16px,4.8vw,22px)!important;margin:0 0 12px!important;',
-      'line-height:1.25!important;color:#8B6914!important;font-weight:700!important;text-align:center!important;}',
-    '#sceneBanner .bb{font-size:clamp(13.5px,3.7vw,16px)!important;line-height:1.6!important;',
-      'margin:0 0 10px!important;color:#3D2B1F!important;text-align:center!important;}',
-    '#sceneBanner .ba{font-size:clamp(14px,3.9vw,18px)!important;line-height:1.65!important;',
-      'margin:8px 0 6px!important;color:#8B6914!important;font-style:italic!important;text-align:center!important;}',
-    '#sceneBanner .bt{font-size:clamp(12.5px,3.3vw,15px)!important;line-height:1.55!important;',
-      'margin:0 0 10px!important;color:#6B5B4F!important;font-style:italic!important;text-align:center!important;}',
-    '#sceneBanner .sep{width:60px!important;margin:8px auto!important;}',
+    + '#sceneBanner h3{'
+    + 'font-size:clamp(17px,2.8vw,30px)!important;margin:0 0 14px!important;'
+    + 'line-height:1.25!important;color:#8B6914!important;font-weight:700!important;text-align:center!important;'
+    + '}'
+    + '#sceneBanner .bb{'
+    + 'font-size:clamp(13px,1.35vw,17px)!important;line-height:1.65!important;'
+    + 'margin:0 0 10px!important;color:#3D2B1F!important;text-align:center!important;'
+    + '}'
+    + '#sceneBanner .ba{'
+    + 'font-size:clamp(14px,1.55vw,20px)!important;line-height:1.65!important;'
+    + 'margin:8px 0 6px!important;color:#8B6914!important;font-style:italic!important;text-align:center!important;'
+    + '}'
+    + '#sceneBanner .bt{'
+    + 'font-size:clamp(12px,1.15vw,16px)!important;line-height:1.55!important;'
+    + 'margin:0 0 10px!important;color:#6B5B4F!important;font-style:italic!important;text-align:center!important;'
+    + '}'
+    + '#sceneBanner .sep{width:64px!important;margin:10px auto!important;}'
     /* ── Button ── */
-    '#sceneBanner button{padding:12px 32px!important;font-size:15px!important;',
-      'margin-top:14px!important;border-radius:8px!important;min-width:120px!important;}',
-    '}'
-  ].join('');
+    + '#sceneBanner button{'
+    + 'padding:clamp(10px,1.2vh,14px) clamp(22px,3vw,34px)!important;'
+    + 'font-size:clamp(13px,1.1vw,15px)!important;'
+    + 'margin-top:clamp(12px,2vh,18px)!important;border-radius:8px!important;min-width:110px!important;'
+    + '}';
   document.head
     ? document.head.appendChild(s)
     : document.addEventListener('DOMContentLoaded', function(){ document.head.appendChild(s); });

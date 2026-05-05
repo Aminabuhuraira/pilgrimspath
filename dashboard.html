@@ -76,6 +76,8 @@
         </div>
     </header>
 
+    <!-- Sidebar overlay (mobile tap-to-close) -->
+    <div id="sidebarBackdrop" onclick="closeSidebar()"></div>
     <!-- Sidebar -->
     <aside class="dash-sidebar" id="dashSidebar">
         <div class="sidebar-section">
@@ -416,9 +418,31 @@
     const sidebar = document.getElementById('dashSidebar');
     const main = document.getElementById('dashMain');
     const sidebarToggle = document.getElementById('sidebarToggle');
+    const backdrop = document.getElementById('sidebarBackdrop');
+
+    function closeSidebar() {
+        sidebar.classList.add('collapsed');
+        main.classList.add('expanded');
+        if (backdrop) backdrop.classList.remove('active');
+    }
+    function openSidebar() {
+        sidebar.classList.remove('collapsed');
+        main.classList.remove('expanded');
+        if (backdrop && window.innerWidth <= 900) backdrop.classList.add('active');
+    }
+
+    // Start collapsed on mobile
+    if (window.innerWidth <= 900) {
+        sidebar.classList.add('collapsed');
+        main.classList.add('expanded');
+    }
+
     sidebarToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('collapsed');
-        main.classList.toggle('expanded');
+        if (sidebar.classList.contains('collapsed')) {
+            openSidebar();
+        } else {
+            closeSidebar();
+        }
     });
 
     // Tab switching
@@ -447,8 +471,8 @@
 
     // Mobile sidebar close on outside click
     document.addEventListener('click', (e) => {
-        if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
-            sidebar.classList.add('collapsed');
+        if (window.innerWidth <= 900 && !sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+            closeSidebar();
         }
     });
     // Session & visit tracking for admin analytics
