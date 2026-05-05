@@ -83,9 +83,13 @@ registerRoute(
   })
 );
 
-// ─── 5. CSS & JS (site styles and scripts) ───
+// ─── 5. CSS & JS (site styles and scripts — same-origin only) ───
+// Explicitly exclude external scripts (Facebook Pixel, Meta, etc.) so the SW
+// doesn't try to StaleWhileRevalidate a CDN request that might be blocked,
+// which causes "no-response" console errors.
 registerRoute(
-  ({ request }) => request.destination === 'style' || request.destination === 'script',
+  ({ request, url }) => (request.destination === 'style' || request.destination === 'script') &&
+    url.origin === self.location.origin,
   new StaleWhileRevalidate({
     cacheName: 'static-assets',
     plugins: [

@@ -562,6 +562,10 @@ function installFirstInteractionVO(){
     // started it), don't double-fire.
     if(window._voAudio && !window._voAudio.paused) return;
     if(window._welcomeVoStarted) return;
+    // Don't override Ihram-guide step VOs — the guide has its own VO system
+    // and we must not cancel it by playing a panorama VO on the same click.
+    var guide = document.getElementById('ihramGuide');
+    if(guide && guide.style.display !== 'none' && !guide.classList.contains('hidden')) return;
     var v = getCurrentSceneVO();
     if(!v || !v.audio) return;
     if(v.chain) window._voChainPending = v.chain;
