@@ -159,9 +159,20 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(clients.claim());
 });
 
+// ─── Cache-name helper (must mirror sw.js routing strategies) ───
+function swCacheFor(url) {
+  if (/\/panorama_|\/media\//.test(url))             return 'panorama-tiles';
+  if (/\/locale\/|script(_general)?\.js/.test(url)) return 'vr-scenes';
+  if (/\.html?($|\?)/.test(url))                    return 'pages';
+  if (/\.js($|\?)/.test(url))                       return 'static-assets';
+  if (/\.(webp|png|jpg|jpeg|gif|svg)($|\?)/.test(url)) return 'images';
+  return 'pp-prefetch';
+}
+
 // ─── Pre-fetch on demand (Dashboard "Download Experience" button) ───
 // Dashboard sends: { type:'PREFETCH_SCENE', urls:[url1, url2, ...] }
-// SW fetches each URL and caches it, then broadcasts progress back.
+// SW fetches each URL and stores it in the correct Workbox cache so that
+// CacheFirst / StaleWhileRevalidate routes serve it on the next real visit.
 self.addEventListener('message', (event) => {
   if (!event.data || event.data.type !== 'PREFETCH_SCENE') return;
   const urls = Array.isArray(event.data.urls) ? event.data.urls : [];
@@ -182,10 +193,10 @@ self.addEventListener('message', (event) => {
     urls.map(url =>
       caches.match(url).then(hit => {
         if (hit) { done++; notify(); return; }
-        return fetch(url, { credentials: 'same-origin', mode: 'no-cors' })
+        return fetch(url, { credentials: 'same-origin' })
           .then(res => {
-            if (res.status === 200 || res.type === 'opaque') {
-              return caches.open('pp-prefetch').then(c => c.put(url, res));
+            if (res.ok) {
+              return caches.open(swCacheFor(url)).then(c => c.put(url, res));
             }
           })
           .catch(() => {})

@@ -514,44 +514,94 @@
         clearTimeout(_dlToast._t);
         if (dur) _dlToast._t = setTimeout(function(){ _dlToast.classList.remove('show'); }, dur);
     }
+    // Returns the right Workbox cache name for a given URL —
+    // must match the cache names used in sw.js routing strategies.
+    function _swCacheName(u) {
+        if (/\/panorama_|\/media\//.test(u))             return 'panorama-tiles';
+        if (/\/locale\/|script(_general)?\.js/.test(u)) return 'vr-scenes';
+        if (/\.html?($|\?)/.test(u))                    return 'pages';
+        if (/\.js($|\?)/.test(u))                       return 'static-assets';
+        if (/\.(webp|png|jpg|jpeg|gif|svg)($|\?)/.test(u)) return 'images';
+        return 'pp-prefetch';
+    }
     function _prefetchScene(url, btn) {
-        if (!('serviceWorker' in navigator) || !navigator.serviceWorker.controller) {
-            // SW not yet active — navigate immediately
+        if (!('caches' in window && 'fetch' in window)) {
+            _showToast('Download not supported in this browser', 2500);
             return;
         }
-        var sceneUrls = [
-            url,
-            '/journey-content-loader.js',
-            '/admin-journey-content.js',
-            '/pilgrimspath-vr/journey-nav.js'
-        ];
+        // Strip query params to get the bare HTML file URL
+        var sceneBase = url.split('?')[0];
+        var baseDir   = sceneBase.substring(0, sceneBase.lastIndexOf('/') + 1);
+        var origin    = window.location.origin;
+
         btn.classList.add('loading');
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-        _showToast('⬇ Downloading experience…');
-        var handler = function(e) {
-            if (e.data && e.data.type === 'PREFETCH_DONE') {
-                navigator.serviceWorker.removeEventListener('message', handler);
-                btn.classList.remove('loading');
-                btn.classList.add('done');
-                btn.innerHTML = '<i class="fas fa-check"></i>';
-                _showToast('✓ Ready — opens instantly next time', 3500);
-            } else if (e.data && e.data.type === 'PREFETCH_PROGRESS') {
-                var pct = Math.round(e.data.done / e.data.total * 100);
-                _showToast('⬇ Downloading… ' + pct + '%');
-            }
-        };
-        navigator.serviceWorker.addEventListener('message', handler);
-        navigator.serviceWorker.controller.postMessage({ type: 'PREFETCH_SCENE', urls: sceneUrls });
-        // Fallback: if no SW response in 8s mark as done
-        setTimeout(function() {
-            if (btn.classList.contains('loading')) {
-                navigator.serviceWorker.removeEventListener('message', handler);
-                btn.classList.remove('loading');
-                btn.classList.add('done');
-                btn.innerHTML = '<i class="fas fa-check"></i>';
-                _showToast('✓ Ready for offline', 3000);
-            }
-        }, 8000);
+        _showToast('⬇ Preparing…');
+
+        // Step 1 — fetch the scene HTML to discover its preloaded assets
+        fetch(sceneBase, { cache: 'no-cache' })
+          .then(function(r) {
+              if (!r.ok) throw new Error(r.status);
+              return r.text();
+          })
+          .then(function(html) {
+              var parser = new DOMParser();
+              var doc    = parser.parseFromString(html, 'text/html');
+              var base   = new URL(baseDir, origin);
+              var seen   = {};
+              var urls   = [];
+              function add(u) { if (u && !seen[u]) { seen[u] = 1; urls.push(u); } }
+
+              // The HTML page itself
+              add(origin + sceneBase);
+
+              // All <link rel="preload"> — initial panorama tiles, locale, scripts
+              doc.querySelectorAll('link[rel="preload"]').forEach(function(el) {
+                  var href = el.getAttribute('href');
+                  if (!href) return;
+                  try { add(new URL(href, base).href); } catch(_) {}
+              });
+
+              // Our custom scripts needed on every scene
+              ['/journey-content-loader.js', '/admin-journey-content.js',
+               '/pilgrimspath-vr/journey-nav.js', '/journey-manager.js',
+               '/quiz-content.js'].forEach(function(p) { add(origin + p); });
+
+              var total = urls.length;
+              var done  = 0;
+              _showToast('⬇ Caching ' + total + ' files…');
+
+              // Step 2 — cache each URL into the correct Workbox cache
+              return Promise.allSettled(urls.map(function(u) {
+                  return caches.match(u)
+                    .then(function(hit) {
+                        if (hit) return; // already cached
+                        return fetch(u)
+                          .then(function(res) {
+                              if (res.ok) {
+                                  return caches.open(_swCacheName(u))
+                                    .then(function(c) { return c.put(u, res); });
+                              }
+                          });
+                    })
+                    .catch(function() {})
+                    .then(function() {
+                        done++;
+                        _showToast('⬇ ' + Math.round(done / total * 100) + '%…');
+                    });
+              }));
+          })
+          .then(function() {
+              btn.classList.remove('loading');
+              btn.classList.add('done');
+              btn.innerHTML = '<i class="fas fa-check"></i>';
+              _showToast('✓ Ready — opens instantly next time', 4000);
+          })
+          .catch(function() {
+              btn.classList.remove('loading');
+              btn.innerHTML = '<i class="fas fa-cloud-arrow-down"></i>';
+              _showToast('Download failed — try again', 3000);
+          });
     }
     function _addDlBtn(card, url) {
         var btn = document.createElement('button');
