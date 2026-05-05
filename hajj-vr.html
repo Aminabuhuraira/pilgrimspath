@@ -1024,11 +1024,11 @@
             }, 1500);
         }
 
-        // Restore previous opt-in selection on load
+        // Restore previous opt-in selection on load — default to checked for new users
         try{
             window.addEventListener('DOMContentLoaded', function(){
                 var cb = document.getElementById('quizOptIn');
-                if(cb && localStorage.getItem('pp_quiz_enabled')==='1') cb.checked = true;
+                if(cb && localStorage.getItem('pp_quiz_enabled') !== '0') cb.checked = true;
             });
         }catch(e){}
 

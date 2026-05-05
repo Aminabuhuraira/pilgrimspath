@@ -790,7 +790,10 @@ function initOverlayStateBridge(){
 // Triggered when the user clicks "Next Stop" if they opted in on hajj-vr.html.
 // Questions are loaded from /pilgrimspath-vr/quiz-content.js (PPQuiz.questions[step]).
 function quizEnabled(){
-  try{ return localStorage.getItem('pp_quiz_enabled') === '1'; }catch(e){ return false; }
+  try{
+    var v = localStorage.getItem('pp_quiz_enabled');
+    return v === null ? true : v === '1'; // default ON for new users
+  }catch(e){ return true; }
 }
 // Aggregate quiz performance across all answered steps.
 // Returns {answered, totalQuestions, correct, percent} where percent is 0-100.

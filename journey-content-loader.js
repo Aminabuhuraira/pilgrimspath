@@ -20,7 +20,7 @@ if(window.location && window.location.protocol === 'http:' && window.location.ho
 }
 var KEY = 'pp_journey_content_v1';
 var LANG_KEY = 'pp_user_lang';
-var AUDIO_BASE_ROOT = '/hajj%20voiceover%20english/';
+var AUDIO_BASE_ROOT = '/Hajj%20voiceover%20english/';
 var DEFAULT_LANG_FOLDERS = {en:'English/',ar:'Arabic/',fr:'French/',ur:'Urdu/',tr:'Turkish/',id:'Indonesian/',ms:'Malay/',es:'Spanish/',fa:'Persian/'};
 var data = null;
 try{ data = JSON.parse(localStorage.getItem(KEY)); }catch(e){}
@@ -408,6 +408,9 @@ function showAdminBanner(opts){
   }
   var title = opts.title||'';
   var html = opts.html||'';
+  // Reset scene pager so its stale state can't re-show old banner pages
+  // when this banner's "Continue" button calls window.dismissBanner().
+  try{ if(window._bannerPager) window._bannerPager = {title:'', pages:[], index:0}; }catch(_){}
   el.innerHTML = '<div class="sceneBannerBody">'+(title?'<h3 style="margin:0 0 12px;color:#D4AF37">'+title+'</h3>':'')+html+
     '<div style="margin-top:14px;text-align:center"><button onclick="(function(){var e=document.getElementById(\'sceneBanner\');var b=document.getElementById(\'sceneBannerBackdrop\');if(e){e.style.opacity=\'0\';e.style.transform=\'translate(-50%,-50%) scale(.92)\';setTimeout(function(){e.style.display=\'none\';},340);}if(b){b.style.opacity=\'0\';setTimeout(function(){b.style.display=\'none\';},340);}try{if(typeof window.dismissBanner===\'function\')window.dismissBanner();}catch(_){}try{if(typeof window.__ppSceneBannerAfterClose===\'function\'){var fn=window.__ppSceneBannerAfterClose;window.__ppSceneBannerAfterClose=null;fn();}}catch(_){window.__ppSceneBannerAfterClose=null;}})()" style="background:#D4AF37;color:#1a1a2e;border:none;padding:8px 22px;border-radius:6px;font-weight:700;cursor:pointer;font-size:.85rem">Continue \u25b8</button></div>'+
     '</div>';
