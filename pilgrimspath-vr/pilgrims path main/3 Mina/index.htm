@@ -1,8 +1,8 @@
-﻿?<!DOCTYPE html>
+?<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Mina tents </title>
-    <script src="/admin-journey-content.js?v=15"></script>
+    <script src="/admin-journey-content.js?v=17"></script>
     <script src="/journey-content-loader.js?v=38"></script>
     <!-- Meta Pixel Code -->
     <script>
@@ -99,7 +99,7 @@ transition:transform .15s;box-shadow:0 4px 12px rgba(201,168,76,0.32);align-self
 #minaContinue:hover{transform:translateX(-50%) scale(1.05);box-shadow:0 8px 30px rgba(201,168,76,0.7);}
 @media(max-width:480px){#minaContinue{font-size:13px;padding:12px 22px;bottom:90px;}}
 </style>
-<button id="minaContinue">🕋 Continue to Jamarat ▸</button>
+<button id="minaContinue">?? Continue to Jamarat ?</button>
 <script>
 (function(){
   var ctx=new URL(window.location).searchParams.get('context')||'8th-day';
@@ -183,13 +183,13 @@ function _hideVoHint(){ var h = document.getElementById('voHint'); if(h) h.remov
 (function(){
 var journeyContext = new URL(window.location).searchParams.get('context') || '8th-day';
 
-// ── Map context → JCM scene key ──────────────────────────────────────────
+// -- Map context ? JCM scene key ------------------------------------------
 var _sceneKey = journeyContext === 'tents-11th' ? 'mina-tents-11'
               : journeyContext === 'tents-12th' ? 'mina-tents-12'
               : journeyContext === 'tents-13th' ? 'mina-tents-13'
               :                                  'mina-8th';
 
-// ── Read banner + VO data from JCM (single source of truth) ──────────────
+// -- Read banner + VO data from JCM (single source of truth) --------------
 var _bannerMap = {};
 var _audioMap  = {};
 if (window.PPContent && window.PPContent.hasData) {
@@ -259,7 +259,7 @@ function _showMinaEndModal(){
     if(typeof showJourneyNextButton==='function'){ showJourneyNextButton(); }
   };
 }
-// PerformanceObserver + Image.src hijack removed — fires on adjacent-pano
+// PerformanceObserver + Image.src hijack removed � fires on adjacent-pano
 // preloads causing banners/VOs to play before user actually navigates there.
 // TDV hook below is the only trigger.
 function hookTDV(){if(typeof TDV==='undefined'||!TDV.Tour||!TDV.Tour.Script)return setTimeout(hookTDV,500);var o1=TDV.Tour.Script.setPlayListSelectedIndex;if(o1){TDV.Tour.Script.setPlayListSelectedIndex=function(a,b){try{var id=a.get('items')[b].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}catch(e){}return o1.apply(this,arguments);};}var o2=TDV.Tour.Script.setMainMediaByIndex;if(o2){TDV.Tour.Script.setMainMediaByIndex=function(a){try{var items=this.mainPlayList.get('items');if(a>=0&&a<items.length){var id=items[a].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}}catch(e){}return o2.apply(this,arguments);};}console.log('[Mina] banner hooks installed (ctx='+journeyContext+')');}
