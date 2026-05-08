@@ -256,6 +256,15 @@ div[style*="iVBORw0KGgoAAAANSUhEUgAAAcw"] {
    including ones that visually parent our hamburger / Next Stop buttons.
    The data-URL signature match above is fully specific and sufficient. */
 
+/* ═══ Hide 3DVista panorama-name tooltips ═══
+   The TDV player renders hotspot/panorama tooltips as a <span> with
+   pointer-events:none; position:absolute; text-align:center injected inline.
+   No other element in our codebase has all three simultaneously. ═══ */
+span[style*="pointer-events: none"][style*="position: absolute"][style*="text-align: center"],
+span[style*="pointer-events:none"][style*="position:absolute"][style*="text-align:center"] {
+  display: none !important;
+}
+
 /* ═══ When paused: lift the entire #viewer stacking context above body-level
    banners (e.g. #sceneBanner z=10003), so the pause panel and the bottom
    scene-strip render IN FRONT of any open banner. The base #viewer { z-index:1 }
@@ -629,6 +638,24 @@ body.ppMenuOpen #viewer { z-index: 99490 !important; }
     max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px) !important;
     overflow-y: auto !important;
     box-sizing: border-box;
+  }
+
+  /* Replace the banner-frame.png background with a clean CSS card on mobile —
+     the wide decorative image distorts badly on narrow screens. */
+  #sceneBanner {
+    background: linear-gradient(135deg, #FDFAF0 0%, #F5EDD4 100%) !important;
+    border: 2.5px solid #C9A84C !important;
+    border-radius: 16px !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(201,168,76,0.25) !important;
+    position: fixed !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    min-height: 0 !important;
+  }
+
+  #sceneBanner .sceneBannerBody {
+    padding: 24px 20px 18px !important;
   }
 
   #jamarGuide,

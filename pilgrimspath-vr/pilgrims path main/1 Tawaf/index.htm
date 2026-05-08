@@ -1215,9 +1215,21 @@ hookTDV();
     guide.style.display='flex';
     setTimeout(function(){
         if(typeof playVO==='function'){
+            // Mark as started so the button click never re-triggers this audio.
+            // The button's ihramNext() will stop any in-progress audio and advance.
+            window._welcomeVoStarted = true;
             var _ov=window.PPContent&&window.PPContent.byId('tawaf-initial','tw-guide-0');
             var _wf=(_ov&&_ov.audio)||'1 English Welcome Info.mp3';
-            if(_wf) playVO(_wf);
+            if(_wf){
+                playVO(_wf);
+                // When auto-played audio ends naturally, mark welcome as done
+                // so the very first button click advances immediately.
+                if(window._voAudio){
+                    window._voAudio.addEventListener('ended', function(){
+                        window._welcomeVoDone = true;
+                    }, { once: true });
+                }
+            }
         }
     }, 800);
 })();
