@@ -170,6 +170,14 @@ var SCENE_TEMPLATES = {
   'sunrise-gold': 'background:linear-gradient(135deg,#FFE5B4 0%,#FFD98A 50%,#E8B860 100%) !important;border:2px solid #B8941F !important;border-radius:16px !important;color:#3D2B1F !important',
   'ihram-guide': ''
 };
+/* h3 title colour override for light-background templates.
+   The base banner injects h3 with color:#D4AF37 (gold) which is near-invisible
+   on warm/cream backgrounds. These overrides inject a <style> rule to fix it. */
+var TPL_H3_COLORS = {
+  'sunrise-gold':    '#8B4513',
+  'side-card':       '#2C1810',
+  'parchment-frame': '#3a2410'
+};
 
 function applyTemplate(elementSelector, tplId, pos){
   setTimeout(function(){
@@ -180,6 +188,15 @@ function applyTemplate(elementSelector, tplId, pos){
       var existing = el.getAttribute('style')||'';
       existing = existing.replace(/\/\*PPTPL\*\/[^]*?\/\*\/PPTPL\*\//g,'');
       el.setAttribute('style', existing + '/*PPTPL*/'+styles+'/*\/PPTPL*/');
+    }
+    // For light-background templates the h3 inline color (#D4AF37 gold) is
+    // near-invisible. Inject a <style> override so the heading is readable.
+    var h3Color = TPL_H3_COLORS[tplId];
+    if(h3Color){
+      var styleId = 'ppTplH3Style';
+      var sEl = document.getElementById(styleId);
+      if(!sEl){ sEl = document.createElement('style'); sEl.id = styleId; document.head.appendChild(sEl); }
+      sEl.textContent = '#sceneBanner h3 { color: ' + h3Color + ' !important; }';
     }
     if(pos && (pos.x!=null||pos.y!=null)){
       var pStyles = ';left:'+(pos.x||50)+'% !important;top:'+(pos.y||50)+'% !important;transform:translate(-50%,-50%) !important;';
@@ -418,6 +435,11 @@ function showAdminBanner(opts){
   el.style.display = 'block';
   bd.style.display = 'block';
   if(opts.template) applyTemplate('#sceneBanner', opts.template, opts.position||{x:50,y:50});
+  // Safety override: mz-load must always use sunrise-gold regardless of what is
+  // stored in localStorage (guard against stale midnight-blue template in cache).
+  if(opts.id === 'mz-load' && opts.template !== 'sunrise-gold'){
+    applyTemplate('#sceneBanner', 'sunrise-gold', opts.position||{x:50,y:50});
+  }
   // Reset any template-injected transform so our scale animation works
   el.style.opacity = '0';
   el.style.transform = (el.style.transform.replace(/scale\([^)]*\)/,'').trim() || 'translate(-50%,-50%)') + ' scale(.92)';
