@@ -115,43 +115,26 @@
       '.scnItem.scnDoneItem .scnItemName{color:#86efac;}',
       /* push other bottom-anchored UI up so they do not collide with the rail */
       '#muzdHud,#muzdPouch{bottom:80px !important;}',
-      /* ===== Mobile: scene strip moves to LEFT side, vertical & scrollable ===== */
+      /* ===== Mobile: bottom rail stays at bottom — compact items, horizontal scroll ===== */
       '@media(max-width:640px){',
-        /* slim left rail with fixed width so other UI can offset reliably */
-        '#scnRail{left:0;right:auto;top:60px;bottom:70px;width:54px;padding:0;',
-          'justify-content:flex-start;align-items:stretch;}',
-        '#scnRailInner{flex-direction:column;align-items:center;gap:6px;',
-          'padding:6px 3px 8px;width:54px;max-height:100%;',
-          'overflow-y:auto;overflow-x:hidden;',
-          'border-radius:0 16px 16px 0;',
-          'background:linear-gradient(90deg,rgba(14,8,2,0.85),rgba(18,10,3,0.0));}',
-        '.scnGroup{flex-direction:column;align-items:center;width:100%;}',
-        '.scnGroupLabel{font-size:8px;padding:1px 2px 2px;writing-mode:horizontal-tb;}',
-        /* convert bracket from horizontal-top to vertical-left */
-        '.scnGroupBracket{height:auto;width:6px;align-self:center;margin:1px 0 2px;',
-          'min-height:8px;border:none;border-left:1.5px solid rgba(201,168,76,0.55);',
-          'border-radius:0;}',
-        '.scnGroupBracket::before{display:none;}',
-        '.scnGroupItems{flex-direction:column;gap:4px;align-items:center;width:100%;}',
+        '#scnRailInner{gap:4px;padding:4px 6px 5px;}',
+        '.scnGroupLabel{font-size:7.5px;}',
+        /* reset bracket back to horizontal-top (undo any previous vertical override) */
+        '.scnGroupBracket{height:8px;width:auto;align-self:unset;margin:0 4px 2px;',
+          'min-height:unset;border-bottom:none;',
+          'border-top:1.5px solid rgba(201,168,76,0.55);',
+          'border-left:1.5px solid rgba(201,168,76,0.55);',
+          'border-right:1.5px solid rgba(201,168,76,0.55);',
+          'border-radius:8px 8px 0 0;}',
+        '.scnGroupBracket::before{display:block;}',
+        '.scnGroupItems{flex-direction:row;gap:3px;align-items:flex-start;width:auto;}',
         '.scnItem{padding:2px 2px;}',
-        '.scnCircleWrap{width:32px;height:32px;}',
-        '.scnCircle{font-size:15px;}',
-        '.scnItemName{font-size:8px;max-width:48px;}',
-        /* keep bottom-anchored HUDs out of the way of the now-narrow rail */
-        '#muzdHud,#muzdPouch{bottom:20px !important;left:auto !important;right:14px !important;transform:none !important;}',
-        /* sai counter is top-anchored like tawaf — nudge right to clear the left rail */
-        '#saiCounter{left:calc(50% + 27px) !important;}',
-        /* ===== shift center/edge-anchored UI to clear the 54px left rail ===== */
-        /* center-anchored HUD/banners: nudge right by half the rail width */
-        '#tawafCounter{left:calc(50% + 27px) !important;}',
-        '#sceneBanner{left:calc(50% + 27px) !important;width:min(92vw,560px) !important;max-width:calc(100vw - 64px) !important;}',
-        '#pathCueToast{left:calc(50% + 27px);max-width:calc(100vw - 80px);}',
-        '#jamarThrowBtn,#jamarAimHint,#jamarGuide,#jamarComplete,#journeyComplete{left:calc(50% + 27px) !important;}',
-        '#jamarHUD{right:8px !important;max-width:calc(100vw - 72px) !important;}',
-        '#ppQuizOverlay{padding-left:60px;box-sizing:border-box;}',
-        '#ppQuizOverlay .ppQuizCard{margin-left:27px;max-width:calc(100vw - 74px) !important;}',
+        '.scnCircleWrap{width:28px;height:28px;}',
+        '.scnCircle{font-size:13px;}',
+        '.scnItemName{font-size:7.5px;max-width:36px;}',
+        /* HUDs stay above the bottom rail */
+        '#muzdHud,#muzdPouch{left:auto !important;right:14px !important;transform:none !important;}',
         'body.ppOverlayActive #scnRail,.ppOverlayActive #scnRail{display:none !important;opacity:0 !important;pointer-events:none !important;}',
-        /* pause button stays top-right and next stop button stays bottom-right - both already clear of the 54px left rail */
       '}'
     ].join('');
 

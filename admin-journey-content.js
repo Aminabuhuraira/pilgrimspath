@@ -238,7 +238,7 @@ var DEFAULT_DATA = {
     { key:'muzdalifah-9th', step:8, title:'Step 8 — Muzdalifah (Night of 9th)', file:'pilgrimspath-vr/pilgrims path main/Muzdalifah/index.htm', context:'pebbles',
       panoramas:[],
       banners:[
-        defB({ id:'mz-load', trigger:'scene-load', label:'Scene load — Muzdalifah arrival', template:'midnight-blue',
+        defB({ id:'mz-load', trigger:'scene-load', label:'Scene load — Muzdalifah arrival', template:'sunrise-gold',
           text:{en:{title:'🌙 Muzdalifah — Pebble Collection',body:'<p class="bb">After sunset on the 9th, travel from Arafah to Muzdalifah. Pray Maghrib and Isha together (combined &amp; shortened) with one Adhan and two Iqamahs.</p><p class="bb">Spend the night under the open sky and collect at least <strong>49 pebbles</strong> (or 70 to be safe) for the stoning ritual at Jamarat tomorrow.</p>'}},
           audio:{en:'18 English 9th Day Dhul Hijjah 3.mp3'} })
       ]},
