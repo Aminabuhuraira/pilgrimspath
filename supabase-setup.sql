@@ -2,8 +2,7 @@
 -- Pilgrim's Path — Supabase Profiles Table Setup
 -- =============================================================
 -- Run this SQL in your Supabase Dashboard → SQL Editor
--- This creates a profiles table that auto-populates when users sign up
--- and keeps last_sign_in_at updated on every login.
+-- Safe to re-run: uses IF NOT EXISTS and DROP ... IF EXISTS throughout.
 -- =============================================================
 
 -- 1. Create the profiles table
@@ -22,7 +21,13 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 -- 2. Enable Row Level Security
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
--- 3. RLS Policies
+-- 3. RLS Policies — drop first so this script is idempotent
+DROP POLICY IF EXISTS "Authenticated users can read all profiles" ON public.profiles;
+DROP POLICY IF EXISTS "Users read own profile" ON public.profiles;
+DROP POLICY IF EXISTS "Admins read all profiles" ON public.profiles;
+DROP POLICY IF EXISTS "Users can update own profile" ON public.profiles;
+DROP POLICY IF EXISTS "Allow insert for service role" ON public.profiles;
+
 -- Users may only read their own profile (fixes M3 — PII leak)
 CREATE POLICY "Users read own profile"
     ON public.profiles FOR SELECT
@@ -62,6 +67,7 @@ CREATE TABLE IF NOT EXISTS public.paid_users (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 ALTER TABLE public.paid_users ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Service role manages paid_users" ON public.paid_users;
 -- Only service role (server) can write; nobody can read via anon key
 CREATE POLICY "Service role manages paid_users"
     ON public.paid_users FOR ALL

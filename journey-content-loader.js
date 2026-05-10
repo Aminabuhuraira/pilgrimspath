@@ -411,7 +411,10 @@ function showAdminBanner(opts){
   if(!el){
     el = document.createElement('div');
     el.id = 'sceneBanner';
-    el.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.92);z-index:99000;background:#1a1a2e;color:#f4ead5;border:2px solid #D4AF37;border-radius:14px;padding:24px 32px;max-width:min(94vw,640px);font-family:Georgia,serif;box-shadow:0 18px 44px rgba(0,0,0,.55);display:none;opacity:0;transition:opacity .35s ease, transform .35s cubic-bezier(.2,.9,.3,1.2);will-change:opacity,transform';
+    // Only set properties not covered by the injected <style> block (which uses !important
+    // for width/background/border/border-radius/etc). Setting max-width here would cap
+    // the banner narrower than the 860px target on non-VR HTML scenes.
+    el.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.92);z-index:99000;font-family:Georgia,serif;display:none;opacity:0;transition:opacity .35s ease, transform .35s cubic-bezier(.2,.9,.3,1.2);will-change:opacity,transform';
     document.body.appendChild(el);
     freshlyCreated = true;
   }
