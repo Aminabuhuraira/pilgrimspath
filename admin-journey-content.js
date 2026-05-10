@@ -935,6 +935,13 @@ function bannerCard(b){
       renderButtonPicker(b)+
       '<div class="jc-row"><label>Button ID</label><input type="text" data-jc-field="buttonId" data-id="'+esc(b.id)+'" value="'+esc(b.buttonId||'')+'" placeholder="e.g. proceed-muzdalifah, begin-tawaf"></div>'+
       '<div class="jc-row"><label>Button label</label><input type="text" data-jc-field="buttonLabel" data-id="'+esc(b.id)+'" value="'+esc(b.buttonLabel||'')+'" placeholder="Visible text on the button"></div>'+
+      '<div class="jc-row" title="When checked: plays the VO then auto-fires the button\u2019s native action when audio ends \u2014 no banner or \u2018Continue\u2019 click needed.">'+
+        '<label>Auto-continue after VO</label>'+
+        '<label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--text-secondary);font-size:.8rem;font-weight:400">'+
+          '<input type="checkbox" data-jc-field="continueAfter" data-id="'+esc(b.id)+'"'+(b.continueAfter?' checked':'')+' style="width:15px;height:15px;accent-color:#C9A84C;cursor:pointer">'+
+          'Play VO then auto-advance (no &ldquo;Continue&rdquo; banner needed)'+
+        '</label>'+
+      '</div>'+
       '</div>' : '')+
     '<div class="jc-row"><label>Title <small style="color:var(--gold)">['+esc(lang)+']</small></label><input type="text" data-jc-field="title" data-id="'+esc(b.id)+'" data-lang="'+esc(lang)+'" value="'+esc(t.title)+'"'+(hasLang?'':' disabled')+'></div>'+
     '<div class="jc-row"><label>Body HTML <small style="color:var(--gold)">['+esc(lang)+']</small></label><textarea data-jc-field="body" data-id="'+esc(b.id)+'" data-lang="'+esc(lang)+'"'+(hasLang?'':' disabled')+' placeholder="HTML allowed: &lt;p class=\'bb\'&gt;…&lt;/p&gt;">'+esc(t.body)+'</textarea></div>'+
@@ -1137,6 +1144,7 @@ function handleFieldEdit(el){
   else if(field==='audioChain'){ b.audioChain = b.audioChain||{}; b.audioChain[lang] = el.value; }
   else if(field==='buttonId'){ b.buttonId = el.value; }
   else if(field==='buttonLabel'){ b.buttonLabel = el.value; }
+  else if(field==='continueAfter'){ b.continueAfter = el.checked; }
   markDirty();
   // Live preview update
   if(field==='title'||field==='body'||field==='label'){

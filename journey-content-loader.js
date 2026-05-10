@@ -143,7 +143,7 @@ function byButton(sceneKey){
   var s=getScene(sceneKey); if(!s) return [];
   return s.banners
     .filter(function(b){return b.trigger==='button';})
-    .map(function(b){var t=textFor(b)||{}; return {id:b.id,buttonId:b.buttonId||'',buttonLabel:b.buttonLabel||'',title:t.title||'',html:t.body||'',audio:audioFile(b)||'',audioChain:audioChainFile(b)||'',template:b.template||'classic-gold',position:b.position||{x:50,y:50}};});
+    .map(function(b){var t=textFor(b)||{}; return {id:b.id,buttonId:b.buttonId||'',buttonLabel:b.buttonLabel||'',title:t.title||'',html:t.body||'',audio:audioFile(b)||'',audioChain:audioChainFile(b)||'',template:b.template||'classic-gold',position:b.position||{x:50,y:50},continueAfter:b.continueAfter||false};});
 }
 function byCompletion(sceneKey){
   var s=getScene(sceneKey); if(!s) return null;
@@ -500,6 +500,21 @@ function autoWireButtons(){
       // Suppress the first-interaction welcome VO so admin's button audio wins cleanly
       window._welcomeVoStarted = true;
       var resume = function(){ resumeButtonAction(el); };
+
+      // continueAfter: play VO via a tracked Audio object, then auto-fire the
+      // native button action when audio ends — no banner required, audio not killed
+      if(b.continueAfter && b.audio){
+        try{ if(window._voAudio){ window._voAudio.pause(); window._voAudio = null; } }catch(_){ }
+        try{ if(window._ppFallbackVO){ window._ppFallbackVO.pause(); window._ppFallbackVO = null; } }catch(_){ }
+        var autoA = new Audio(audioUrl(b.audio));
+        window._ppFallbackVO = autoA;
+        autoA.addEventListener('ended', function(){ resume(); });
+        autoA.addEventListener('error', function(){ resume(); });
+        var _pp = autoA.play();
+        if(_pp && _pp.catch){ _pp.catch(function(){ resume(); }); }
+        return;
+      }
+
       if(b.audio){ ppPlayVOAuto(b.audio); if(b.audioChain) window._voChainPending = b.audioChain; }
       if(b.title || b.html){
         window.__ppSceneBannerAfterClose = resume;
