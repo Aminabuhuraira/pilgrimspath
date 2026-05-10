@@ -168,7 +168,7 @@ var SCENE_TEMPLATES = {
   'side-card': 'background:linear-gradient(180deg,#fffbe9,#f5edd0) !important;border:none !important;border-left:4px solid #C9A84C !important;border-radius:8px !important;color:#2C1810 !important;width:auto !important;max-width:380px !important;min-height:auto !important;padding:18px 22px !important;text-align:left !important',
   'midnight-blue': 'background:radial-gradient(ellipse at top,#1e3a5f,#0d1b2a) !important;border:1px solid #D4AF37 !important;border-radius:14px !important;color:#e8eef4 !important',
   'sunrise-gold': 'background:linear-gradient(135deg,#FFE5B4 0%,#FFD98A 50%,#E8B860 100%) !important;border:2px solid #B8941F !important;border-radius:16px !important;color:#3D2B1F !important',
-  'ihram-guide': ''
+  'ihram-guide': 'background:linear-gradient(180deg,#fffbe9,#f5edd0) !important;border:2px solid #C9A84C !important;border-radius:16px !important;color:#2C1810 !important;width:min(94vw,780px) !important;padding:32px 28px !important;text-align:center !important'
 };
 /* h3 title colour override for light-background templates.
    The base banner injects h3 with color:#D4AF37 (gold) which is near-invisible
@@ -176,7 +176,8 @@ var SCENE_TEMPLATES = {
 var TPL_H3_COLORS = {
   'sunrise-gold':    '#8B4513',
   'side-card':       '#2C1810',
-  'parchment-frame': '#3a2410'
+  'parchment-frame': '#3a2410',
+  'ihram-guide':     '#2C1810'
 };
 
 function applyTemplate(elementSelector, tplId, pos){

@@ -118,6 +118,13 @@ app.get('/sanctum-admin-7f3k9q2m', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
+// ── Favicon ───────────────────────────────────────────────────
+// Override the stale favicon.ico with the platform logo PNG
+app.get('/favicon.ico', (req, res) => {
+  res.setHeader('Cache-Control', 'public, max-age=86400');
+  res.sendFile(path.join(__dirname, 'images', 'logo.png'));
+});
+
 // ── Static files ──────────────────────────────────────────────
 // Serve everything from the project root as static
 // Long cache for versioned assets, no-cache for HTML
