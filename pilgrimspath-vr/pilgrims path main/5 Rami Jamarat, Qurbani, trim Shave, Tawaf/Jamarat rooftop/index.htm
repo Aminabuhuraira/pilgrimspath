@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>jamarat roof top</title>
@@ -195,12 +195,12 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ro
 
 <!-- Throw Button -->
 <button id="jamarThrowBtn" onclick="throwStone()">
-  <span class="icon">??</span> Throw Stone <span id="throwLabel">(1/7)</span>
+  <span class="icon">&#x1FAA8;</span> Throw Stone <span id="throwLabel">(1/7)</span>
 </button>
 
 <!-- Counter HUD -->
 <div id="jamarHUD">
-  <h4>? Rami al-Jamarat</h4>
+  <h4>&#x1F54C; Rami al-Jamarat</h4>
   <div class="hud-pillar">
     <span class="name">Sughra (Small)</span>
     <span class="count" id="hudSmall">0/7</span>
@@ -226,35 +226,35 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ro
 <div id="jamarGlow"></div>
 
 <!-- Directional arrow -->
-<div id="jamarArrow">?</div>
+<div id="jamarArrow">&#x2B06;</div>
 
 <!-- Aim hint -->
-<div id="jamarAimHint">? Turn towards the pillar to throw</div>
+<div id="jamarAimHint">&#x1F3AF; Turn towards the pillar to throw</div>
 
 <!-- Debug yaw -->
 <div id="jamarDebugYaw">yaw: --</div>
 
 <!-- Bismillah overlay -->
-<div id="jamarBismillah">?????? ??????? ??????? ????????</div>
+<div id="jamarBismillah">&#x628;&#x650;&#x633;&#x652;&#x645;&#x650; &#x627;&#x644;&#x644;&#x651;&#x64E;&#x647;&#x650; &#x627;&#x644;&#x644;&#x651;&#x64E;&#x647;&#x64F; &#x623;&#x64E;&#x643;&#x652;&#x628;&#x64E;&#x631;&#x64F;</div>
 
 <!-- Activity Guide -->
 <div id="jamarGuide">
   <h3>?? Rami al-Jamarat</h3>
-  <p class="subtitle">The Stoning of the Pillars — Sunnah of Ibrahim (AS)</p>
+  <p class="subtitle">The Stoning of the Pillars &mdash; Sunnah of Ibrahim (AS)</p>
   <ul class="steps">
-    <li><span class="num">1.</span> Turn to face the Jamrah (pillar) — follow the arrow</li>
+    <li><span class="num">1.</span> Turn to face the Jamrah (pillar) &mdash; follow the arrow</li>
     <li><span class="num">2.</span> Tap "Throw Stone" when the screen glows green</li>
     <li><span class="num">3.</span> Throw 7 stones at each of the 3 pillars</li>
-    <li><span class="num">4.</span> Start with Sughra (small) ? Wusta (middle) ? Aqaba (large)</li>
+    <li><span class="num">4.</span> Start with Sughra (small) &#x2192; Wusta (middle) &#x2192; Aqaba (large)</li>
   </ul>
-  <div class="dua">?????? ??????? ??????? ????????</div>
+  <div class="dua">&#x628;&#x650;&#x633;&#x652;&#x645;&#x650; &#x627;&#x644;&#x644;&#x651;&#x64E;&#x647;&#x650; &#x627;&#x644;&#x644;&#x651;&#x64E;&#x647;&#x64F; &#x623;&#x64E;&#x643;&#x652;&#x628;&#x64E;&#x631;&#x64F;</div>
   <p style="color:#8B95A5;font-size:12px;margin:0 0 14px;">Say this with each throw: "In the name of Allah, Allah is the Greatest"</p>
-  <button onclick="dismissGuide()">Begin Stoning ?</button>
+  <button onclick="dismissGuide()">Begin Stoning &#x276F;</button>
 </div>
 
 <!-- Completion banner -->
 <div id="jamarComplete">
-  <h3>?? MashaAllah!</h3>
+  <h3>&#x2705; MashaAllah!</h3>
   <p>You have completed all 21 throws.<br>May Allah accept your Hajj.</p>
   <button onclick="resetJamarat()">Reset &amp; Repeat</button>
 </div>
@@ -610,7 +610,7 @@ function detectPano(url) {
   }
 }
 
-// 1. PerformanceObserver — catches ALL resource loads (img, fetch, xhr, css)
+// 1. PerformanceObserver ï¿½ catches ALL resource loads (img, fetch, xhr, css)
 try {
   const po = new PerformanceObserver(function(list) {
     const entries = list.getEntries();
@@ -872,7 +872,7 @@ setTimeout(function(){_jbChk('panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1');},
   var ctx=new URL(window.location).searchParams.get('context')||'10th-day';
   if(ctx!=='10th-day') return; // 11th/12th/13th still use full 3-pillar flow
 
-  // Hide the intro guide immediately — Aqabah stoning goes straight into action
+  // Hide the intro guide immediately ï¿½ Aqabah stoning goes straight into action
   sessionStorage.setItem('jamarGuideShown','true');
   document.addEventListener('DOMContentLoaded',function(){
     var g=document.getElementById('jamarGuide');
@@ -943,7 +943,7 @@ setTimeout(function(){_jbChk('panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1');},
   }
   buildCompletionModal();
 
-  // 4? Watch jamarState.large — trigger custom completion at 7
+  // 4? Watch jamarState.large ï¿½ trigger custom completion at 7
   var done=false;
   setInterval(function(){
     if(done) return;
@@ -1012,21 +1012,21 @@ setTimeout(function(){_jbChk('panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1');},
     var el=document.getElementById('jamarComplete');
     if(!el) return;
     var dayLabel=ctx==='11th-day'?'11th':(ctx==='12th-day'?'12th':'13th');
-    var html='<h3>?? '+dayLabel+' Day Stoning Complete!</h3>'+
+    var html='<h3>&#x2705; '+dayLabel+' Day Stoning Complete!</h3>'+
       '<p>Alhamdulillah! You have completed all 21 throws across the three pillars.</p>';
     if(ctx==='11th-day'){
       html+='<p style="font-size:12px;color:#8B95A5;margin:0 0 18px;">Next: return to your tent at Mina to rest before the 12th day stoning.</p>'+
-        '<button id="jamarChainBtn">Return to Mina (Tents) ?</button>'+
-        '<button id="jamarReplay" style="background:rgba(255,255,255,0.08);margin-left:8px;">? Restart</button>';
+        '<button id="jamarChainBtn">Return to Mina (Tents) &#x276F;</button>'+
+        '<button id="jamarReplay" style="background:rgba(255,255,255,0.08);margin-left:8px;">&#x21BA; Restart</button>';
     } else if(ctx==='12th-day'){
       html+='<p style="font-size:13px;color:#ccc;margin:0 0 12px;">You may now choose:</p>'+
-        '<button id="jamarChainBtn" style="display:block;margin:8px auto;">Stay for 13th Day Stoning ?</button>'+
-        '<button id="jamarChainBtn2" style="display:block;margin:8px auto;">Leave for Farewell Tawaf ?</button>'+
-        '<button id="jamarReplay" style="background:rgba(255,255,255,0.08);margin-top:6px;">? Restart</button>';
+        '<button id="jamarChainBtn" style="display:block;margin:8px auto;">Stay for 13th Day Stoning &#x276F;</button>'+
+        '<button id="jamarChainBtn2" style="display:block;margin:8px auto;">Leave for Farewell Tawaf &#x276F;</button>'+
+        '<button id="jamarReplay" style="background:rgba(255,255,255,0.08);margin-top:6px;">&#x21BA; Restart</button>';
     } else {
-      html+='<p style="font-size:12px;color:#8B95A5;margin:0 0 18px;">Your stoning is complete. Proceed to Al-Masjid Al-Haram for Tawaf al-Wida’ (Farewell Tawaf).</p>'+
-        '<button id="jamarChainBtn">Continue to Farewell Tawaf ?</button>'+
-        '<button id="jamarReplay" style="background:rgba(255,255,255,0.08);margin-left:8px;">? Restart</button>';
+      html+='<p style="font-size:12px;color:#8B95A5;margin:0 0 18px;">Your stoning is complete. Proceed to Al-Masjid Al-Haram for Tawaf al-Wida' (Farewell Tawaf).</p>'+
+        '<button id="jamarChainBtn">Continue to Farewell Tawaf &#x276F;</button>'+
+        '<button id="jamarReplay" style="background:rgba(255,255,255,0.08);margin-left:8px;">&#x21BA; Restart</button>';
     }
     el.innerHTML=html;
     function clearAndGo(href){return function(){sessionStorage.removeItem('jamarState');sessionStorage.removeItem(dayInitKey);window.location.href=href;};}
