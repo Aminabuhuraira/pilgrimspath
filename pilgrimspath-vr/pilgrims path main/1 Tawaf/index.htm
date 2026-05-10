@@ -71,7 +71,7 @@
             position: absolute; inset: 0; overflow: hidden; opacity: 0.04;
         }
         .ihram-bg-pattern::before {
-            content: '?';
+            content: '\fdfd';
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             font-family: 'Amiri', serif; font-size: 40vw;
@@ -310,7 +310,7 @@
         .ihram-list li:nth-child(4) { animation-delay: 0.46s; }
         .ihram-list li:nth-child(5) { animation-delay: 0.53s; }
         .ihram-list li::before {
-            content: '?'; position: absolute; left: 4px; top: 7px;
+            content: '\fdfd'; position: absolute; left: 4px; top: 7px;
             color: #D4AF37; font-size: 0.6rem;
         }
 
@@ -594,7 +594,7 @@
                     <div class="ihram-divider"><span></span><i>?</i><span></span></div>
                     <ul class="ihram-list">
                         <li>Perform <strong style="color:#C9A227">Ghusl</strong> (full ritual bath) or at minimum Wudu</li>
-                        <li><strong style="color:#C9A227">For men:</strong> Wear two white unstitched cloths — the Izaar (lower body) and the Rida (over the shoulder)</li>
+                        <li><strong style="color:#C9A227">For men:</strong> Wear two white unstitched cloths ï¿½ the Izaar (lower body) and the Rida (over the shoulder)</li>
                         <li><strong style="color:#C9A227">For women:</strong> Wear modest, loose clothing covering the body; your face and hands remain uncovered</li>
                         <li>You may apply fragrance to your body (not the garments) before making your intention</li>
                     </ul>
@@ -740,7 +740,7 @@
 
                     <div class="miqat-callout">
                         <strong>You must make your Niyyah before or at the Miqat boundary</strong>
-                        <span>The Miqat is the sacred boundary you cross on your journey — once past it, you must already be in the state of Ihram</span>
+                        <span>The Miqat is the sacred boundary you cross on your journey ï¿½ once past it, you must already be in the state of Ihram</span>
                     </div>
 
                     <p class="ihram-body">Declare your intention for Umrah or Hajj clearly:</p>
@@ -825,22 +825,22 @@
         // Card width: wide for step 2, narrow for 0-1
         var card = document.querySelector('.ihram-card');
         if (step >= 2) { card.classList.remove('narrow'); } else { card.classList.add('narrow'); }
-        // Reset for new step (no UI button anymore — audio is auto)
+        // Reset for new step (no UI button anymore ï¿½ audio is auto)
         if(typeof _setVoBtn==='function') _setVoBtn('blocked');
     }
 
     function ihramNext() {
         // STEP 0 (Welcome) gate: don't stomp the welcome VO. If it hasn't played
         // yet (autoplay was blocked, or user is clicking past it on a fresh load)
-        // start it now and don't advance — user clicks again to continue.
+        // start it now and don't advance ï¿½ user clicks again to continue.
         if(ihramStep===0 && !window._welcomeVoDone){
             if(window._welcomeVoStarted){
-                // Second click — user wants to skip the welcome VO and move on.
+                // Second click ï¿½ user wants to skip the welcome VO and move on.
                 if(window._voAudio){ try{ window._voAudio.pause(); }catch(e){} window._voAudio=null; }
                 window._voPending = null;
                 window._welcomeVoDone = true;
             } else {
-                // First click on Let's Begin — user gesture. Play welcome VO now.
+                // First click on Let's Begin ï¿½ user gesture. Play welcome VO now.
                 window._welcomeVoStarted = true;
                 _hideVoHint && _hideVoHint();
                 var _ov0=window.PPContent&&window.PPContent.byId('tawaf-initial','tw-guide-0');
@@ -849,7 +849,7 @@
                 if(window._voAudio){
                     window._voAudio.addEventListener('ended', function(){ window._welcomeVoDone = true; }, { once: true });
                 } else {
-                    // No audio configured — mark welcome "done" so next click advances.
+                    // No audio configured ï¿½ mark welcome "done" so next click advances.
                     window._welcomeVoDone = true;
                 }
                 // Update button label to indicate the next click will continue
@@ -915,7 +915,7 @@
             var _p = TDV && TDV.PlayerAPI && TDV.PlayerAPI.getCurrentPlayer();
             if(_p && typeof _p.__ppIhramOrigAuto !== 'undefined') _p.set('automaticRotationSpeed', _p.__ppIhramOrigAuto);
         }catch(_e){}
-        // Don't replay any ihram step audio here — it already played when user
+        // Don't replay any ihram step audio here ï¿½ it already played when user
         // advanced to that step. Cancelling it now lets the upcoming panorama
         // banner audio (set in admin) play cleanly without overlap.
         if(window._voAudio){ try{ window._voAudio.pause(); }catch(e){} window._voAudio=null; }
@@ -1072,7 +1072,7 @@ function _showVoHint(){
 }
 function _hideVoHint(){ var h = document.getElementById('voHint'); if(h) h.remove(); }
 function _setVoBtn(){ /* no-op: visible button removed, audio is auto */ }
-function ihramPlayCurrentVO(){ /* legacy stub — button removed */ }
+function ihramPlayCurrentVO(){ /* legacy stub ï¿½ button removed */ }
 var _bannerFirstId='panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5';
 var _bannerChk;
 (function(){
@@ -1092,7 +1092,7 @@ if (window.PPContent && window.PPContent.hasData) {
   _audioMap  = window.PPContent.audioMapByPano(_sceneKey)  || {};
 }
 
-// -- Deduplication — always keyed by panorama ID ---------------------------
+// -- Deduplication ï¿½ always keyed by panorama ID ---------------------------
 // Previously used 'idx:N' as key for initial context, which caused the TDV
 // hook and any other trigger to use different keys for the same panorama,
 // letting banners/VOs fire twice. Now a single canonical key: panorama ID.
@@ -1108,12 +1108,12 @@ var _tawafFirstVisitSeen = false;
 function chk(id, idx) {
   window._currentPanoId = id; // publish for HUD gating
 
-  // Lap counting — initial Tawaf
+  // Lap counting ï¿½ initial Tawaf
   if (journeyContext === 'initial' && id.indexOf('7F92625E') !== -1 && typeof idx === 'number') {
     if (!_tawafFirstVisitSeen) { _tawafFirstVisitSeen = true; }
     else if (typeof window.tawafLapInc === 'function') { window.tawafLapInc(); }
   }
-  // Lap counting — Farewell Tawaf (same 3D model, separate sessionStorage key)
+  // Lap counting ï¿½ Farewell Tawaf (same 3D model, separate sessionStorage key)
   if (journeyContext === 'farewell' && id.indexOf('7F92625E') !== -1 && typeof idx === 'number') {
     if (!_tawafFirstVisitSeen) { _tawafFirstVisitSeen = true; }
     else if (typeof window.tawafLapInc === 'function') { window.tawafLapInc(); }
@@ -1123,7 +1123,7 @@ function chk(id, idx) {
   window._tawafPanoVisits = window._tawafPanoVisits || {};
   window._tawafPanoVisits[id] = (window._tawafPanoVisits[id] || 0) + 1;
 
-  // Deduplicate by panorama ID — one banner+VO per panorama per page-load
+  // Deduplicate by panorama ID ï¿½ one banner+VO per panorama per page-load
   if (shown[id]) return;
 
   // Gate: Farewell Hajj-Complete banner only fires after 7 full circuits
@@ -1139,7 +1139,7 @@ function chk(id, idx) {
   // Fetch content from JCM only
   var b  = _bannerMap[id];
   var vo = _audioMap[id];
-  if (!b && !vo) return; // JCM has nothing for this panorama — stay silent
+  if (!b && !vo) return; // JCM has nothing for this panorama ï¿½ stay silent
 
   shown[id] = true; // mark BEFORE showing so re-entrant calls are blocked
 
@@ -1155,11 +1155,11 @@ function chk(id, idx) {
   }
 }
 
-// -- TDV hook — fires on real navigation events only -----------------------
+// -- TDV hook ï¿½ fires on real navigation events only -----------------------
 // No PerformanceObserver / Image.src hijack: those fire on tile preloads for
 // adjacent panoramas (panoramas the user hasn't navigated to yet), which was
 // the primary cause of banners and VOs playing at the wrong time or twice.
-// The TDV hook is the only reliable trigger — it fires exactly when the user
+// The TDV hook is the only reliable trigger ï¿½ it fires exactly when the user
 // actually arrives at a new panorama.
 function hookTDV() {
   if (typeof TDV === 'undefined' || !TDV.Tour || !TDV.Tour.Script) return setTimeout(hookTDV, 500);
@@ -1182,7 +1182,7 @@ function hookTDV() {
 hookTDV();
 })();
 
-// Ensure pre-Tawaf onboarding screens are visible — but NOT for ifadha/farewell (no Ihram needed again).
+// Ensure pre-Tawaf onboarding screens are visible ï¿½ but NOT for ifadha/farewell (no Ihram needed again).
 (function(){
     var ctx = new URL(window.location.href).searchParams.get('context') || '';
     if(ctx === 'ifadha' || ctx === 'farewell') return;
@@ -1285,16 +1285,16 @@ box-shadow:0 20px 60px rgba(0,0,0,0.5);font-family:'DM Sans',Arial,sans-serif;co
 border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:pointer;margin:0 6px;}
 </style>
 <div id="tawafCounter">
-  <span class="tcLabel">?? Circuit</span>
+  <span class="tcLabel">&#xFDFD; Circuit</span>
   <span class="tcCount" id="tawafCount">0/7</span>
-  <button class="tcReset" onclick="tawafLapReset()" title="Reset">?</button>
+  <button class="tcReset" onclick="tawafLapReset()" title="Reset">&#x21BA;</button>
 </div>
 <div id="tawafComplete">
-  <h3 id="tcTitle">?? Tawaf Complete!</h3>
+  <h3 id="tcTitle">&#xFDFD; Tawaf Complete!</h3>
   <p id="tcMsg">Alhamdulillah! You have completed all seven circuits of the Kaaba.<br>May Allah accept your Tawaf.</p>
   <p style="font-size:13px;opacity:0.75;margin-bottom:20px;">What would you like to do next?</p>
-  <button id="tcNextBtn">Next ?</button>
-  <button class="tcReset" onclick="tawafLapReset();document.getElementById('tawafComplete').style.display='none';location.reload()">? Restart Tawaf</button>
+  <button id="tcNextBtn">Next &#x276F;</button>
+  <button class="tcReset" onclick="tawafLapReset();document.getElementById('tawafComplete').style.display='none';location.reload()">&#x21BA; Restart Tawaf</button>
 </div>
 <script>
 (function(){
@@ -1310,8 +1310,8 @@ border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:point
     nextBtn.textContent='Return to Mina (Tents) ?';
     nextBtn.onclick=go('../3%20Mina/index.htm?context=tents-11th');
   } else if(ctx==='farewell'){
-    titleEl.textContent='?? Hajj Complete — May Allah Accept!';
-    msgEl.innerHTML='You have completed Tawaf al-Wida’, the farewell circumambulation.<br><br>Recite as you exit with your right foot:<br><em style="color:#8B6914;display:block;margin-top:8px;">Bismillahi wa s-salatu wa s-salamu ?ala rasulillah, Allahumma inni as?aluka min fa?lik.</em><br><span style="font-size:12px;opacity:0.75;">“In the name of Allah, and prayers and peace upon the Messenger of Allah. O Allah, I ask You for Your bounty.”</span><br><br><strong style="color:#22c55e;">Congratulations on completing your Hajj. May Allah accept this act of ‘ibadah.</strong>';
+    titleEl.textContent='?? Hajj Complete ï¿½ May Allah Accept!';
+    msgEl.innerHTML='You have completed Tawaf al-Widaï¿½, the farewell circumambulation.<br><br>Recite as you exit with your right foot:<br><em style="color:#8B6914;display:block;margin-top:8px;">Bismillahi wa s-salatu wa s-salamu ?ala rasulillah, Allahumma inni as?aluka min fa?lik.</em><br><span style="font-size:12px;opacity:0.75;">ï¿½In the name of Allah, and prayers and peace upon the Messenger of Allah. O Allah, I ask You for Your bounty.ï¿½</span><br><br><strong style="color:#22c55e;">Congratulations on completing your Hajj. May Allah accept this act of ï¿½ibadah.</strong>';
     nextBtn.textContent='?? Return to Home';
     nextBtn.onclick=function(){sessionStorage.removeItem(_lapKey);window.location.href='/index.html';};
   } else {
@@ -1322,14 +1322,14 @@ border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:point
 </script>
 <script>
 (function(){
-  // Per-context lap counter — initial / ifadha / farewell each get their own
+  // Per-context lap counter ï¿½ initial / ifadha / farewell each get their own
   // sessionStorage key so a stale 6/7 from a previous Tawaf leg cannot
   // prematurely fire the Hajj-Complete modal on the next leg.
   var ctx=new URL(window.location).searchParams.get('context')||'initial';
   var _lapKey='tawafLaps_'+ctx;
   // One-time migration: clear the legacy shared key.
   try{ sessionStorage.removeItem('tawafLaps'); }catch(_e){}
-  // Reset lap counter on fresh navigation (not on reload) — prevents stale
+  // Reset lap counter on fresh navigation (not on reload) ï¿½ prevents stale
   // counts from a previous visit in the same browser session.
   try{
     var _nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
@@ -1352,7 +1352,7 @@ border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:point
   render();
   // Once user has begun tawaf, keep HUD visible across all panoramas until 7/7.
   if(laps>0 && laps<7) window._tawafActive = true;
-  // Show HUD ONLY on the main starting area panorama (panorama_7F92625E_…),
+  // Show HUD ONLY on the main starting area panorama (panorama_7F92625E_ï¿½),
   // and only after the Ihram guide is dismissed.
   // Uses window._currentPanoId published by chk() above (most reliable).
   function curPanoId(){
