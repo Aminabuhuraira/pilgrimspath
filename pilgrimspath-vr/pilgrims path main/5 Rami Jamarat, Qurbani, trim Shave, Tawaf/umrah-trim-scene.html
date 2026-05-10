@@ -218,6 +218,26 @@ document.addEventListener('DOMContentLoaded', function(){
 <!-- Scene Navigation Overlay -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='barber-umrah';</script>
 <script src="../../scene-nav-overlay.js?v=10" defer></script>
+
+<!-- Landing choice prompt -->
+<script>
+window._ppLandingCfg = {
+  icon: '✂️',
+  title: 'Halq or Taqsir — Completing Umrah',
+  subtitle: 'Explore the difference between Halq (full shave) and Taqsir (trim) — or continue to rest and prepare for Hajj.'
+};
+window._ppLandingProceed = function () {
+  var btn = document.getElementById('umrahTrimContinue');
+  if (btn) { btn.click(); return; }
+  var nav = function () {
+    if (window.jm && typeof window.jm.goToStep === 'function') window.jm.goToStep(4);
+    else window.location.href = '../../0%20Ihram/rest-scene.html?journey=4&context=rest';
+  };
+  if (typeof window.proceedWithQuiz === 'function') window.proceedWithQuiz(nav);
+  else nav();
+};
+</script>
+<script src="/scene-landing-prompt.js?v=1" defer></script>
 <script src="../../../meta-capi.js" defer></script>
 </body>
 </html>
