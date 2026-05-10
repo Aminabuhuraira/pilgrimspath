@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>jamarat Aqabah</title>
@@ -73,7 +73,7 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ro
 #jamarThrowBtn:active{transform:translateX(-50%) scale(0.97);}
 #jamarThrowBtn .icon{font-size:22px;}
 
-/* Counter HUD — offset below the journey menu button (top:14px right:14px, ~50px tall) */
+/* Counter HUD � offset below the journey menu button (top:14px right:14px, ~50px tall) */
 #jamarHUD{
   display:none; position:fixed; top:74px; right:16px; z-index:9999;
   background:rgba(10,15,30,0.88); border:1px solid rgba(201,168,76,0.4);
@@ -195,12 +195,12 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ro
 
 <!-- Throw Button -->
 <button id="jamarThrowBtn" onclick="throwStone()">
-  <span class="icon">🪨</span> Throw Stone <span id="throwLabel">(1/7)</span>
+  <span class="icon">??</span> Throw Stone <span id="throwLabel">(1/7)</span>
 </button>
 
 <!-- Counter HUD -->
 <div id="jamarHUD">
-  <h4>⬡ Rami al-Aqabah</h4>
+  <h4>? Rami al-Aqabah</h4>
   <div class="hud-pillar">
     <span class="name">Aqaba (Large)</span>
     <span class="count" id="hudLarge">0/7</span>
@@ -214,35 +214,35 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ro
 <div id="jamarGlow"></div>
 
 <!-- Directional arrow -->
-<div id="jamarArrow">◀</div>
+<div id="jamarArrow">?</div>
 
 <!-- Aim hint -->
-<div id="jamarAimHint">↻ Turn towards the pillar to throw</div>
+<div id="jamarAimHint">? Turn towards the pillar to throw</div>
 
 <!-- Debug yaw -->
 <div id="jamarDebugYaw">yaw: --</div>
 
 <!-- Bismillah overlay -->
-<div id="jamarBismillah">بِسْمِ اللَّهِ اللَّهُ أَكْبَرُ</div>
+<div id="jamarBismillah">?????? ??????? ??????? ????????</div>
 
 <!-- Activity Guide -->
 <div id="jamarGuide">
-  <h3>🪨 Rami al-Aqabah</h3>
-  <p class="subtitle">Day of Sacrifice (10th Dhul-Hijjah) — Stoning of Jamarat al-Aqabah</p>
+  <h3>?? Rami al-Aqabah</h3>
+  <p class="subtitle">Day of Sacrifice (10th Dhul-Hijjah) � Stoning of Jamarat al-Aqabah</p>
   <ul class="steps">
-    <li><span class="num">1.</span> Turn to face the Jamrah (pillar) — follow the arrow</li>
+    <li><span class="num">1.</span> Turn to face the Jamrah (pillar) � follow the arrow</li>
     <li><span class="num">2.</span> Tap "Throw Stone" when the screen glows green</li>
     <li><span class="num">3.</span> Throw 7 stones at Jamarat al-Aqabah only</li>
-    <li><span class="num">4.</span> Today only Aqabah is stoned — the other two pillars are stoned on the 11th–13th</li>
+    <li><span class="num">4.</span> Today only Aqabah is stoned � the other two pillars are stoned on the 11th�13th</li>
   </ul>
-  <div class="dua">بِسْمِ اللَّهِ اللَّهُ أَكْبَرُ</div>
+  <div class="dua">?????? ??????? ??????? ????????</div>
   <p style="color:#8B95A5;font-size:12px;margin:0 0 14px;">Say this with each throw: "In the name of Allah, Allah is the Greatest"</p>
-  <button onclick="dismissGuide()">Begin Stoning ▸</button>
+  <button onclick="dismissGuide()">Begin Stoning ?</button>
 </div>
 
 <!-- Completion banner -->
 <div id="jamarComplete">
-  <h3>🕋 MashaAllah!</h3>
+  <h3>?? MashaAllah!</h3>
   <p>You have completed your 7 throws at Jamarat al-Aqabah.<br>May Allah accept your Hajj.</p>
   <button onclick="resetJamarat()">Reset &amp; Repeat</button>
 </div>
@@ -259,13 +259,13 @@ const JAMAR_PANORAMAS = {
   'panorama_691B217E_7C54_3E7A_41D3_35A255D72204': 'large'
 };
 
-// ── TARGET YAW for each pillar (degrees) ──
+// -- TARGET YAW for each pillar (degrees) --
 // The yaw angle where the pillar is visible in each panorama
 // Tolerance = how many degrees off-center is still accepted
 const PILLAR_TARGET = {
   small:  { yaw: -82.55, tolerance: 18 },
   medium: { yaw: 48.15,  tolerance: 18 },
-  large:  { yaw: -47.85, tolerance: 18 }   // tight cone — must actually face the pillar
+  large:  { yaw: -47.85, tolerance: 18 }   // tight cone � must actually face the pillar
 };
 
 // State
@@ -280,7 +280,7 @@ let currentPitch = 0;
 let tdvPlayer = null; // reference to active PanoramaPlayer
 let guideShown = sessionStorage.getItem('jamarGuideShown') === 'true';
 
-// ── UI refs ──
+// -- UI refs --
 const throwBtn = document.getElementById('jamarThrowBtn');
 const throwLabel = document.getElementById('throwLabel');
 const hud = document.getElementById('jamarHUD');
@@ -293,12 +293,12 @@ const aimHint = document.getElementById('jamarAimHint');
 const debugYaw = document.getElementById('jamarDebugYaw');
 const tcx = throwCanvas.getContext('2d');
 
-// ── Save state ──
+// -- Save state --
 function saveState() {
   sessionStorage.setItem('jamarState', JSON.stringify(jamarState));
 }
 
-// ── Update HUD ──
+// -- Update HUD --
 function updateHUD() {
   document.getElementById('hudLarge').textContent = jamarState.large + '/7';
   document.getElementById('hudLarge').className = 'count' + (jamarState.large >= 7 ? ' done' : '');
@@ -308,13 +308,13 @@ function updateHUD() {
   }
 }
 
-// ── Angular distance helper (handles wrap-around) ──
+// -- Angular distance helper (handles wrap-around) --
 function yawDistance(a, b) {
   let d = ((a - b) % 360 + 540) % 360 - 180;
   return Math.abs(d);
 }
 
-// ── Check if camera is aimed at the pillar ──
+// -- Check if camera is aimed at the pillar --
 function updateAimState() {
   if (!currentPillar || jamarState[currentPillar] >= 7) {
     isAimedAtPillar = false;
@@ -351,21 +351,21 @@ function updateAimState() {
   }
 }
 
-// ── Dismiss guide ──
+// -- Dismiss guide --
 function dismissGuide() {
   document.getElementById('jamarGuide').style.display = 'none';
   guideShown = true;
   sessionStorage.setItem('jamarGuideShown', 'true');
 }
 
-// ── Show activity guide ──
+// -- Show activity guide --
 function showGuide() {
   if (!guideShown) {
     document.getElementById('jamarGuide').style.display = 'block';
   }
 }
 
-// ── Show/hide overlay based on current panorama ──
+// -- Show/hide overlay based on current panorama --
 function checkPanorama(panoramaId) {
   if(typeof _jbChk==='function') _jbChk(panoramaId);
   const pillar = JAMAR_PANORAMAS[panoramaId] || null;
@@ -408,7 +408,7 @@ function checkPanorama(panoramaId) {
   }
 }
 
-// ── THROW ANIMATION (simplified from jamarat_hand_throw_v3) ──
+// -- THROW ANIMATION (simplified from jamarat_hand_throw_v3) --
 const TW = 240, TH = 320, TNF = 36;
 
 function lerp(a, b, t) { return a + (b - a) * t; }
@@ -504,7 +504,7 @@ function playThrowAnimation(callback) {
   animate();
 }
 
-// ── THROW ACTION ──
+// -- THROW ACTION --
 function throwStone() {
   if (!currentPillar || throwAnimating) return;
   if (jamarState[currentPillar] >= 7) return;
@@ -561,7 +561,7 @@ function throwStone() {
   }, 800);
 }
 
-// ── RESET ──
+// -- RESET --
 function resetJamarat() {
   jamarState = { small: 0, medium: 0, large: 0 };
   saveState();
@@ -578,7 +578,7 @@ function resetJamarat() {
   }
 }
 
-// ── PANORAMA CHANGE DETECTION ──
+// -- PANORAMA CHANGE DETECTION --
 let lastPanoId = '';
 const PANO_RE = /(panorama_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+_[A-F0-9]+)_0\//i;
 
@@ -592,7 +592,7 @@ function detectPano(url) {
   }
 }
 
-// 1. PerformanceObserver — catches ALL resource loads (img, fetch, xhr, css)
+// 1. PerformanceObserver � catches ALL resource loads (img, fetch, xhr, css)
 try {
   const po = new PerformanceObserver(function(list) {
     const entries = list.getEntries();
@@ -656,9 +656,9 @@ function hookTDV() {
 }
 hookTDV();
 
-// ── YAW POLLING via global `tour` object ──
+// -- YAW POLLING via global `tour` object --
 // tour is a global set by 3DVista's script.js
-// Chain: tour._getRootPlayer() → getActivePlayerWithViewer(getMainViewer()) → .get('yaw')
+// Chain: tour._getRootPlayer() ? getActivePlayerWithViewer(getMainViewer()) ? .get('yaw')
 function pollYaw() {
   if (!currentPillar) {
     requestAnimationFrame(pollYaw);
@@ -717,7 +717,7 @@ updateHUD();
 setTimeout(pollYaw, 2000);
 </script>
 
-<!-- ═══ Scene Guide Banners ═══ -->
+<!-- --- Scene Guide Banners --- -->
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
 #sceneBanner{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10003;
@@ -756,7 +756,7 @@ transition:transform .15s;box-shadow:0 4px 12px rgba(201,168,76,0.32);align-self
 <script>
 var _bannerPager={title:'',pages:[],index:0};
 function _splitBannerHtml(html){var segs=html.match(/<h3[\s\S]*?<\/h3>|<p[\s\S]*?<\/p>|<div class="sep"><\/div>|<br\s*\/?\s*>/gi)||[html];var pages=[];var cur=[];var chars=0;for(var i=0;i<segs.length;i++){var s=segs[i];var txt=s.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();var len=txt.length;if(cur.length&&(chars+len>620||cur.length>=6)){pages.push(cur.join(''));cur=[];chars=0;}cur.push(s);chars+=len;}if(cur.length)pages.push(cur.join(''));return pages.length?pages:[html];}
-function _renderBannerPage(){var el=document.getElementById('sceneBanner');if(!el)return;var isLast=_bannerPager.index>=_bannerPager.pages.length-1;var btn=isLast?'Continue ▸':'Next ▸';el.innerHTML='<div class="sceneBannerBody"><h3>'+_bannerPager.title+'</h3>'+_bannerPager.pages[_bannerPager.index]+'<button onclick="dismissBanner()">'+btn+'</button></div>';el.style.display='block';}
+function _renderBannerPage(){var el=document.getElementById('sceneBanner');if(!el)return;var isLast=_bannerPager.index>=_bannerPager.pages.length-1;var btn=isLast?'Continue ?':'Next ?';el.innerHTML='<div class="sceneBannerBody"><h3>'+_bannerPager.title+'</h3>'+_bannerPager.pages[_bannerPager.index]+'<button onclick="dismissBanner()">'+btn+'</button></div>';el.style.display='block';}
 function openBanner(title,html){_bannerPager.title=title;_bannerPager.pages=_splitBannerHtml(html);_bannerPager.index=0;_renderBannerPage();}
 function dismissBanner(){if(_bannerPager.pages.length&&_bannerPager.index<_bannerPager.pages.length-1){_bannerPager.index++;_renderBannerPage();return;}_bannerPager={title:'',pages:[],index:0};document.getElementById('sceneBanner').style.display='none';}
 function playVO(f){
@@ -826,23 +826,23 @@ var BANNERS_10TH={'panorama_691B217E_7C54_3E7A_41D3_35A255D72204':{
   _aliases:['panorama_691B7A27_7C54_4D8A_4199_B128B8AEBDE4']
 },
 // fallback for the original pillar overview panorama (in case journey lands here first)'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':{
-  title:'\u{1f54b} 10th Day of Dhul-Hijjah — Yawm an-Nahr',
+  title:'\u{1f54b} 10th Day of Dhul-Hijjah � Yawm an-Nahr',
   html:'<p class="bb">Today is the 10th day, Yawm an-Nahr. After completing Fajr prayer, we have now arrived at Rami al-Jamarat where we will perform the full ritual:</p><p class="bb">\u2022 Stone Jamrah al-Aqaba (the large pillar) only once with 7 pebbles<br>\u2022 Perform Qurbani (animal sacrifice)<br>\u2022 Shave or trim your hair<br>\u2022 Return to Al-Masjid Al-Haram for Tawaf al-Ifadha</p>'}
 };
 var BANNERS_11TH={
 'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':{
-  title:'\u{1f54b} 11th Day of Dhul-Hijjah — Days of Tashreeq',
-  html:'<p class="bb">On the 11th day, you return to Rami al-Jamarat. Today you will stone all three pillars in order:</p><p class="bb">\u2022 Jamrah as-Sughra (small) — 7 pebbles<br>\u2022 Jamrah al-Wusta (middle) — 7 pebbles<br>\u2022 Jamrah al-Aqaba (large) — 7 pebbles<br><br>Total: 21 pebbles. After completing the stoning, you may rest at your lodging in Mina or proceed to Muzdalifah if leaving on this day.</p>'}
+  title:'\u{1f54b} 11th Day of Dhul-Hijjah � Days of Tashreeq',
+  html:'<p class="bb">On the 11th day, you return to Rami al-Jamarat. Today you will stone all three pillars in order:</p><p class="bb">\u2022 Jamrah as-Sughra (small) � 7 pebbles<br>\u2022 Jamrah al-Wusta (middle) � 7 pebbles<br>\u2022 Jamrah al-Aqaba (large) � 7 pebbles<br><br>Total: 21 pebbles. After completing the stoning, you may rest at your lodging in Mina or proceed to Muzdalifah if leaving on this day.</p>'}
 };
 var BANNERS_12TH={
 'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':{
-  title:'\u{1f54b} 12th Day of Dhul-Hijjah — Days of Tashreeq',
-  html:'<p class="bb">On the 12th day, you return again to Rami al-Jamarat. Today you will stone all three pillars:</p><p class="bb">\u2022 Jamrah as-Sughra (small) — 7 pebbles<br>\u2022 Jamrah al-Wusta (middle) — 7 pebbles<br>\u2022 Jamrah al-Aqaba (large) — 7 pebbles<br><br>After completing today\'s stoning, you may choose to depart Mina (though you can also stay until the 13th). If you depart, perform Tawaf al-Wida before leaving.</p>'}
+  title:'\u{1f54b} 12th Day of Dhul-Hijjah � Days of Tashreeq',
+  html:'<p class="bb">On the 12th day, you return again to Rami al-Jamarat. Today you will stone all three pillars:</p><p class="bb">\u2022 Jamrah as-Sughra (small) � 7 pebbles<br>\u2022 Jamrah al-Wusta (middle) � 7 pebbles<br>\u2022 Jamrah al-Aqaba (large) � 7 pebbles<br><br>After completing today\'s stoning, you may choose to depart Mina (though you can also stay until the 13th). If you depart, perform Tawaf al-Wida before leaving.</p>'}
 };
 var BANNERS_13TH={
 'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':{
-  title:'\u{1f54b} 13th Day of Dhul-Hijjah — Final Optional Day',
-  html:'<p class="bb">On the 13th day, stoning is optional but encouraged for those who have the time and ability. If you choose to stone today:</p><p class="bb">\u2022 Jamrah as-Sughra (small) — 7 pebbles<br>\u2022 Jamrah al-Wusta (middle) — 7 pebbles<br>\u2022 Jamrah al-Aqaba (large) — 7 pebbles<br><br>After completing today\'s stoning (or if you choose not to stone), proceed directly to Al-Masjid Al-Haram to perform your Farewell Tawaf (Tawaf al-Wida), which marks the conclusion of your Hajj.</p>'}
+  title:'\u{1f54b} 13th Day of Dhul-Hijjah � Final Optional Day',
+  html:'<p class="bb">On the 13th day, stoning is optional but encouraged for those who have the time and ability. If you choose to stone today:</p><p class="bb">\u2022 Jamrah as-Sughra (small) � 7 pebbles<br>\u2022 Jamrah al-Wusta (middle) � 7 pebbles<br>\u2022 Jamrah al-Aqaba (large) � 7 pebbles<br><br>After completing today\'s stoning (or if you choose not to stone), proceed directly to Al-Masjid Al-Haram to perform your Farewell Tawaf (Tawaf al-Wida), which marks the conclusion of your Hajj.</p>'}
 };
 var journeyContext=new URL(window.location).searchParams.get('context')||'10th-day';
 var BANNERS=journeyContext==='11th-day'?BANNERS_11TH:(journeyContext==='12th-day'?BANNERS_12TH:(journeyContext==='13th-day'?BANNERS_13TH:BANNERS_10TH));
@@ -863,13 +863,13 @@ setTimeout(function(){_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},
 })();
 </script>
 
-<!-- ═══ 10th-Day Aqabah-Only Mode ═══ -->
+<!-- --- 10th-Day Aqabah-Only Mode --- -->
 <script>
 (function(){
   var ctx=new URL(window.location).searchParams.get('context')||'10th-day';
   if(ctx!=='10th-day') return; // 11th/12th/13th still use full 3-pillar flow
 
-  // Hide the intro guide immediately — Aqabah stoning goes straight into action
+  // Hide the intro guide immediately � Aqabah stoning goes straight into action
   sessionStorage.setItem('jamarGuideShown','true');
   document.addEventListener('DOMContentLoaded',function(){
     var g=document.getElementById('jamarGuide');
@@ -897,7 +897,7 @@ setTimeout(function(){_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},
   window.journeyActivityComplete = false;
 
   // Widen the large-pillar tolerance so BOTH visible stoning areas in this panorama count
-  // (the new Aqabah panorama shows two valid stoning bays — left and right of the pillar)
+  // (the new Aqabah panorama shows two valid stoning bays � left and right of the pillar)
   if(typeof PILLAR_TARGET!=='undefined' && PILLAR_TARGET.large){
     PILLAR_TARGET.large.yaw = -47.85;
     PILLAR_TARGET.large.tolerance = 110; // covers both stoning spots
@@ -947,7 +947,7 @@ setTimeout(function(){_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},
   setTimeout(function(){ aimAtStoning(0); }, 4500);
   setTimeout(function(){ aimAtStoning(0); }, 7000);
 
-  // 1⃣ Inject CSS overrides: hide non-Aqabah HUD rows + retitle counter
+  // 1? Inject CSS overrides: hide non-Aqabah HUD rows + retitle counter
   var s=document.createElement('style');
   s.textContent=[
     '#jamarHUD .hud-total{display:none !important;}',
@@ -955,7 +955,7 @@ setTimeout(function(){_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},
   ].join('');
   document.head.appendChild(s);
 
-  // 2⃣ Force-jump to the Aqabah-facing panorama once TDV is ready
+  // 2? Force-jump to the Aqabah-facing panorama once TDV is ready
   function jumpToAqabah(retries){
     retries=retries||0;
     try{
@@ -974,7 +974,7 @@ setTimeout(function(){_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},
   }
   setTimeout(jumpToAqabah,1500);
 
-  // 3⃣ Override completion: when Aqabah hits 7, show custom modal → Qurbani
+  // 3? Override completion: when Aqabah hits 7, show custom modal ? Qurbani
   function buildCompletionModal(){
     var el=document.getElementById('jamarComplete');
     if(!el) return;
@@ -998,7 +998,7 @@ setTimeout(function(){_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},
   }
   buildCompletionModal();
 
-  // 4⃣ Watch jamarState.large — trigger custom completion at 7
+  // 4? Watch jamarState.large � trigger custom completion at 7
   var done=false;
   setInterval(function(){
     if(done) return;
@@ -1019,7 +1019,7 @@ setTimeout(function(){_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},
 })();
 </script>
 
-<!-- ═══ 11th / 12th / 13th-Day Full 3-Pillar Override (DISABLED — dedicated 10th-day Aqabah scene) ═══ -->
+<!-- --- 11th / 12th / 13th-Day Full 3-Pillar Override (DISABLED � dedicated 10th-day Aqabah scene) --- -->
 <script>
 (function(){
   // This scene is dedicated to the 10th-day Aqabah-only flow.
@@ -1060,21 +1060,21 @@ setTimeout(function(){_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},
     var el=document.getElementById('jamarComplete');
     if(!el) return;
     var dayLabel=ctx==='11th-day'?'11th':(ctx==='12th-day'?'12th':'13th');
-    var html='<h3>🎉 '+dayLabel+' Day Stoning Complete!</h3>'+
+    var html='<h3>?? '+dayLabel+' Day Stoning Complete!</h3>'+
       '<p>Alhamdulillah! You have completed all 21 throws across the three pillars.</p>';
     if(ctx==='11th-day'){
       html+='<p style="font-size:12px;color:#8B95A5;margin:0 0 18px;">Next: return to your tent at Mina to rest before the 12th day stoning.</p>'+
-        '<button id="jamarChainBtn">Return to Mina (Tents) ▸</button>'+
-        '<button id="jamarReplay" style="background:rgba(255,255,255,0.08);margin-left:8px;">↺ Restart</button>';
+        '<button id="jamarChainBtn">Return to Mina (Tents) ?</button>'+
+        '<button id="jamarReplay" style="background:rgba(255,255,255,0.08);margin-left:8px;">? Restart</button>';
     } else if(ctx==='12th-day'){
       html+='<p style="font-size:13px;color:#ccc;margin:0 0 12px;">You may now choose:</p>'+
-        '<button id="jamarChainBtn" style="display:block;margin:8px auto;">Stay for 13th Day Stoning ▸</button>'+
-        '<button id="jamarChainBtn2" style="display:block;margin:8px auto;">Leave for Farewell Tawaf ▸</button>'+
-        '<button id="jamarReplay" style="background:rgba(255,255,255,0.08);margin-top:6px;">↺ Restart</button>';
+        '<button id="jamarChainBtn" style="display:block;margin:8px auto;">Stay for 13th Day Stoning ?</button>'+
+        '<button id="jamarChainBtn2" style="display:block;margin:8px auto;">Leave for Farewell Tawaf ?</button>'+
+        '<button id="jamarReplay" style="background:rgba(255,255,255,0.08);margin-top:6px;">? Restart</button>';
     } else {
-      html+='<p style="font-size:12px;color:#8B95A5;margin:0 0 18px;">Your stoning is complete. Proceed to Al-Masjid Al-Haram for Tawaf al-Wida’ (Farewell Tawaf).</p>'+
-        '<button id="jamarChainBtn">Continue to Farewell Tawaf ▸</button>'+
-        '<button id="jamarReplay" style="background:rgba(255,255,255,0.08);margin-left:8px;">↺ Restart</button>';
+      html+='<p style="font-size:12px;color:#8B95A5;margin:0 0 18px;">Your stoning is complete. Proceed to Al-Masjid Al-Haram for Tawaf al-Wida� (Farewell Tawaf).</p>'+
+        '<button id="jamarChainBtn">Continue to Farewell Tawaf ?</button>'+
+        '<button id="jamarReplay" style="background:rgba(255,255,255,0.08);margin-left:8px;">? Restart</button>';
     }
     el.innerHTML=html;
     function clearAndGo(href){return function(){sessionStorage.removeItem('jamarState');sessionStorage.removeItem(dayInitKey);window.location.href=href;};}
@@ -1095,8 +1095,8 @@ setTimeout(function(){_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},
 <!-- Journey Navigation -->
 <script src="../../journey-manager.js?v=3" defer></script>
 <script src="../../quiz-content.js?v=6" defer></script>
-<script src="../../journey-nav.js?v=29" defer></script>
-<!-- ═══ Scene Navigation Overlay ═══ -->
+<script src="../../journey-nav.js?v=30" defer></script>
+<!-- --- Scene Navigation Overlay --- -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='jamarat-10th';</script>
 <script src="../../scene-nav-overlay.js?v=10" defer></script>
 

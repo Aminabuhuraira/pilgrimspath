@@ -1,4 +1,4 @@
-﻿?<!DOCTYPE html>
+?<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>muzdalifa</title>
@@ -121,7 +121,7 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Muzdalifah
   100%{ opacity:0; transform:translateY(-50px); }
 }
 
-/* Ground pile indicator (decorative rocks image) — REMOVED at user request.
+/* Ground pile indicator (decorative rocks image) � REMOVED at user request.
    The static pile of pebbles at the bottom centre was visual clutter and
    distinct from the collectible glowing pebbles. Hidden permanently. */
 #pebblePile{ display:none !important; }
@@ -137,7 +137,7 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Muzdalifah
   width:min(96vw,860px);
   max-height:90vh;
   overflow-y:auto;
-  /* Pure CSS card — no background-image so it never distorts or clips on desktop */
+  /* Pure CSS card � no background-image so it never distorts or clips on desktop */
   background:linear-gradient(150deg,#FDFBF4 0%,#F6EDDA 55%,#FDFBF4 100%);
   border:2.5px solid #C9A84C;
   border-radius:20px;
@@ -218,7 +218,7 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Muzdalifah
 
 <!-- Pebble HUD -->
 <div id="pebbleHUD">
-  <h4>🌙 Pebble Collection</h4>
+  <h4>?? Pebble Collection</h4>
   <div class="hud-row">
     <span class="label">Collected</span>
     <span class="val" id="hudPebbles">0 / 49</span>
@@ -226,7 +226,7 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Muzdalifah
   <div class="hud-sub">Explore Muzdalifah to find pebbles</div>
 </div>
 
-<!-- Ground pile indicator removed (decorative rocks image — see CSS note above) -->
+<!-- Ground pile indicator removed (decorative rocks image � see CSS note above) -->
 
 <!-- Pebble spots container (dynamically populated) -->
 <div id="pebbleSpots"></div>
@@ -234,7 +234,7 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Muzdalifah
 <!-- Activity Guide -->
 <div id="muzGuide">
   <div class="muzGuideBody">
-    <h3>🌙 Night at Muzdalifah</h3>
+    <h3>?? Night at Muzdalifah</h3>
     <p class="subtitle">Collecting pebbles for Rami al-Jamarat</p>
     <img class="pebble-img" src="pebbles_for_jamarat-removebg-preview.png" alt="pebbles">
     <ul class="steps">
@@ -243,16 +243,16 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Muzdalifah
       <li><span class="num">3.</span> These pebbles will be used for stoning the Jamarat over 3 days</li>
       <li><span class="num">4.</span> Explore the panoramas and tap the glowing pebbles to pick them up</li>
     </ul>
-    <div class="dua" style="direction:rtl;font-family:'Cinzel',serif;">اللَّهُمَّ اجْعَلْهُ حَجًّا مَبْرُورًا وَذَنْبًا مَغْفُورًا</div>
+    <div class="dua" style="direction:rtl;font-family:'Cinzel',serif;">?????????? ????????? ?????? ?????????? ????????? ??????????</div>
     <p style="color:#6B5B4F;font-size:clamp(10px,1vw,13px);margin:0 0 10px;font-style:italic;">"O Allah, make it an accepted Hajj and a forgiven sin"</p>
-    <button onclick="dismissMuzGuide()">Begin Collecting ▸</button>
+    <button onclick="dismissMuzGuide()">Begin Collecting ?</button>
   </div>
 </div>
 
 <!-- Completion -->
 <div id="pebbleComplete">
   <div class="pcBody">
-    <h3>🎉 MashaAllah!</h3>
+    <h3>?? MashaAllah!</h3>
     <p>You have collected all 49 pebbles!<br>You are ready for Rami al-Jamarat.</p>
     <button onclick="resetPebbles()">Collect Again</button>
   </div>
@@ -260,7 +260,7 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Muzdalifah
 <script>
 // ====== MUZDALIFAH PEBBLE COLLECTION SYSTEM ======
 
-// Pebble distribution across panoramas — pool of ~80 spots so users have
+// Pebble distribution across panoramas � pool of ~80 spots so users have
 // abundant choice. Collection is capped at 49 (the actual ritual count).
 const PEBBLE_MAP = {
   'panorama_818474DF_8B44_BA01_41D9_8F1D94AB5DAE': [
@@ -351,7 +351,7 @@ function updateHUD() {
 function collectPebble(key, el) {
   if (pebbleState[key]) return;
   if (totalCollected >= PEBBLE_TARGET) {
-    // Pouch is full — ignore further taps and surface the completion prompt
+    // Pouch is full � ignore further taps and surface the completion prompt
     showPebbleComplete();
     return;
   }
@@ -398,9 +398,9 @@ function showPebbleComplete() {
   completeEl.innerHTML =
     '<div class="pcBody">'
       +'<h3>\uD83C\uDF89 MashaAllah!</h3>'
-      +'<p>You have collected all '+PEBBLE_TARGET+' pebbles — your pouch is full.<br>You are ready for Rami al-Jamarat.</p>'
+      +'<p>You have collected all '+PEBBLE_TARGET+' pebbles � your pouch is full.<br>You are ready for Rami al-Jamarat.</p>'
       +'<div style="display:flex;flex-direction:column;gap:10px;margin-top:6px;">'
-        +'<button id="pbContinue" style="background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;border:none;border-radius:999px;padding:11px 22px;font-size:14px;font-weight:700;cursor:pointer;">Continue to Next Scene ▸</button>'
+        +'<button id="pbContinue" style="background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;border:none;border-radius:999px;padding:11px 22px;font-size:14px;font-weight:700;cursor:pointer;">Continue to Next Scene ?</button>'
         +'<button id="pbExplore" style="background:transparent;color:#8B6914;border:1.5px solid #C9A84C;border-radius:999px;padding:10px 22px;font-size:13px;font-weight:600;cursor:pointer;">Keep Exploring</button>'
         +'<button id="pbRestart" style="background:transparent;color:#6B5B4F;border:1px solid rgba(107,91,79,.4);border-radius:999px;padding:9px 22px;font-size:12px;font-weight:600;cursor:pointer;">\u21bb Restart Scene</button>'
       +'</div>'
@@ -424,7 +424,7 @@ function showPebbleComplete() {
 
 function renderPebbles(panoId) {
   spotsContainer.innerHTML = '';
-  if (totalCollected >= PEBBLE_TARGET) return; // pouch full — hide remaining spots
+  if (totalCollected >= PEBBLE_TARGET) return; // pouch full � hide remaining spots
   const spots = PEBBLE_MAP[panoId];
   if (!spots) return;
 
@@ -538,7 +538,7 @@ updateHUD();
 <!-- Journey Navigation -->
 <script src="../../journey-manager.js?v=6" defer></script>
 <script src="../../quiz-content.js?v=6" defer></script>
-<script src="../../journey-nav.js?v=29" defer></script>
+<script src="../../journey-nav.js?v=30" defer></script>
 
 <script>
 // Signal to journey nav that last panorama is reached

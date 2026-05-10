@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>tawaf area</title>
@@ -41,7 +41,7 @@
     <script src="script.js?v=1776284580066"></script>
     <script src="../../journey-manager.js?v=6" defer></script>
     <script src="../../quiz-content.js?v=6" defer></script>
-<script src="../../journey-nav.js?v=29" defer></script>
+<script src="../../journey-nav.js?v=30" defer></script>
     <style type="text/css">
         html, body { height:100%; width:100%; height:100vh; width:100vw; margin:0; padding:0; overflow:hidden; }
         .fill-viewport { position:fixed; top:0; left:0; right:0; bottom:0; padding:0; margin:0; overflow: hidden; }
@@ -50,10 +50,10 @@
         #viewer { z-index:1; }
         #preloadContainer { z-index:2; opacity:0; background-color:rgba(255,255,255,1); transition: opacity 0.5s; -webkit-transition: opacity 0.5s; -moz-transition: opacity 0.5s; -o-transition: opacity 0.5s;}
 
-        /* ═══ Fonts ═══ */
+        /* --- Fonts --- */
         @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap');
 
-        /* ═══ Ihram Guide Overlay ═══ */
+        /* --- Ihram Guide Overlay --- */
         #ihramGuide {
             position: fixed; inset: 0; z-index: 100000;
             display: flex; align-items: center; justify-content: center;
@@ -71,7 +71,7 @@
             position: absolute; inset: 0; overflow: hidden; opacity: 0.04;
         }
         .ihram-bg-pattern::before {
-            content: '﷽';
+            content: '?';
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             font-family: 'Amiri', serif; font-size: 40vw;
@@ -310,7 +310,7 @@
         .ihram-list li:nth-child(4) { animation-delay: 0.46s; }
         .ihram-list li:nth-child(5) { animation-delay: 0.53s; }
         .ihram-list li::before {
-            content: '✦'; position: absolute; left: 4px; top: 7px;
+            content: '?'; position: absolute; left: 4px; top: 7px;
             color: #D4AF37; font-size: 0.6rem;
         }
 
@@ -358,7 +358,7 @@
         .ihram-step[data-step="2"] .ihram-divider { margin: 4px auto 8px; }
         .ihram-step[data-step="2"] .ihram-btns { margin-top: 14px; }
 
-        /* ═══ YouTube Embed ═══ */
+        /* --- YouTube Embed --- */
         .ihram-video-wrap {
             margin: 6px auto 4px; max-width: 240px;
             border-radius: 14px; overflow: hidden;
@@ -375,7 +375,7 @@
             opacity: 0; animation: ihramFadeUp 0.5s 0.6s ease forwards;
         }
 
-        /* ═══ Miqat / Travel Scene Animation ═══ */
+        /* --- Miqat / Travel Scene Animation --- */
         .miqat-scene {
             position: relative; width: 100%; max-width: 400px;
             height: 150px; margin: 12px auto 8px;
@@ -486,7 +486,7 @@
             margin-top: 3px; line-height: 1.4;
         }
 
-        /* ═══ Ihram Restrictions (in col) ═══ */
+        /* --- Ihram Restrictions (in col) --- */
         .ihram-restrictions-title {
             font-family: 'Poppins', sans-serif; font-size: 0.92rem;
             font-weight: 700; color: #B8941F;
@@ -560,7 +560,7 @@
     <div id="preloadContainer" class="fill-viewport"><div style="z-index: 4; position: absolute; overflow: hidden; left: 0%; top: 50%; width: 100.00%; height: 10.00%" ><div style="text-align:left; color:#000; "><DIV STYLE="text-align:center;font-size:1.6666666666666663vmin;"><SPAN STYLE="display:inline-block; letter-spacing:0vmin; white-space:pre-wrap;color:#777777;font-size:1.67vmin;font-family:Arial, Helvetica, sans-serif;">Loading virtual tour. Please wait...</SPAN></DIV></div></div></div>
     <div id="viewer" class="fill-viewport"></div>
 
-    <!-- ═══ Ihram Guide Overlay ═══ -->
+    <!-- --- Ihram Guide Overlay --- -->
     <div id="ihramGuide">
         <div class="ihram-bg-pattern"></div>
         <div class="ihram-card narrow">
@@ -574,42 +574,42 @@
 
                 <!-- STEP 0: Welcome -->
                 <div class="ihram-step active" data-step="0">
-                    <div class="ihram-icon">🕋</div>
+                    <div class="ihram-icon">??</div>
                     <div class="ihram-label">Welcome</div>
                     <h2 class="ihram-heading">Welcome</h2>
-                    <div class="ihram-divider"><span></span><i>✦</i><span></span></div>
+                    <div class="ihram-divider"><span></span><i>?</i><span></span></div>
                     <p class="ihram-body">Welcome to this immersive Hajj experience, a journey of faith, devotion, and unity. Together, we will explore the sacred rites, duas, and profound meanings of Hajj, bringing you closer to the essence of Hajj.</p>
                     <p class="ihram-dua">May Allah accept your intentions and grant you blessings as we walk this path together.</p>
                     <div class="ihram-btns">
-                        <button class="ihram-btn-next" onclick="ihramNext()">Let's Begin →</button>
+                        <button class="ihram-btn-next" onclick="ihramNext()">Let's Begin ?</button>
                         <button class="ihram-btn-skip" onclick="ihramSkip()">Skip</button>
                     </div>
                 </div>
 
                 <!-- STEP 1: Cleansing & Garments -->
                 <div class="ihram-step" data-step="1">
-                    <div class="ihram-icon">🤲</div>
+                    <div class="ihram-icon">??</div>
                     <div class="ihram-label">Step 1</div>
                     <h2 class="ihram-heading">Cleansing &amp; Garments</h2>
-                    <div class="ihram-divider"><span></span><i>✦</i><span></span></div>
+                    <div class="ihram-divider"><span></span><i>?</i><span></span></div>
                     <ul class="ihram-list">
                         <li>Perform <strong style="color:#C9A227">Ghusl</strong> (full ritual bath) or at minimum Wudu</li>
-                        <li><strong style="color:#C9A227">For men:</strong> Wear two white unstitched cloths — the Izaar (lower body) and the Rida (over the shoulder)</li>
+                        <li><strong style="color:#C9A227">For men:</strong> Wear two white unstitched cloths � the Izaar (lower body) and the Rida (over the shoulder)</li>
                         <li><strong style="color:#C9A227">For women:</strong> Wear modest, loose clothing covering the body; your face and hands remain uncovered</li>
                         <li>You may apply fragrance to your body (not the garments) before making your intention</li>
                     </ul>
                     <div class="ihram-btns">
-                        <button class="ihram-btn-back" onclick="ihramBack()">← Back</button>
-                        <button class="ihram-btn-next" onclick="ihramNext()">Continue →</button>
+                        <button class="ihram-btn-back" onclick="ihramBack()">? Back</button>
+                        <button class="ihram-btn-next" onclick="ihramNext()">Continue ?</button>
                         <button class="ihram-btn-skip" onclick="ihramSkip()">Skip</button>
                     </div>
                 </div>
                 <!-- STEP 2: Ihram, Niyyah & Miqat (merged) -->
                 <div class="ihram-step" data-step="2">
-                    <div class="ihram-icon">👔</div>
+                    <div class="ihram-icon">??</div>
                     <div class="ihram-label">Step 2</div>
                     <h2 class="ihram-heading">Your Ihram &amp; Niyyah</h2>
-                    <div class="ihram-divider"><span></span><i>✦</i><span></span></div>
+                    <div class="ihram-divider"><span></span><i>?</i><span></span></div>
 
                     <div class="ihram-three-col">
                         <!-- Column 1: Video -->
@@ -622,16 +622,16 @@
 
                         <!-- Column 2: Restrictions -->
                         <div class="ihram-col-restrictions">
-                            <h3 class="ihram-restrictions-title">⚠ Ihram Restrictions</h3>
+                            <h3 class="ihram-restrictions-title">? Ihram Restrictions</h3>
                             <p class="ihram-restrictions-intro">Once in the state of Ihram, observe these restrictions:</p>
                             <div class="ihram-restrictions-list">
-                                <div class="ihram-restriction-item"><span class="restriction-icon">✦</span><span><strong style="color:#C9A227">Men:</strong> two seamless white garments only</span></div>
-                                <div class="ihram-restriction-item"><span class="restriction-icon">✦</span><span><strong style="color:#C9A227">Women:</strong> modest clothing covering the body</span></div>
-                                <div class="ihram-restriction-item"><span class="restriction-icon">✦</span><span>No <strong style="color:#C9A227">perfume</strong> or scented products</span></div>
-                                <div class="ihram-restriction-item"><span class="restriction-icon">✦</span><span>No cutting <strong style="color:#C9A227">hair or nails</strong></span></div>
-                                <div class="ihram-restriction-item"><span class="restriction-icon">✦</span><span>No <strong style="color:#C9A227">marital relations</strong></span></div>
-                                <div class="ihram-restriction-item"><span class="restriction-icon">✦</span><span>No <strong style="color:#C9A227">hunting</strong> animals</span></div>
-                                <div class="ihram-restriction-item"><span class="restriction-icon">✦</span><span>No <strong style="color:#C9A227">disputes</strong> or arguments</span></div>
+                                <div class="ihram-restriction-item"><span class="restriction-icon">?</span><span><strong style="color:#C9A227">Men:</strong> two seamless white garments only</span></div>
+                                <div class="ihram-restriction-item"><span class="restriction-icon">?</span><span><strong style="color:#C9A227">Women:</strong> modest clothing covering the body</span></div>
+                                <div class="ihram-restriction-item"><span class="restriction-icon">?</span><span>No <strong style="color:#C9A227">perfume</strong> or scented products</span></div>
+                                <div class="ihram-restriction-item"><span class="restriction-icon">?</span><span>No cutting <strong style="color:#C9A227">hair or nails</strong></span></div>
+                                <div class="ihram-restriction-item"><span class="restriction-icon">?</span><span>No <strong style="color:#C9A227">marital relations</strong></span></div>
+                                <div class="ihram-restriction-item"><span class="restriction-icon">?</span><span>No <strong style="color:#C9A227">hunting</strong> animals</span></div>
+                                <div class="ihram-restriction-item"><span class="restriction-icon">?</span><span>No <strong style="color:#C9A227">disputes</strong> or arguments</span></div>
                             </div>
                         </div>
 
@@ -740,19 +740,19 @@
 
                     <div class="miqat-callout">
                         <strong>You must make your Niyyah before or at the Miqat boundary</strong>
-                        <span>The Miqat is the sacred boundary you cross on your journey — once past it, you must already be in the state of Ihram</span>
+                        <span>The Miqat is the sacred boundary you cross on your journey � once past it, you must already be in the state of Ihram</span>
                     </div>
 
                     <p class="ihram-body">Declare your intention for Umrah or Hajj clearly:</p>
-                    <p class="ihram-arabic">اللَّهُمَّ إِنِّي أُرِيدُ الْعُمْرَةَ فَيَسِّرْهَا لِي وَتَقَبَّلْهَا مِنِّي</p>
+                    <p class="ihram-arabic">?????????? ?????? ??????? ??????????? ???????????? ??? ?????????????? ??????</p>
                     <p class="ihram-translit">"Allahumma inni ureedal Umrata fa yassirha li wa taqabbalha minni"</p>
                     <p class="ihram-translation">"O Allah, I intend to perform Umrah, so make it easy for me and accept it from me."</p>
                         </div>
                     </div>
 
                     <div class="ihram-btns">
-                        <button class="ihram-btn-back" onclick="ihramBack()">← Back</button>
-                        <button class="ihram-btn-next" onclick="ihramStep2PlayVO();ihramSkip();">Begin Your Tawaf 🕋</button>
+                        <button class="ihram-btn-back" onclick="ihramBack()">? Back</button>
+                        <button class="ihram-btn-next" onclick="ihramStep2PlayVO();ihramSkip();">Begin Your Tawaf ??</button>
                     </div>
                 </div>
             </div>
@@ -760,7 +760,7 @@
     </div>
 
     <script>
-    /* ═══ Ihram Guide Logic ═══ */
+    /* --- Ihram Guide Logic --- */
     var ihramStep = 0;
     var ihramTotal = 3;
 
@@ -825,22 +825,22 @@
         // Card width: wide for step 2, narrow for 0-1
         var card = document.querySelector('.ihram-card');
         if (step >= 2) { card.classList.remove('narrow'); } else { card.classList.add('narrow'); }
-        // Reset for new step (no UI button anymore — audio is auto)
+        // Reset for new step (no UI button anymore � audio is auto)
         if(typeof _setVoBtn==='function') _setVoBtn('blocked');
     }
 
     function ihramNext() {
         // STEP 0 (Welcome) gate: don't stomp the welcome VO. If it hasn't played
         // yet (autoplay was blocked, or user is clicking past it on a fresh load)
-        // start it now and don't advance — user clicks again to continue.
+        // start it now and don't advance � user clicks again to continue.
         if(ihramStep===0 && !window._welcomeVoDone){
             if(window._welcomeVoStarted){
-                // Second click — user wants to skip the welcome VO and move on.
+                // Second click � user wants to skip the welcome VO and move on.
                 if(window._voAudio){ try{ window._voAudio.pause(); }catch(e){} window._voAudio=null; }
                 window._voPending = null;
                 window._welcomeVoDone = true;
             } else {
-                // First click on Let's Begin — user gesture. Play welcome VO now.
+                // First click on Let's Begin � user gesture. Play welcome VO now.
                 window._welcomeVoStarted = true;
                 _hideVoHint && _hideVoHint();
                 var _ov0=window.PPContent&&window.PPContent.byId('tawaf-initial','tw-guide-0');
@@ -849,12 +849,12 @@
                 if(window._voAudio){
                     window._voAudio.addEventListener('ended', function(){ window._welcomeVoDone = true; }, { once: true });
                 } else {
-                    // No audio configured — mark welcome "done" so next click advances.
+                    // No audio configured � mark welcome "done" so next click advances.
                     window._welcomeVoDone = true;
                 }
                 // Update button label to indicate the next click will continue
                 var _btn = document.querySelector('.ihram-step[data-step="0"] .ihram-btn-next');
-                if(_btn){ _btn.textContent = 'Continue →'; }
+                if(_btn){ _btn.textContent = 'Continue ?'; }
                 return; // do NOT advance yet
             }
         }
@@ -915,7 +915,7 @@
             var _p = TDV && TDV.PlayerAPI && TDV.PlayerAPI.getCurrentPlayer();
             if(_p && typeof _p.__ppIhramOrigAuto !== 'undefined') _p.set('automaticRotationSpeed', _p.__ppIhramOrigAuto);
         }catch(_e){}
-        // Don't replay any ihram step audio here — it already played when user
+        // Don't replay any ihram step audio here � it already played when user
         // advanced to that step. Cancelling it now lets the upcoming panorama
         // banner audio (set in admin) play cleanly without overlap.
         if(window._voAudio){ try{ window._voAudio.pause(); }catch(e){} window._voAudio=null; }
@@ -928,7 +928,7 @@
     }
     </script>
 
-<!-- ═══ Scene Guide Banners ═══ -->
+<!-- --- Scene Guide Banners --- -->
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
 #sceneBanner{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10003;
@@ -995,7 +995,7 @@ function _renderBannerPage(){
     var el=document.getElementById('sceneBanner');
     if(!el) return;
     var isLast=_bannerPager.index>=_bannerPager.pages.length-1;
-    var btn=isLast?'Continue ▸':'Next ▸';
+    var btn=isLast?'Continue ?':'Next ?';
     el.innerHTML='<div class="sceneBannerBody"><h3>'+_bannerPager.title+'</h3>'+_bannerPager.pages[_bannerPager.index]+'<button onclick="dismissBanner()">'+btn+'</button></div>';
     el.style.display='block';
 }
@@ -1057,7 +1057,7 @@ function _showVoHint(){
     if(document.getElementById('voHint')) return;
     var h = document.createElement('div');
     h.id = 'voHint';
-    h.textContent = '🔊 Tap anywhere to start narration';
+    h.textContent = '?? Tap anywhere to start narration';
     h.style.cssText = 'position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:99999;'
       + 'background:linear-gradient(135deg,#D4AF37,#C9A227);color:#fff;padding:9px 18px;border-radius:999px;'
       + 'font-family:Poppins,sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:.3px;'
@@ -1072,17 +1072,17 @@ function _showVoHint(){
 }
 function _hideVoHint(){ var h = document.getElementById('voHint'); if(h) h.remove(); }
 function _setVoBtn(){ /* no-op: visible button removed, audio is auto */ }
-function ihramPlayCurrentVO(){ /* legacy stub — button removed */ }
+function ihramPlayCurrentVO(){ /* legacy stub � button removed */ }
 var _bannerFirstId='panorama_8CE4041C_9544_BA06_41E1_5E77B48B16C5';
 var _bannerChk;
 (function(){
-// ── Journey context ───────────────────────────────────────────────────────
+// -- Journey context -------------------------------------------------------
 var journeyContext = new URL(window.location).searchParams.get('context') || 'initial';
 var _sceneKey = journeyContext === 'ifadha'   ? 'tawaf-ifadha'
               : journeyContext === 'farewell' ? 'tawaf-farewell'
               :                                'tawaf-initial';
 
-// ── Read banner + VO data ONCE from JCM (single source of truth) ──────────
+// -- Read banner + VO data ONCE from JCM (single source of truth) ----------
 // bannerMap: { panoramaId: {title, html, template, position} }
 // audioMap:  { panoramaId: 'filename.mp3' }
 var _bannerMap = {};
@@ -1092,7 +1092,7 @@ if (window.PPContent && window.PPContent.hasData) {
   _audioMap  = window.PPContent.audioMapByPano(_sceneKey)  || {};
 }
 
-// ── Deduplication — always keyed by panorama ID ───────────────────────────
+// -- Deduplication � always keyed by panorama ID ---------------------------
 // Previously used 'idx:N' as key for initial context, which caused the TDV
 // hook and any other trigger to use different keys for the same panorama,
 // letting banners/VOs fire twice. Now a single canonical key: panorama ID.
@@ -1101,19 +1101,19 @@ var lastId = '';
 
 _bannerChk = chk;
 
-// ── Lap counter ───────────────────────────────────────────────────────────
+// -- Lap counter -----------------------------------------------------------
 var _tawafFirstVisitSeen = false;
 
-// ── Main panorama handler ─────────────────────────────────────────────────
+// -- Main panorama handler -------------------------------------------------
 function chk(id, idx) {
   window._currentPanoId = id; // publish for HUD gating
 
-  // Lap counting — initial Tawaf
+  // Lap counting � initial Tawaf
   if (journeyContext === 'initial' && id.indexOf('7F92625E') !== -1 && typeof idx === 'number') {
     if (!_tawafFirstVisitSeen) { _tawafFirstVisitSeen = true; }
     else if (typeof window.tawafLapInc === 'function') { window.tawafLapInc(); }
   }
-  // Lap counting — Farewell Tawaf (same 3D model, separate sessionStorage key)
+  // Lap counting � Farewell Tawaf (same 3D model, separate sessionStorage key)
   if (journeyContext === 'farewell' && id.indexOf('7F92625E') !== -1 && typeof idx === 'number') {
     if (!_tawafFirstVisitSeen) { _tawafFirstVisitSeen = true; }
     else if (typeof window.tawafLapInc === 'function') { window.tawafLapInc(); }
@@ -1123,7 +1123,7 @@ function chk(id, idx) {
   window._tawafPanoVisits = window._tawafPanoVisits || {};
   window._tawafPanoVisits[id] = (window._tawafPanoVisits[id] || 0) + 1;
 
-  // Deduplicate by panorama ID — one banner+VO per panorama per page-load
+  // Deduplicate by panorama ID � one banner+VO per panorama per page-load
   if (shown[id]) return;
 
   // Gate: Farewell Hajj-Complete banner only fires after 7 full circuits
@@ -1139,7 +1139,7 @@ function chk(id, idx) {
   // Fetch content from JCM only
   var b  = _bannerMap[id];
   var vo = _audioMap[id];
-  if (!b && !vo) return; // JCM has nothing for this panorama — stay silent
+  if (!b && !vo) return; // JCM has nothing for this panorama � stay silent
 
   shown[id] = true; // mark BEFORE showing so re-entrant calls are blocked
 
@@ -1155,11 +1155,11 @@ function chk(id, idx) {
   }
 }
 
-// ── TDV hook — fires on real navigation events only ───────────────────────
+// -- TDV hook � fires on real navigation events only -----------------------
 // No PerformanceObserver / Image.src hijack: those fire on tile preloads for
 // adjacent panoramas (panoramas the user hasn't navigated to yet), which was
 // the primary cause of banners and VOs playing at the wrong time or twice.
-// The TDV hook is the only reliable trigger — it fires exactly when the user
+// The TDV hook is the only reliable trigger � it fires exactly when the user
 // actually arrives at a new panorama.
 function hookTDV() {
   if (typeof TDV === 'undefined' || !TDV.Tour || !TDV.Tour.Script) return setTimeout(hookTDV, 500);
@@ -1182,7 +1182,7 @@ function hookTDV() {
 hookTDV();
 })();
 
-// Ensure pre-Tawaf onboarding screens are visible — but NOT for ifadha/farewell (no Ihram needed again).
+// Ensure pre-Tawaf onboarding screens are visible � but NOT for ifadha/farewell (no Ihram needed again).
 (function(){
     var ctx = new URL(window.location.href).searchParams.get('context') || '';
     if(ctx === 'ifadha' || ctx === 'farewell') return;
@@ -1261,7 +1261,7 @@ hookTDV();
 })();
 </script>
 
-<!-- ═══ Tawaf Lap Counter HUD ═══ -->
+<!-- --- Tawaf Lap Counter HUD --- -->
 <style>
 #tawafCounter{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:10002;
 display:none;align-items:center;gap:7px;padding:5px 12px;border-radius:999px;
@@ -1285,16 +1285,16 @@ box-shadow:0 20px 60px rgba(0,0,0,0.5);font-family:'DM Sans',Arial,sans-serif;co
 border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:pointer;margin:0 6px;}
 </style>
 <div id="tawafCounter">
-  <span class="tcLabel">🕋 Circuit</span>
+  <span class="tcLabel">?? Circuit</span>
   <span class="tcCount" id="tawafCount">0/7</span>
-  <button class="tcReset" onclick="tawafLapReset()" title="Reset">↺</button>
+  <button class="tcReset" onclick="tawafLapReset()" title="Reset">?</button>
 </div>
 <div id="tawafComplete">
-  <h3 id="tcTitle">🎉 Tawaf Complete!</h3>
+  <h3 id="tcTitle">?? Tawaf Complete!</h3>
   <p id="tcMsg">Alhamdulillah! You have completed all seven circuits of the Kaaba.<br>May Allah accept your Tawaf.</p>
   <p style="font-size:13px;opacity:0.75;margin-bottom:20px;">What would you like to do next?</p>
-  <button id="tcNextBtn">Next ▸</button>
-  <button class="tcReset" onclick="tawafLapReset();document.getElementById('tawafComplete').style.display='none';location.reload()">↺ Restart Tawaf</button>
+  <button id="tcNextBtn">Next ?</button>
+  <button class="tcReset" onclick="tawafLapReset();document.getElementById('tawafComplete').style.display='none';location.reload()">? Restart Tawaf</button>
 </div>
 <script>
 (function(){
@@ -1305,31 +1305,31 @@ border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:point
   var msgEl=document.getElementById('tcMsg');
   function go(href){return function(){sessionStorage.removeItem(_lapKey);window.location.href=href;};}
   if(ctx==='ifadha'){
-    titleEl.textContent='🎉 Tawaf al-Ifadha Complete!';
+    titleEl.textContent='?? Tawaf al-Ifadha Complete!';
     msgEl.innerHTML='Alhamdulillah! You have completed Tawaf al-Ifadha.<br>You will now return to your tent at Mina to rest before the 11th day stoning.';
-    nextBtn.textContent='Return to Mina (Tents) ▸';
+    nextBtn.textContent='Return to Mina (Tents) ?';
     nextBtn.onclick=go('../3%20Mina/index.htm?context=tents-11th');
   } else if(ctx==='farewell'){
-    titleEl.textContent='🕋 Hajj Complete — May Allah Accept!';
-    msgEl.innerHTML='You have completed Tawaf al-Wida’, the farewell circumambulation.<br><br>Recite as you exit with your right foot:<br><em style="color:#8B6914;display:block;margin-top:8px;">Bismillāhi wa s-salātu wa s-salāmu ʿalā rasūlillāh, Allāhumma innī asʾaluka min faḍlik.</em><br><span style="font-size:12px;opacity:0.75;">“In the name of Allah, and prayers and peace upon the Messenger of Allah. O Allah, I ask You for Your bounty.”</span><br><br><strong style="color:#22c55e;">Congratulations on completing your Hajj. May Allah accept this act of ‘ibādah.</strong>';
-    nextBtn.textContent='🏠 Return to Home';
+    titleEl.textContent='?? Hajj Complete � May Allah Accept!';
+    msgEl.innerHTML='You have completed Tawaf al-Wida�, the farewell circumambulation.<br><br>Recite as you exit with your right foot:<br><em style="color:#8B6914;display:block;margin-top:8px;">Bismillahi wa s-salatu wa s-salamu ?ala rasulillah, Allahumma inni as?aluka min fa?lik.</em><br><span style="font-size:12px;opacity:0.75;">�In the name of Allah, and prayers and peace upon the Messenger of Allah. O Allah, I ask You for Your bounty.�</span><br><br><strong style="color:#22c55e;">Congratulations on completing your Hajj. May Allah accept this act of �ibadah.</strong>';
+    nextBtn.textContent='?? Return to Home';
     nextBtn.onclick=function(){sessionStorage.removeItem(_lapKey);window.location.href='/index.html';};
   } else {
-    nextBtn.textContent="Next: Sa'i ▸";
+    nextBtn.textContent="Next: Sa'i ?";
     nextBtn.onclick=go('../2%20Safa%20and%20Marwa/index.htm');
   }
 })();
 </script>
 <script>
 (function(){
-  // Per-context lap counter — initial / ifadha / farewell each get their own
+  // Per-context lap counter � initial / ifadha / farewell each get their own
   // sessionStorage key so a stale 6/7 from a previous Tawaf leg cannot
   // prematurely fire the Hajj-Complete modal on the next leg.
   var ctx=new URL(window.location).searchParams.get('context')||'initial';
   var _lapKey='tawafLaps_'+ctx;
   // One-time migration: clear the legacy shared key.
   try{ sessionStorage.removeItem('tawafLaps'); }catch(_e){}
-  // Reset lap counter on fresh navigation (not on reload) — prevents stale
+  // Reset lap counter on fresh navigation (not on reload) � prevents stale
   // counts from a previous visit in the same browser session.
   try{
     var _nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
@@ -1352,7 +1352,7 @@ border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:point
   render();
   // Once user has begun tawaf, keep HUD visible across all panoramas until 7/7.
   if(laps>0 && laps<7) window._tawafActive = true;
-  // Show HUD ONLY on the main starting area panorama (panorama_7F92625E_…),
+  // Show HUD ONLY on the main starting area panorama (panorama_7F92625E_�),
   // and only after the Ihram guide is dismissed.
   // Uses window._currentPanoId published by chk() above (most reliable).
   function curPanoId(){
@@ -1385,7 +1385,7 @@ border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:point
 if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Tawaf VR Scene",content_category:"VR Hajj Tour",content_type:"vr_360_scene"});}
 </script>
 <script src="../../../meta-capi.js" defer></script>
-<!-- ═══ Scene Navigation Overlay ═══ -->
+<!-- --- Scene Navigation Overlay --- -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='tawaf';</script>
 <script src="../../scene-nav-overlay.js?v=10" defer></script>
 </body>

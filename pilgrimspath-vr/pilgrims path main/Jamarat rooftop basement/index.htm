@@ -1,4 +1,4 @@
-ï»¿?<!DOCTYPE html>
+?<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Jamarat base</title>
@@ -194,12 +194,12 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ba
 
 <!-- Throw Button -->
 <button id="jamarThrowBtn" onclick="throwStone()">
-  <span class="icon">ðŸª¨</span> Throw Stone <span id="throwLabel">(1/7)</span>
+  <span class="icon">??</span> Throw Stone <span id="throwLabel">(1/7)</span>
 </button>
 
 <!-- Counter HUD -->
 <div id="jamarHUD">
-  <h4>â¬¡ Rami al-Jamarat</h4>
+  <h4>? Rami al-Jamarat</h4>
   <div class="hud-pillar">
     <span class="name">Sughra (Small)</span>
     <span class="count" id="hudSmall">0/7</span>
@@ -228,7 +228,7 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ba
 <div id="jamarArrow">?</div>
 
 <!-- Aim hint -->
-<div id="jamarAimHint">â†» Turn towards the pillar to throw</div>
+<div id="jamarAimHint">? Turn towards the pillar to throw</div>
 
 <!-- Debug yaw -->
 <div id="jamarDebugYaw">yaw: --</div>
@@ -236,9 +236,9 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ba
 <!-- Activity Guide -->
 <div id="jamarGuide">
   <h3>?? Rami al-Jamarat</h3>
-  <p class="subtitle">The Stoning of the Pillars â€” Sunnah of Ibrahim (AS)</p>
+  <p class="subtitle">The Stoning of the Pillars — Sunnah of Ibrahim (AS)</p>
   <ul class="steps">
-    <li><span class="num">1.</span> Turn to face the Jamrah (pillar) â€” follow the arrow</li>
+    <li><span class="num">1.</span> Turn to face the Jamrah (pillar) — follow the arrow</li>
     <li><span class="num">2.</span> Tap "Throw Stone" when the screen glows green</li>
     <li><span class="num">3.</span> Throw 7 stones at each of the 3 pillars</li>
     <li><span class="num">4.</span> Start with Sughra (small) ? Wusta (middle) ? Aqaba (large)</li>
@@ -262,16 +262,16 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ba
 // ====== JAMARAT STONE THROWING SYSTEM (BASE LEVEL) ======
 // Panorama IDs that face the Jamarat pillars (base level)
 const JAMAR_PANORAMAS = {
-  // VID_20260217_113534_00_425 (14-14-15) â€” Small pillar (Sughra)
+  // VID_20260217_113534_00_425 (14-14-15) — Small pillar (Sughra)
   'panorama_6F591FE4_7C4C_428E_41D7_A32CBCFD088E': 'small',
-  // VID_20260217_113948_00_430 (14-20-18) â€” Medium pillar (Wusta)
+  // VID_20260217_113948_00_430 (14-20-18) — Medium pillar (Wusta)
   'panorama_6F59F27A_7C4C_427A_41D0_44DDEFCC0BC1': 'medium',
-  // VID_20260217_114336_00_433 (14-22-36) â€” Large pillar (Aqaba)
+  // VID_20260217_114336_00_433 (14-22-36) — Large pillar (Aqaba)
   'panorama_6F5AB7CA_7C4C_C29A_41D8_B732BD5E56B3': 'large'
 };
 
 // -- TARGET YAW for each pillar (degrees) --
-// TODO: calibrate â€” navigate to each pillar panorama and note the edge yaw values
+// TODO: calibrate — navigate to each pillar panorama and note the edge yaw values
 const PILLAR_TARGET = {
   small:  { yaw: 0, tolerance: 45 },   // calibrate: look at small pillar, note yaw
   medium: { yaw: 0, tolerance: 45 },   // calibrate: look at medium pillar, note yaw
@@ -688,7 +688,7 @@ function pollYaw() {
     var dx = mx - vw/2;
     var dy = my - vh/2;
     var yawOff   = Math.atan2(dx, f) * 180 / Math.PI;
-    // pitch: account for the rotated camera frame â€” combine pitch via spherical math
+    // pitch: account for the rotated camera frame — combine pitch via spherical math
     var pitchOff = Math.atan2(-dy, Math.sqrt(dx*dx + f*f)) * 180 / Math.PI;
     pointerYaw   = ((currentYaw + yawOff + 540) % 360) - 180;
     pointerPitch = Math.max(-90, Math.min(90, currentPitch + pitchOff));
@@ -793,7 +793,7 @@ var _jbChk;
 (function(){
 var BANNERS={
 'panorama_6F591A67_7C4B_CD8A_41C0_0DCF04356022':{
-  title:'\u{1f54b} 10th Day of Dhul-Hijjah â€” Yawm an-Nahr',
+  title:'\u{1f54b} 10th Day of Dhul-Hijjah — Yawm an-Nahr',
   html:'<p class="bb">Today is the 10th day, Yawm an-Nahr. After completing Fajr prayer, we have now arrived at Rami al-Jamarat where we will perform four key actions:</p><p class="bb">\u2022 Rami al-Jamarat<br>\u2022 Sacrifice (Qurbani)<br>\u2022 Shaving or Trimming the Hair<br>\u2022 Travel back to Al-Masjid Al-Haram in Makkah</p>'},
 'panorama_6F596864_7C4C_CD8E_41BB_4AD5C09CF432':{
   title:'\u{1f3af} Stoning Jamarat al-Aqabah',
@@ -866,7 +866,7 @@ setTimeout(function(){_jbChk('panorama_6F591A67_7C4B_CD8A_41C0_0DCF04356022');},
     } else if (bindTries>50){ clearInterval(bindIv); }
   }, 80);
 
-  // Hard polling backup â€” runs for 15 seconds; only forces if not yet on target.
+  // Hard polling backup — runs for 15 seconds; only forces if not yet on target.
   setTimeout(function(){
     var attempts=0, stable=0;
     var iv=setInterval(function(){
@@ -902,7 +902,7 @@ setTimeout(function(){_jbChk('panorama_6F591A67_7C4B_CD8A_41C0_0DCF04356022');},
 <!-- Journey Navigation -->
 <script src="../../journey-manager.js?v=6" defer></script>
 <script src="../../quiz-content.js?v=6" defer></script>
-<script src="../../journey-nav.js?v=29" defer></script>
+<script src="../../journey-nav.js?v=30" defer></script>
 <!-- --- Scene Navigation Overlay --- -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='jamarat-12th';</script>
 <script src="../../scene-nav-overlay.js?v=10" defer></script>
