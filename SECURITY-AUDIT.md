@@ -397,3 +397,103 @@ These were in the original request but are out of scope for this audit pass. The
 - **F. End-to-end journey QA** — every step 1→13, every device class. Use the existing [JOURNEY_TEST.html](JOURNEY_TEST.html) harness as a starting point.
 
 Reply with the next workstream to tackle and I'll dive in.
+
+---
+
+## 8. Follow-up Audit — 10 May 2026
+
+### NEW CRITICAL: VR Content Is Fully Public (No Server-Side Access Gate)
+
+**Location:** `server.js` — `app.use(express.static(__dirname, {...}))`
+
+**Description:**  
+All files under `/pilgrimspath-vr/` are served as public static assets by Express with zero auth/payment middleware. Anyone who knows a scene URL can load the full VR experience with no login, no email, and no payment:
+
+```
+https://pilgrimspath.io/pilgrimspath-vr/pilgrims%20path%20main/1%20Tawaf/index.htm?journey=1
+```
+
+**Impact:** Complete bypass of all payment and lead-capture gates. Users do not need to purchase or register.
+
+**Recommended Fix — add Express middleware before `express.static`:**
+
+```javascript
+// server.js — BEFORE app.use(express.static(...))
+const jwt = require('jsonwebtoken');
+
+app.use('/pilgrimspath-vr', (req, res, next) => {
+  const token = req.cookies?.pp_access;
+  if (!token) return res.status(403).sendFile(path.join(__dirname, 'hajj-vr.html'));
+  try {
+    jwt.verify(token, process.env.JWT_SECRET);
+    next();
+  } catch {
+    res.status(403).sendFile(path.join(__dirname, 'hajj-vr.html'));
+  }
+});
+```
+
+Pair this with the payment flow writing a signed JWT cookie (see next finding).
+
+---
+
+### NEW CRITICAL: Payment Not Enforced as Access Prerequisite
+
+**Location:** `api/paystack-verify.js`
+
+**Description:**  
+Payment is correctly verified server-side against the Paystack API, but **the result is never stored durably or checked before serving VR content.** After successful payment:
+- Welcome email fires ✅
+- Payment is logged ✅
+- **No "user has paid" record exists that the server checks on subsequent requests** ❌
+
+The gate in `hajj-vr.html` checks `localStorage.getItem('pp_lead_email')` — an email lead capture, not a payment gate.
+
+**Recommended Fix — in `api/paystack-verify.js`, after payment confirmed:**
+
+```javascript
+// Issue a signed access token as an HttpOnly cookie
+const jwt = require('jsonwebtoken');
+const accessToken = jwt.sign(
+  { email: customerEmail, paid: true, ref: reference },
+  process.env.JWT_SECRET,
+  { expiresIn: '365d' }
+);
+res.setHeader('Set-Cookie',
+  `pp_access=${accessToken}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=31536000`
+);
+// Optionally also persist to Supabase: paid_users table upsert
+```
+
+Add `JWT_SECRET` to `.env` (generate: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`).
+
+---
+
+### Confirmed (from §3): Admin Auth Still Client-Side
+
+The admin authentication issue documented in §2 (C2) and §3a has not yet been remediated as of this audit. The SHA-256 password hash remains in `admin.html` page source. Priority unchanged: **CRITICAL**.
+
+**Current bypass (confirmed via code inspection):**
+```javascript
+// Browser console on the admin page — bypasses login:
+sessionStorage.setItem('pp_admin_auth_v2', Date.now().toString());
+showDashboard(); // or reload the page
+```
+
+**Recommended next step:** Implement Option A from §3a (Supabase `is_admin` flag) as the admin login route is already at an obscured URL. This requires no Nginx changes and integrates with the existing Supabase auth stack.
+
+---
+
+### Summary of All Open Issues (Updated 10 May 2026)
+
+| ID | Severity | Issue | Status |
+|---|:---:|---|:---:|
+| CRIT-VR | 🔴 Critical | VR scene files are fully public static assets — no server auth | **OPEN** |
+| CRIT-PAY | 🔴 Critical | Payment not enforced as server-side access prerequisite | **OPEN** |
+| C2 | 🔴 Critical | Admin auth is client-side only — bypassable from console | **OPEN** |
+| C1 | ✅ Fixed | `/api/claude` had no auth | **Closed** |
+| H1–H4 | ✅ Fixed | API CORS / input validation / .gitignore | **Closed** |
+| H5 | ✅ Fixed (partial) | Security headers (CSP still pending) | **Partial** |
+| M1 | 🟡 Medium | Admin route obscurity — resolved when C2 fixed | **Blocked on C2** |
+| M3 | 🟡 Medium | Supabase RLS policy too permissive | **OPEN** |
+| CSP | 🟡 Medium | No Content-Security-Policy header | **OPEN** |

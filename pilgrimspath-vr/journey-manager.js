@@ -102,11 +102,9 @@ class JourneyManager {
 
   goToNext(){
     if(this.currentStep < HAJJ_JOURNEY.length){
-      var self = this, next = this.currentStep + 1;
-      var advance = function(){ self.goToStep(next); };
-      // Show end-of-scene quiz first if the user opted in (no-op otherwise)
-      if(typeof window.proceedWithQuiz === 'function'){ window.proceedWithQuiz(advance); }
-      else { advance(); }
+      // Quiz is always triggered by the caller (Next Stop button or pause menu).
+      // Do not call proceedWithQuiz here — it would show a second set of questions.
+      this.goToStep(this.currentStep + 1);
     } else if(this.currentStep === HAJJ_JOURNEY.length){
       // Journey complete - show completion banner
       if(typeof window.showJourneyComplete === 'function'){
