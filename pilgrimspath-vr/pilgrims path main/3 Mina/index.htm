@@ -228,8 +228,13 @@ function _minaProceed(id) {
     if (btn) { btn.style.display = 'inline-flex'; btn.click(); return; }
   }
   window.journeyIsLastPanorama = true;
-  if (typeof showJourneyNextButton === 'function') showJourneyNextButton();
-  else if (window.jm && typeof window.jm.goToNext === 'function') window.jm.goToNext();
+  if (typeof window.proceedWithQuiz === 'function') {
+    window.proceedWithQuiz(function () {
+      if (window.jm && typeof window.jm.goToNext === 'function') window.jm.goToNext();
+    });
+  } else if (window.jm && typeof window.jm.goToNext === 'function') {
+    window.jm.goToNext();
+  }
 }
 
 function chk(id) {

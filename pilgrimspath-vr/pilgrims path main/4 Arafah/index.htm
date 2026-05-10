@@ -258,14 +258,23 @@ function chk(id) {
         onExplore: function () { /* user stays and explores — nothing else to fire */ },
         onProceed: function () {
           window.journeyIsLastPanorama = true;
-          if (typeof showJourneyNextButton === 'function') showJourneyNextButton();
-          else if (window.jm && typeof window.jm.goToNext === 'function') window.jm.goToNext();
+          if (typeof window.proceedWithQuiz === 'function') {
+            window.proceedWithQuiz(function () {
+              if (window.jm && typeof window.jm.goToNext === 'function') window.jm.goToNext();
+            });
+          } else if (window.jm && typeof window.jm.goToNext === 'function') {
+            window.jm.goToNext();
+          }
         }
       });
     } else {
-      // fallback: just surface the next button
+      // fallback: directly navigate
       window.journeyIsLastPanorama = true;
-      if (typeof showJourneyNextButton === 'function') showJourneyNextButton();
+      if (typeof window.proceedWithQuiz === 'function') {
+        window.proceedWithQuiz(function () {
+          if (window.jm && typeof window.jm.goToNext === 'function') window.jm.goToNext();
+        });
+      }
     }
   }
 }
