@@ -508,7 +508,13 @@
         3:  '/pilgrimspath-vr/pilgrims%20path%20main/2%20Safa%20and%20Marwa/index.htm?journey=2&context=sa-i',
         4:  '/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat,%20Qurbani,%20trim%20Shave,%20Tawaf/barber-scene.html?journey=8&context=barber'
     };
-    function goToHajjCard(n) { if (HAJJ_CARD_URLS[n]) window.location.href = HAJJ_CARD_URLS[n]; }
+    function goToHajjCard(n) {
+        if (!localStorage.getItem('pp_umrah_completed')) {
+            _showToast('\uD83D\uDD11 Complete Umrah first to unlock the Hajj journey', 3500);
+            return;
+        }
+        if (HAJJ_CARD_URLS[n]) window.location.href = HAJJ_CARD_URLS[n];
+    }
     function goToUmrahCard(n) { if (UMRAH_CARD_URLS[n]) window.location.href = UMRAH_CARD_URLS[n]; }
 
     // ── Download-experience pre-fetch ──────────────────────────
@@ -846,6 +852,30 @@
             if (contBtn && stepToDash[nextStep]) {
                 contBtn.onclick = function(){ goToHajjCard(stepToDash[nextStep]); };
             }
+        }
+    })();
+    </script>
+
+    <!-- Deferred analytics (non-blocking) -->
+    <script>
+    // ── Hajj: visual gate lock until Umrah complete ──────────────────────────────
+    (function(){
+        if (localStorage.getItem('pp_umrah_completed')) return;
+        // Visual gate banner inside Hajj tab
+        var header = document.querySelector('#hajjTab .content-header');
+        if (header) {
+            var gate = document.createElement('div');
+            gate.id = 'hajjUmrahGate';
+            gate.style.cssText = 'display:flex;align-items:center;gap:14px;padding:16px 20px;margin:16px 0 4px;border-radius:14px;background:linear-gradient(135deg,#fff8e7,#fef3cc);border:1.5px solid #D4AF37;color:#7a5c00;font-family:inherit;box-shadow:0 2px 12px rgba(212,175,55,0.15);';
+            gate.innerHTML = '<span style="font-size:1.8rem;flex-shrink:0;">🕌</span><div><div style="font-weight:700;font-size:.95rem;margin-bottom:3px;">Complete Umrah First to Unlock Hajj</div><div style="font-size:.82rem;opacity:.8;line-height:1.45;">The full Hajj journey unlocks after completing all 4 Umrah rituals.</div><a href="/umrah-journey.html" style="display:inline-block;margin-top:9px;padding:6px 18px;border-radius:999px;background:#D4AF37;color:#1a1200;font-weight:700;font-size:.8rem;text-decoration:none;">Start Umrah Journey \u2192</a></div>';
+            header.insertAdjacentElement('afterend', gate);
+        }
+        // Disable the Hajj continue button
+        var contBtn = document.querySelector('#hajjTab .continue-btn');
+        if (contBtn) {
+            contBtn.disabled = true;
+            contBtn.style.opacity = '0.4';
+            contBtn.style.cursor = 'not-allowed';
         }
     })();
     </script>

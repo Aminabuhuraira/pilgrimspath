@@ -11,7 +11,7 @@
 
 var STORAGE_KEY = 'pp_journey_content_v1';
 var AUDIO_BASE_ROOT = '/hajj%20voiceover%20english/';
-var SEED_VERSION = 18; // bump to force re-sync of banner text/audio from DEFAULT_DATA
+var SEED_VERSION = 19; // bump to force re-sync of banner text/audio from DEFAULT_DATA
 // Banner IDs whose text/audio MUST be force-overwritten from DEFAULT_DATA on the next
 // SEED_VERSION bump (overrides the "preserve user customisations" rule for these
 // specific banners). Use sparingly — only when admin defaults were wrong and user-edited
@@ -199,7 +199,7 @@ var DEFAULT_DATA = {
     { key:'barber-umrah', step:3, title:'Step 3 — Clip/Shave Hair (Umrah)', file:'pilgrimspath-vr/pilgrims path main/5 Rami Jamarat, Qurbani, trim Shave, Tawaf/barber-scene.html', context:'umrah-trim',
       panoramas:[],
       banners:[
-        defB({ id:'bu-load', trigger:'scene-load', label:'Scene load — Umrah trim', template:'side-card',
+        defB({ id:'bu-load', trigger:'scene-load', label:'Scene load — Umrah trim', template:'ihram-guide',
           text:{en:{title:'✂️ Trim Your Hair',body:'<p class="bb">A small symbolic trim completes your Umrah and exits the state of Ihram. Men may shave or trim, women trim a fingertip\'s length.</p>'}},
           audio:{en:'13 English Halaq or Qasr 1.mp3'} })
       ]},
@@ -286,7 +286,7 @@ var DEFAULT_DATA = {
     { key:'barber-hajj', step:11, title:'Step 11 — Shave Head (Halaq)', file:'pilgrimspath-vr/pilgrims path main/5 .../barber-scene.html', context:'barber',
       panoramas:[],
       banners:[
-        defB({ id:'bh-load', trigger:'scene-load', label:'Scene load — Halaq', template:'side-card',
+        defB({ id:'bh-load', trigger:'scene-load', label:'Scene load — Halaq', template:'ihram-guide',
           text:{en:{title:'✂️ Shaving or Trimming the Hair',body:'<p class="bb">Here Men will shave their heads or trim their hair, while women will cut a small portion of their hair.</p>'}},
           audio:{en:'22 English 10th day Dhul Hijjah 4.mp3'} })
         ,defB({ id:'bh-continue', trigger:'button', label:'Button — Continue to Tawaf al-Ifadah', template:'midnight-blue', buttonId:'barberContinue', buttonLabel:'Continue to Tawaf al-Ifadah',
