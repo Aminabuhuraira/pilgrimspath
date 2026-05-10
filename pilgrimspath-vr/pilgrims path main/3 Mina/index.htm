@@ -202,11 +202,11 @@ var IS_TENT_MODE = (journeyContext === 'tents-11th' || journeyContext === 'tents
 var shown = {}, lastId = '';
 var _landingShown = {};   // tracks whether the landing prompt has fired per pano
 
-// Panoramas that should show the "Explore vs Next Scene" landing prompt
+// Panorama that should show the "Explore vs Next Scene" landing prompt
 var MINA_LANDING_8TH  = 'panorama_73D8B866_7C54_4D8A_41D3_BF331164945C';
 var MINA_LANDING_PANOS = {};
-MINA_LANDING_PANOS[MINA_LANDING_8TH] = { icon: '⛺', title: 'The Tents of Mina', subtitle: 'You have arrived at the sacred tents of Mina. Explore this station or continue your pilgrimage.' };
-MINA_LANDING_PANOS[TENT_PANO]        = { icon: '🕌', title: 'Mina — Days of Tashreeq', subtitle: 'The nights of Tashreeq are spent here in remembrance of Allah. Explore — or continue to the next rite.' };
+// NOTE: MINA_LANDING_8TH is the entry panorama — no prompt on arrival, only on TENT_PANO
+MINA_LANDING_PANOS[TENT_PANO] = { icon: '🕌', title: 'Mina — Days of Tashreeq', subtitle: 'The nights of Tashreeq are spent here in remembrance of Allah. Explore — or continue to the next rite.' };
 
 function _minaFireBannerVO(id) {
   var b  = _bannerMap[id];

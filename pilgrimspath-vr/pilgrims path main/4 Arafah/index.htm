@@ -241,14 +241,21 @@ function _playRemainingArafahNarration(idx){
 // ── TDV hook only — no PerformanceObserver/Image hijack ─────────────────
 var shown = {}, lastId = '';
 function chk(id) {
+  // Entry panorama (84B0CD28): play the intro directly, no prompt
   if (id.indexOf('84B0CD28') !== -1 && !shown[id]) {
+    shown[id] = true;
+    _showArafahIntro();
+    return;
+  }
+  // Target panorama (84B78C66 — 15-09-02 screenshot): show the landing prompt
+  if (id.indexOf('84B78C66') !== -1 && !shown[id]) {
     shown[id] = true;
     if (typeof window.ppShowLandingPrompt === 'function') {
       window.ppShowLandingPrompt({
         icon: '🌄',
         title: 'The Plains of Arafah',
-        subtitle: 'You have arrived at the greatest station of Hajj. Explore this sacred place — or continue your pilgrimage.',
-        onExplore: function () { _showArafahIntro(); },
+        subtitle: 'You stand at the most sacred station of Hajj. Continue exploring — or move on with your pilgrimage.',
+        onExplore: function () { /* user stays and explores — nothing else to fire */ },
         onProceed: function () {
           window.journeyIsLastPanorama = true;
           if (typeof showJourneyNextButton === 'function') showJourneyNextButton();
@@ -256,12 +263,22 @@ function chk(id) {
         }
       });
     } else {
-      _showArafahIntro(); // fallback if ppShowLandingPrompt not yet loaded
+      // fallback: just surface the next button
+      window.journeyIsLastPanorama = true;
+      if (typeof showJourneyNextButton === 'function') showJourneyNextButton();
     }
   }
 }
 function hookTDV(){if(typeof TDV==='undefined'||!TDV.Tour||!TDV.Tour.Script)return setTimeout(hookTDV,500);var o1=TDV.Tour.Script.setPlayListSelectedIndex;if(o1){TDV.Tour.Script.setPlayListSelectedIndex=function(a,b){try{var id=a.get('items')[b].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}catch(e){}return o1.apply(this,arguments);};}var o2=TDV.Tour.Script.setMainMediaByIndex;if(o2){TDV.Tour.Script.setMainMediaByIndex=function(a){try{var items=this.mainPlayList.get('items');if(a>=0&&a<items.length){var id=items[a].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}}catch(e){}return o2.apply(this,arguments);};}console.log('[Arafah] banner hooks installed');}
-hookTDV();setTimeout(function(){chk('panorama_84B0CD28_8BC4_4A0E_4196_9526145973A3');},2500);
+hookTDV();
+// Fire the Arafah intro on the entry panorama after a short delay
+// (fallback in case the TDV hook doesn't fire on initial load)
+setTimeout(function(){
+  if (!shown['panorama_84B0CD28_8BC4_4A0E_4196_9526145973A3']) {
+    shown['panorama_84B0CD28_8BC4_4A0E_4196_9526145973A3'] = true;
+    _showArafahIntro();
+  }
+}, 2500);
 })();
 </script>
 
