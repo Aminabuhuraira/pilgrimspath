@@ -168,7 +168,7 @@ var SCENE_TEMPLATES = {
   'side-card': 'background:linear-gradient(180deg,#fffbe9,#f5edd0) !important;border:none !important;border-left:4px solid #C9A84C !important;border-radius:8px !important;color:#2C1810 !important;width:auto !important;max-width:380px !important;min-height:auto !important;padding:18px 22px !important;text-align:left !important',
   'midnight-blue': 'background:radial-gradient(ellipse at top,#1e3a5f,#0d1b2a) !important;border:1px solid #D4AF37 !important;border-radius:14px !important;color:#e8eef4 !important',
   'sunrise-gold': 'background:linear-gradient(135deg,#FFE5B4 0%,#FFD98A 50%,#E8B860 100%) !important;border:2px solid #B8941F !important;border-radius:16px !important;color:#3D2B1F !important',
-  'ihram-guide': 'background:linear-gradient(180deg,#fffbe9,#f5edd0) !important;border:2px solid #C9A84C !important;border-radius:16px !important;color:#2C1810 !important;width:min(94vw,780px) !important;padding:32px 28px !important;text-align:center !important'
+  'ihram-guide': 'background:linear-gradient(180deg,#fffbe9,#f5edd0) !important;border:2px solid #C9A84C !important;border-radius:16px !important;color:#2C1810 !important'
 };
 /* h3 title colour override for light-background templates.
    The base banner injects h3 with color:#D4AF37 (gold) which is near-invisible
@@ -443,6 +443,19 @@ function showAdminBanner(opts){
   // stored in localStorage (guard against stale midnight-blue template in cache).
   if(opts.id === 'mz-load' && opts.template !== 'sunrise-gold'){
     applyTemplate('#sceneBanner', 'sunrise-gold', opts.position||{x:50,y:50});
+  }
+  // Force full width after applyTemplate fires (its setTimeout is 60ms).
+  // This overrides any stale max-width:380px from the old side-card template
+  // that may be stored in user localStorage, ensuring cream banners are always wide.
+  var _narrowTpls = {'side-card':1,'compact-pill':1};
+  if(!_narrowTpls[opts.template]){
+    setTimeout(function(){
+      var _bEl = document.getElementById('sceneBanner');
+      if(_bEl){
+        _bEl.style.setProperty('width','min(90vw,860px)','important');
+        _bEl.style.setProperty('max-width','none','important');
+      }
+    }, 100);
   }
   // Reset any template-injected transform so our scale animation works
   el.style.opacity = '0';
