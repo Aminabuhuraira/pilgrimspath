@@ -241,7 +241,24 @@ function _playRemainingArafahNarration(idx){
 // ── TDV hook only — no PerformanceObserver/Image hijack ─────────────────
 var shown = {}, lastId = '';
 function chk(id) {
-  if (id.indexOf('84B0CD28') !== -1 && !shown[id]) { shown[id] = true; _showArafahIntro(); }
+  if (id.indexOf('84B0CD28') !== -1 && !shown[id]) {
+    shown[id] = true;
+    if (typeof window.ppShowLandingPrompt === 'function') {
+      window.ppShowLandingPrompt({
+        icon: '🌄',
+        title: 'The Plains of Arafah',
+        subtitle: 'You have arrived at the greatest station of Hajj. Explore this sacred place — or continue your pilgrimage.',
+        onExplore: function () { _showArafahIntro(); },
+        onProceed: function () {
+          window.journeyIsLastPanorama = true;
+          if (typeof showJourneyNextButton === 'function') showJourneyNextButton();
+          else if (window.jm && typeof window.jm.goToNext === 'function') window.jm.goToNext();
+        }
+      });
+    } else {
+      _showArafahIntro(); // fallback if ppShowLandingPrompt not yet loaded
+    }
+  }
 }
 function hookTDV(){if(typeof TDV==='undefined'||!TDV.Tour||!TDV.Tour.Script)return setTimeout(hookTDV,500);var o1=TDV.Tour.Script.setPlayListSelectedIndex;if(o1){TDV.Tour.Script.setPlayListSelectedIndex=function(a,b){try{var id=a.get('items')[b].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}catch(e){}return o1.apply(this,arguments);};}var o2=TDV.Tour.Script.setMainMediaByIndex;if(o2){TDV.Tour.Script.setMainMediaByIndex=function(a){try{var items=this.mainPlayList.get('items');if(a>=0&&a<items.length){var id=items[a].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}}catch(e){}return o2.apply(this,arguments);};}console.log('[Arafah] banner hooks installed');}
 hookTDV();setTimeout(function(){chk('panorama_84B0CD28_8BC4_4A0E_4196_9526145973A3');},2500);
@@ -252,6 +269,9 @@ hookTDV();setTimeout(function(){chk('panorama_84B0CD28_8BC4_4A0E_4196_9526145973
 <script src="../../journey-manager.js?v=6" defer></script>
 <script src="../../quiz-content.js?v=6" defer></script>
 <script src="../../journey-nav.js?v=29" defer></script>
+
+<!-- Landing panorama choice prompt -->
+<script src="/scene-landing-prompt.js?v=2" defer></script>
 
 <!-- Meta Pixel VR Event -->
 <script>

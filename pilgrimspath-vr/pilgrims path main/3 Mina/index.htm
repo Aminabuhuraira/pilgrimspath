@@ -200,9 +200,56 @@ if (window.PPContent && window.PPContent.hasData) {
 var TENT_PANO = 'panorama_72AD4A6A_7C54_4D9A_41DC_AA69EFBD3C52';
 var IS_TENT_MODE = (journeyContext === 'tents-11th' || journeyContext === 'tents-12th' || journeyContext === 'tents-13th');
 var shown = {}, lastId = '';
+var _landingShown = {};   // tracks whether the landing prompt has fired per pano
+
+// Panoramas that should show the "Explore vs Next Scene" landing prompt
+var MINA_LANDING_8TH  = 'panorama_73D8B866_7C54_4D8A_41D3_BF331164945C';
+var MINA_LANDING_PANOS = {};
+MINA_LANDING_PANOS[MINA_LANDING_8TH] = { icon: '⛺', title: 'The Tents of Mina', subtitle: 'You have arrived at the sacred tents of Mina. Explore this station or continue your pilgrimage.' };
+MINA_LANDING_PANOS[TENT_PANO]        = { icon: '🕌', title: 'Mina — Days of Tashreeq', subtitle: 'The nights of Tashreeq are spent here in remembrance of Allah. Explore — or continue to the next rite.' };
+
+function _minaFireBannerVO(id) {
+  var b  = _bannerMap[id];
+  var vo = _audioMap[id];
+  if (!b && !vo) return;
+  shown[id] = true;
+  if (b && (b.title || b.html)) openBanner(b.title, b.html);
+  if (vo) playVO(vo);
+  if (id === MINA_LANDING_8TH) {
+    window.journeyIsLastPanorama = true;
+    if (typeof showJourneyNextButton === 'function') { setTimeout(showJourneyNextButton, 300); }
+  }
+}
+
+function _minaProceed(id) {
+  shown[id] = true;
+  if (IS_TENT_MODE) {
+    var btn = document.getElementById('minaContinue');
+    if (btn) { btn.style.display = 'inline-flex'; btn.click(); return; }
+  }
+  window.journeyIsLastPanorama = true;
+  if (typeof showJourneyNextButton === 'function') showJourneyNextButton();
+  else if (window.jm && typeof window.jm.goToNext === 'function') window.jm.goToNext();
+}
 
 function chk(id) {
   if (shown[id]) return;
+
+  // Show landing prompt first for the designated panoramas
+  var lpCfg = MINA_LANDING_PANOS[id];
+  if (lpCfg && !_landingShown[id] && typeof window.ppShowLandingPrompt === 'function') {
+    _landingShown[id] = true;
+    window.ppShowLandingPrompt({
+      icon: lpCfg.icon,
+      title: lpCfg.title,
+      subtitle: lpCfg.subtitle,
+      onExplore: function () { _minaFireBannerVO(id); },
+      onProceed: function () { _minaProceed(id); }
+    });
+    return;
+  }
+
+  // Normal panorama (no landing prompt): fire banner/VO if configured
   var b  = _bannerMap[id];
   var vo = _audioMap[id];
   if (!b && !vo) return;
@@ -210,7 +257,7 @@ function chk(id) {
   if (b && (b.title || b.html)) openBanner(b.title, b.html);
   if (vo) playVO(vo);
   // 8th-day end panorama: surface the Next-Stop button
-  if (id === 'panorama_73D8B866_7C54_4D8A_41D3_BF331164945C') {
+  if (id === MINA_LANDING_8TH) {
     window.journeyIsLastPanorama = true;
     if (typeof showJourneyNextButton === 'function') { setTimeout(showJourneyNextButton, 300); }
   }
@@ -279,6 +326,9 @@ if(IS_TENT_MODE){
 <script src="../../journey-manager.js?v=8" defer></script>
 <script src="../../quiz-content.js?v=6" defer></script>
 <script src="../../journey-nav.js?v=29" defer></script>
+
+<!-- Landing panorama choice prompt -->
+<script src="/scene-landing-prompt.js?v=2" defer></script>
 
 <!-- Meta Pixel VR Event -->
 <script>

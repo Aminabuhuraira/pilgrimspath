@@ -414,23 +414,5 @@ fbq('track', 'ViewContent', {
 <script>window._sceneNavBase='../';window._sceneNavCurrent='qurbani';</script>
 <script src="../../scene-nav-overlay.js?v=10" defer></script>
 <!-- VO autoplay handled by /journey-content-loader.js?v=40 (fireSceneLoad ? qb-load) -->
-
-<!-- Landing choice prompt -->
-<script>
-window._ppLandingCfg = {
-  icon: '🐑',
-  title: 'Qurbani — The Sacred Sacrifice',
-  subtitle: 'Learn about the meaning and steps of the Qurbani rite on the Day of Sacrifice — or continue your journey.'
-};
-window._ppLandingProceed = function () {
-  if (window.jm && typeof window.jm.goToNext === 'function') {
-    window.jm.goToNext();
-  } else {
-    var jnb = document.getElementById('journeyNextBtn') || document.querySelector('[id*="journeyNext"]');
-    if (jnb) jnb.click();
-  }
-};
-</script>
-<script src="/scene-landing-prompt.js?v=1" defer></script>
 </body>
 </html>

@@ -1,37 +1,29 @@
 /**
  * scene-landing-prompt.js
- * Shows a landing choice overlay when a pilgrim arrives at an HTML scene.
- * Two choices:
- *   "Continue Exploring"  → dismisses overlay, user reads scene content
- *   "Move to Next Scene"  → dismisses overlay then triggers the scene's
- *                           own continue-button (with quiz/VO flow intact)
+ * Exposes window.ppShowLandingPrompt(cfg) — call it from VR panorama hooks
+ * to show a choice overlay asking the pilgrim to explore or move on.
  *
- * Each scene configures this via:
- *   window._ppLandingCfg  = { icon, title, subtitle }
- *   window._ppLandingProceed = function(){...}   // optional override
+ * cfg = {
+ *   icon      : string  (emoji)
+ *   title     : string
+ *   subtitle  : string
+ *   onExplore : function()  — called when user picks "Continue Exploring"
+ *   onProceed : function()  — called when user picks "Move to Next Scene"
+ * }
  */
 (function () {
   'use strict';
 
-  /* ── wait for DOM then delay 900 ms so the scene card animates in first ── */
-  function whenReady(fn) {
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', function () { setTimeout(fn, 900); });
-    } else {
-      setTimeout(fn, 900);
-    }
-  }
-
-  function init() {
-    var cfg = window._ppLandingCfg || {};
+  window.ppShowLandingPrompt = function (cfg) {
+    cfg = cfg || {};
     var icon     = cfg.icon     || '🕌';
     var title    = cfg.title    || 'You Have Arrived';
-    var subtitle = cfg.subtitle || 'Take a moment to explore this station — or continue your journey.';
+    var subtitle = cfg.subtitle || 'Take a moment to explore — or continue your journey.';
+    var onExplore = typeof cfg.onExplore === 'function' ? cfg.onExplore : function () {};
+    var onProceed = typeof cfg.onProceed === 'function' ? cfg.onProceed : function () {};
 
-    /* ── only show once per page session ── */
-    var sessionKey = 'pp_lp_' + (window._sceneNavCurrent || location.pathname);
-    if (sessionStorage.getItem(sessionKey)) return;
-    sessionStorage.setItem(sessionKey, '1');
+    /* guard: only one prompt open at a time */
+    if (document.getElementById('ppLandingPrompt')) return;
 
     /* ── build overlay ── */
     var ov = document.createElement('div');
@@ -59,118 +51,44 @@
         'text-align:center;',
         'font-family:Georgia,serif;',
       '">',
-        /* icon */
         '<div style="font-size:2.8rem;margin-bottom:12px;line-height:1">',icon,'</div>',
-        /* title */
-        '<h2 style="',
-          'font-family:Georgia,serif;font-size:1.3rem;font-weight:700;',
-          'color:#1a1a2e;margin:0 0 10px;line-height:1.3',
-        '">',title,'</h2>',
-        /* divider */
-        '<div style="',
-          'width:48px;height:2px;margin:0 auto 14px;',
-          'background:linear-gradient(90deg,transparent,rgba(201,168,76,0.7),transparent)',
-        '"></div>',
-        /* subtitle */
-        '<p style="',
-          'font-family:Poppins,sans-serif;font-size:0.88rem;',
-          'color:#5a4a3a;line-height:1.65;margin:0 0 24px',
-        '">',subtitle,'</p>',
-        /* buttons */
+        '<h2 style="font-family:Georgia,serif;font-size:1.3rem;font-weight:700;color:#1a1a2e;margin:0 0 10px;line-height:1.3">',title,'</h2>',
+        '<div style="width:48px;height:2px;margin:0 auto 14px;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.7),transparent)"></div>',
+        '<p style="font-family:Poppins,sans-serif;font-size:0.88rem;color:#5a4a3a;line-height:1.65;margin:0 0 24px">',subtitle,'</p>',
         '<div style="display:flex;flex-direction:column;gap:11px">',
-          /* Explore button */
-          '<button id="ppLandingExploreBtn" style="',
-            'padding:13px 22px;border-radius:50px;',
-            'border:2px solid rgba(201,168,76,0.65);background:transparent;',
-            'color:#8B6914;font-family:Poppins,sans-serif;',
-            'font-size:0.95rem;font-weight:600;cursor:pointer;',
-            'transition:background 0.2s,border-color 0.2s',
-          '">🔍 Continue Exploring</button>',
-          /* Proceed button */
-          '<button id="ppLandingProceedBtn" style="',
-            'padding:14px 22px;border-radius:50px;border:none;',
-            'background:linear-gradient(135deg,#D4AF37,#C9A227,#B8941F);',
-            'color:#fff;font-family:Poppins,sans-serif;',
-            'font-size:0.95rem;font-weight:600;cursor:pointer;',
-            'box-shadow:0 6px 22px rgba(201,162,39,0.45);',
-            'transition:transform 0.15s,box-shadow 0.15s',
-          '">▸ Move to Next Scene</button>',
+          '<button id="ppLandingExploreBtn" style="padding:13px 22px;border-radius:50px;border:2px solid rgba(201,168,76,0.65);background:transparent;color:#8B6914;font-family:Poppins,sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;transition:background 0.2s,border-color 0.2s">🔍 Continue Exploring</button>',
+          '<button id="ppLandingProceedBtn" style="padding:14px 22px;border-radius:50px;border:none;background:linear-gradient(135deg,#D4AF37,#C9A227,#B8941F);color:#fff;font-family:Poppins,sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;box-shadow:0 6px 22px rgba(201,162,39,0.45);transition:transform 0.15s,box-shadow 0.15s">▸ Move to Next Scene</button>',
         '</div>',
       '</div>'
     ].join('');
 
     document.body.appendChild(ov);
 
-    /* ── fade in ── */
     requestAnimationFrame(function () {
       requestAnimationFrame(function () { ov.style.opacity = '1'; });
     });
 
-    /* ── hover effect on explore button ── */
     var exploreBtn = document.getElementById('ppLandingExploreBtn');
     var proceedBtn = document.getElementById('ppLandingProceedBtn');
 
-    exploreBtn.addEventListener('mouseover', function () {
-      this.style.background = 'rgba(201,168,76,0.08)';
-      this.style.borderColor = 'rgba(201,168,76,1)';
-    });
-    exploreBtn.addEventListener('mouseout', function () {
-      this.style.background = 'transparent';
-      this.style.borderColor = 'rgba(201,168,76,0.65)';
-    });
-    proceedBtn.addEventListener('mouseover', function () {
-      this.style.transform = 'translateY(-2px) scale(1.02)';
-      this.style.boxShadow = '0 8px 28px rgba(201,162,39,0.6)';
-    });
-    proceedBtn.addEventListener('mouseout', function () {
-      this.style.transform = '';
-      this.style.boxShadow = '0 6px 22px rgba(201,162,39,0.45)';
-    });
+    exploreBtn.addEventListener('mouseover', function () { this.style.background='rgba(201,168,76,0.08)'; this.style.borderColor='rgba(201,168,76,1)'; });
+    exploreBtn.addEventListener('mouseout',  function () { this.style.background='transparent'; this.style.borderColor='rgba(201,168,76,0.65)'; });
+    proceedBtn.addEventListener('mouseover', function () { this.style.transform='translateY(-2px) scale(1.02)'; this.style.boxShadow='0 8px 28px rgba(201,162,39,0.6)'; });
+    proceedBtn.addEventListener('mouseout',  function () { this.style.transform=''; this.style.boxShadow='0 6px 22px rgba(201,162,39,0.45)'; });
 
-    /* ── dismiss helper ── */
     function dismiss() {
       ov.style.opacity = '0';
-      setTimeout(function () {
-        if (ov.parentNode) ov.parentNode.removeChild(ov);
-      }, 420);
+      setTimeout(function () { if (ov.parentNode) ov.parentNode.removeChild(ov); }, 420);
     }
 
-    /* ── Explore: just close overlay ── */
-    exploreBtn.addEventListener('click', dismiss);
+    exploreBtn.addEventListener('click', function () {
+      dismiss();
+      setTimeout(onExplore, 450);
+    });
 
-    /* ── Proceed: close then trigger the scene's own continue flow ── */
     proceedBtn.addEventListener('click', function () {
       dismiss();
-      setTimeout(function () {
-        /* 1. scene-specific override */
-        if (typeof window._ppLandingProceed === 'function') {
-          window._ppLandingProceed();
-          return;
-        }
-        /* 2. auto-detect the primary continue button in this scene */
-        var continueSel = [
-          '#continueBtn',
-          '.continue-btn',
-          '#umrahTrimContinue',
-          '#barberContinue',
-          '#qurbaniContinue'
-        ].join(',');
-        var btn = document.querySelector(continueSel);
-        if (btn) {
-          btn.click();
-          return;
-        }
-        /* 3. fallback: journey manager goToNext (also triggers quiz) */
-        if (window.jm && typeof window.jm.goToNext === 'function') {
-          window.jm.goToNext();
-          return;
-        }
-        /* 4. last resort: show the journey nav next button if visible */
-        var jnb = document.getElementById('journeyNextBtn') || document.querySelector('[id*="journeyNext"]');
-        if (jnb) jnb.click();
-      }, 450); /* slight delay so overlay fade is done */
+      setTimeout(onProceed, 450);
     });
-  }
-
-  whenReady(init);
+  };
 })();
