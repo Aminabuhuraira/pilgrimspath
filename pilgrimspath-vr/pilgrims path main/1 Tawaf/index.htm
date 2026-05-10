@@ -995,7 +995,7 @@ function _renderBannerPage(){
     var el=document.getElementById('sceneBanner');
     if(!el) return;
     var isLast=_bannerPager.index>=_bannerPager.pages.length-1;
-    var btn=isLast?'Continue ?':'Next ?';
+    var btn=isLast?'Continue \u276F':'Next \u276F';
     el.innerHTML='<div class="sceneBannerBody"><h3>'+_bannerPager.title+'</h3>'+_bannerPager.pages[_bannerPager.index]+'<button onclick="dismissBanner()">'+btn+'</button></div>';
     el.style.display='block';
 }
@@ -1053,7 +1053,7 @@ function playVO(f){
         });
     }
 }
-function _showVoHint(){
+function _showVoHint(){ return; return;
     if(document.getElementById('voHint')) return;
     var h = document.createElement('div');
     h.id = 'voHint';
