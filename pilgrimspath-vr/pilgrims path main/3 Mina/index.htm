@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>Mina tents </title>
-    <script src="/admin-journey-content.js?v=18"></script>
+    <script src="/admin-journey-content.js?v=19"></script>
     <script src="/journey-content-loader.js?v=39"></script>
     <!-- Meta Pixel Code -->
     <script>
@@ -259,7 +259,7 @@ function _showMinaEndModal(){
     if(typeof showJourneyNextButton==='function'){ showJourneyNextButton(); }
   };
 }
-// PerformanceObserver + Image.src hijack removed — fires on adjacent-pano
+// PerformanceObserver + Image.src hijack removed ï¿½ fires on adjacent-pano
 // preloads causing banners/VOs to play before user actually navigates there.
 // TDV hook below is the only trigger.
 function hookTDV(){if(typeof TDV==='undefined'||!TDV.Tour||!TDV.Tour.Script)return setTimeout(hookTDV,500);var o1=TDV.Tour.Script.setPlayListSelectedIndex;if(o1){TDV.Tour.Script.setPlayListSelectedIndex=function(a,b){try{var id=a.get('items')[b].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}catch(e){}return o1.apply(this,arguments);};}var o2=TDV.Tour.Script.setMainMediaByIndex;if(o2){TDV.Tour.Script.setMainMediaByIndex=function(a){try{var items=this.mainPlayList.get('items');if(a>=0&&a<items.length){var id=items[a].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}}catch(e){}return o2.apply(this,arguments);};}console.log('[Mina] banner hooks installed (ctx='+journeyContext+')');}

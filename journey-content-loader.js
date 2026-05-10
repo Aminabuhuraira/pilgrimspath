@@ -715,6 +715,7 @@ window.addEventListener('storage', function(e){
     /* ── Banner shell: cream card, gold border ── */
     '#sceneBanner{'
     + 'width:min(90vw,860px)!important;'
+    + 'max-width:none!important;'
     + 'min-height:auto!important;'
     + 'max-height:88vh!important;'
     + 'background:rgba(255,252,242,0.98)!important;'
