@@ -6,28 +6,93 @@
 
 require('dotenv').config();
 
-const express = require('express');
-const path    = require('path');
-const fs      = require('fs');
+const express      = require('express');
+const path         = require('path');
+const fs           = require('fs');
+const cookieParser = require('cookie-parser');
+const jwt          = require('jsonwebtoken');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
+
+// ── Cookie parser (needed to read pp_access and pp_admin_session) ─
+app.use(cookieParser());
 
 // ── Body parsers ──────────────────────────────────────────────
 app.use(express.json({ limit: '100kb' }));
 app.use(express.urlencoded({ extended: false, limit: '100kb' }));
 
-// ── Security headers (mirrors vercel.json) ────────────────────
+// ── Security headers ──────────────────────────────────────────
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options',  'nosniff');
   res.setHeader('X-Frame-Options',         'SAMEORIGIN');
   res.setHeader('Referrer-Policy',         'strict-origin-when-cross-origin');
   res.setHeader('Permissions-Policy',      'geolocation=(), microphone=(), camera=(self), gyroscope=(self), accelerometer=(self)');
+  // Content-Security-Policy — allows the Supabase client, Paystack, Meta Pixel,
+  // Google Fonts, and the 3DVista VR engine (requires unsafe-inline + blob:).
+  res.setHeader('Content-Security-Policy',
+    "default-src 'self'; " +
+    "script-src 'self' 'unsafe-inline' https://js.paystack.co https://cdn.jsdelivr.net https://connect.facebook.net; " +
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+    "font-src 'self' https://fonts.gstatic.com; " +
+    "img-src 'self' data: blob: https:; " +
+    "connect-src 'self' https://*.supabase.co https://api.paystack.co https://graph.facebook.com; " +
+    "media-src 'self' blob:; " +
+    "worker-src blob:; " +
+    "frame-src https://checkout.paystack.com; " +
+    "frame-ancestors 'none';"
+  );
   if (req.secure || req.headers['x-forwarded-proto'] === 'https') {
     res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
   }
   next();
 });
+
+// ── VR access gate ────────────────────────────────────────────
+// ALL /pilgrimspath-vr/** requests require a valid pp_access JWT cookie.
+// The cookie is issued by /api/paystack-verify on confirmed payment.
+function requireVrAccess(req, res, next) {
+  const token = req.cookies && req.cookies.pp_access;
+  if (!token) {
+    // Redirect browser requests to the VR launch page; reject asset fetches
+    if (req.headers.accept && req.headers.accept.includes('text/html')) {
+      return res.redirect(302, '/hajj-vr');
+    }
+    return res.status(403).send('Forbidden');
+  }
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    console.error('[VR Gate] JWT_SECRET is not set — blocking access');
+    return res.status(503).send('Service temporarily unavailable');
+  }
+  try {
+    jwt.verify(token, secret);
+    next();
+  } catch {
+    res.clearCookie('pp_access', { path: '/' });
+    if (req.headers.accept && req.headers.accept.includes('text/html')) {
+      return res.redirect(302, '/hajj-vr');
+    }
+    return res.status(403).send('Forbidden');
+  }
+}
+app.use('/pilgrimspath-vr', requireVrAccess);
+
+// ── Admin session gate ────────────────────────────────────────
+// Protect the admin panel with a server-side signed session cookie.
+function requireAdminSession(req, res, next) {
+  const token = req.cookies && req.cookies.pp_admin_session;
+  const secret = process.env.JWT_SECRET;
+  if (!token || !secret) return res.redirect(302, '/sanctum-admin-7f3k9q2m?auth=1');
+  try {
+    const payload = jwt.verify(token, secret);
+    if (payload.role !== 'admin') throw new Error('not admin');
+    next();
+  } catch {
+    res.clearCookie('pp_admin_session', { path: '/' });
+    return res.redirect(302, '/sanctum-admin-7f3k9q2m?auth=1');
+  }
+}
 
 // ── Mount all api/* handlers ──────────────────────────────────
 const API_DIR = path.join(__dirname, 'api');
@@ -47,7 +112,8 @@ const apiFiles = fs.readdirSync(API_DIR).filter(f => f.endsWith('.js') && !f.sta
 apiFiles.forEach(f => console.log(`  ✓ /api/${f.replace('.js', '')}`));
 
 // ── Admin route alias ─────────────────────────────────────────
-// /sanctum-admin-7f3k9q2m → admin.html (keep URL in browser bar as-is)
+// Serve the admin HTML only. The login form POSTs to /api/admin-auth.
+// The dashboard content is shown only after pp_admin_session cookie is set.
 app.get('/sanctum-admin-7f3k9q2m', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin.html'));
 });

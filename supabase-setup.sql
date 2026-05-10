@@ -23,10 +23,20 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
 -- 3. RLS Policies
--- Allow all authenticated users to read all profiles (needed for admin dashboard)
-CREATE POLICY "Authenticated users can read all profiles"
+-- Users may only read their own profile (fixes M3 — PII leak)
+CREATE POLICY "Users read own profile"
     ON public.profiles FOR SELECT
-    USING (auth.role() = 'authenticated');
+    USING (auth.uid() = id);
+
+-- Admins may read all profiles (is_admin flag added below)
+CREATE POLICY "Admins read all profiles"
+    ON public.profiles FOR SELECT
+    USING (
+        EXISTS (
+            SELECT 1 FROM public.profiles p
+            WHERE p.id = auth.uid() AND p.is_admin = true
+        )
+    );
 
 -- Allow users to update their own profile
 CREATE POLICY "Users can update own profile"
@@ -37,6 +47,26 @@ CREATE POLICY "Users can update own profile"
 CREATE POLICY "Allow insert for service role"
     ON public.profiles FOR INSERT
     WITH CHECK (true);
+
+-- 3b. Add is_admin column (run once; safe to re-run)
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT false;
+-- Grant admin flag to the site admin:
+-- UPDATE public.profiles SET is_admin = true WHERE email = 'admin@pilgrimspath.io';
+
+-- 3c. paid_users table — records confirmed Paystack payments
+CREATE TABLE IF NOT EXISTS public.paid_users (
+    email TEXT PRIMARY KEY,
+    paid_at TIMESTAMPTZ DEFAULT NOW(),
+    paystack_ref TEXT,
+    plan TEXT DEFAULT 'hajj',
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+ALTER TABLE public.paid_users ENABLE ROW LEVEL SECURITY;
+-- Only service role (server) can write; nobody can read via anon key
+CREATE POLICY "Service role manages paid_users"
+    ON public.paid_users FOR ALL
+    USING (false)
+    WITH CHECK (false);
 
 -- 4. Trigger: auto-create profile when a new user signs up
 CREATE OR REPLACE FUNCTION public.handle_new_user()

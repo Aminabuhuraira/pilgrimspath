@@ -4,12 +4,12 @@
   "description": "The world's first free, immersive VR Hajj and Umrah experience platform.",
   "main": "server.js",
   "scripts": {
-    "start":      "node server.js",
-    "dev":        "node tools/serve.js",
-    "pm2:start":  "pm2 start ecosystem.config.js",
-    "pm2:stop":   "pm2 stop pilgrimspath",
-    "pm2:logs":   "pm2 logs pilgrimspath",
-    "test":       "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "dev": "node tools/serve.js",
+    "pm2:start": "pm2 start ecosystem.config.js",
+    "pm2:stop": "pm2 stop pilgrimspath",
+    "pm2:logs": "pm2 logs pilgrimspath",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -26,8 +26,11 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.20.0",
     "@supabase/supabase-js": "^2.39.0",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.3",
     "nodemailer": "^6.9.13"
   },
   "devDependencies": {

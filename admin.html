@@ -931,18 +931,10 @@ Example: Write 5 Instagram captions for promoting our VR Hajj experience during 
 </main>
 
 <script>
-// === ADMIN LOGIN (inline, after all DOM elements) ===
+// === ADMIN LOGIN — server-side authentication ===
+// Credentials are verified by /api/admin-auth (bcrypt + JWT).
+// No password hash or email is stored here.
 var ADMIN_ROUTE='/sanctum-admin-7f3k9q2m';
-var ADMIN_EMAIL='admin@pilgrimspath.io';
-var ADMIN_PASSWORD_HASH='eec8d46bd81e5c374c46c6466c6783a7b086d61df00b35e798c6fab16e3d7010';
-
-async function sha256Hex(value){
-    var bytes=new TextEncoder().encode(value);
-    var hash=await crypto.subtle.digest('SHA-256',bytes);
-    return Array.from(new Uint8Array(hash)).map(function(b){
-        return b.toString(16).padStart(2,'0');
-    }).join('');
-}
 
 async function handleAdminLogin(e){
     e.preventDefault();
@@ -954,15 +946,21 @@ async function handleAdminLogin(e){
     btn.disabled=true;
     btn.textContent='Checking...';
     try{
-        var pwHash=await sha256Hex(pw);
-        if(email===ADMIN_EMAIL&&pwHash===ADMIN_PASSWORD_HASH){
-        sessionStorage.setItem('pp_admin_auth_v2',Date.now().toString());
-        showDashboard();
+        var resp=await fetch('/api/admin-auth',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({email:email,password:pw}),
+            credentials:'same-origin'
+        });
+        if(resp.ok){
+            showDashboard();
         }else{
-            err.textContent='Invalid email or password.';
+            var body={};
+            try{body=await resp.json();}catch(_){}
+            err.textContent=body.error||'Invalid email or password.';
         }
     }catch(e2){
-        err.textContent='Could not verify admin credentials in this browser.';
+        err.textContent='Network error — please try again.';
     }finally{
         btn.disabled=false;
         btn.textContent='Sign In';
@@ -975,17 +973,19 @@ function showDashboard(){
     document.getElementById('adminSidebar').style.display='';
     document.getElementById('adminMain').style.display='';
 }
-// Auto-login if session is valid
+// Show dashboard immediately if the server-side session cookie is present.
+// The cookie is HttpOnly so JS cannot read it; we detect session validity by
+// calling a lightweight check endpoint instead.
 (function(){
     var isLocalHost=/^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname);
     if(!isLocalHost&&/\/admin\.html$/i.test(window.location.pathname)){
         window.location.replace(ADMIN_ROUTE);
         return;
     }
-    var a=sessionStorage.getItem('pp_admin_auth_v2');
-    if(a&&(Date.now()-parseInt(a))<28800000){
-        showDashboard();
-    }
+    // Check whether a valid server session cookie exists
+    fetch('/api/admin-auth-check',{method:'GET',credentials:'same-origin'})
+        .then(function(r){if(r.ok)showDashboard();})
+        .catch(function(){});
 })();
 </script>
 <script src="admin-dashboard.js?v=4"></script>

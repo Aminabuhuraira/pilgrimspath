@@ -4,6 +4,7 @@
 
 const https = require('https');
 const http  = require('http');
+const jwt   = require('jsonwebtoken');
 
 const { applyCors, rateLimit } = require('./_security');
 
@@ -74,6 +75,25 @@ module.exports = async function handler(req, res) {
       const firstName = meta.firstName || meta.first_name || '';
       const plan = (meta.plan && meta.plan.toLowerCase().includes('umrah')) ? 'umrah' : 'hajj';
       if (customerEmail) sendWelcomeEmail(customerEmail, firstName, plan);
+
+      // Issue a signed access cookie granting entry to the VR experience.
+      // HttpOnly + Secure so it cannot be read or forged by client-side JS.
+      const jwtSecret = process.env.JWT_SECRET;
+      if (jwtSecret) {
+        const accessToken = jwt.sign(
+          { email: customerEmail, paid: true, ref: reference, plan },
+          jwtSecret,
+          { expiresIn: '365d' }
+        );
+        const isHttps = (res.req && res.req.headers['x-forwarded-proto'] === 'https') ||
+                        (res.socket && res.socket.encrypted);
+        const cookieFlags = isHttps
+          ? 'HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=31536000'
+          : 'HttpOnly; SameSite=Strict; Path=/; Max-Age=31536000';
+        res.setHeader('Set-Cookie', `pp_access=${accessToken}; ${cookieFlags}`);
+      } else {
+        console.warn('[Paystack Verify] JWT_SECRET not set — skipping access cookie');
+      }
     }
 
     return res.status(200).json(result);
