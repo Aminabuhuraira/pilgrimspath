@@ -21,7 +21,12 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 -- 2. Enable Row Level Security
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
--- 3. RLS Policies — drop first so this script is idempotent
+-- 3. Add is_admin column FIRST — policies below reference it
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT false;
+-- Grant admin flag to the site admin (uncomment and run once):
+-- UPDATE public.profiles SET is_admin = true WHERE email = 'admin@pilgrimspath.io';
+
+-- 3b. RLS Policies — drop first so this script is idempotent
 DROP POLICY IF EXISTS "Authenticated users can read all profiles" ON public.profiles;
 DROP POLICY IF EXISTS "Users read own profile" ON public.profiles;
 DROP POLICY IF EXISTS "Admins read all profiles" ON public.profiles;
@@ -33,7 +38,7 @@ CREATE POLICY "Users read own profile"
     ON public.profiles FOR SELECT
     USING (auth.uid() = id);
 
--- Admins may read all profiles (is_admin flag added below)
+-- Admins may read all profiles
 CREATE POLICY "Admins read all profiles"
     ON public.profiles FOR SELECT
     USING (
@@ -52,11 +57,6 @@ CREATE POLICY "Users can update own profile"
 CREATE POLICY "Allow insert for service role"
     ON public.profiles FOR INSERT
     WITH CHECK (true);
-
--- 3b. Add is_admin column (run once; safe to re-run)
-ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT false;
--- Grant admin flag to the site admin:
--- UPDATE public.profiles SET is_admin = true WHERE email = 'admin@pilgrimspath.io';
 
 -- 3c. paid_users table — records confirmed Paystack payments
 CREATE TABLE IF NOT EXISTS public.paid_users (
