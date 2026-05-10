@@ -1668,4 +1668,27 @@ console.log('[JourneyNav] Initialized');
   document.addEventListener('webkitfullscreenchange', onFsChange);
 })();
 
+// ── Disable 3DVista panorama-name tooltips via TDV Player API ──────────────
+// The CSS selector (span[style*="pointer-events: none"]...) handles DOM-based
+// tooltips. For the WebGL/3D-rendered tooltips used in panoramic mode we must
+// use the player API. Setting displayTooltipInSurfaceSelection:false stops the
+// panorama label from being surfaced as a tooltip when hovering transition areas.
+(function disablePanoTooltips(){
+  function attempt(){
+    try{
+      if(typeof TDV === 'undefined' || !TDV.PlayerAPI || typeof TDV.PlayerAPI.getCurrentPlayer !== 'function') return false;
+      var p = TDV.PlayerAPI.getCurrentPlayer();
+      if(!p) return false;
+      p.set('displayTooltipInSurfaceSelection', false);
+      return true;
+    }catch(e){ return false; }
+  }
+  if(!attempt()){
+    var tries = 0, iv = setInterval(function(){
+      tries++;
+      if(attempt() || tries > 20) clearInterval(iv);
+    }, 500);
+  }
+})();
+
 })();
