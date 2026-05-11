@@ -84,14 +84,13 @@ registerRoute(
 );
 
 // ─── 5. CSS & JS (site styles and scripts — same-origin only) ───
-// Explicitly exclude external scripts (Facebook Pixel, Meta, etc.) so the SW
-// doesn't try to StaleWhileRevalidate a CDN request that might be blocked,
-// which causes "no-response" console errors.
+// NetworkFirst so that version-bumped files always load fresh.
+// Cache is used only as an offline fallback.
 registerRoute(
   ({ request, url }) => (request.destination === 'style' || request.destination === 'script') &&
     url.origin === self.location.origin,
-  new StaleWhileRevalidate({
-    cacheName: 'static-assets',
+  new NetworkFirst({
+    cacheName: 'static-assets-v2',
     plugins: [
       new CacheableResponsePlugin({ statuses: [0, 200] }),
       new ExpirationPlugin({
@@ -156,7 +155,14 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(clients.claim());
+  // Delete stale caches from previous SW versions
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys.filter(k => k === 'static-assets').map(k => caches.delete(k))
+      )
+    ).then(() => clients.claim())
+  );
 });
 
 // ─── Cache-name helper (must mirror sw.js routing strategies) ───
