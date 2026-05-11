@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>tawaf area</title>
     <link rel="icon" type="image/png" sizes="512x512" href="/images/Pilgrims_Path-removebg-preview.png">
     <script src="/admin-journey-content.js?v=19"></script>
-    <script src="/journey-content-loader.js?v=39"></script>
+    <script src="/journey-content-loader.js?v=43"></script>
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -41,7 +41,7 @@
     <script src="script.js?v=1776284580066"></script>
     <script src="../../journey-manager.js?v=6" defer></script>
     <script src="../../quiz-content.js?v=6" defer></script>
-<script src="../../journey-nav.js?v=30" defer></script>
+<script src="../../journey-nav.js?v=31" defer></script>
     <style type="text/css">
         html, body { height:100%; width:100%; height:100vh; width:100vw; margin:0; padding:0; overflow:hidden; }
         .fill-viewport { position:fixed; top:0; left:0; right:0; bottom:0; padding:0; margin:0; overflow: hidden; }
@@ -892,7 +892,7 @@
         }
     }
     function ihramStep2PlayVO(){
-        // Skip if JCM already played the button VO via continueAfter — avoids
+        // Skip if JCM already played the button VO via continueAfter � avoids
         // double-play and prevents a stale _voUnlockBound from blocking the
         // upcoming panorama banner audio from _bannerChk.
         if(window._ppContAfterFired) return;
@@ -927,6 +927,10 @@
         var guide = document.getElementById('ihramGuide');
         guide.classList.add('hidden');
         setTimeout(function() { guide.style.display = 'none'; }, 900);
+        // If JCM continueAfter already played the intro VO and will show the
+        // Next Stop button, skip the panorama banner chain so the screen is
+        // clean (no overlapping banner + Next Stop button at the same time).
+        if(window._ppContAfterFired) return;
         // Trigger first banner check after Ihram guide dismisses
         setTimeout(function(){ if(typeof _bannerChk==='function') _bannerChk(_bannerFirstId); }, 1200);
     }

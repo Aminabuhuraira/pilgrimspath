@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>safa da marwa</title>
     <link rel="icon" type="image/png" sizes="512x512" href="/images/Pilgrims_Path-removebg-preview.png">
     <script src="/admin-journey-content.js?v=19"></script>
-    <script src="/journey-content-loader.js?v=39"></script>
+    <script src="/journey-content-loader.js?v=43"></script>
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -159,7 +159,7 @@ if (window.PPContent && window.PPContent.hasData) {
   _audioMap  = window.PPContent.audioMapByPano('safa-marwa')  || {};
 }
 
-// -- Deduplication � persisted across same-session reloads -----------------
+// -- Deduplication ? persisted across same-session reloads -----------------
 var shown = {}, lastId = '';
 var _shownKey = 'pp_shown_safa_marwa';
 try { var _ss = sessionStorage.getItem(_shownKey); if (_ss) { var _p = JSON.parse(_ss); if (_p && typeof _p === 'object') { shown = _p; } } } catch(_e) {}
@@ -193,7 +193,7 @@ function chk(id) {
   }
 }
 
-// TDV hook only � no PerformanceObserver/Image hijack (fires on adjacent-pano preloads)
+// TDV hook only ? no PerformanceObserver/Image hijack (fires on adjacent-pano preloads)
 function hookTDV(){if(typeof TDV==='undefined'||!TDV.Tour||!TDV.Tour.Script)return setTimeout(hookTDV,500);var o1=TDV.Tour.Script.setPlayListSelectedIndex;if(o1){TDV.Tour.Script.setPlayListSelectedIndex=function(a,b){try{var id=a.get('items')[b].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}catch(e){}return o1.apply(this,arguments);};}var o2=TDV.Tour.Script.setMainMediaByIndex;if(o2){TDV.Tour.Script.setMainMediaByIndex=function(a){try{var items=this.mainPlayList.get('items');if(a>=0&&a<items.length){var id=items[a].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}}catch(e){}return o2.apply(this,arguments);};}console.log('[SafaMarwa] banner hooks installed');}
 hookTDV();
 
@@ -205,7 +205,7 @@ setTimeout(function(){try{var t=TDV.PlayerAPI.getCurrentPlayer();var pl=t&&t.mai
 <!-- Journey Navigation -->
 <script src="../../journey-manager.js?v=7" defer></script>
 <script src="../../quiz-content.js?v=6" defer></script>
-<script src="../../journey-nav.js?v=30" defer></script>
+<script src="../../journey-nav.js?v=31" defer></script>
 
 <!-- --- Sa'i Lap Counter HUD (top, matches Tawaf style) --- -->
 <style>

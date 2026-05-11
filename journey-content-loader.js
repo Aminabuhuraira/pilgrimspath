@@ -518,28 +518,49 @@ function autoWireButtons(){
       window._welcomeVoStarted = true;
       var resume = function(){ resumeButtonAction(el); };
 
-      // continueAfter: play VO via a tracked Audio object, then auto-fire the
-      // native button action when audio ends — no banner required, audio not killed
+      // continueAfter: play VO, then auto-fire the button's native action when
+      // audio ends — no banner needed.  Handles mobile autoplay policy: if
+      // play() is blocked, retries on the next user gesture (tap anywhere).
+      // After the VO finishes, the "Next Stop →" button is shown so the
+      // journey can continue without a manual "Continue" click.
       if(b.continueAfter && b.audio){
         try{ if(window._voAudio){ window._voAudio.pause(); window._voAudio = null; } }catch(_){ }
         try{ if(window._ppFallbackVO){ window._ppFallbackVO.pause(); window._ppFallbackVO = null; } }catch(_){ }
-        var autoA = new Audio(audioUrl(b.audio));
-        window._ppFallbackVO = autoA;
-        var _contAfterDone = function(){
-          // Reset stale VO unlock state so subsequent playVO calls can install
-          // fresh handlers without being blocked by a stale _voUnlockBound flag.
+        var _caA = new Audio(audioUrl(b.audio));
+        window._ppFallbackVO = _caA;
+        var _caDone = false;
+        var _caUnlock = null;
+        var _caFinish = function(){
+          if(_caDone) return; _caDone = true;
+          if(_caUnlock){ document.removeEventListener('click',_caUnlock,true); document.removeEventListener('touchend',_caUnlock,true); }
           window._voUnlockBound = false;
-          // Signal native onclick handlers that JCM already played the button VO
-          // so they can skip redundant audio playback (e.g. ihramStep2PlayVO).
           window._ppContAfterFired = true;
           resume();
-          // Clean up the flag after native onclick and its microtasks have settled
-          setTimeout(function(){ delete window._ppContAfterFired; }, 2500);
+          // Show "Next Stop →" after the guide closes so the user can proceed
+          setTimeout(function(){
+            window.journeyIsLastPanorama = true;
+            if(typeof window.showJourneyNextButton === 'function') window.showJourneyNextButton();
+            delete window._ppContAfterFired;
+          }, 1500);
         };
-        autoA.addEventListener('ended', _contAfterDone);
-        autoA.addEventListener('error', _contAfterDone);
-        var _pp = autoA.play();
-        if(_pp && _pp.catch){ _pp.catch(_contAfterDone); }
+        _caA.addEventListener('ended', _caFinish);
+        _caA.addEventListener('error', _caFinish);
+        _caA.load(); // preload so play() has data ready immediately
+        var _caP = _caA.play();
+        if(_caP && _caP.catch){
+          _caP.catch(function(){
+            // Autoplay blocked (common on mobile) — retry on next tap/click
+            if(!_caDone){
+              _caUnlock = function(){
+                document.removeEventListener('click',_caUnlock,true);
+                document.removeEventListener('touchend',_caUnlock,true);
+                _caA.play().catch(_caFinish);
+              };
+              document.addEventListener('click',_caUnlock,true);
+              document.addEventListener('touchend',_caUnlock,true);
+            }
+          });
+        }
         return;
       }
 

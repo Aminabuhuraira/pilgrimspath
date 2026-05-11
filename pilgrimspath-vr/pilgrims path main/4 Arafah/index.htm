@@ -1,10 +1,10 @@
-﻿?<!DOCTYPE html>
+?<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Arafah</title>
     <link rel="icon" type="image/png" sizes="512x512" href="/images/Pilgrims_Path-removebg-preview.png">
     <script src="/admin-journey-content.js?v=19"></script>
-    <script src="/journey-content-loader.js?v=39"></script>
+    <script src="/journey-content-loader.js?v=43"></script>
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -157,7 +157,7 @@ var _arafahSeq = (window.PPContent && window.PPContent.hasData)
   : [];
 /* Only the first banner plays at intro. After dismissing it the standard
    Next-Stop button surfaces so the user can proceed to Muzdalifah whenever
-   they're ready. Banners 2 & 3 are NOT auto-played here � their content is
+   they're ready. Banners 2 & 3 are NOT auto-played here ? their content is
    about leaving Arafah / arriving at Muzdalifah and would feel out of
    place while the user is still exploring this panorama. */
 function _showArafahIntro(){
@@ -239,7 +239,7 @@ function _playRemainingArafahNarration(idx){
     };
   },50);
 }
-// -- TDV hook only � no PerformanceObserver/Image hijack -----------------
+// -- TDV hook only ? no PerformanceObserver/Image hijack -----------------
 var shown = {}, lastId = '';
 function chk(id) {
   // Entry panorama (84B0CD28): play the intro directly, no prompt
@@ -248,15 +248,15 @@ function chk(id) {
     _showArafahIntro();
     return;
   }
-  // Target panorama (84B78C66 � 15-09-02 screenshot): show the landing prompt
+  // Target panorama (84B78C66 ? 15-09-02 screenshot): show the landing prompt
   if (id.indexOf('84B78C66') !== -1 && !shown[id]) {
     shown[id] = true;
     if (typeof window.ppShowLandingPrompt === 'function') {
       window.ppShowLandingPrompt({
         icon: '??',
         title: 'The Plains of Arafah',
-        subtitle: 'You stand at the most sacred station of Hajj. Continue exploring � or move on with your pilgrimage.',
-        onExplore: function () { /* user stays and explores � nothing else to fire */ },
+        subtitle: 'You stand at the most sacred station of Hajj. Continue exploring ? or move on with your pilgrimage.',
+        onExplore: function () { /* user stays and explores ? nothing else to fire */ },
         onProceed: function () {
           window.journeyIsLastPanorama = true;
           if (typeof window.proceedWithQuiz === 'function') {
@@ -295,7 +295,7 @@ setTimeout(function(){
 <!-- Journey Navigation -->
 <script src="../../journey-manager.js?v=6" defer></script>
 <script src="../../quiz-content.js?v=6" defer></script>
-<script src="../../journey-nav.js?v=30" defer></script>
+<script src="../../journey-nav.js?v=31" defer></script>
 
 <!-- Landing panorama choice prompt -->
 <script src="/scene-landing-prompt.js?v=2" defer></script>
