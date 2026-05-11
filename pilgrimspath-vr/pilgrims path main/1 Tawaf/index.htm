@@ -62,6 +62,11 @@
             font-family: 'Poppins', Arial, sans-serif;
             overflow: hidden;
             transition: opacity 0.8s ease;
+            /* Safe area: with viewport-fit=cover the guide extends under the notch
+               and home indicator. Padding here keeps the flex content (card) in
+               the visible safe zone so top text is never hidden under the status bar. */
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
         }
         #ihramGuide.hidden {
             opacity: 0; pointer-events: none;

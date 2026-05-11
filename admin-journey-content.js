@@ -383,6 +383,13 @@ var injectedTplCss = {}; // template ID → true once injected
 function load(){
   try{
     var raw = localStorage.getItem(STORAGE_KEY);
+    // Mojibake guard: Windows-1252 mis-read of UTF-8 emoji produces U+00F0 + U+0178
+    // (ð + Ÿ). If detected, wipe the key and re-seed from clean DEFAULT_DATA.
+    if(raw && /\u00f0[\u0178\u009f]/.test(raw)){
+      console.warn('[JourneyContent] mojibake in stored data — clearing and re-seeding');
+      try{ localStorage.removeItem(STORAGE_KEY); }catch(_){}
+      raw = null;
+    }
     if(raw){
       data = JSON.parse(raw);
       // Migrate older entries: add template/position defaults

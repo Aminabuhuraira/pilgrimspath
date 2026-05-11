@@ -115,6 +115,9 @@
       '.scnItem.scnDoneItem .scnItemName{color:#86efac;}',
       /* push other bottom-anchored UI up so they do not collide with the rail */
       '#muzdHud,#muzdPouch{bottom:80px !important;}',
+      /* Scene-specific action buttons must clear the rail (~70px tall on desktop) */
+      '#jamarThrowBtn,#minaContinue,#umrahTrimContinue,#barberContinue{bottom:82px !important;}',
+      '#jamarAimHint{bottom:calc(82px + 54px) !important;}',  /* aim hint above throw btn */
       /* ===== Mobile: bottom rail stays at bottom — compact items, horizontal scroll ===== */
       '@media(max-width:640px){',
         '#scnRailInner{gap:4px;padding:4px 6px 5px;}',
@@ -134,6 +137,11 @@
         '.scnItemName{font-size:7.5px;max-width:36px;}',
         /* HUDs stay above the bottom rail */
         '#muzdHud,#muzdPouch{left:auto !important;right:14px !important;transform:none !important;}',
+        /* On mobile, action buttons need extra clearance for safe area + rail */
+        '#jamarThrowBtn,#minaContinue,#umrahTrimContinue,#barberContinue{bottom:calc(70px + env(safe-area-inset-bottom,0px)) !important;}',
+        '#jamarAimHint{bottom:calc(126px + env(safe-area-inset-bottom,0px)) !important;}',
+        /* add safe-area-inset-bottom to rail inner so content isn\'t hidden under home bar */
+        '#scnRailInner{padding-bottom:calc(5px + env(safe-area-inset-bottom,0px)) !important;}',
         'body.ppOverlayActive #scnRail,.ppOverlayActive #scnRail{display:none !important;opacity:0 !important;pointer-events:none !important;}',
       '}'
     ].join('');
