@@ -18,7 +18,9 @@ if(window.location && window.location.protocol === 'http:' && window.location.ho
   window.location.replace('http://127.0.0.1:3000' + window.location.pathname + window.location.search + window.location.hash);
   return;
 }
-var KEY = 'pp_journey_content_v1';
+// v1 key may contain mojibake data saved on Windows machines — always purge it.
+try{ localStorage.removeItem('pp_journey_content_v1'); }catch(_){}
+var KEY = 'pp_journey_content_v2';
 var LANG_KEY = 'pp_user_lang';
 var AUDIO_BASE_ROOT = '/Hajj%20voiceover%20english/';
 var DEFAULT_LANG_FOLDERS = {en:'English/',ar:'Arabic/',fr:'French/',ur:'Urdu/',tr:'Turkish/',id:'Indonesian/',ms:'Malay/',es:'Spanish/',fa:'Persian/'};
@@ -30,7 +32,7 @@ var data = null;
 (function(){
   var raw = '';
   try{ raw = localStorage.getItem(KEY) || ''; }catch(_){}
-  var hasMojibake = raw && (/\u00f0[\u0178\u009f]|\u00e2\u0081[\u00a0-\u00af]/.test(raw));
+  var hasMojibake = raw && (/\u00f0[\u0178\u009f]|\u00c3\u00b0[\u00c5\u00b8]|ðŸ|ðŸ•/.test(raw));
   if(hasMojibake){
     console.warn('[PPContent] mojibake detected in stored journey content — clearing corrupted data');
     try{ localStorage.removeItem(KEY); }catch(_){}

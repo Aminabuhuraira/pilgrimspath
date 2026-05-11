@@ -9,7 +9,7 @@
 (function(){
 'use strict';
 
-var STORAGE_KEY = 'pp_journey_content_v1';
+var STORAGE_KEY = 'pp_journey_content_v2';
 var AUDIO_BASE_ROOT = '/hajj%20voiceover%20english/';
 var SEED_VERSION = 21; // bump to force re-sync of banner text/audio from DEFAULT_DATA
 // Banner IDs whose text/audio MUST be force-overwritten from DEFAULT_DATA on the next

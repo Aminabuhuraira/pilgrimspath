@@ -815,7 +815,7 @@ function _ppMerge(){
   }catch(_){}
 }
 _ppMerge();
-window.addEventListener('storage',function(e){if(e&&e.key==='pp_journey_content_v1'){_ppMerge();}});
+window.addEventListener('storage',function(e){if(e&&e.key==='pp_journey_content_v2'){_ppMerge();}});
 _jbChk=function(id){var b=BANNERS[id];if(!b||shown[id])return;shown[id]=true;if(b.title||b.html)openBanner(b.title,b.html);
   try{
     var f=(window._jb12VOMap||{})[id];
