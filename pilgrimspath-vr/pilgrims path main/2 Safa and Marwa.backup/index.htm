@@ -235,14 +235,14 @@ border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:point
 <div id="saiCounter">
   <span class="scLabel">&#x1F6B6; Sa'i Circuit</span>
   <span class="scCount" id="saiCount">0/7</span>
-  <button class="scReset" onclick="saiLapReset()" title="Reset">? Reset</button>
+  <button class="scReset" onclick="saiLapReset()" title="Reset">&#x21BA; Reset</button>
 </div>
 <div id="saiComplete">
   <h3>✅ Sa'i Complete!</h3>
   <p>Alhamdulillah! You have walked all seven legs between Safa and Marwa.<br>May Allah accept your Sa'i.</p>
   <p style="font-size:13px;opacity:0.75;margin-bottom:20px;">What would you like to do next?</p>
   <button onclick="sessionStorage.removeItem('saiLaps');document.getElementById('saiComplete').style.display='none';if(typeof showJourneyNextButton==='function'){showJourneyNextButton();}">Next Scene ?</button>
-  <button class="scReset" onclick="saiLapReset();document.getElementById('saiComplete').style.display='none';location.reload()">? Restart Sa'i</button>
+  <button class="scReset" onclick="saiLapReset();document.getElementById('saiComplete').style.display='none';location.reload()">&#x21BA; Restart Sa'i</button>
 </div>
 <script>
 (function(){

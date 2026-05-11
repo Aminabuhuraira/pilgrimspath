@@ -389,7 +389,7 @@
   "jamarat-11th": [
     {
       "id": "jamarThrowBtn",
-      "text": "?? Throw Stone (1/7)",
+      "text": "&#x1FAA8; Throw Stone (1/7)",
       "cls": "",
       "onclick": "throwStone()"
     },
@@ -415,7 +415,7 @@
   "jamarat-12th": [
     {
       "id": "jamarThrowBtn",
-      "text": "?? Throw Stone (1/7)",
+      "text": "&#x1FAA8; Throw Stone (1/7)",
       "cls": "",
       "onclick": "throwStone()"
     },
