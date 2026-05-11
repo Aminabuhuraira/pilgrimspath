@@ -1693,4 +1693,16 @@ console.log('[JourneyNav] Initialized');
   }
 })();
 
+// ── SW_UPDATED auto-reload ────────────────────────────────────────────────
+// When a new service worker activates it sends SW_UPDATED to all open clients.
+// Reload so VR scenes pick up the latest journey-nav.js / journey-content-loader.js
+// without the user needing to hard-refresh.
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.addEventListener('message', function(e){
+    if(e.data && e.data.type === 'SW_UPDATED'){
+      window.location.reload();
+    }
+  });
+}
+
 })();

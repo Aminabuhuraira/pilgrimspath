@@ -161,7 +161,14 @@ self.addEventListener('activate', (event) => {
       Promise.all(
         keys.filter(k => k === 'static-assets').map(k => caches.delete(k))
       )
-    ).then(() => clients.claim())
+    ).then(() => clients.claim()).then(() => {
+      // Tell all open tabs to reload so they get the fresh JS/CSS immediately
+      return self.clients.matchAll({ type: 'window' }).then(function(windowClients) {
+        windowClients.forEach(function(client) {
+          client.postMessage({ type: 'SW_UPDATED' });
+        });
+      });
+    })
   );
 });
 

@@ -118,6 +118,16 @@ app.get('/sanctum-admin-7f3k9q2m', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
+// ── Service Worker — must never be cached by the browser ─────
+// Browsers use a byte-diff check to detect SW updates, but only if they
+// actually fetch it. A stale HTTP cache would prevent that check entirely,
+// locking users onto an old SW indefinitely.
+app.get('/sw.js', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Service-Worker-Allowed', '/');
+  res.sendFile(path.join(__dirname, 'sw.js'));
+});
+
 // ── Favicon ───────────────────────────────────────────────────
 // Override the stale favicon.ico with the platform logo PNG
 app.get('/favicon.ico', (req, res) => {

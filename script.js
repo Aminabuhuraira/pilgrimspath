@@ -569,4 +569,11 @@ if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').catch(() => {});
     });
+    // When the SW activates a new version it broadcasts SW_UPDATED so pages
+    // reload to pick up the latest JS/CSS without the user needing to hard-refresh.
+    navigator.serviceWorker.addEventListener('message', (e) => {
+        if (e.data && e.data.type === 'SW_UPDATED') {
+            window.location.reload();
+        }
+    });
 }
