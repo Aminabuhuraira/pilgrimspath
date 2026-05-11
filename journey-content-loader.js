@@ -746,9 +746,11 @@ function fireSceneLoad(){
   window._ppSceneLoadFired = true;
   var t = textFor(b)||{};
   var audio = audioFile(b);
+  // Run through output-layer mojibake filter before displaying
+  var safe = _cleanBanner({title:t.title||'', html:t.body||''});
   // Show banner with smooth transition
-  if(t.title || t.body){
-    showAdminBanner({title:t.title||'', html:t.body||'', template:b.template, position:b.position});
+  if(safe && (safe.title || safe.html)){
+    showAdminBanner({title:safe.title, html:safe.html, template:b.template, position:b.position});
   }
   if(audio){
     // Mark so first-interaction handler doesn't fire again
