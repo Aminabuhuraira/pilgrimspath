@@ -11,11 +11,11 @@
 
 var STORAGE_KEY = 'pp_journey_content_v2';
 var AUDIO_BASE_ROOT = '/hajj%20voiceover%20english/';
-var SEED_VERSION = 22; // bump to force re-sync of banner text/audio from DEFAULT_DATA
+var SEED_VERSION = 23; // bump to force re-sync of banner text/audio from DEFAULT_DATA
 // Below this seed version, ALL banner text/audio is force-reset from DEFAULT_DATA.
 // This is a one-time nuclear reset to wipe any mojibake or Windows-encoding corruption
-// that may be stored in v2 localStorage across user devices. Customize freely after v22.
-var FORCE_RESET_ALL_BELOW_SEED = 22;
+// that may be stored in v2 localStorage across user devices. Customize freely after v23.
+var FORCE_RESET_ALL_BELOW_SEED = 23;
 // Banner IDs whose text/audio MUST be force-overwritten from DEFAULT_DATA on the next
 // SEED_VERSION bump (overrides the "preserve user customisations" rule for these
 // specific banners). Use sparingly — only when admin defaults were wrong and user-edited
@@ -428,7 +428,26 @@ function load(){
   activeSceneKey = data.scenes[0]&&data.scenes[0].key;
   activeLang = (data.languages.find(function(l){return l.isDefault;})||data.languages[0]).code;
 }
+// Mojibake guard regex — UTF-8 4-byte emoji decoded as Windows-1252:
+// F0 9F... becomes U+00F0 (ð) followed by U+0178 (Ÿ) or U+009F etc.
+var _SAVE_MOJI_RE = /\u00f0[\u0178\u009f\u0094\u0097\u0098\u00a4\u00b9]/;
+function _saveHasMojibake(obj){
+  var s = JSON.stringify(obj);
+  return _SAVE_MOJI_RE.test(s);
+}
 function save(silent){
+  // Pre-save mojibake guard: if the about-to-be-saved data contains corrupted
+  // encoding (Windows-1252 mis-decode of UTF-8 emoji), reset ALL banner text
+  // from DEFAULT_DATA before persisting so we never write corruption back.
+  if(_saveHasMojibake(data)){
+    console.warn('[JourneyContent] mojibake detected in save() — auto-resetting all banner text from DEFAULT_DATA');
+    resyncFromDefaults();
+    // Force-overwrite ALL banner text via the nuclear path
+    data.seedVersion = FORCE_RESET_ALL_BELOW_SEED - 1;
+    resyncFromDefaults();
+    data.seedVersion = SEED_VERSION;
+    flash('Encoding error detected — content automatically reset to clean defaults', true);
+  }
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   dirty = false;
   if(!silent) flash('Saved');

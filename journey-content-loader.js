@@ -106,6 +106,22 @@ function audioFile(b){ return pick(b&&b.audio); }
 function audioChainFile(b){ return pick(b&&b.audioChain); }
 function textFor(b){ return pick(b&&b.text); }
 
+// ─── Mojibake guard (output layer) ───────────────────────────────────────────
+// UTF-8 4-byte emoji decoded as Windows-1252 yields U+00F0 followed by
+// U+0178 (ðŸ) or U+009F. Catching it here means corrupt localStorage data
+// can NEVER reach the browser UI — regardless of seedVersion / save history.
+// If a string is corrupt we return the empty string so the scene falls back
+// to its own hardcoded BANNERS content (which always uses clean \uXXXX escapes).
+var _MOJI_RE = /\u00f0[\u0178\u009f\u0094\u0097\u0098\u00a4\u00b9]/;
+function _clean(s){ return (typeof s==='string' && _MOJI_RE.test(s)) ? '' : (s||''); }
+function _cleanBanner(obj){
+  if(!obj) return obj;
+  var dirty = (_MOJI_RE.test(obj.title||'') || _MOJI_RE.test(obj.html||''));
+  if(!dirty) return obj;
+  console.warn('[PPContent] mojibake in banner title/html — skipping from PPContent, scene fallback applies');
+  return null;
+}
+
 function langEntry(code){
   var ls = (data && data.languages) || [];
   return ls.find(function(l){return l.code===code;}) || (code==='en'?{code:'en',name:'English',folder:'English/'}:null);
@@ -139,27 +155,30 @@ function audioChainMapByPano(sceneKey){
 function bannerMapByPano(sceneKey){
   var s=getScene(sceneKey); if(!s) return {};
   var m={};
-  s.banners.forEach(function(b){ if(b.trigger==='panorama' && b.panorama){ var t=textFor(b)||{}; m[b.panorama]={title:t.title||'',html:t.body||'',template:b.template||'classic-gold',position:b.position||{x:50,y:50}}; } });
+  s.banners.forEach(function(b){ if(b.trigger==='panorama' && b.panorama){ var t=textFor(b)||{}; var entry={title:_clean(t.title||''),html:_clean(t.body||''),template:b.template||'classic-gold',position:b.position||{x:50,y:50}}; if(entry.title||entry.html) m[b.panorama]=entry; } });
   return m;
 }
 function byId(sceneKey,id){
   var s=getScene(sceneKey); if(!s) return null;
   var b=s.banners.find(function(x){return x.id===id;}); if(!b) return null;
   var t=textFor(b)||{};
-  return { title:t.title||'', html:t.body||'', audio:audioFile(b)||'', audioChain:audioChainFile(b)||'', template:b.template||'classic-gold', position:b.position||{x:50,y:50}, buttonId:b.buttonId||'', buttonLabel:b.buttonLabel||'' };
+  var result = { title:_clean(t.title||''), html:_clean(t.body||''), audio:audioFile(b)||'', audioChain:audioChainFile(b)||'', template:b.template||'classic-gold', position:b.position||{x:50,y:50}, buttonId:b.buttonId||'', buttonLabel:b.buttonLabel||'' };
+  return (_MOJI_RE.test(result.title) || _MOJI_RE.test(result.html)) ? null : result;
 }
 function bySequence(sceneKey){
   var s=getScene(sceneKey); if(!s) return [];
   return s.banners
     .filter(function(b){return /^sequence-/.test(b.trigger);})
     .sort(function(a,b){return a.trigger.localeCompare(b.trigger);})
-    .map(function(b){var t=textFor(b)||{}; return {title:t.title||'',html:t.body||'',audio:audioFile(b)||'',template:b.template||'classic-gold',position:b.position||{x:50,y:50}};});
+    .map(function(b){var t=textFor(b)||{}; return _cleanBanner({title:t.title||'',html:t.body||'',audio:audioFile(b)||'',template:b.template||'classic-gold',position:b.position||{x:50,y:50}});})
+    .filter(Boolean);
 }
 function byButton(sceneKey){
   var s=getScene(sceneKey); if(!s) return [];
   return s.banners
     .filter(function(b){return b.trigger==='button';})
-    .map(function(b){var t=textFor(b)||{}; return {id:b.id,buttonId:b.buttonId||'',buttonLabel:b.buttonLabel||'',title:t.title||'',html:t.body||'',audio:audioFile(b)||'',audioChain:audioChainFile(b)||'',template:b.template||'classic-gold',position:b.position||{x:50,y:50},continueAfter:b.continueAfter||false};});
+    .map(function(b){var t=textFor(b)||{}; return _cleanBanner({id:b.id,buttonId:b.buttonId||'',buttonLabel:b.buttonLabel||'',title:t.title||'',html:t.body||'',audio:audioFile(b)||'',audioChain:audioChainFile(b)||'',template:b.template||'classic-gold',position:b.position||{x:50,y:50},continueAfter:b.continueAfter||false});})
+    .filter(Boolean);
 }
 function byCompletion(sceneKey){
   var s=getScene(sceneKey); if(!s) return null;
@@ -169,7 +188,7 @@ function byCompletion(sceneKey){
     || candidates[0];
   if(!b) return null;
   var t=textFor(b)||{};
-  return { id:b.id, title:t.title||'', html:t.body||'', audio:audioFile(b)||'', template:b.template||'sunrise-gold', position:b.position||{x:50,y:50} };
+  return _cleanBanner({ id:b.id, title:t.title||'', html:t.body||'', audio:audioFile(b)||'', template:b.template||'sunrise-gold', position:b.position||{x:50,y:50} });
 }
 
 /* ─── Templates ─── */
