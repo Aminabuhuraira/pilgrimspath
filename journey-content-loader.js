@@ -23,7 +23,21 @@ var LANG_KEY = 'pp_user_lang';
 var AUDIO_BASE_ROOT = '/Hajj%20voiceover%20english/';
 var DEFAULT_LANG_FOLDERS = {en:'English/',ar:'Arabic/',fr:'French/',ur:'Urdu/',tr:'Turkish/',id:'Indonesian/',ms:'Malay/',es:'Spanish/',fa:'Persian/'};
 var data = null;
-try{ data = JSON.parse(localStorage.getItem(KEY)); }catch(e){}
+// Mojibake detector: UTF-8 4-byte emoji (F0 9F ...) decoded as Windows-1252 produces
+// U+00F0 (ð) followed by U+0178 (Ÿ) or U+009F — a pattern that is impossible in
+// legitimate Arabic/English banner content. If detected, the stored data was saved
+// on a Windows machine with wrong encoding. Nuke it so scenes use their clean defaults.
+(function(){
+  var raw = '';
+  try{ raw = localStorage.getItem(KEY) || ''; }catch(_){}
+  var hasMojibake = raw && (/\u00f0[\u0178\u009f]|\u00e2\u0081[\u00a0-\u00af]/.test(raw));
+  if(hasMojibake){
+    console.warn('[PPContent] mojibake detected in stored journey content — clearing corrupted data');
+    try{ localStorage.removeItem(KEY); }catch(_){}
+    return;
+  }
+  try{ data = raw ? JSON.parse(raw) : null; }catch(e){ data = null; }
+})();
 // If the admin content script is present, force its load/resync path to run so
 // seed-version updates and newly added default banners propagate into existing data.
 if(window.PPJourneyContent && typeof window.PPJourneyContent.get === 'function'){

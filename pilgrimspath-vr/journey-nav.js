@@ -882,6 +882,16 @@ function _resolveCurrentQuizStep(){
 function showQuizForCurrentStep(onDone){
   if(document.getElementById('ppQuizOverlay')){ return; } // prevent double overlay
   var step = _resolveCurrentQuizStep();
+  // sessionStorage dedup: never re-show the quiz for step N in the same browser tab session.
+  // sessionStorage survives same-tab soft navigations but is cleared when the tab closes.
+  // This is the most reliable guard against double-quiz regardless of how this function is reached.
+  if(step){
+    var _ssKey = 'pp_qshown_' + step;
+    try{
+      if(sessionStorage.getItem(_ssKey)){ onDone(); return; }
+      sessionStorage.setItem(_ssKey, '1');
+    }catch(e){}
+  }
   var pool = (window.PPQuiz && window.PPQuiz.questions && window.PPQuiz.questions[step]) || null;
   if(!pool || !pool.length){
     console.warn('[Quiz] no pool for resolved step='+step+' \u2014 skipping quiz');
@@ -1500,6 +1510,9 @@ document.head.appendChild(styleEl);
 
 // ── Global functions for scenes to call ──
 window.showJourneyNextButton = function() {
+  // Don't recreate the button while a quiz is in progress — removing it mid-quiz
+  // would create a second button with a fresh (non-deduped) click handler.
+  if(document.getElementById('ppQuizOverlay')) return;
   // Remove existing button if present
   const existing = document.getElementById('nextStopBtn');
   if(existing) existing.remove();
