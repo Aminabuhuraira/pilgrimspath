@@ -1,4 +1,4 @@
-/* ═══════════════════════════════════════════════════════════════════
+﻿/* ═══════════════════════════════════════════════════════════════════
   PILGRIM'S PATH — Journey Content Loader (v5)
    Reads admin overrides from localStorage and exposes them to scenes.
 

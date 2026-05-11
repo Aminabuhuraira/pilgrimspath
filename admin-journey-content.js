@@ -1,4 +1,4 @@
-/* ═══════════════════════════════════════════════════════════════════
+﻿/* ═══════════════════════════════════════════════════════════════════
    PILGRIM'S PATH — Journey Content Manager (v3)
    ▸ Full banner content mirrored from live VR scenes
    ▸ Banner template library (10 professional styles)
@@ -11,11 +11,11 @@
 
 var STORAGE_KEY = 'pp_journey_content_v2';
 var AUDIO_BASE_ROOT = '/hajj%20voiceover%20english/';
-var SEED_VERSION = 23; // bump to force re-sync of banner text/audio from DEFAULT_DATA
+var SEED_VERSION = 24; // bump to force re-sync of banner text/audio from DEFAULT_DATA
 // Below this seed version, ALL banner text/audio is force-reset from DEFAULT_DATA.
 // This is a one-time nuclear reset to wipe any mojibake or Windows-encoding corruption
-// that may be stored in v2 localStorage across user devices. Customize freely after v23.
-var FORCE_RESET_ALL_BELOW_SEED = 23;
+// that may be stored in v2 localStorage across user devices. Customize freely after v24.
+var FORCE_RESET_ALL_BELOW_SEED = 24;
 // Banner IDs whose text/audio MUST be force-overwritten from DEFAULT_DATA on the next
 // SEED_VERSION bump (overrides the "preserve user customisations" rule for these
 // specific banners). Use sparingly — only when admin defaults were wrong and user-edited

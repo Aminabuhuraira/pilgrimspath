@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Pilgrim's Path — Per-step Reflection Quiz Content (v4)
  * Each question is sourced DIRECTLY from `Hajj voice over.docx.md`.
  * Sections are quoted in the file comments above each step.

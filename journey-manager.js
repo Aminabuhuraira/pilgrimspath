@@ -1,4 +1,4 @@
-// ═══ HAJJ JOURNEY STATE MANAGER ═══
+﻿// ═══ HAJJ JOURNEY STATE MANAGER ═══
 // Central source of truth for the 14-step Hajj journey
 // Manages navigation, progress tracking, and localStorage persistence
 

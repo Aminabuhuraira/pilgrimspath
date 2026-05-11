@@ -1,4 +1,4 @@
-// ═══ JOURNEY NAVIGATION UI INJECTOR ═══
+﻿// ═══ JOURNEY NAVIGATION UI INJECTOR ═══
 // Injects progress indicators and navigation buttons into VR scenes
 // Requires journey-manager.js to be loaded first
 

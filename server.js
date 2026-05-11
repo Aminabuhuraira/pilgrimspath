@@ -141,6 +141,20 @@ app.get('/favicon.ico', (req, res) => {
 app.use(express.static(__dirname, {
   maxAge: '7d',
   setHeaders(res, filePath) {
+    // CRITICAL: explicit UTF-8 charset on every text response. Without this,
+    // mobile browsers (especially iOS Safari) may parse JS/CSS as Windows-1252,
+    // turning UTF-8 emoji bytes (F0 9F ...) into mojibake (ðŸ•Œ).
+    if (filePath.endsWith('.js') || filePath.endsWith('.mjs')) {
+      res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+    } else if (filePath.endsWith('.css')) {
+      res.setHeader('Content-Type', 'text/css; charset=utf-8');
+    } else if (filePath.endsWith('.json')) {
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    } else if (filePath.endsWith('.html') || filePath.endsWith('.htm')) {
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    } else if (filePath.endsWith('.svg')) {
+      res.setHeader('Content-Type', 'image/svg+xml; charset=utf-8');
+    }
     if (filePath.endsWith('.html') || filePath.endsWith('.htm')) {
       res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     } else if (/\/(journey-nav|journey-content-loader|scene-nav-overlay|journey-manager|admin-journey-content|quiz-content|journey-manager-content)\.js(\?|$)/.test(filePath)) {

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Scene Navigation Overlay — 18-step full journey strip
  * Each page must set window._sceneNavBase and window._sceneNavCurrent before loading this script.
  *
