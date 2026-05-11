@@ -11,7 +11,11 @@
 
 var STORAGE_KEY = 'pp_journey_content_v2';
 var AUDIO_BASE_ROOT = '/hajj%20voiceover%20english/';
-var SEED_VERSION = 21; // bump to force re-sync of banner text/audio from DEFAULT_DATA
+var SEED_VERSION = 22; // bump to force re-sync of banner text/audio from DEFAULT_DATA
+// Below this seed version, ALL banner text/audio is force-reset from DEFAULT_DATA.
+// This is a one-time nuclear reset to wipe any mojibake or Windows-encoding corruption
+// that may be stored in v2 localStorage across user devices. Customize freely after v22.
+var FORCE_RESET_ALL_BELOW_SEED = 22;
 // Banner IDs whose text/audio MUST be force-overwritten from DEFAULT_DATA on the next
 // SEED_VERSION bump (overrides the "preserve user customisations" rule for these
 // specific banners). Use sparingly — only when admin defaults were wrong and user-edited
@@ -463,9 +467,9 @@ function resyncFromDefaults(){
     ds.banners.forEach(function(db){
       var lb = ls.banners.find(function(x){return x.id===db.id;});
       if(!lb){ ls.banners.push(JSON.parse(JSON.stringify(db))); return; }
-      // Force-overwrite text/audio for IDs in FORCE_RESET_BANNER_IDS — used when
-      // admin defaults were corrected and user-edited values must be wiped.
-      if(FORCE_RESET_BANNER_IDS.indexOf(db.id) !== -1){
+      // Force-overwrite text/audio for IDs in FORCE_RESET_BANNER_IDS, OR if this
+      // seed version is below FORCE_RESET_ALL_BELOW_SEED (one-time nuclear clean).
+      if((data.seedVersion||0) < FORCE_RESET_ALL_BELOW_SEED || FORCE_RESET_BANNER_IDS.indexOf(db.id) !== -1){
         lb.text = JSON.parse(JSON.stringify(db.text||{}));
         lb.audio = db.audio?JSON.parse(JSON.stringify(db.audio)):{};
         if(db.audioChain) lb.audioChain = JSON.parse(JSON.stringify(db.audioChain));
