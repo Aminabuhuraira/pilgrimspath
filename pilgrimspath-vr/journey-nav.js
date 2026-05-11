@@ -534,7 +534,7 @@ body.ppMenuOpen #viewer { z-index: 99490 !important; }
   .ppPauseIcon span { height: 14px; width: 4px; }
 
   #nextStopBtn {
-    bottom: 80px;
+    bottom: 110px;
     right: 15px;
     padding: 12px 20px;
     font-size: 14px;
@@ -595,7 +595,7 @@ body.ppMenuOpen #viewer { z-index: 99490 !important; }
 
   #nextStopBtn {
     right: max(10px, env(safe-area-inset-right));
-    bottom: calc(80px + env(safe-area-inset-bottom));
+    bottom: calc(100px + env(safe-area-inset-bottom));
     max-width: calc(100vw - 20px);
     padding: 10px 16px;
     font-size: 13px;
@@ -880,6 +880,7 @@ function _resolveCurrentQuizStep(){
   return 0;
 }
 function showQuizForCurrentStep(onDone){
+  if(document.getElementById('ppQuizOverlay')){ return; } // prevent double overlay
   var step = _resolveCurrentQuizStep();
   var pool = (window.PPQuiz && window.PPQuiz.questions && window.PPQuiz.questions[step]) || null;
   if(!pool || !pool.length){
@@ -1001,6 +1002,7 @@ function showQuizForCurrentStep(onDone){
 // Expose a single-line helper used by the Next-Stop button + menu
 window.proceedWithQuiz = function(after){
   if(!quizEnabled()){ after(); return; }
+  if(document.getElementById('ppQuizOverlay')){ return; } // quiz already showing — ignore double-tap
   loadQuizContent(function(){ showQuizForCurrentStep(after); });
 };
 

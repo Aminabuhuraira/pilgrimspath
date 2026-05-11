@@ -545,7 +545,9 @@ function autoWireButtons(){
         };
         _caA.addEventListener('ended', _caFinish);
         _caA.addEventListener('error', _caFinish);
-        _caA.load(); // preload so play() has data ready immediately
+        // Do NOT call _caA.load() here — on iOS Safari, calling load() before play()
+        // within a user gesture invalidates the gesture context, blocking autoplay.
+        // play() will start loading implicitly and still work within the gesture.
         var _caP = _caA.play();
         if(_caP && _caP.catch){
           _caP.catch(function(){
