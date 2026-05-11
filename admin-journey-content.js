@@ -389,7 +389,9 @@ function load(){
     var raw = localStorage.getItem(STORAGE_KEY);
     // Mojibake guard: Windows-1252 mis-read of UTF-8 emoji produces U+00F0 + U+0178
     // (ð + Ÿ). If detected, wipe the key and re-seed from clean DEFAULT_DATA.
-    if(raw && /\u00f0[\u0178\u009f]/.test(raw)){
+    // Use the full pattern identical to the loader's _MOJI_RE so both scripts
+    // always detect the same corruption. \u00f0[\u0178\u009f] was the old narrow form.
+    if(raw && /\u00f0[\u0178\u009f\u0094\u0097\u0098\u00a4\u00b9]/.test(raw)){
       console.warn('[JourneyContent] mojibake in stored data — clearing and re-seeding');
       try{ localStorage.removeItem(STORAGE_KEY); }catch(_){}
       raw = null;
@@ -546,7 +548,12 @@ function publicGet(sceneKey, bannerId, lang){
   var t = (bn.text&&bn.text[L])||(bn.text&&bn.text.en)||{title:'',body:''};
   var a = (bn.audio&&bn.audio[L])||(bn.audio&&bn.audio.en)||'';
   var ac = (bn.audioChain&&bn.audioChain[L])||(bn.audioChain&&bn.audioChain.en)||'';
-  return { title:t.title, body:t.body, html:t.body, audio:a, audioUrl:audioUrl(a), audioChain:ac, audioChainUrl:audioUrl(ac), trigger:bn.trigger, panorama:bn.panorama, template:bn.template, position:bn.position };
+  // Apply mojibake filter before returning — publicGet is the admin's public API
+  // and must never serve corrupted text to any caller.
+  var _pgRe = /\u00f0[\u0178\u009f\u0094\u0097\u0098\u00a4\u00b9]/;
+  var _pgTitle = (_pgRe.test(t.title||'')) ? '' : (t.title||'');
+  var _pgBody  = (_pgRe.test(t.body||''))  ? '' : (t.body||'');
+  return { title:_pgTitle, body:_pgBody, html:_pgBody, audio:a, audioUrl:audioUrl(a), audioChain:ac, audioChainUrl:audioUrl(ac), trigger:bn.trigger, panorama:bn.panorama, template:bn.template, position:bn.position };
 }
 
 /* ═══════════════════════════════════════════════

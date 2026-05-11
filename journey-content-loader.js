@@ -32,7 +32,9 @@ var data = null;
 (function(){
   var raw = '';
   try{ raw = localStorage.getItem(KEY) || ''; }catch(_){}
-  var hasMojibake = raw && (/\u00f0[\u0178\u009f]|\u00c3\u00b0[\u00c5\u00b8]|ðŸ|ðŸ•/.test(raw));
+  // Use the full pattern \u00f0[\u0178\u009f\u0094\u0097\u0098\u00a4\u00b9] — same as the output-layer _MOJI_RE —
+  // so the input check and output filter are always in exact sync.
+  var hasMojibake = raw && (/\u00f0[\u0178\u009f\u0094\u0097\u0098\u00a4\u00b9]/.test(raw));
   if(hasMojibake){
     console.warn('[PPContent] mojibake detected in stored journey content — clearing corrupted data');
     try{ localStorage.removeItem(KEY); }catch(_){}
@@ -87,6 +89,36 @@ if(!data && window.PPJourneyContent && typeof window.PPJourneyContent.get === 'f
   }catch(e){ console.warn('[PPContent v4] auto-seed failed', e); }
 }
 migrateMistakenStep15CompletionData();
+
+// ── Full-data integrity scan ────────────────────────────────────────────────
+// Run synchronously here, BEFORE window.PPContent is exposed to scene scripts,
+// so inline scene code always receives either clean data or a null PPContent.
+// This catches any corruption that slipped through the narrow input-check above
+// (e.g. re-introduced after seed-23 bump) by scanning EVERY banner/language entry.
+// If found: clear key, reload once (sessionStorage flag stops infinite loops).
+(function(){
+  if(!data || !data.scenes) return;
+  var re = /\u00f0[\u0178\u009f\u0094\u0097\u0098\u00a4\u00b9]/;
+  var found = false;
+  for(var _si=0; _si<data.scenes.length && !found; _si++){
+    var _s=data.scenes[_si]; if(!_s||!_s.banners) continue;
+    for(var _bi=0; _bi<_s.banners.length && !found; _bi++){
+      var _b=_s.banners[_bi]; if(!_b||!_b.text) continue;
+      var _lg=Object.keys(_b.text);
+      for(var _li=0; _li<_lg.length && !found; _li++){
+        var _t=_b.text[_lg[_li]]||{};
+        if(re.test(_t.title||'')||re.test(_t.body||'')) found=true;
+      }
+    }
+  }
+  if(!found) return;
+  console.warn('[PPContent] full-data scan: mojibake in stored banner — clearing localStorage and reloading for clean defaults');
+  if(sessionStorage.getItem('_ppScanReload')){ data=null; return; } // safety: stop infinite reload loop
+  sessionStorage.setItem('_ppScanReload','1');
+  try{ localStorage.removeItem(KEY); }catch(_){}
+  location.reload();
+})();
+
 var lang = localStorage.getItem(LANG_KEY) || 'en';
 
 try{
