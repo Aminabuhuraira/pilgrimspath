@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Jamarat base</title>
@@ -143,7 +143,7 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ba
 }
 #jamarThrowBtn.disabled:hover{transform:translateX(-50%) scale(1);box-shadow:0 4px 24px rgba(201,168,76,0.3);}
 
-/* Debug yaw display (HIDDEN — calibration complete) */
+/* Debug yaw display (HIDDEN ï¿½ calibration complete) */
 #jamarDebugYaw, #jamarCalibBtn{ display:none !important; }
 #jamarDebugYaw{
   display:block; position:fixed; top:8px; left:8px; z-index:99999;
@@ -247,11 +247,11 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ba
 // ====== JAMARAT STONE THROWING SYSTEM (BASE LEVEL) ======
 // Panorama IDs that face the Jamarat pillars (base level)
 const JAMAR_PANORAMAS = {
-  // VID_20260217_113534_00_425 (14-14-15) — Small pillar (Sughra)
+  // VID_20260217_113534_00_425 (14-14-15) ï¿½ Small pillar (Sughra)
   'panorama_6F591FE4_7C4C_428E_41D7_A32CBCFD088E': 'small',
-  // VID_20260217_113948_00_430 (14-20-18) — Medium pillar (Wusta)
+  // VID_20260217_113948_00_430 (14-20-18) ï¿½ Medium pillar (Wusta)
   'panorama_6F59F27A_7C4C_427A_41D0_44DDEFCC0BC1': 'medium',
-  // VID_20260217_114336_00_433 (14-22-46) — Large pillar (Aqaba)
+  // VID_20260217_114336_00_433 (14-22-46) ï¿½ Large pillar (Aqaba)
   'panorama_6F595EB7_7C4C_C28A_4188_BA3415271B80': 'large'
 };
 
@@ -686,7 +686,7 @@ function pollYaw() {
     var dx = mx - vw/2;
     var dy = my - vh/2;
     var yawOff   = Math.atan2(dx, f) * 180 / Math.PI;
-    // pitch: account for the rotated camera frame — combine pitch via spherical math
+    // pitch: account for the rotated camera frame ï¿½ combine pitch via spherical math
     var pitchOff = Math.atan2(-dy, Math.sqrt(dx*dx + f*f)) * 180 / Math.PI;
     pointerYaw   = ((currentYaw + yawOff + 540) % 360) - 180;
     pointerPitch = Math.max(-90, Math.min(90, currentPitch + pitchOff));
@@ -721,7 +721,7 @@ setTimeout(pollYaw, 2000);
 
 // --- YAW CALIBRATION HELPER ---
 // Press the floating button while looking at a pillar to capture its yaw.
-// The snippet is copied to clipboard — paste back to the developer.
+// The snippet is copied to clipboard ï¿½ paste back to the developer.
 (function(){
   var btn = document.createElement('button');
   btn.id = 'jamarCalibBtn';
@@ -733,7 +733,7 @@ setTimeout(pollYaw, 2000);
   toast.style.cssText = 'position:fixed;top:50px;left:230px;z-index:99999;background:#0f6b2c;color:#fff;padding:8px 14px;border-radius:6px;font-family:monospace;font-size:12px;display:none;max-width:520px;box-shadow:0 4px 16px rgba(0,0,0,.5)';
   document.body.appendChild(toast);
   btn.addEventListener('click', function(){
-    var pid = (typeof lastPanoId === 'string' && lastPanoId) ? lastPanoId : '(unknown panorama — enter a Jamarat panorama first)';
+    var pid = (typeof lastPanoId === 'string' && lastPanoId) ? lastPanoId : '(unknown panorama ï¿½ enter a Jamarat panorama first)';
     var pillar = (typeof JAMAR_PANORAMAS !== 'undefined' && JAMAR_PANORAMAS[pid]) || (typeof currentPillar !== 'undefined' && currentPillar) || 'unknown';
     var y = (typeof currentYaw === 'number') ? currentYaw.toFixed(2) : '0';
     var snippet = "  '" + pid + "': { yaw: " + y + ", tolerance: 25 },  // " + pillar + " pillar";
@@ -882,7 +882,7 @@ setTimeout(function(){_jbChk('panorama_6F591A67_7C4B_CD8A_41C0_0DCF04356022');},
       clearInterval(bindIv);
       try{
         window.tour.bind(TDV.Tour.EVENT_TOUR_LOADED, function(){
-          // Multiple deferred attempts to beat any auto-sequence — stop after first success.
+          // Multiple deferred attempts to beat any auto-sequence ï¿½ stop after first success.
           [0, 100, 300, 600, 1200, 2000].forEach(function(d){
             setTimeout(function(){
               if(window._enforceLanded) return;
@@ -894,7 +894,7 @@ setTimeout(function(){_jbChk('panorama_6F591A67_7C4B_CD8A_41C0_0DCF04356022');},
     } else if (bindTries>50){ clearInterval(bindIv); }
   }, 80);
 
-  // Hard polling backup — only forces if we haven't yet landed once. Stops on first successful land.
+  // Hard polling backup ï¿½ only forces if we haven't yet landed once. Stops on first successful land.
   setTimeout(function(){
     var attempts=0;
     var iv=setInterval(function(){
@@ -902,12 +902,12 @@ setTimeout(function(){_jbChk('panorama_6F591A67_7C4B_CD8A_41C0_0DCF04356022');},
       if(window._stopEnforce){ clearInterval(iv); return; }
       var cur=currentMediaId();
       if(cur===START_ID){
-        // Successfully landed — set sentinel so no further enforcement (lets user navigate freely).
+        // Successfully landed ï¿½ set sentinel so no further enforcement (lets user navigate freely).
         window._enforceLanded = true;
         clearInterval(iv);
         return;
       }
-      // Not on target yet — force.
+      // Not on target yet ï¿½ force.
       jumpToStart();
       if(attempts>=40){ clearInterval(iv); } // 10 seconds max
     },250);
@@ -931,7 +931,7 @@ setTimeout(function(){_jbChk('panorama_6F591A67_7C4B_CD8A_41C0_0DCF04356022');},
 <!-- Journey Navigation -->
 <script src="../../journey-manager.js?v=6" defer></script>
 <script src="../../quiz-content.js?v=6" defer></script>
-<script src="../../journey-nav.js?v=31" defer></script>
+<script src="../../journey-nav.js?v=32" defer></script>
 <!-- --- Scene Navigation Overlay --- -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='jamarat-12th';</script>
 <script src="../../scene-nav-overlay.js?v=10" defer></script>

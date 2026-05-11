@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Jamarat base</title>
@@ -219,9 +219,9 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ba
 <!-- Activity Guide -->
 <div id="jamarGuide">
   <h3>?? Rami al-Jamarat</h3>
-  <p class="subtitle">The Stoning of the Pillars — Sunnah of Ibrahim (AS)</p>
+  <p class="subtitle">The Stoning of the Pillars ï¿½ Sunnah of Ibrahim (AS)</p>
   <ul class="steps">
-    <li><span class="num">1.</span> Turn to face the Jamrah (pillar) — follow the arrow</li>
+    <li><span class="num">1.</span> Turn to face the Jamrah (pillar) ï¿½ follow the arrow</li>
     <li><span class="num">2.</span> Tap "Throw Stone" when the screen glows green</li>
     <li><span class="num">3.</span> Throw 7 stones at each of the 3 pillars</li>
     <li><span class="num">4.</span> Start with Sughra (small) ? Wusta (middle) ? Aqaba (large)</li>
@@ -245,16 +245,16 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ba
 // ====== JAMARAT STONE THROWING SYSTEM (BASE LEVEL) ======
 // Panorama IDs that face the Jamarat pillars (base level)
 const JAMAR_PANORAMAS = {
-  // VID_20260217_113534_00_425 (14-14-15) — Small pillar (Sughra)
+  // VID_20260217_113534_00_425 (14-14-15) ï¿½ Small pillar (Sughra)
   'panorama_6F591FE4_7C4C_428E_41D7_A32CBCFD088E': 'small',
-  // VID_20260217_113948_00_430 (14-20-18) — Medium pillar (Wusta)
+  // VID_20260217_113948_00_430 (14-20-18) ï¿½ Medium pillar (Wusta)
   'panorama_6F59F27A_7C4C_427A_41D0_44DDEFCC0BC1': 'medium',
-  // VID_20260217_114336_00_433 (14-22-36) — Large pillar (Aqaba)
+  // VID_20260217_114336_00_433 (14-22-36) ï¿½ Large pillar (Aqaba)
   'panorama_6F5AB7CA_7C4C_C29A_41D8_B732BD5E56B3': 'large'
 };
 
 // -- TARGET YAW for each pillar (degrees) --
-// TODO: calibrate — navigate to each pillar panorama and note the edge yaw values
+// TODO: calibrate ï¿½ navigate to each pillar panorama and note the edge yaw values
 const PILLAR_TARGET = {
   small:  { yaw: 0, tolerance: 45 },
   medium: { yaw: 0, tolerance: 45 },
@@ -581,7 +581,7 @@ setTimeout(pollYaw, 2000);
   toast.style.cssText = 'position:fixed;top:50px;left:230px;z-index:99999;background:#0f6b2c;color:#fff;padding:8px 14px;border-radius:6px;font-family:monospace;font-size:12px;display:none;max-width:520px;box-shadow:0 4px 16px rgba(0,0,0,.5)';
   document.body.appendChild(toast);
   btn.addEventListener('click', function(){
-    var pid = (typeof lastPanoId === 'string' && lastPanoId) ? lastPanoId : '(unknown panorama — enter a Jamarat panorama first)';
+    var pid = (typeof lastPanoId === 'string' && lastPanoId) ? lastPanoId : '(unknown panorama ï¿½ enter a Jamarat panorama first)';
     var pillar = (typeof JAMAR_PANORAMAS !== 'undefined' && JAMAR_PANORAMAS[pid]) || (typeof currentPillar !== 'undefined' && currentPillar) || 'unknown';
     var y = (typeof currentYaw === 'number') ? currentYaw.toFixed(2) : '0';
     var snippet = "  '" + pid + "': { yaw: " + y + ", tolerance: 25 },  // " + pillar + " pillar";
@@ -641,8 +641,8 @@ var _jbChk;
 (function(){
 var BANNERS={
 'panorama_6F591A67_7C4B_CD8A_41C0_0DCF04356022':{
-  title:'\u{1f54b} 12th Day of Dhul-Hijjah — Rami All Pillars',
-  html:'<p class="bb">Today is the 12th day of Dhul-Hijjah. After Dhuhr, perform Rami at all three Jamarat — Sughra (small), Wusta (middle), then Aqaba (large). Throw seven pebbles at each, reciting:</p><p class="ba">Bismillahi Allahu Akbar</p>'}
+  title:'\u{1f54b} 12th Day of Dhul-Hijjah ï¿½ Rami All Pillars',
+  html:'<p class="bb">Today is the 12th day of Dhul-Hijjah. After Dhuhr, perform Rami at all three Jamarat ï¿½ Sughra (small), Wusta (middle), then Aqaba (large). Throw seven pebbles at each, reciting:</p><p class="ba">Bismillahi Allahu Akbar</p>'}
 };
 var shown={};
 _jbChk=function(id){var b=BANNERS[id];if(!b||shown[id])return;shown[id]=true;if(b.title||b.html)openBanner(b.title,b.html);};
@@ -727,7 +727,7 @@ setTimeout(function(){_jbChk('panorama_6F591A67_7C4B_CD8A_41C0_0DCF04356022');},
 <!-- Journey Navigation -->
 <script src="../../journey-manager.js?v=4" defer></script>
 <script src="../../quiz-content.js?v=6" defer></script>
-<script src="../../journey-nav.js?v=31" defer></script>
+<script src="../../journey-nav.js?v=32" defer></script>
 <!-- --- Scene Navigation Overlay --- -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='jamarat-12th';</script>
 <script src="../../scene-nav-overlay.js?v=10" defer></script>

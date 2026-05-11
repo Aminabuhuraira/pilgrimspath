@@ -276,9 +276,9 @@ body.ppMenuOpen #viewer { z-index: 99490 !important; }
 #nextStopBtn {
   display: none;
   position: fixed;
-  bottom: 20px;
+  bottom: 90px;
   right: 20px;
-  z-index: 5001;
+  z-index: 10020;
   background: linear-gradient(135deg, #C9A84C, #8B6914);
   color: #fff;
   border: none;
@@ -534,7 +534,7 @@ body.ppMenuOpen #viewer { z-index: 99490 !important; }
   .ppPauseIcon span { height: 14px; width: 4px; }
 
   #nextStopBtn {
-    bottom: 15px;
+    bottom: 80px;
     right: 15px;
     padding: 12px 20px;
     font-size: 14px;
@@ -595,7 +595,7 @@ body.ppMenuOpen #viewer { z-index: 99490 !important; }
 
   #nextStopBtn {
     right: max(10px, env(safe-area-inset-right));
-    bottom: max(12px, env(safe-area-inset-bottom));
+    bottom: calc(80px + env(safe-area-inset-bottom));
     max-width: calc(100vw - 20px);
     padding: 10px 16px;
     font-size: 13px;
