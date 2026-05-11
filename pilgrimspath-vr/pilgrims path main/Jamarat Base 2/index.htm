@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>/* cache-nuke v35 */(function(){var V="pp35";if(sessionStorage.getItem(V))return;sessionStorage.setItem(V,"1");if("serviceWorker" in navigator){Promise.all([navigator.serviceWorker.getRegistrations().then(function(r){return Promise.all(r.map(function(s){return s.unregister();}))}),caches.keys().then(function(k){return Promise.all(k.map(function(c){return caches.delete(c)}))})]).then(function(){window.location.reload(true);});return;}})();window.addEventListener("pageshow",function(e){if(e.persisted)window.location.reload(true);});</script>
+<script>/* cache-nuke v36 */(function(){var V="pp_nk36";if(localStorage.getItem(V))return;localStorage.setItem(V,"1");if("serviceWorker" in navigator){Promise.all([navigator.serviceWorker.getRegistrations().then(function(r){return Promise.all(r.map(function(s){return s.unregister();}))}),caches.keys().then(function(k){return Promise.all(k.map(function(c){return caches.delete(c)}))})]).then(function(){var u=new URL(location.href);u.searchParams.set("_t",Date.now().toString(36));location.replace(u.toString());});return;}})();</script>
     <title>Jamarat base</title>
     <link rel="icon" type="image/png" sizes="512x512" href="/images/Pilgrims_Path-removebg-preview.png">
     <!-- Meta Pixel Code -->
@@ -195,7 +195,7 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ba
 
 <!-- Throw Button -->
 <button id="jamarThrowBtn" onclick="throwStone()">
-  <span class="icon">??</span> Throw Stone <span id="throwLabel">(1/7)</span>
+  <span class='icon'>&#x1FAA8;</span> Throw Stone <span id="throwLabel">(1/7)</span>
 </button>
 
 <!-- Counter HUD -->
@@ -236,7 +236,7 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ba
 
 <!-- Activity Guide -->
 <div id="jamarGuide">
-  <h3>?? Rami al-Jamarat</h3>
+  <h3>&#x1FAA8; Rami al-Jamarat</h3>
   <p class="subtitle">The Stoning of the Pillars � Sunnah of Ibrahim (AS)</p>
   <ul class="steps">
     <li><span class="num">1.</span> Turn to face the Jamrah (pillar) � follow the arrow</li>
@@ -244,17 +244,17 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ba
     <li><span class="num">3.</span> Throw 7 stones at each of the 3 pillars</li>
     <li><span class="num">4.</span> Start with Sughra (small) ? Wusta (middle) ? Aqaba (large)</li>
   </ul>
-  <div class="dua">?????? ??????? ??????? ????????</div>
+  <div class='dua'>بِسْمِ اللَّهِ وَاللّهُ أَكْبَرُ</div>
   <p style="color:#8B95A5;font-size:12px;margin:0 0 14px;">Say this with each throw: "In the name of Allah, Allah is the Greatest"</p>
   <button onclick="dismissGuide()">Begin Stoning &#x25B8;</button>
 </div>
 
 <!-- Bismillah overlay -->
-<div id="jamarBismillah">?????? ??????? ??????? ????????</div>
+<div id='jamarBismillah'>بِسْمِ اللَّهِ وَاللّهُ أَكْبَرُ</div>
 
 <!-- Completion banner -->
 <div id="jamarComplete">
-  <h3>?? MashaAllah!</h3>
+  <h3>✅ MashaAllah!</h3>
   <p>You have completed all 21 throws.<br>May Allah accept your Hajj.</p>
   <button onclick="resetJamarat()">Reset &amp; Repeat</button>
 </div>
@@ -728,7 +728,7 @@ setTimeout(pollYaw, 2000);
 (function(){
   var btn = document.createElement('button');
   btn.id = 'jamarCalibBtn';
-  btn.textContent = '?? Save Yaw';
+  btn.textContent = '🧭 Save Yaw';
   btn.style.cssText = 'position:fixed;top:8px;left:230px;z-index:99999;background:#1a1a2e;color:#C9A84C;border:1px solid #C9A84C;border-radius:6px;padding:8px 14px;font-family:monospace;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.6)';
   btn.title = 'Capture current yaw for this panorama';
   document.body.appendChild(btn);
@@ -911,7 +911,7 @@ setTimeout(function(){_jbChk('panorama_6F591A67_7C4B_CD8A_41C0_0DCF04356022');},
 <!-- Journey Navigation -->
 <script src="../../journey-manager.js?v=6" defer></script>
 <script src="../../quiz-content.js?v=6" defer></script>
-<script src="../../journey-nav.js?v=35" defer></script>
+<script src="../../journey-nav.js?v=36" defer></script>
 <!-- --- Scene Navigation Overlay --- -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='jamarat-12th';</script>
 <script src="../../scene-nav-overlay.js?v=10" defer></script>

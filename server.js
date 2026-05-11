@@ -143,6 +143,8 @@ app.use(express.static(__dirname, {
   setHeaders(res, filePath) {
     if (filePath.endsWith('.html') || filePath.endsWith('.htm')) {
       res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    } else if (/\/(journey-nav|journey-content-loader|scene-nav-overlay|journey-manager|admin-journey-content|quiz-content|journey-manager-content)\.js(\?|$)/.test(filePath)) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     }
   },
 }));

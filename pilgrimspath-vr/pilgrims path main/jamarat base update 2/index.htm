@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>/* cache-nuke v35 */(function(){var V="pp35";if(sessionStorage.getItem(V))return;sessionStorage.setItem(V,"1");if("serviceWorker" in navigator){Promise.all([navigator.serviceWorker.getRegistrations().then(function(r){return Promise.all(r.map(function(s){return s.unregister();}))}),caches.keys().then(function(k){return Promise.all(k.map(function(c){return caches.delete(c)}))})]).then(function(){window.location.reload(true);});return;}})();window.addEventListener("pageshow",function(e){if(e.persisted)window.location.reload(true);});</script>
+<script>/* cache-nuke v36 */(function(){var V="pp_nk36";if(localStorage.getItem(V))return;localStorage.setItem(V,"1");if("serviceWorker" in navigator){Promise.all([navigator.serviceWorker.getRegistrations().then(function(r){return Promise.all(r.map(function(s){return s.unregister();}))}),caches.keys().then(function(k){return Promise.all(k.map(function(c){return caches.delete(c)}))})]).then(function(){var u=new URL(location.href);u.searchParams.set("_t",Date.now().toString(36));location.replace(u.toString());});return;}})();</script>
     <title>Jamarat base</title>
     <link rel="icon" type="image/png" sizes="512x512" href="/images/Pilgrims_Path-removebg-preview.png">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -9,7 +9,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <script src="/admin-journey-content.js?v=19"></script>
-    <script src="/journey-content-loader.js?v=44"></script>
+    <script src="/journey-content-loader.js?v=45"></script>
     <script src="lib/tdvplayer.js?v=1777651137952"></script>
     <link rel="preload" href="locale/en.txt?v=1777651137952" as="fetch" crossorigin="anonymous"/>
 	<link rel="preload" href="script.js?v=1777651137952" as="script"/>
@@ -726,7 +726,7 @@ setTimeout(pollYaw, 2000);
 (function(){
   var btn = document.createElement('button');
   btn.id = 'jamarCalibBtn';
-  btn.textContent = '?? Save Yaw';
+  btn.textContent = '🧭 Save Yaw';
   btn.style.cssText = 'position:fixed;top:8px;left:230px;z-index:99999;background:#1a1a2e;color:#C9A84C;border:1px solid #C9A84C;border-radius:6px;padding:8px 14px;font-family:monospace;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.6)';
   btn.title = 'Capture current yaw for this panorama';
   document.body.appendChild(btn);
@@ -932,7 +932,7 @@ setTimeout(function(){_jbChk('panorama_6F591A67_7C4B_CD8A_41C0_0DCF04356022');},
 <!-- Journey Navigation -->
 <script src="../../journey-manager.js?v=6" defer></script>
 <script src="../../quiz-content.js?v=6" defer></script>
-<script src="../../journey-nav.js?v=35" defer></script>
+<script src="../../journey-nav.js?v=36" defer></script>
 <!-- --- Scene Navigation Overlay --- -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='jamarat-12th';</script>
 <script src="../../scene-nav-overlay.js?v=10" defer></script>

@@ -510,6 +510,27 @@ function autoWireButtons(){
     if(el.dataset.ppBound==='1') return;
     el.dataset.ppBound = '1';
     console.log('[PPContent] wired button: "'+(el.textContent||'').trim().slice(0,40)+'" → '+(b.audio||'(no audio)')+(b.audioChain?' → '+b.audioChain:''));
+
+    // iOS Safari only allows audio.play() in handlers of user-initiated (isTrusted) events.
+    // 3DVista may fire a synthetic click on hotspot buttons, so touchstart (always trusted)
+    // pre-primes the Audio element. The click handler reuses the primed element.
+    var _caPrimedAudio = null;
+    if(b.continueAfter && b.audio){
+      el.addEventListener('touchstart', function(){
+        if(_caPrimedAudio) return;
+        _caPrimedAudio = new Audio(audioUrl(b.audio));
+        var p = _caPrimedAudio.play();
+        if(p && p.then){
+          p.then(function(){
+            _caPrimedAudio.pause();
+            _caPrimedAudio.currentTime = 0;
+          }).catch(function(){
+            _caPrimedAudio = null; // prime failed — click handler will try normally
+          });
+        }
+      }, {passive: true});
+    }
+
     el.addEventListener('click', function(e){
       if(el.dataset.ppAllowNative==='1') return;
       e.preventDefault();
@@ -526,7 +547,10 @@ function autoWireButtons(){
       if(b.continueAfter && b.audio){
         try{ if(window._voAudio){ window._voAudio.pause(); window._voAudio = null; } }catch(_){ }
         try{ if(window._ppFallbackVO){ window._ppFallbackVO.pause(); window._ppFallbackVO = null; } }catch(_){ }
-        var _caA = new Audio(audioUrl(b.audio));
+        // Use the touchstart-primed Audio element if available (bypasses iOS autoplay restriction
+        // when 3DVista fires a synthetic/untrusted click). Fall back to a fresh Audio element.
+        var _caA = _caPrimedAudio || new Audio(audioUrl(b.audio));
+        _caPrimedAudio = null; // consume primed instance
         window._ppFallbackVO = _caA;
         var _caDone = false;
         var _caUnlock = null;

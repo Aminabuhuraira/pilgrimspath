@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>/* cache-nuke v35 */(function(){var V="pp35";if(sessionStorage.getItem(V))return;sessionStorage.setItem(V,"1");if("serviceWorker" in navigator){Promise.all([navigator.serviceWorker.getRegistrations().then(function(r){return Promise.all(r.map(function(s){return s.unregister();}))}),caches.keys().then(function(k){return Promise.all(k.map(function(c){return caches.delete(c)}))})]).then(function(){window.location.reload(true);});return;}})();window.addEventListener("pageshow",function(e){if(e.persisted)window.location.reload(true);});</script>
+<script>/* cache-nuke v36 */(function(){var V="pp_nk36";if(localStorage.getItem(V))return;localStorage.setItem(V,"1");if("serviceWorker" in navigator){Promise.all([navigator.serviceWorker.getRegistrations().then(function(r){return Promise.all(r.map(function(s){return s.unregister();}))}),caches.keys().then(function(k){return Promise.all(k.map(function(c){return caches.delete(c)}))})]).then(function(){var u=new URL(location.href);u.searchParams.set("_t",Date.now().toString(36));location.replace(u.toString());});return;}})();</script>
     <title>tawaf area</title>
     <link rel="icon" type="image/png" sizes="512x512" href="/images/Pilgrims_Path-removebg-preview.png">
     <script src="/admin-journey-content.js?v=19"></script>
-    <script src="/journey-content-loader.js?v=44"></script>
+    <script src="/journey-content-loader.js?v=45"></script>
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -42,7 +42,7 @@
     <script src="script.js?v=1776284580066"></script>
     <script src="../../journey-manager.js?v=6" defer></script>
     <script src="../../quiz-content.js?v=6" defer></script>
-<script src="../../journey-nav.js?v=35" defer></script>
+<script src="../../journey-nav.js?v=36" defer></script>
     <style type="text/css">
         html, body { height:100%; width:100%; height:100vh; width:100vw; margin:0; padding:0; overflow:hidden; }
         .fill-viewport { position:fixed; top:0; left:0; right:0; bottom:0; padding:0; margin:0; overflow: hidden; }
@@ -1066,7 +1066,7 @@ function _showVoHint(){ return; return;
     if(document.getElementById('voHint')) return;
     var h = document.createElement('div');
     h.id = 'voHint';
-    h.textContent = '?? Tap anywhere to start narration';
+    h.textContent = '🔊 Tap anywhere to start narration';
     h.style.cssText = 'position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:99999;'
       + 'background:linear-gradient(135deg,#D4AF37,#C9A227);color:#fff;padding:9px 18px;border-radius:999px;'
       + 'font-family:Poppins,sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:.3px;'
@@ -1314,14 +1314,14 @@ border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:point
   var msgEl=document.getElementById('tcMsg');
   function go(href){return function(){sessionStorage.removeItem(_lapKey);window.location.href=href;};}
   if(ctx==='ifadha'){
-    titleEl.textContent='?? Tawaf al-Ifadha Complete!';
+    titleEl.textContent='✅ Tawaf al-Ifadha Complete!';
     msgEl.innerHTML='Alhamdulillah! You have completed Tawaf al-Ifadha.<br>You will now return to your tent at Mina to rest before the 11th day stoning.';
     nextBtn.textContent='Return to Mina (Tents) ?';
     nextBtn.onclick=go('../3%20Mina/index.htm?context=tents-11th');
   } else if(ctx==='farewell'){
-    titleEl.textContent='?? Hajj Complete &mdash; May Allah Accept!';
+    titleEl.textContent='🕋 Hajj Complete &mdash; May Allah Accept!';
     msgEl.innerHTML='You have completed Tawaf al-Wida&mdash;, the farewell circumambulation.<br><br>Recite as you exit with your right foot:<br><em style="color:#8B6914;display:block;margin-top:8px;">Bismillahi wa s-salatu wa s-salamu ?ala rasulillah, Allahumma inni as?aluka min fa?lik.</em><br><span style="font-size:12px;opacity:0.75;">&mdash;In the name of Allah, and prayers and peace upon the Messenger of Allah. O Allah, I ask You for Your bounty.&mdash;</span><br><br><strong style="color:#22c55e;">Congratulations on completing your Hajj. May Allah accept this act of &mdash;ibadah.</strong>';
-    nextBtn.textContent='?? Return to Home';
+    nextBtn.textContent='🏠 Return to Home';
     nextBtn.onclick=function(){sessionStorage.removeItem(_lapKey);window.location.href='/index.html';};
   } else {
     nextBtn.textContent="Next: Sa'i ?";

@@ -5,7 +5,7 @@ importScripts('https://storage.googleapis.com/workbox-cdn/releases/7.3.0/workbox
 workbox.setConfig({ debug: false });
 
 const { registerRoute } = workbox.routing;
-const { CacheFirst, StaleWhileRevalidate, NetworkFirst } = workbox.strategies;
+const { CacheFirst, StaleWhileRevalidate, NetworkFirst, NetworkOnly } = workbox.strategies;
 const { ExpirationPlugin } = workbox.expiration;
 const { CacheableResponsePlugin } = workbox.cacheableResponse;
 const { precacheAndRoute } = workbox.precaching;
@@ -84,7 +84,14 @@ registerRoute(
 );
 
 // ─── 5. CSS & JS (site styles and scripts — same-origin only) ───
-// NetworkFirst so that version-bumped files always load fresh.
+// Our own frequently-changed JS files are always fetched from network (never cached).
+registerRoute(
+  ({ url }) => url.origin === self.location.origin &&
+    /\/(journey-nav|journey-content-loader|scene-nav-overlay|journey-manager|admin-journey-content|quiz-content|journey-manager-content)\.js(\?|$)/.test(url.pathname),
+  new NetworkOnly()
+);
+
+// NetworkFirst for remaining JS/CSS so version-bumped files always load fresh.
 // Cache is used only as an offline fallback.
 registerRoute(
   ({ request, url }) => (request.destination === 'style' || request.destination === 'script') &&

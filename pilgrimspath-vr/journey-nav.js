@@ -1000,10 +1000,16 @@ function showQuizForCurrentStep(onDone){
 }
 
 // Expose a single-line helper used by the Next-Stop button + menu
+var _ppQuizBusy = false; // prevents duplicate quiz when button is tapped rapidly
 window.proceedWithQuiz = function(after){
   if(!quizEnabled()){ after(); return; }
-  if(document.getElementById('ppQuizOverlay')){ return; } // quiz already showing — ignore double-tap
-  loadQuizContent(function(){ showQuizForCurrentStep(after); });
+  if(_ppQuizBusy || document.getElementById('ppQuizOverlay')){ return; }
+  _ppQuizBusy = true;
+  loadQuizContent(function(){
+    _ppQuizBusy = false;
+    if(document.getElementById('ppQuizOverlay')){ return; }
+    showQuizForCurrentStep(after);
+  });
 };
 
 // ── Hajj Readiness Certificate modal ───────────────────────────────────────
