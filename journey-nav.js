@@ -172,7 +172,7 @@ const journeyNavCSS = `
   }
 
   #nextStopBtn {
-    bottom: 15px;
+    bottom: 80px;
     right: 15px;
     padding: 12px 20px;
     font-size: 14px;

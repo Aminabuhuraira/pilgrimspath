@@ -892,6 +892,10 @@
         }
     }
     function ihramStep2PlayVO(){
+        // Skip if JCM already played the button VO via continueAfter — avoids
+        // double-play and prevents a stale _voUnlockBound from blocking the
+        // upcoming panorama banner audio from _bannerChk.
+        if(window._ppContAfterFired) return;
         var f = window._ihramStep2Audio;
         if(!f || typeof playVO!=='function') return;
         playVO(f);

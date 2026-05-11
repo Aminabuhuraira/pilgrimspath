@@ -525,10 +525,21 @@ function autoWireButtons(){
         try{ if(window._ppFallbackVO){ window._ppFallbackVO.pause(); window._ppFallbackVO = null; } }catch(_){ }
         var autoA = new Audio(audioUrl(b.audio));
         window._ppFallbackVO = autoA;
-        autoA.addEventListener('ended', function(){ resume(); });
-        autoA.addEventListener('error', function(){ resume(); });
+        var _contAfterDone = function(){
+          // Reset stale VO unlock state so subsequent playVO calls can install
+          // fresh handlers without being blocked by a stale _voUnlockBound flag.
+          window._voUnlockBound = false;
+          // Signal native onclick handlers that JCM already played the button VO
+          // so they can skip redundant audio playback (e.g. ihramStep2PlayVO).
+          window._ppContAfterFired = true;
+          resume();
+          // Clean up the flag after native onclick and its microtasks have settled
+          setTimeout(function(){ delete window._ppContAfterFired; }, 2500);
+        };
+        autoA.addEventListener('ended', _contAfterDone);
+        autoA.addEventListener('error', _contAfterDone);
         var _pp = autoA.play();
-        if(_pp && _pp.catch){ _pp.catch(function(){ resume(); }); }
+        if(_pp && _pp.catch){ _pp.catch(_contAfterDone); }
         return;
       }
 
