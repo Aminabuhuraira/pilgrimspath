@@ -11,7 +11,7 @@
 
 var STORAGE_KEY = 'pp_journey_content_v1';
 var AUDIO_BASE_ROOT = '/hajj%20voiceover%20english/';
-var SEED_VERSION = 20; // bump to force re-sync of banner text/audio from DEFAULT_DATA
+var SEED_VERSION = 21; // bump to force re-sync of banner text/audio from DEFAULT_DATA
 // Banner IDs whose text/audio MUST be force-overwritten from DEFAULT_DATA on the next
 // SEED_VERSION bump (overrides the "preserve user customisations" rule for these
 // specific banners). Use sparingly — only when admin defaults were wrong and user-edited

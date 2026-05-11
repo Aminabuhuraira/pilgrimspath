@@ -836,7 +836,18 @@
         // start it now and don't advance &mdash; user clicks again to continue.
         if(ihramStep===0 && !window._welcomeVoDone){
             if(window._welcomeVoStarted){
-                // Second click &mdash; user wants to skip the welcome VO and move on.
+                // Second click — but first check if the autoplay-unlock handler just
+                // fired on this SAME tap (mobile autoplay-blocked scenario). If so,
+                // audio only just started — let it play, change button to Continue ›.
+                if(window._ppVoUnlockedThisTick){
+                    var _btnC = document.querySelector('.ihram-step[data-step="0"] .ihram-btn-next');
+                    if(_btnC){ _btnC.textContent = 'Continue \u276F'; }
+                    if(window._voAudio){
+                        window._voAudio.addEventListener('ended', function(){ window._welcomeVoDone = true; }, { once: true });
+                    } else { window._welcomeVoDone = true; }
+                    return;
+                }
+                // Second click — user wants to skip the welcome VO and move on.
                 if(window._voAudio){ try{ window._voAudio.pause(); }catch(e){} window._voAudio=null; }
                 window._voPending = null;
                 window._welcomeVoDone = true;
@@ -1052,6 +1063,10 @@ function playVO(f){
                 document.removeEventListener('pointerdown', unlock, true);
                 window._voUnlockBound = false;
                 _hideVoHint();
+                // Signal to ihramNext() that this tap already started audio,
+                // so ihramNext() should NOT cancel it (fixes mobile VO not playing).
+                window._ppVoUnlockedThisTick = true;
+                setTimeout(function(){ window._ppVoUnlockedThisTick = false; }, 150);
                 var pending = window._voPending;
                 if(pending) playVO(pending);
             };

@@ -534,7 +534,7 @@ body.ppMenuOpen #viewer { z-index: 99490 !important; }
   .ppPauseIcon span { height: 14px; width: 4px; }
 
   #nextStopBtn {
-    bottom: 110px;
+    bottom: 128px;
     right: 15px;
     padding: 12px 20px;
     font-size: 14px;
@@ -595,7 +595,7 @@ body.ppMenuOpen #viewer { z-index: 99490 !important; }
 
   #nextStopBtn {
     right: max(10px, env(safe-area-inset-right));
-    bottom: calc(100px + env(safe-area-inset-bottom));
+    bottom: calc(120px + env(safe-area-inset-bottom));
     max-width: calc(100vw - 20px);
     padding: 10px 16px;
     font-size: 13px;
@@ -1001,13 +1001,17 @@ function showQuizForCurrentStep(onDone){
 
 // Expose a single-line helper used by the Next-Stop button + menu
 var _ppQuizBusy = false; // prevents duplicate quiz when button is tapped rapidly
+var _ppQuizShownSteps = {}; // tracks which steps have already shown a quiz this session
 window.proceedWithQuiz = function(after){
   if(!quizEnabled()){ after(); return; }
   if(_ppQuizBusy || document.getElementById('ppQuizOverlay')){ return; }
+  var _quizStep = _resolveCurrentQuizStep();
+  if(_quizStep && _ppQuizShownSteps[_quizStep]){ after(); return; } // already quizzed this step this session
   _ppQuizBusy = true;
   loadQuizContent(function(){
     _ppQuizBusy = false;
     if(document.getElementById('ppQuizOverlay')){ return; }
+    if(_quizStep) _ppQuizShownSteps[_quizStep] = true;
     showQuizForCurrentStep(after);
   });
 };
