@@ -1132,13 +1132,9 @@ var _tawafFirstVisitSeen = false;
 function chk(id, idx) {
   window._currentPanoId = id; // publish for HUD gating
 
-  // Lap counting &mdash; initial Tawaf
-  if (journeyContext === 'initial' && id.indexOf('7F92625E') !== -1 && typeof idx === 'number') {
-    if (!_tawafFirstVisitSeen) { _tawafFirstVisitSeen = true; }
-    else if (typeof window.tawafLapInc === 'function') { window.tawafLapInc(); }
-  }
-  // Lap counting &mdash; Farewell Tawaf (same 3D model, separate sessionStorage key)
-  if (journeyContext === 'farewell' && id.indexOf('7F92625E') !== -1 && typeof idx === 'number') {
+  // Lap counting &mdash; works for ALL three contexts (initial / ifadha / farewell)
+  // Each context has its own sessionStorage key (tawafLaps_<ctx>) handled below.
+  if (id.indexOf('7F92625E') !== -1 && typeof idx === 'number') {
     if (!_tawafFirstVisitSeen) { _tawafFirstVisitSeen = true; }
     else if (typeof window.tawafLapInc === 'function') { window.tawafLapInc(); }
   }
@@ -1150,9 +1146,11 @@ function chk(id, idx) {
   // Deduplicate by panorama ID &mdash; one banner+VO per panorama per page-load
   if (shown[id]) return;
 
-  // Gate: Farewell Hajj-Complete banner only fires after 7 full circuits
-  if (journeyContext === 'farewell' && id.indexOf('8AC63E8D') !== -1) {
-    var _laps = parseInt(sessionStorage.getItem('tawafLaps_farewell') || '0', 10);
+  // Gate: Hajj/Tawaf completion banner (final panorama) only fires after 7 full circuits
+  // Applies to both Ifadha and Farewell, each with its own lap key.
+  if ((journeyContext === 'farewell' || journeyContext === 'ifadha') && id.indexOf('8AC63E8D') !== -1) {
+    var _lapsKey = 'tawafLaps_' + journeyContext;
+    var _laps = parseInt(sessionStorage.getItem(_lapsKey) || '0', 10);
     if (_laps < 7) return;
   }
 

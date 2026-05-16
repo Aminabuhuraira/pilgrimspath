@@ -77,18 +77,18 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ro
 /* Counter HUD &mdash; offset below the journey menu button (top:14px right:14px, ~50px tall) */
 #jamarHUD{
   display:none; position:fixed; top:74px; right:16px; z-index:9999;
-  background:rgba(10,15,30,0.88); border:1px solid rgba(201,168,76,0.4);
+  background:linear-gradient(145deg,#FFFDF7,#F4EBD2); border:1px solid #C9A84C;
   border-radius:14px; padding:12px 18px; font-family:'DM Sans',Arial,sans-serif;
-  color:#fff; min-width:170px; backdrop-filter:blur(8px);
+  color:#3D2B1F; min-width:170px; backdrop-filter:blur(8px);
 }
 #jamarHUD h4{margin:0 0 8px;font-size:13px;color:#C9A84C;letter-spacing:1px;text-transform:uppercase;}
 .hud-pillar{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:14px;}
-.hud-pillar .name{color:#ccc;}
-.hud-pillar .count{font-weight:700;color:#C9A84C;font-size:15px;}
+.hud-pillar .name{color:#6B5B4F;}
+.hud-pillar .count{font-weight:700;color:#8B6914;font-size:15px;}
 .hud-pillar .count.done{color:#22c55e;}
-.hud-divider{height:1px;background:rgba(255,255,255,0.1);margin:6px 0;}
-.hud-total{text-align:center;font-size:12px;color:#8B95A5;margin-top:6px;}
-.hud-total strong{color:#fff;font-size:14px;}
+.hud-divider{height:1px;background:rgba(201,168,76,0.25);margin:6px 0;}
+.hud-total{text-align:center;font-size:12px;color:#6B5B4F;margin-top:6px;}
+.hud-total strong{color:#8B6914;font-size:14px;}
 
 /* Stone throw animation overlay (canvas) */
 #jamarThrowCanvas{
@@ -99,13 +99,13 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ro
 /* Completion banner */
 #jamarComplete{
   display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
-  z-index:10001; background:rgba(10,15,30,0.95); border:2px solid #C9A84C;
+  z-index:10001; background:linear-gradient(135deg,#fff8e7,#fbecc4); border:2px solid #C9A84C;
   border-radius:20px; padding:32px 40px; text-align:center;
-  font-family:'DM Sans',Arial,sans-serif; color:#fff;
+  font-family:'DM Sans',Arial,sans-serif; color:#3D2B1F;
   box-shadow:0 20px 60px rgba(0,0,0,0.6); backdrop-filter:blur(12px);
 }
-#jamarComplete h3{color:#C9A84C;font-size:22px;margin:0 0 8px;}
-#jamarComplete p{color:#ccc;font-size:14px;margin:0 0 16px;}
+#jamarComplete h3{color:#22c55e;font-size:22px;margin:0 0 8px;}
+#jamarComplete p{color:#3D2B1F;font-size:14px;margin:0 0 16px;}
 #jamarComplete button{
   background:linear-gradient(135deg,#C9A84C,#8B6914); color:#fff;
   border:none; border-radius:8px; padding:8px 20px; font-size:13px;
@@ -181,17 +181,17 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ro
 /* Activity Guide Overlay */
 #jamarGuide{
   display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
-  z-index:10003; background:rgba(10,15,30,0.96); border:2px solid #C9A84C;
+  z-index:10003; background:linear-gradient(135deg,#fff8e7,#fbecc4); border:2px solid #C9A84C;
   border-radius:20px; padding:28px 34px; max-width:380px; width:90vw;
-  font-family:'DM Sans',Arial,sans-serif; color:#fff;
+  font-family:'DM Sans',Arial,sans-serif; color:#3D2B1F;
   box-shadow:0 20px 60px rgba(0,0,0,0.7); backdrop-filter:blur(12px);
   text-align:center;
 }
-#jamarGuide h3{ color:#C9A84C; font-size:20px; margin:0 0 6px; }
-#jamarGuide .subtitle{ color:#8B95A5; font-size:13px; margin:0 0 16px; font-style:italic; }
+#jamarGuide h3{ color:#8B6914; font-size:20px; margin:0 0 6px; }
+#jamarGuide .subtitle{ color:#6B5B4F; font-size:13px; margin:0 0 16px; font-style:italic; }
 #jamarGuide .steps{ text-align:left; margin:0 0 18px; padding:0; list-style:none; }
-#jamarGuide .steps li{ padding:6px 0; font-size:14px; color:#ccc; display:flex; gap:10px; align-items:flex-start; }
-#jamarGuide .steps li .num{ color:#C9A84C; font-weight:700; min-width:22px; }
+#jamarGuide .steps li{ padding:6px 0; font-size:14px; color:#3D2B1F; display:flex; gap:10px; align-items:flex-start; }
+#jamarGuide .steps li .num{ color:#8B6914; font-weight:700; min-width:22px; }
 #jamarGuide .dua{ font-family:'Cinzel',serif; font-size:18px; color:#C9A84C; margin:0 0 18px;
   text-shadow:0 1px 10px rgba(201,168,76,0.4); direction:rtl; line-height:1.6; }
 #jamarGuide button{
