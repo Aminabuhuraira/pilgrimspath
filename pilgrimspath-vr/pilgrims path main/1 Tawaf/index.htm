@@ -1040,11 +1040,14 @@ function dismissBanner(){
 }
 function playVO(f){
     if(!f) return;
+    // dedup: same file already playing -> no-op (prevents double playback)
+    if(window._voCurrentFile===f && window._voAudio && !window._voAudio.paused && !window._voAudio.ended) return;
     // Cancel any audio currently playing
     if(window._voAudio){ try{ window._voAudio.pause(); }catch(e){} window._voAudio=null; }
     // Always update the LATEST pending intent so a stale unlock handler plays
     // the correct (most recent) requested track, never an outdated welcome clip.
     window._voPending = f;
+    window._voCurrentFile = f;
     var url = (window.PPContent && window.PPContent.audioUrl)
         ? window.PPContent.audioUrl(f)
         : ('/Hajj%20voiceover%20english/English/' + encodeURIComponent(f));

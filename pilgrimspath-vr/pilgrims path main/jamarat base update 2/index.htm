@@ -820,9 +820,11 @@ _jbChk=function(id){var b=BANNERS[id];if(!b||shown[id])return;shown[id]=true;if(
   try{
     var f=(window._jb12VOMap||{})[id];
     if(f && window.PPContent && typeof window.PPContent.audioUrl==='function'){
+      // dedup: same file already playing -> no-op (prevents double playback)
+      if(window._voCurrentFile===f && window._voAudio && !window._voAudio.paused && !window._voAudio.ended) return;
       var url=window.PPContent.audioUrl(f);
       try{if(window._voAudio){window._voAudio.pause();window._voAudio=null;}}catch(_){}
-      var a=new Audio(url); window._voAudio=a; window._welcomeVoStarted=true;
+      var a=new Audio(url); window._voAudio=a; window._voCurrentFile=f; window._welcomeVoStarted=true;
       a.play().catch(function(){});
     }
   }catch(_){}};

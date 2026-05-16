@@ -982,7 +982,16 @@ function showQuizForCurrentStep(onDone){
         else { b.classList.add('wrong'); var cb = bodyEl.querySelector('.ppQuizOpt[data-i="'+correct+'"]'); if(cb) cb.classList.add('correct'); }
         bodyEl.querySelectorAll('.ppQuizOpt').forEach(function(x){ x.disabled = true; });
         var ex = bodyEl.querySelector('.ppQuizExplain');
-        if(ex && qs[idx].why){ ex.textContent = qs[idx].why; ex.classList.add('visible'); }
+        if(ex && qs[idx].why){
+          // Strip "Voiceover §N..." / "Source: voiceover §N..." citation prefix
+          // so the user only sees the explanation, not the internal reference.
+          var _why = String(qs[idx].why)
+            .replace(/^\s*(Source:\s*)?Voiceover\s*§[^:]*:\s*/i, '')
+            .replace(/\s*Voiceover\s*§[^.]*\.?\s*$/i, '')
+            .trim();
+          ex.textContent = _why || qs[idx].why;
+          ex.classList.add('visible');
+        }
         primary.disabled = false;
         primary.classList.remove('disabled');
       });

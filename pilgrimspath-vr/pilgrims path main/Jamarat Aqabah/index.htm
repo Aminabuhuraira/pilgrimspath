@@ -770,8 +770,11 @@ function openBanner(title,html){_bannerPager.title=title;_bannerPager.pages=_spl
 function dismissBanner(){if(_bannerPager.pages.length&&_bannerPager.index<_bannerPager.pages.length-1){_bannerPager.index++;_renderBannerPage();return;}_bannerPager={title:'',pages:[],index:0};document.getElementById('sceneBanner').style.display='none';}
 function playVO(f){
     if(!f) return;
+    // dedup: same file already playing -> no-op
+    if(window._voCurrentFile===f && window._voAudio && !window._voAudio.paused && !window._voAudio.ended) return;
     if(window._voAudio){ try{ window._voAudio.pause(); }catch(e){} window._voAudio=null; }
     window._voPending = f;
+    window._voCurrentFile = f;
     var url = (window.PPContent && window.PPContent.audioUrl)
         ? window.PPContent.audioUrl(f)
         : ('/Hajj%20Voice%20Over/' + encodeURIComponent(f));
