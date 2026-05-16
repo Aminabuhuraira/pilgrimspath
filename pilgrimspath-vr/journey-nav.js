@@ -1558,6 +1558,10 @@ window.showActivityNotice = showActivityNotice;
 // Long form on first scene + Mina; short form everywhere else.
 function showPathCue(){
   try{
+    // Skip in non-panorama scenes (e.g. Rest, Re-enter Ihram, Barber, Qurbani):
+    // these screens have their own in-flow Continue button which the toast
+    // would otherwise overlap, and there is no panorama to scan for a path.
+    if(!document.getElementById('viewer') && !window.TDV) return;
     var path = (window.location.pathname || '').toLowerCase();
     var search = (window.location.search || '').toLowerCase();
     // Decode the URL so "%20" becomes a real space (URL contains "/1%20Tawaf/" etc.)

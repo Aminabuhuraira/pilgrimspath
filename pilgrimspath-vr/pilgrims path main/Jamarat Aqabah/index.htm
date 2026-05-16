@@ -155,6 +155,14 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ro
 }
 #jamarAimHint.locked{ color:#22c55e; }
 
+/* Path-cue onboarding toast must clear the Throw button + Aim hint stack
+   in this scene so it isn't blocked by them. (Defaults: throw btn @ ~82px,
+   aim hint @ ~136px; mobile: throw @ ~70px+safe, aim @ ~126px+safe.) */
+#pathCueToast{ bottom: 178px !important; z-index: 9997 !important; }
+@media(max-width:520px){
+  #pathCueToast{ bottom: calc(168px + env(safe-area-inset-bottom,0px)) !important; }
+}
+
 /* Throw button disabled state */
 #jamarThrowBtn.disabled{
   opacity:0.35; cursor:not-allowed;
