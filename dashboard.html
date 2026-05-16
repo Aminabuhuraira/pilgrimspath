@@ -490,23 +490,23 @@
 
     // ─── Journey Card Navigation ──────────────────────────────────
     var HAJJ_CARD_URLS = {
-        1:  '/pilgrimspath-vr/pilgrims%20path%20main/0%20Ihram/ihram-scene.html?context=re-enter',
-        2:  '/pilgrimspath-vr/pilgrims%20path%20main/3%20Mina/index.htm?journey=3&context=8th-day',
-        3:  '/pilgrimspath-vr/pilgrims%20path%20main/4%20Arafah/index.htm?journey=4&context=9th-day',
-        4:  '/pilgrimspath-vr/pilgrims%20path%20main/Muzdalifah/index.htm?journey=5&context=pebbles',
-        5:  '/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat,%20Qurbani,%20trim%20Shave,%20Tawaf/Jamarat%20rooftop/index.htm?journey=6&context=10th-day',
-        6:  '/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat,%20Qurbani,%20trim%20Shave,%20Tawaf/qurbani-scene.html?journey=7&context=sacrifice',
-        7:  '/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat,%20Qurbani,%20trim%20Shave,%20Tawaf/barber-scene.html?journey=8&context=barber',
-        8:  '/pilgrimspath-vr/pilgrims%20path%20main/1%20Tawaf/index.htm?journey=9&context=ifadha',
-        9:  '/pilgrimspath-vr/pilgrims%20path%20main/2%20Safa%20and%20Marwa/index.htm?journey=2&context=sa-i',
-        10: '/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat,%20Qurbani,%20trim%20Shave,%20Tawaf/Jamarat%20rooftop/index.htm?journey=10&context=11th-day',
-        11: '/pilgrimspath-vr/pilgrims%20path%20main/1%20Tawaf/index.htm?journey=13&context=farewell'
+        1:  '/journey/ihram/ihram-scene.html?context=re-enter',
+        2:  '/journey/mina/index.htm?journey=3&context=8th-day',
+        3:  '/journey/arafah/index.htm?journey=4&context=9th-day',
+        4:  '/journey/muzdalifah/index.htm?journey=5&context=pebbles',
+        5:  '/journey/jamarat-rooftop/index.htm?journey=6&context=10th-day',
+        6:  '/journey/rami/qurbani-scene.html?journey=7&context=sacrifice',
+        7:  '/journey/rami/barber-scene.html?journey=8&context=barber',
+        8:  '/journey/tawaf/index.htm?journey=9&context=ifadha',
+        9:  '/journey/sai/index.htm?journey=2&context=sa-i',
+        10: '/journey/jamarat-rooftop/index.htm?journey=10&context=11th-day',
+        11: '/journey/tawaf/index.htm?journey=13&context=farewell'
     };
     var UMRAH_CARD_URLS = {
-        1:  '/pilgrimspath-vr/pilgrims%20path%20main/1%20Tawaf/index.htm?journey=1&context=initial',
-        2:  '/pilgrimspath-vr/pilgrims%20path%20main/1%20Tawaf/index.htm?journey=1&context=initial',
-        3:  '/pilgrimspath-vr/pilgrims%20path%20main/2%20Safa%20and%20Marwa/index.htm?journey=2&context=sa-i',
-        4:  '/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat,%20Qurbani,%20trim%20Shave,%20Tawaf/barber-scene.html?journey=8&context=barber'
+        1:  '/journey/tawaf/index.htm?journey=1&context=initial',
+        2:  '/journey/tawaf/index.htm?journey=1&context=initial',
+        3:  '/journey/sai/index.htm?journey=2&context=sa-i',
+        4:  '/journey/rami/barber-scene.html?journey=8&context=barber'
     };
     function goToHajjCard(n) {
         if (!localStorage.getItem('pp_umrah_completed')) {

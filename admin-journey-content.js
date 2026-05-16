@@ -10,7 +10,7 @@
 'use strict';
 
 var STORAGE_KEY = 'pp_journey_content_v2';
-var AUDIO_BASE_ROOT = '/hajj%20voiceover%20english/';
+var AUDIO_BASE_ROOT = '/Hajj%20voiceover%20english/';
 var SEED_VERSION = 24; // bump to force re-sync of banner text/audio from DEFAULT_DATA
 // Below this seed version, ALL banner text/audio is force-reset from DEFAULT_DATA.
 // This is a one-time nuclear reset to wipe any mojibake or Windows-encoding corruption

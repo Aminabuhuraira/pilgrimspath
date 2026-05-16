@@ -534,7 +534,7 @@ body.ppMenuOpen #viewer { z-index: 99490 !important; }
   .ppPauseIcon span { height: 14px; width: 4px; }
 
   #nextStopBtn {
-    bottom: 128px;
+    bottom: 168px;
     right: 15px;
     padding: 12px 20px;
     font-size: 14px;
@@ -595,7 +595,7 @@ body.ppMenuOpen #viewer { z-index: 99490 !important; }
 
   #nextStopBtn {
     right: max(10px, env(safe-area-inset-right));
-    bottom: calc(120px + env(safe-area-inset-bottom));
+    bottom: calc(160px + env(safe-area-inset-bottom));
     max-width: calc(100vw - 20px);
     padding: 10px 16px;
     font-size: 13px;

@@ -76,6 +76,32 @@ function requireVrAccess(req, res, next) {
     return res.status(403).send('Forbidden');
   }
 }
+// ── Clean URL aliases for VR journey scenes ───────────────────
+// Maps /journey/<slug>/... to the real folder under /pilgrimspath-vr/pilgrims path main/.
+// Keeps the original encoded paths working so deep links don't break.
+const JOURNEY_SLUG_MAP = {
+  'tawaf'            : '1 Tawaf',
+  'sai'              : '2 Safa and Marwa',
+  'ihram'            : '0 Ihram',
+  'mina'             : '3 Mina',
+  'arafah'           : '4 Arafah',
+  'muzdalifah'       : 'Muzdalifah',
+  'jamarat-aqabah'   : 'Jamarat Aqabah',
+  'rami'             : '5 Rami Jamarat, Qurbani, trim Shave, Tawaf',
+  'jamarat-rooftop'  : '5 Rami Jamarat, Qurbani, trim Shave, Tawaf/Jamarat rooftop',
+  'jamarat-base-12'  : 'jamarat base update 2',
+};
+app.use((req, res, next) => {
+  const m = req.url.match(/^\/journey\/([^\/?#]+)(\/?.*)$/);
+  if (!m) return next();
+  const dir = JOURNEY_SLUG_MAP[m[1]];
+  if (!dir) return next();
+  const tail = m[2] && m[2].length > 1 ? m[2] : '/index.htm';
+  req.url = '/pilgrimspath-vr/pilgrims%20path%20main/' +
+    encodeURIComponent(dir).replace(/%2F/g, '/') + tail;
+  next();
+});
+
 app.use('/pilgrimspath-vr', requireVrAccess);
 
 // ── Admin session gate ────────────────────────────────────────

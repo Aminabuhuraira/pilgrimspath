@@ -282,11 +282,31 @@ function chk(id) {
 }
 function hookTDV(){if(typeof TDV==='undefined'||!TDV.Tour||!TDV.Tour.Script)return setTimeout(hookTDV,500);var o1=TDV.Tour.Script.setPlayListSelectedIndex;if(o1){TDV.Tour.Script.setPlayListSelectedIndex=function(a,b){try{var id=a.get('items')[b].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}catch(e){}return o1.apply(this,arguments);};}var o2=TDV.Tour.Script.setMainMediaByIndex;if(o2){TDV.Tour.Script.setMainMediaByIndex=function(a){try{var items=this.mainPlayList.get('items');if(a>=0&&a<items.length){var id=items[a].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}}catch(e){}return o2.apply(this,arguments);};}console.log('[Arafah] banner hooks installed');}
 hookTDV();
+// Force-jump to the entry panorama (84B0CD28). The TDV tour may default to a
+// different panorama (e.g. the summit 84B78C66) which would cause the
+// summit "Continue or Explore" landing prompt to appear on scene load.
+var ARAFAH_ENTRY = 'panorama_84B0CD28_8BC4_4A0E_4196_9526145973A3';
+function _arafahJumpEntry(retries){
+  retries = retries || 0;
+  try{
+    var t = TDV.PlayerAPI.getCurrentPlayer();
+    var pl = t && t.mainPlayList;
+    if(!pl){ if(retries<40) return setTimeout(function(){_arafahJumpEntry(retries+1);}, 250); return; }
+    var items = pl.get('items');
+    for(var i=0; i<items.length; i++){
+      if(items[i].get('media').get('id') === ARAFAH_ENTRY){
+        if(pl.get('selectedIndex') !== i) pl.set('selectedIndex', i);
+        return;
+      }
+    }
+  }catch(e){ if(retries<40) setTimeout(function(){_arafahJumpEntry(retries+1);}, 250); }
+}
+setTimeout(_arafahJumpEntry, 800);
 // Fire the Arafah intro on the entry panorama after a short delay
 // (fallback in case the TDV hook doesn't fire on initial load)
 setTimeout(function(){
-  if (!shown['panorama_84B0CD28_8BC4_4A0E_4196_9526145973A3']) {
-    shown['panorama_84B0CD28_8BC4_4A0E_4196_9526145973A3'] = true;
+  if (!shown[ARAFAH_ENTRY]) {
+    shown[ARAFAH_ENTRY] = true;
     _showArafahIntro();
   }
 }, 2500);

@@ -322,7 +322,14 @@ hookTDV();
 if(IS_TENT_MODE){
   function jumpToTent(retries){retries=retries||0;try{var t=TDV.PlayerAPI.getCurrentPlayer();var pl=t&&t.mainPlayList;if(!pl){if(retries<40)return setTimeout(function(){jumpToTent(retries+1);},250);return;}var items=pl.get('items');for(var i=0;i<items.length;i++){if(items[i].get('media').get('id')===TENT_PANO){if(pl.get('selectedIndex')!==i)pl.set('selectedIndex',i);return;}}}catch(e){if(retries<40)setTimeout(function(){jumpToTent(retries+1);},250);}}
   setTimeout(jumpToTent,1500);
-  setTimeout(function(){chk(TENT_PANO);},2500);
+  // Tents mode: suppress the auto-firing "Continue or Explore" landing prompt
+  // on first frame. Mark the tent panorama as already-shown so the TDV hook
+  // does not pop the prompt instantly when the force-jump lands there. The
+  // user can summon the end-of-scene options via the "I'm done exploring"
+  // pill which appears after a short interaction window.
+  shown[TENT_PANO] = true;
+  _landingShown[TENT_PANO] = true;
+  setTimeout(function(){ if(typeof _showMinaDoneBtn === 'function') _showMinaDoneBtn(); }, 6000);
 } else {
   setTimeout(function(){var k=Object.keys(_bannerMap);if(k.length)chk(k[0]);},2500);
 }

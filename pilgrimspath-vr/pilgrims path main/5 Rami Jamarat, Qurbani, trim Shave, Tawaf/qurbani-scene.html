@@ -3,6 +3,8 @@
 <head>
 <script>/* cache-nuke v36 */(function(){var V="pp_nk36";if(localStorage.getItem(V))return;localStorage.setItem(V,"1");if("serviceWorker" in navigator){Promise.all([navigator.serviceWorker.getRegistrations().then(function(r){return Promise.all(r.map(function(s){return s.unregister();}))}),caches.keys().then(function(k){return Promise.all(k.map(function(c){return caches.delete(c)}))})]).then(function(){var u=new URL(location.href);u.searchParams.set("_t",Date.now().toString(36));location.replace(u.toString());});return;}})();</script>
 <meta charset="UTF-8"/>
+<link rel="icon" type="image/png" sizes="512x512" href="/images/Pilgrims_Path-removebg-preview.png">
+<link rel="apple-touch-icon" sizes="512x512" href="/images/Pilgrims_Path-removebg-preview.png">
 <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
@@ -174,6 +176,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overfl
 html,body{height:100%;overflow:hidden}
 .scene-wrap{height:100vh;height:100dvh;overflow:hidden;padding:14px 10px;align-items:flex-start;justify-content:center}
 .scene-card{width:100%;max-width:760px;max-height:calc(100vh - 28px);max-height:calc(100dvh - 28px);overflow-y:auto;overflow-x:hidden;padding:18px 22px;scrollbar-width:thin;scrollbar-color:#D4AF37 transparent}
+.scene-card,.scene-card *{word-wrap:break-word;overflow-wrap:break-word;min-width:0}
 .scene-card::-webkit-scrollbar{width:6px}
 .scene-card::-webkit-scrollbar-thumb{background:#D4AF37;border-radius:3px}
 .scene-icon{font-size:1.9rem;margin-bottom:2px}

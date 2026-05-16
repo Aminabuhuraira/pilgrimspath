@@ -37,7 +37,7 @@
     <p class="subtitle">An immersive 16-step journey through the sacred rites of Hajj</p>
     <div class="divider"></div>
 
-    <a class="btn-start" href="/pilgrimspath-vr/pilgrims%20path%20main/1%20Tawaf/index.htm?journey=1&context=initial">
+    <a class="btn-start" href="/journey/tawaf/index.htm?journey=1&context=initial">
       🕊️ Begin Your Hajj Journey
     </a>
 
@@ -59,22 +59,22 @@
 
   // Build step quick-links from journey-manager
   var STEPS = [
-    {n:1,  icon:'🕋', name:'Tawaf × 7',                  url:'/pilgrimspath-vr/pilgrims%20path%20main/1%20Tawaf/index.htm?journey=1&context=initial'},
-    {n:2,  icon:'🚶', name:"Sa'i — Safa & Marwa",         url:'/pilgrimspath-vr/pilgrims%20path%20main/2%20Safa%20and%20Marwa/index.htm?journey=2&context=sa-i'},
-    {n:3,  icon:'✂️', name:'Clip/Shave Hair (Umrah)',     url:'/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat%2C%20Qurbani%2C%20trim%20Shave%2C%20Tawaf/barber-scene.html?journey=3&context=umrah-trim'},
-    {n:4,  icon:'🌙', name:'Resting & Praying',           url:'/pilgrimspath-vr/pilgrims%20path%20main/0%20Ihram/rest-scene.html?journey=4'},
-    {n:5,  icon:'🤲', name:'Re-enter State of Ihram',     url:'/pilgrimspath-vr/pilgrims%20path%20main/0%20Ihram/ihram-scene.html?journey=5&context=re-enter'},
-    {n:6,  icon:'⛺', name:'Arrive at Mina (8th Day)',    url:'/pilgrimspath-vr/pilgrims%20path%20main/3%20Mina/index.htm?journey=6&context=8th-day'},
-    {n:7,  icon:'🌄', name:'Day of Arafah',               url:'/pilgrimspath-vr/pilgrims%20path%20main/4%20Arafah/index.htm?journey=7&context=9th-day'},
-    {n:8,  icon:'⭐', name:'Muzdalifah',                  url:'/pilgrimspath-vr/pilgrims%20path%20main/Muzdalifah/index.htm?journey=8&context=pebbles'},
-    {n:9,  icon:'🪨', name:'Rami al-Aqabah (10th Day)',  url:'/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat%2C%20Qurbani%2C%20trim%20Shave%2C%20Tawaf/Jamarat%20rooftop/index.htm?journey=9&context=10th-day'},
-    {n:10, icon:'🐑', name:'Qurbani (Sacrifice)',         url:'/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat%2C%20Qurbani%2C%20trim%20Shave%2C%20Tawaf/qurbani-scene.html?journey=10&context=sacrifice'},
-    {n:11, icon:'✂️', name:'Shave Head (Halaq)',          url:'/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat%2C%20Qurbani%2C%20trim%20Shave%2C%20Tawaf/barber-scene.html?journey=11&context=barber'},
-    {n:12, icon:'🕋', name:'Tawaf al-Ifadha',             url:'/pilgrimspath-vr/pilgrims%20path%20main/1%20Tawaf/index.htm?journey=12&context=ifadha'},
-    {n:13, icon:'🪨', name:'Rami — All Pillars (11th)',  url:'/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat%2C%20Qurbani%2C%20trim%20Shave%2C%20Tawaf/Jamarat%20rooftop/index.htm?journey=13&context=11th-day'},
-    {n:14, icon:'⛺', name:'Spend Night at Mina',         url:'/pilgrimspath-vr/pilgrims%20path%20main/3%20Mina/index.htm?journey=14&context=tents-12th'},
-    {n:15, icon:'🪨', name:'Rami — All Pillars (12th)',  url:'/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat%2C%20Qurbani%2C%20trim%20Shave%2C%20Tawaf/Jamarat%20rooftop/index.htm?journey=15&context=12th-day'},
-    {n:16, icon:'🕌', name:"Farewell Tawaf al-Wida'",    url:'/pilgrimspath-vr/pilgrims%20path%20main/1%20Tawaf/index.htm?journey=16&context=farewell'}
+    {n:1,  icon:'🕋', name:'Tawaf × 7',                  url:'/journey/tawaf/index.htm?journey=1&context=initial'},
+    {n:2,  icon:'🚶', name:"Sa'i — Safa & Marwa",         url:'/journey/sai/index.htm?journey=2&context=sa-i'},
+    {n:3,  icon:'✂️', name:'Clip/Shave Hair (Umrah)',     url:'/journey/rami/barber-scene.html?journey=3&context=umrah-trim'},
+    {n:4,  icon:'🌙', name:'Resting & Praying',           url:'/journey/ihram/rest-scene.html?journey=4'},
+    {n:5,  icon:'🤲', name:'Re-enter State of Ihram',     url:'/journey/ihram/ihram-scene.html?journey=5&context=re-enter'},
+    {n:6,  icon:'⛺', name:'Arrive at Mina (8th Day)',    url:'/journey/mina/index.htm?journey=6&context=8th-day'},
+    {n:7,  icon:'🌄', name:'Day of Arafah',               url:'/journey/arafah/index.htm?journey=7&context=9th-day'},
+    {n:8,  icon:'⭐', name:'Muzdalifah',                  url:'/journey/muzdalifah/index.htm?journey=8&context=pebbles'},
+    {n:9,  icon:'🪨', name:'Rami al-Aqabah (10th Day)',  url:'/journey/jamarat-rooftop/index.htm?journey=9&context=10th-day'},
+    {n:10, icon:'🐑', name:'Qurbani (Sacrifice)',         url:'/journey/rami/qurbani-scene.html?journey=10&context=sacrifice'},
+    {n:11, icon:'✂️', name:'Shave Head (Halaq)',          url:'/journey/rami/barber-scene.html?journey=11&context=barber'},
+    {n:12, icon:'🕋', name:'Tawaf al-Ifadha',             url:'/journey/tawaf/index.htm?journey=12&context=ifadha'},
+    {n:13, icon:'🪨', name:'Rami — All Pillars (11th)',  url:'/journey/jamarat-rooftop/index.htm?journey=13&context=11th-day'},
+    {n:14, icon:'⛺', name:'Spend Night at Mina',         url:'/journey/mina/index.htm?journey=14&context=tents-12th'},
+    {n:15, icon:'🪨', name:'Rami — All Pillars (12th)',  url:'/journey/jamarat-rooftop/index.htm?journey=15&context=12th-day'},
+    {n:16, icon:'🕌', name:"Farewell Tawaf al-Wida'",    url:'/journey/tawaf/index.htm?journey=16&context=farewell'}
   ];
 
   var saved = JSON.parse(localStorage.getItem('journeyState')||'{}');

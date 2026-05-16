@@ -160,10 +160,25 @@
     var currentGroup = null;
     var currentGroupItems = null;
 
+    // Read persisted completion state from journey-manager (localStorage).
+    // Falls back to "all steps before current URL ?journey=N" if no state yet.
+    var COMPLETED = (function(){
+      try{
+        var raw = localStorage.getItem('journeyState');
+        if(!raw) return null;
+        var arr = (JSON.parse(raw)||{}).completedSteps;
+        return Array.isArray(arr) ? arr : null;
+      }catch(_){ return null; }
+    })();
+
     SCENES.forEach(function (s) {
       // Active: prefer journey param, fall back to string id match
       var isActive = PAGE_JOURNEY > 0 ? (s.step === PAGE_JOURNEY) : (s.id === CURRENT);
-      var isDone   = PAGE_JOURNEY > 0 ? (s.step < PAGE_JOURNEY) : false;
+      // Done: prefer persisted completedSteps (true completion), else legacy
+      // "step is earlier in the URL-implied progression" heuristic.
+      var isDone   = COMPLETED
+        ? (COMPLETED.indexOf(s.step) !== -1)
+        : (PAGE_JOURNEY > 0 ? (s.step < PAGE_JOURNEY) : false);
 
       var a = document.createElement('a');
       a.className = 'scnItem' + (isActive ? ' scnActiveItem' : '') + (isDone ? ' scnDoneItem' : '');

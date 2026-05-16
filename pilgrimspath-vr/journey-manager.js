@@ -11,23 +11,23 @@
 const HAJJ_JOURNEY = [
   // ── Umrah rituals (within Hajj al-Tamattu') ──
   // Note: Ihram prep/enter info is embedded inside the Tawaf scene's built-in guide
-  {id: 1,  step: 1,  name: 'Tawaf x7',                      url: '/pilgrimspath-vr/pilgrims%20path%20main/1%20Tawaf/index.htm',               type: 'vr',   context: 'initial'},
-  {id: 2,  step: 2,  name: "Sa'i — Safa & Marwa",           url: '/pilgrimspath-vr/pilgrims%20path%20main/2%20Safa%20and%20Marwa/index.htm?v=3',  type: 'vr',   context: 'sa-i'},
-  {id: 3,  step: 3,  name: 'Clip/Shave Hair (Umrah)',        url: '/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat%2C%20Qurbani%2C%20trim%20Shave%2C%20Tawaf/umrah-trim-scene.html', type: 'html', context: 'umrah-trim'},
-  {id: 4,  step: 4,  name: 'Resting & Praying',             url: '/pilgrimspath-vr/pilgrims%20path%20main/0%20Ihram/rest-scene.html',         type: 'html', context: 'rest'},
-  {id: 5,  step: 5,  name: 'Re-enter State of Ihram',       url: '/pilgrimspath-vr/pilgrims%20path%20main/0%20Ihram/ihram-scene.html',         type: 'html', context: 're-enter'},
+  {id: 1,  step: 1,  name: 'Tawaf x7',                      url: '/journey/tawaf/index.htm',               type: 'vr',   context: 'initial'},
+  {id: 2,  step: 2,  name: "Sa'i — Safa & Marwa",           url: '/journey/sai/index.htm?v=3',  type: 'vr',   context: 'sa-i'},
+  {id: 3,  step: 3,  name: 'Clip/Shave Hair (Umrah)',        url: '/journey/rami/umrah-trim-scene.html', type: 'html', context: 'umrah-trim'},
+  {id: 4,  step: 4,  name: 'Resting & Praying',             url: '/journey/ihram/rest-scene.html',         type: 'html', context: 'rest'},
+  {id: 5,  step: 5,  name: 'Re-enter State of Ihram',       url: '/journey/ihram/ihram-scene.html',         type: 'html', context: 're-enter'},
   // ── Hajj rituals ──
-  {id: 6,  step: 6,  name: 'Arrive at Mina (8th Day)',      url: '/pilgrimspath-vr/pilgrims%20path%20main/3%20Mina/index.htm',               type: 'vr',   context: '8th-day'},
-  {id: 7,  step: 7,  name: 'Day of Arafah',                 url: '/pilgrimspath-vr/pilgrims%20path%20main/4%20Arafah/index.htm',             type: 'vr',   context: '9th-day'},
-  {id: 8,  step: 8,  name: 'Muzdalifah',                    url: '/pilgrimspath-vr/pilgrims%20path%20main/Muzdalifah/index.htm',              type: 'vr',   context: 'pebbles'},
-  {id: 9,  step: 9,  name: 'Rami al-Aqabah (10th Day)',     url: '/pilgrimspath-vr/pilgrims%20path%20main/Jamarat%20Aqabah/index.htm?v=3', type: 'vr', context: '10th-day'},
-  {id: 10, step: 10, name: 'Qurbani (Sacrifice)',           url: '/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat%2C%20Qurbani%2C%20trim%20Shave%2C%20Tawaf/qurbani-scene.html', type: 'html', context: 'sacrifice'},
-  {id: 11, step: 11, name: 'Shave Head (Halaq)',            url: '/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat%2C%20Qurbani%2C%20trim%20Shave%2C%20Tawaf/barber-scene.html', type: 'html', context: 'barber'},
-  {id: 12, step: 12, name: 'Tawaf al-Ifadha',              url: '/pilgrimspath-vr/pilgrims%20path%20main/1%20Tawaf/index.htm',               type: 'vr',   context: 'ifadha'},
-  {id: 13, step: 13, name: 'Rami — All Pillars (11th Day)', url: '/pilgrimspath-vr/pilgrims%20path%20main/5%20Rami%20Jamarat%2C%20Qurbani%2C%20trim%20Shave%2C%20Tawaf/Jamarat%20rooftop/index.htm?v=3', type: 'vr', context: '11th-day'},
-  {id: 14, step: 14, name: 'Spend Night at Mina',          url: '/pilgrimspath-vr/pilgrims%20path%20main/3%20Mina/index.htm',               type: 'vr',   context: 'tents-12th'},
-  {id: 15, step: 15, name: 'Rami — All Pillars (12th Day)', url: '/pilgrimspath-vr/pilgrims%20path%20main/jamarat%20base%20update%202/index.htm?v=17', type: 'vr', context: '12th-day'},
-  {id: 16, step: 16, name: "Farewell Tawaf al-Wida'",      url: '/pilgrimspath-vr/pilgrims%20path%20main/1%20Tawaf/index.htm',               type: 'vr',   context: 'farewell'},
+  {id: 6,  step: 6,  name: 'Arrive at Mina (8th Day)',      url: '/journey/mina/index.htm',               type: 'vr',   context: '8th-day'},
+  {id: 7,  step: 7,  name: 'Day of Arafah',                 url: '/journey/arafah/index.htm',             type: 'vr',   context: '9th-day'},
+  {id: 8,  step: 8,  name: 'Muzdalifah',                    url: '/journey/muzdalifah/index.htm',              type: 'vr',   context: 'pebbles'},
+  {id: 9,  step: 9,  name: 'Rami al-Aqabah (10th Day)',     url: '/journey/jamarat-aqabah/index.htm?v=3', type: 'vr', context: '10th-day'},
+  {id: 10, step: 10, name: 'Qurbani (Sacrifice)',           url: '/journey/rami/qurbani-scene.html', type: 'html', context: 'sacrifice'},
+  {id: 11, step: 11, name: 'Shave Head (Halaq)',            url: '/journey/rami/barber-scene.html', type: 'html', context: 'barber'},
+  {id: 12, step: 12, name: 'Tawaf al-Ifadha',              url: '/journey/tawaf/index.htm',               type: 'vr',   context: 'ifadha'},
+  {id: 13, step: 13, name: 'Rami — All Pillars (11th Day)', url: '/journey/jamarat-rooftop/index.htm?v=3', type: 'vr', context: '11th-day'},
+  {id: 14, step: 14, name: 'Spend Night at Mina',          url: '/journey/mina/index.htm',               type: 'vr',   context: 'tents-12th'},
+  {id: 15, step: 15, name: 'Rami — All Pillars (12th Day)', url: '/journey/jamarat-base-12/index.htm?v=17', type: 'vr', context: '12th-day'},
+  {id: 16, step: 16, name: "Farewell Tawaf al-Wida'",      url: '/journey/tawaf/index.htm',               type: 'vr',   context: 'farewell'},
 ];
 
 // ── JourneyManager Class ──
@@ -82,6 +82,14 @@ class JourneyManager {
   goToStep(index){
     if(index >= 1 && index <= HAJJ_JOURNEY.length){
       const step = HAJJ_JOURNEY[index - 1];
+      // Mark the step we are leaving as completed when moving forward.
+      // (Backward navigation does NOT un-complete steps already finished.)
+      if(this.currentStep > 0 && index > this.currentStep){
+        if(!Array.isArray(this.completedSteps)) this.completedSteps = [];
+        if(this.completedSteps.indexOf(this.currentStep) === -1){
+          this.completedSteps.push(this.currentStep);
+        }
+      }
       this.currentStep = index;
       this.currentContext = step.context;
       this.saveState();
