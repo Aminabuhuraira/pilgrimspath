@@ -758,7 +758,16 @@
     }
 
     // ===== On Load — redirect if already logged in =====
+    // Skip this when a redirect target is pending: either ?next= (handled below)
+    // or a previously-stored sessionStorage.redirectAfterLogin. The auto-redirect
+    // IIFE further down handles those cases and will route the user to the right
+    // destination AFTER granting the pp_access VR cookie.
     document.addEventListener('DOMContentLoaded', () => {
+        try {
+            var hasNext = new URLSearchParams(window.location.search).get('next');
+            var hasStored = sessionStorage.getItem('redirectAfterLogin');
+            if (hasNext || hasStored) return; // let the auto-redirect IIFE handle it
+        } catch(e) {}
         redirectIfLoggedIn();
     });
 

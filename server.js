@@ -148,6 +148,25 @@ app.get('/sanctum-admin-7f3k9q2m', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
+// ── /login shortcut ───────────────────────────────────────────
+// If the visitor already holds a valid pp_access JWT cookie AND the URL
+// includes ?next=, skip rendering the form and go straight to the target.
+// This eliminates the loop where the VR gate sent a logged-in user to
+// /login?next=/journey/... and the page bounced them to /dashboard.
+app.get(['/login', '/login.html'], (req, res, next) => {
+  const token = req.cookies && req.cookies.pp_access;
+  const dest  = typeof req.query.next === 'string' ? req.query.next : '';
+  if (!token || !dest) return next();
+  // Only follow safe local destinations (must start with a single '/').
+  if (!/^\/[^/]/.test(dest)) return next();
+  const secret = process.env.JWT_SECRET;
+  if (!secret) return next();
+  try {
+    jwt.verify(token, secret);
+    return res.redirect(302, dest);
+  } catch { return next(); }
+});
+
 // ── Service Worker — must never be cached by the browser ─────
 // Browsers use a byte-diff check to detect SW updates, but only if they
 // actually fetch it. A stale HTTP cache would prevent that check entirely,

@@ -64,9 +64,13 @@ module.exports = async function handler(req, res) {
   const isHttps =
     (req.headers['x-forwarded-proto'] === 'https') ||
     (req.socket && req.socket.encrypted);
+  // SameSite=Lax is the right default for an auth cookie — it is sent on
+  // top-level GET navigations (which is exactly how /journey/* is reached
+  // from the dashboard), while still blocking CSRF on POST. Strict was too
+  // aggressive and caused the cookie to be omitted on some browser redirects.
   const flags = isHttps
-    ? 'HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=2592000'
-    : 'HttpOnly; SameSite=Strict; Path=/; Max-Age=2592000';
+    ? 'HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=2592000'
+    : 'HttpOnly; SameSite=Lax; Path=/; Max-Age=2592000';
   res.setHeader('Set-Cookie', `pp_access=${accessToken}; ${flags}`);
 
   return res.status(200).json({ ok: true });
