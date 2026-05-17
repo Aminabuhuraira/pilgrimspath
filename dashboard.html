@@ -489,6 +489,22 @@
     (function(){try{var st=Date.now();window.addEventListener('beforeunload',function(){var d=Math.floor((Date.now()-st)/1000);var s=JSON.parse(localStorage.getItem('pp_sessions')||'[]');s.push(d);if(s.length>100)s.splice(0,s.length-100);localStorage.setItem('pp_sessions',JSON.stringify(s));});var v=JSON.parse(localStorage.getItem('pp_visits')||'[]');v.push({time:new Date().toISOString(),referrer:document.referrer||'direct',page:location.pathname});if(v.length>500)v.splice(0,v.length-500);localStorage.setItem('pp_visits',JSON.stringify(v));}catch(e){}})();
 
     // ─── Journey Card Navigation ──────────────────────────────────
+    // Auto-detect Umrah completion from journey state so logged-in pilgrims
+    // who finished Tawaf + Sa'i (the core Umrah rites) aren't gated out of Hajj.
+    (function autoUnlockUmrah(){
+        if (localStorage.getItem('pp_umrah_completed')) return;
+        try {
+            var s = JSON.parse(localStorage.getItem('journeyState') || '{}');
+            var done = Array.isArray(s.completedSteps) ? s.completedSteps : [];
+            var cur  = parseInt(s.currentStep, 10) || 0;
+            // Umrah is effectively complete once Tawaf (1) AND Sa'i (2) are done,
+            // or the journey has advanced past Sa'i.
+            if (cur > 2 || (done.indexOf(1) !== -1 && done.indexOf(2) !== -1)) {
+                localStorage.setItem('pp_umrah_completed', '1');
+            }
+        } catch(e){}
+    })();
+
     var HAJJ_CARD_URLS = {
         1:  '/journey/ihram/ihram-scene.html?context=re-enter',
         2:  '/journey/mina/index.htm?journey=3&context=8th-day',

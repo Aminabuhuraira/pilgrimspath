@@ -1116,8 +1116,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="meta-capi.js" defer></script>
 
-<!-- Email Gate Modal -->
-<div id="emailGate" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);align-items:center;justify-content:center;">
+<!-- Email Gate Modal (DISABLED — kept for backwards compat, never shown) -->
+<div id="emailGate" style="display:none !important;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);align-items:center;justify-content:center;">
     <div style="background:white;border-radius:24px;padding:48px 36px;max-width:440px;width:90%;text-align:center;position:relative;box-shadow:0 30px 80px rgba(0,0,0,0.3);">
         <div style="width:64px;height:64px;margin:0 auto 20px;border-radius:50%;background:linear-gradient(135deg,rgba(201,162,39,0.15),rgba(201,162,39,0.05));display:flex;align-items:center;justify-content:center;">
             <i class="fas fa-kaaba" style="font-size:1.5rem;color:#C9A227;"></i>
@@ -1165,10 +1165,8 @@
     }
 
     function showGateIfNeeded() {
-        if (!hasAccess) {
-            var gate = document.getElementById('emailGate');
-            gate.style.display = 'flex';
-        }
+        // Email gate permanently disabled — never show the popup.
+        return;
     }
 
     window.captureLead = function(e) {
