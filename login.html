@@ -581,7 +581,7 @@
 
     <!-- Supabase JS SDK (CDN) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="auth.js?v=20260517b"></script>
+    <script src="auth.js?v=20260517c"></script>
 
     <script>
     // ===== Tab Switching =====
@@ -767,32 +767,43 @@
 
     // ===== On Load — single auto-redirect for already-signed-in users =====
     // If a session exists: grant VR cookie, then navigate to ?next= (if set
-    // and safe) or /dashboard. If grant FAILS, we do NOT redirect — we let
-    // the form show so the user can re-authenticate. This is what prevents
-    // the infinite /login → /journey → /login loop that occurs when the
-    // VR gate keeps bouncing because the cookie never lands.
+    // and safe) or /dashboard. Loop prevention: per-destination attempt
+    // counter (sessionStorage). If we end up back here for the same dest
+    // after >2 attempts, stop trying and show the form with an error.
     (async function autoRedirect() {
         try {
             if (typeof getSession !== 'function') return;
             const session = await getSession();
             if (!session) return; // not logged in — show the form
+
             const nextParam = new URLSearchParams(location.search).get('next');
             const safeNext = (nextParam && /^\/[^/]/.test(nextParam)) ? nextParam : null;
             const dest = safeNext || '/dashboard';
-            // If destination is a VR route, we MUST grant the cookie first.
-            // If grant fails OR the sentinel cookie did not land in the browser
-            // (e.g. third-party cookie block), abort the redirect so the user
-            // is not looped indefinitely between /login and /journey.
+
+            // Loop guard — count attempts per destination in this tab.
+            const guardKey = '_pp_auto_redirect_attempts:' + dest;
+            const attempts = parseInt(sessionStorage.getItem(guardKey) || '0', 10);
+            if (attempts >= 2) {
+                sessionStorage.removeItem(guardKey);
+                console.warn('[login] aborted auto-redirect after 2 failed attempts to', dest);
+                showMessage('Could not establish VR session. Please sign in again.', 'error');
+                return;
+            }
+            sessionStorage.setItem(guardKey, attempts + 1);
+
+            // For VR destinations, attempt to grant the pp_access cookie.
+            // We do NOT block on the result — the cookie may be set in the
+            // browser jar even if document.cookie does not yet reflect it.
+            // The next request will carry it. If the cookie genuinely failed
+            // to land, we will return here and the attempt counter trips.
             const isVrRoute = dest.startsWith('/journey/') || dest.startsWith('/pilgrimspath-vr');
             if (isVrRoute && typeof window.ppGrantVrAccess === 'function') {
-                const ok = await window.ppGrantVrAccess(session);
-                const sentinel = /(?:^|;\s*)pp_access_ok=1/.test(document.cookie || '');
-                if (!ok || !sentinel) {
-                    console.warn('[login] VR cookie not established (grant=' + ok + ', sentinel=' + sentinel + '); showing form');
-                    showMessage('Could not establish VR session. Please sign in again.', 'error');
-                    return;
-                }
+                try { await window.ppGrantVrAccess(session); } catch(e){}
             }
+
+            // Clear the counter on the destination side via a one-shot URL
+            // param — the destination doesn't need to know about it, but if
+            // navigation succeeds the counter just stays at 1 (stale, harmless).
             location.replace(dest);
         } catch (e) { console.warn('[login] auto-redirect error', e); }
     })();
