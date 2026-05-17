@@ -382,7 +382,7 @@
 
     <!-- Supabase Auth -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="auth.js?v=20260517"></script>
+    <script src="auth.js?v=20260517b"></script>
     <script>
     // Auth guard — redirect to login if not signed in
     (async () => {
@@ -517,28 +517,14 @@
         4:  '/journey/rami/umrah-trim-scene.html?journey=3&context=umrah-trim'
     };
     async function _ppGo(url) {
-        // Try to ensure pp_access + sentinel cookies are set before navigating.
-        // The sentinel (pp_access_ok=1) is the fast path — confirms cookies land.
-        // If grant fails after two attempts we navigate anyway: the server will
-        // redirect to /login which auto-grants the cookie and bounces back once.
-        function _hasSentinel() {
-            return /(?:^|;\s*)pp_access_ok=1/.test(document.cookie || '');
+        // Grant the VR cookie first so /journey/* loads directly. If grant
+        // fails (e.g. session expired), navigate anyway — the server will
+        // redirect to /login?next=<url>, which then re-grants and bounces
+        // back. No infinite loop: login.html aborts the auto-redirect when
+        // grant fails and shows the form instead.
+        if (typeof window.ppGrantVrAccess === 'function') {
+            try { await window.ppGrantVrAccess(); } catch(e){}
         }
-        async function _grantOnce() {
-            if (typeof window.ppGrantVrAccess !== 'function') return false;
-            try { return !!(await window.ppGrantVrAccess()); } catch(e){ return false; }
-        }
-        if (!_hasSentinel()) {
-            await Promise.race([_grantOnce(), new Promise(function(res){ setTimeout(res, 2500); })]);
-        }
-        if (!_hasSentinel()) {
-            // Retry once after a brief delay (covers slow networks / first-request races)
-            await new Promise(function(r){ setTimeout(r, 250); });
-            await Promise.race([_grantOnce(), new Promise(function(res){ setTimeout(res, 2500); })]);
-        }
-        // Navigate regardless — if pp_access cookie is absent the server redirects
-        // to /login which auto-grants and returns here (single round-trip, no loop).
-        window.__ppVrReady = _hasSentinel();
         window.location.href = url;
     }
     function goToHajjCard(n) {

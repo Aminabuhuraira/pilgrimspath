@@ -581,7 +581,7 @@
 
     <!-- Supabase JS SDK (CDN) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="auth.js?v=20260517"></script>
+    <script src="auth.js?v=20260517b"></script>
 
     <script>
     // ===== Tab Switching =====
@@ -653,16 +653,16 @@
                 MetaCAPI.lead({ content_name: 'User Login', content_category: 'Authentication' }, { em: email });
             }
             
-            const redirect = sessionStorage.getItem('redirectAfterLogin') || 'dashboard.html';
-            sessionStorage.removeItem('redirectAfterLogin');
-            // Grant the VR access cookie BEFORE navigating so /journey/* URLs
-            // don't bounce back to /login (which would loop).
+            // Single source of truth for post-login destination: ?next= param.
+            // Grant VR cookie first so /journey/* loads directly without bouncing.
+            const nextParam = new URLSearchParams(location.search).get('next');
+            const dest = (nextParam && /^\/[^/]/.test(nextParam)) ? nextParam : '/dashboard';
             try {
                 if (typeof window.ppGrantVrAccess === 'function') {
                     await window.ppGrantVrAccess(result && result.session);
                 }
             } catch(e){}
-            setTimeout(() => { window.location.href = redirect; }, 600);
+            setTimeout(() => { window.location.href = dest; }, 600);
         } catch (err) {
             showMessage(err.message || 'Invalid email or password.');
             btn.disabled = false;
@@ -700,14 +700,14 @@
                 // Email confirmation disabled — user is logged in immediately
                 showMessage('Account created! Redirecting to dashboard...', 'success');
                 setTimeout(async () => {
-                    const redirect = sessionStorage.getItem('redirectAfterLogin') || 'dashboard.html';
-                    sessionStorage.removeItem('redirectAfterLogin');
+                    const nextParam = new URLSearchParams(location.search).get('next');
+                    const dest = (nextParam && /^\/[^/]/.test(nextParam)) ? nextParam : '/dashboard';
                     try {
                         if (typeof window.ppGrantVrAccess === 'function') {
                             await window.ppGrantVrAccess(result && result.session);
                         }
                     } catch(e){}
-                    window.location.href = redirect;
+                    window.location.href = dest;
                 }, 1000);
             } else {
                 // Email confirmation required
@@ -765,19 +765,37 @@
         }
     }
 
-    // ===== On Load — redirect if already logged in =====
-    // Skip this when a redirect target is pending: either ?next= (handled below)
-    // or a previously-stored sessionStorage.redirectAfterLogin. The auto-redirect
-    // IIFE further down handles those cases and will route the user to the right
-    // destination AFTER granting the pp_access VR cookie.
-    document.addEventListener('DOMContentLoaded', () => {
+    // ===== On Load — single auto-redirect for already-signed-in users =====
+    // If a session exists: grant VR cookie, then navigate to ?next= (if set
+    // and safe) or /dashboard. If grant FAILS, we do NOT redirect — we let
+    // the form show so the user can re-authenticate. This is what prevents
+    // the infinite /login → /journey → /login loop that occurs when the
+    // VR gate keeps bouncing because the cookie never lands.
+    (async function autoRedirect() {
         try {
-            var hasNext = new URLSearchParams(window.location.search).get('next');
-            var hasStored = sessionStorage.getItem('redirectAfterLogin');
-            if (hasNext || hasStored) return; // let the auto-redirect IIFE handle it
-        } catch(e) {}
-        redirectIfLoggedIn();
-    });
+            if (typeof getSession !== 'function') return;
+            const session = await getSession();
+            if (!session) return; // not logged in — show the form
+            const nextParam = new URLSearchParams(location.search).get('next');
+            const safeNext = (nextParam && /^\/[^/]/.test(nextParam)) ? nextParam : null;
+            const dest = safeNext || '/dashboard';
+            // If destination is a VR route, we MUST grant the cookie first.
+            // If grant fails OR the sentinel cookie did not land in the browser
+            // (e.g. third-party cookie block), abort the redirect so the user
+            // is not looped indefinitely between /login and /journey.
+            const isVrRoute = dest.startsWith('/journey/') || dest.startsWith('/pilgrimspath-vr');
+            if (isVrRoute && typeof window.ppGrantVrAccess === 'function') {
+                const ok = await window.ppGrantVrAccess(session);
+                const sentinel = /(?:^|;\s*)pp_access_ok=1/.test(document.cookie || '');
+                if (!ok || !sentinel) {
+                    console.warn('[login] VR cookie not established (grant=' + ok + ', sentinel=' + sentinel + '); showing form');
+                    showMessage('Could not establish VR session. Please sign in again.', 'error');
+                    return;
+                }
+            }
+            location.replace(dest);
+        } catch (e) { console.warn('[login] auto-redirect error', e); }
+    })();
 
     // ===== Mobile Menu (simplified for this page) =====
     const hamburger = document.getElementById('hamburger');
@@ -802,35 +820,9 @@
     });
 
     // Check for tab param (?tab=register)
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('tab') === 'register') {
+    if (new URLSearchParams(location.search).get('tab') === 'register') {
         switchAuthTab('register');
     }
-    // Pick up ?next=/foo and remember it for post-login redirect
-    (function(){
-        var nextParam = urlParams.get('next');
-        if (nextParam) {
-            try { sessionStorage.setItem('redirectAfterLogin', nextParam); } catch(e){}
-        }
-    })();
-    // If already signed in AND a redirect target is pending, grant VR cookie
-    // and bounce immediately — prevents the loop where the VR gate sends a
-    // logged-in user to /login?next=... and they just see the login form.
-    (async function(){
-        try {
-            if (typeof getSession !== 'function') return;
-            var session = await getSession();
-            if (!session) return;
-            var dest = sessionStorage.getItem('redirectAfterLogin');
-            if (!dest) return;
-            sessionStorage.removeItem('redirectAfterLogin');
-            // Grant VR cookie before redirecting so the gate passes on first try.
-            if (typeof window.ppGrantVrAccess === 'function') {
-                try { await window.ppGrantVrAccess(session); } catch(e){}
-            }
-            window.location.replace(dest);
-        } catch(e){}
-    })();
     // Session & visit tracking for admin analytics
     (function(){try{var st=Date.now();window.addEventListener('beforeunload',function(){var d=Math.floor((Date.now()-st)/1000);var s=JSON.parse(localStorage.getItem('pp_sessions')||'[]');s.push(d);if(s.length>100)s.splice(0,s.length-100);localStorage.setItem('pp_sessions',JSON.stringify(s));});var v=JSON.parse(localStorage.getItem('pp_visits')||'[]');v.push({time:new Date().toISOString(),referrer:document.referrer||'direct',page:location.pathname});if(v.length>500)v.splice(0,v.length-500);localStorage.setItem('pp_visits',JSON.stringify(v));}catch(e){}})();
     </script>

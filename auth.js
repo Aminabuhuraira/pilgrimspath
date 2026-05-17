@@ -285,9 +285,8 @@ if (typeof window !== 'undefined') window.ppGrantVrAccess = ppGrantVrAccess;
 async function requireAuth() {
     const session = await getVerifiedSession();
     if (!session) {
-        // Save where they wanted to go
-        sessionStorage.setItem('redirectAfterLogin', window.location.href);
-        window.location.href = '/login';
+        const next = encodeURIComponent(window.location.pathname + window.location.search);
+        window.location.href = '/login?next=' + next;
         return null;
     }
     return session.user;
