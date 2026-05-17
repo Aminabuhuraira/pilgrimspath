@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VR Auth Debugger — Pilgrim's Path</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Courier New',monospace;background:#0a0a0a;color:#e0e0e0;padding:16px;font-size:13px}
+  h1{color:#f0c040;margin-bottom:8px;font-size:16px}
+  .meta{color:#888;font-size:11px;margin-bottom:12px}
+  .controls{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  button{padding:6px 14px;border:none;border-radius:4px;cursor:pointer;font-size:12px;font-weight:bold}
+  .btn-run{background:#1a7f3c;color:#fff}
+  .btn-run:hover{background:#22a050}
+  .btn-grant{background:#1a4a7f;color:#fff}
+  .btn-grant:hover{background:#225aaa}
+  .btn-clear{background:#5a1a1a;color:#fff}
+  .btn-clear:hover{background:#8a2222}
+  .btn-copy{background:#3a3a3a;color:#fff}
+  .btn-copy:hover{background:#555}
+  #log{background:#111;border:1px solid #333;border-radius:6px;padding:12px;min-height:300px;max-height:70vh;overflow-y:auto;white-space:pre-wrap;word-break:break-all;line-height:1.6}
+  .t-ok{color:#4caf50}
+  .t-err{color:#f44336}
+  .t-warn{color:#ff9800}
+  .t-info{color:#64b5f6}
+  .t-dim{color:#666}
+  .t-head{color:#f0c040;font-weight:bold}
+  .status-bar{margin-top:8px;font-size:11px;color:#666}
+  #summary{margin-top:10px;background:#1a1a2a;border:1px solid #2a2a5a;border-radius:6px;padding:10px;display:none}
+  #summary h2{color:#9c88ff;font-size:13px;margin-bottom:6px}
+  #summary ul{list-style:none;padding:0}
+  #summary li{padding:2px 0}
+</style>
+</head>
+<body>
+<h1>🔍 Pilgrim's Path — VR Auth Debugger</h1>
+<p class="meta">Logs persist in localStorage across page reloads and redirects. Run the full test to see exactly where the flow breaks.</p>
+<div class="controls">
+  <button class="btn-run" onclick="runFullTest()">▶ Run Full Test</button>
+  <button class="btn-grant" onclick="runGrantOnly()">🍪 Test Grant Only</button>
+  <button class="btn-copy" onclick="copyLogs()">📋 Copy All Logs</button>
+  <button class="btn-clear" onclick="clearLogs()">🗑 Clear Logs</button>
+</div>
+<div id="log"><span class="t-dim">← logs will appear here. Previous session logs are loaded below.\n\nClick "▶ Run Full Test" to start diagnosis.</span></div>
+<div class="status-bar" id="status">Ready.</div>
+<div id="summary"></div>
+
+<script src="auth.js"></script>
+<script>
+// ─── Persistent logger ────────────────────────────────────────────────────────
+var LOG_KEY = '_pp_debug_log';
+var _logLines = [];
+
+function _ts() {
+  var d = new Date();
+  return d.toTimeString().slice(0,8) + '.' + String(d.getMilliseconds()).padStart(3,'0');
+}
+
+function _persist() {
+  try { localStorage.setItem(LOG_KEY, JSON.stringify(_logLines.slice(-500))); } catch(e){}
+}
+
+function _loadPersisted() {
+  try {
+    var stored = JSON.parse(localStorage.getItem(LOG_KEY) || '[]');
+    _logLines = stored;
+  } catch(e) { _logLines = []; }
+}
+
+function _render() {
+  var el = document.getElementById('log');
+  if (!_logLines.length) {
+    el.innerHTML = '<span class="t-dim">No logs yet. Click "▶ Run Full Test".</span>';
+    return;
+  }
+  el.textContent = _logLines.map(function(l){ return l.raw; }).join('\n');
+  // Apply colour classes
+  el.innerHTML = _logLines.map(function(l) {
+    var cls = l.type === 'ok' ? 't-ok' : l.type === 'err' ? 't-err' : l.type === 'warn' ? 't-warn' : l.type === 'head' ? 't-head' : l.type === 'info' ? 't-info' : 't-dim';
+    return '<span class="' + cls + '">' + _esc(l.raw) + '</span>';
+  }).join('\n');
+  el.scrollTop = el.scrollHeight;
+}
+
+function _esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function log(msg, type) {
+  var line = '[' + _ts() + '] ' + msg;
+  _logLines.push({ raw: line, type: type || 'dim' });
+  _persist();
+  _render();
+  document.getElementById('status').textContent = msg.slice(0,100);
+}
+
+function logHead(msg) { log('══ ' + msg + ' ══', 'head'); }
+function logOk(msg)   { log('✓  ' + msg, 'ok'); }
+function logErr(msg)  { log('✗  ' + msg, 'err'); }
+function logWarn(msg) { log('⚠  ' + msg, 'warn'); }
+function logInfo(msg) { log('ℹ  ' + msg, 'info'); }
+function logDim(msg)  { log('   ' + msg, 'dim'); }
+
+// ─── Load previous logs on page open ─────────────────────────────────────────
+_loadPersisted();
+_render();
+
+// ─── Controls ─────────────────────────────────────────────────────────────────
+function clearLogs() {
+  _logLines = [];
+  localStorage.removeItem(LOG_KEY);
+  _render();
+  document.getElementById('summary').style.display = 'none';
+}
+
+function copyLogs() {
+  var text = _logLines.map(function(l){ return l.raw; }).join('\n');
+  navigator.clipboard.writeText(text).then(function(){
+    document.getElementById('status').textContent = '✓ Copied to clipboard!';
+  }).catch(function(){
+    prompt('Copy from here:', text);
+  });
+}
+
+// ─── Full diagnostic test ─────────────────────────────────────────────────────
+async function runFullTest() {
+  log('', 'dim');
+  logHead('FULL VR AUTH DIAGNOSTIC — ' + new Date().toISOString());
+
+  // 1. Check auth.js loaded
+  logHead('1. Script availability');
+  logInfo('window.ppGrantVrAccess = ' + typeof window.ppGrantVrAccess);
+  logInfo('typeof getSession = ' + typeof getSession);
+  logInfo('typeof getVerifiedSession = ' + typeof getVerifiedSession);
+  logInfo('typeof requireAuth = ' + typeof requireAuth);
+  if (typeof window.ppGrantVrAccess !== 'function') {
+    logErr('ppGrantVrAccess missing — auth.js not loaded or export missing!');
+  }
+
+  // 2. Raw Supabase session
+  logHead('2. Supabase getSession()');
+  var rawSession = null;
+  try {
+    rawSession = await getSession();
+    if (!rawSession) {
+      logErr('getSession() returned null/undefined — NOT logged in');
+    } else {
+      logOk('getSession() returned a session');
+      logDim('  user email : ' + (rawSession.user && rawSession.user.email || '(none)'));
+      logDim('  user id    : ' + (rawSession.user && rawSession.user.id || '(none)'));
+      var ea = rawSession.expires_at;
+      if (ea) {
+        var expiresIn = Math.round((ea*1000 - Date.now()) / 1000);
+        logDim('  expires_at : ' + new Date(ea*1000).toISOString() + ' (' + expiresIn + 's from now)');
+        if (expiresIn < 0) logErr('  TOKEN IS EXPIRED by ' + (-expiresIn) + ' seconds!');
+        else if (expiresIn < 300) logWarn('  Token expires in < 5 min — will trigger refresh');
+      } else {
+        logWarn('  No expires_at on session');
+      }
+      logDim('  access_token: ' + (rawSession.access_token ? rawSession.access_token.slice(0,30) + '...' : '(missing)'));
+    }
+  } catch(e) {
+    logErr('getSession() threw: ' + e.message);
+  }
+
+  // 3. getVerifiedSession
+  logHead('3. getVerifiedSession()');
+  var verSession = null;
+  try {
+    verSession = await getVerifiedSession();
+    if (!verSession) {
+      logErr('getVerifiedSession() returned null — will fail to grant');
+    } else {
+      logOk('getVerifiedSession() returned a session');
+      logDim('  token start: ' + (verSession.access_token || '').slice(0,30) + '...');
+      logDim('  same token as raw? ' + (rawSession && verSession.access_token === rawSession.access_token ? 'YES (cached)' : 'NO (refreshed)'));
+    }
+  } catch(e) {
+    logErr('getVerifiedSession() threw: ' + e.message);
+  }
+
+  // 4. Cookies BEFORE grant
+  logHead('4. Cookies before grant');
+  _showCookies();
+
+  // 5. POST /api/grant-vr-access
+  logHead('5. POST /api/grant-vr-access');
+  if (!verSession || !verSession.access_token) {
+    logErr('Skipping grant — no session token available');
+  } else {
+    try {
+      var t0 = Date.now();
+      var grantResp = await fetch('/api/grant-vr-access', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Authorization': 'Bearer ' + verSession.access_token }
+      });
+      var dur = Date.now() - t0;
+      logInfo('  HTTP status : ' + grantResp.status + ' (' + dur + 'ms)');
+      var body = '';
+      try { body = await grantResp.text(); } catch(e){}
+      logDim('  response    : ' + body.slice(0,200));
+      if (grantResp.ok) {
+        logOk('Grant request succeeded (HTTP 200)');
+      } else {
+        logErr('Grant request FAILED with HTTP ' + grantResp.status);
+        logErr('Response body: ' + body);
+      }
+    } catch(e) {
+      logErr('fetch /api/grant-vr-access threw: ' + e.message);
+    }
+  }
+
+  // 6. Cookies AFTER grant
+  logHead('6. Cookies after grant');
+  _showCookies();
+
+  // 7. Sentinel check
+  logHead('7. Sentinel cookie check');
+  var hasSentinel = /(?:^|;\s*)pp_access_ok=1/.test(document.cookie || '');
+  if (hasSentinel) {
+    logOk('pp_access_ok=1 IS present in document.cookie');
+  } else {
+    logErr('pp_access_ok=1 is NOT in document.cookie');
+    logWarn('Possible causes:');
+    logWarn('  a) Cookies are blocked by browser (3rd-party cookie restriction)');
+    logWarn('  b) Server is on a different domain and SameSite=Strict is blocking');
+    logWarn('  c) grant-vr-access returned non-200 (see step 5 above)');
+    logWarn('  d) pp_access_ok was already set but expired / deleted');
+  }
+
+  // 8. Navigate test (dry-run — reads HAJJ_CARD_URLS from dashboard or checks route exists)
+  logHead('8. Test VR route reachability');
+  await _testRoute('/journey/tawaf/index.htm?journey=1&context=initial');
+
+  // 9. Environment info
+  logHead('9. Environment');
+  logDim('  URL          : ' + window.location.href);
+  logDim('  Origin       : ' + window.location.origin);
+  logDim('  localStorage : ' + (function(){ try{ return Object.keys(localStorage).length + ' keys'; }catch(e){ return 'BLOCKED'; } })());
+  logDim('  sessionStorage: ' + (function(){ try{ return Object.keys(sessionStorage).length + ' keys'; }catch(e){ return 'BLOCKED'; } })());
+  logDim('  cookieEnabled: ' + navigator.cookieEnabled);
+  logDim('  UA           : ' + navigator.userAgent.slice(0,80));
+
+  logHead('DONE');
+  _buildSummary();
+}
+
+async function runGrantOnly() {
+  log('', 'dim');
+  logHead('GRANT-ONLY TEST — ' + new Date().toISOString());
+  _showCookies();
+  logHead('Calling ppGrantVrAccess()...');
+  try {
+    var result = await window.ppGrantVrAccess();
+    logInfo('ppGrantVrAccess() returned: ' + result);
+    if (result) logOk('Grant succeeded'); else logErr('Grant returned false');
+  } catch(e) {
+    logErr('ppGrantVrAccess() threw: ' + e.message);
+  }
+  _showCookies();
+}
+
+function _showCookies() {
+  var all = document.cookie || '';
+  if (!all) {
+    logWarn('  document.cookie is empty (no readable cookies)');
+    return;
+  }
+  var parts = all.split(';').map(function(s){ return s.trim(); });
+  parts.forEach(function(p) {
+    var relevant = p.startsWith('pp_') || p.startsWith('sb-');
+    if (relevant) logInfo('  cookie: ' + p);
+    else logDim('  cookie: ' + p.slice(0,60));
+  });
+}
+
+async function _testRoute(url) {
+  try {
+    var r = await fetch(url, { method: 'HEAD', credentials: 'include', redirect: 'manual' });
+    logDim('  HEAD ' + url);
+    if (r.status === 200) logOk('  → 200 OK (route accessible with current cookies)');
+    else if (r.status === 0 || r.type === 'opaqueredirect') logWarn('  → Redirected (likely to /login — cookie missing or expired)');
+    else if (r.status === 302 || r.status === 301) logWarn('  → ' + r.status + ' Redirect (likely to /login)');
+    else logErr('  → HTTP ' + r.status);
+  } catch(e) {
+    logErr('  → fetch threw: ' + e.message);
+  }
+}
+
+function _buildSummary() {
+  var errors = _logLines.filter(function(l){ return l.type === 'err'; });
+  var warns  = _logLines.filter(function(l){ return l.type === 'warn'; });
+  var s = document.getElementById('summary');
+  s.style.display = 'block';
+  var html = '<h2>📊 Diagnostic Summary</h2><ul>';
+  if (!errors.length && !warns.length) {
+    html += '<li style="color:#4caf50">✓ No errors detected — if links still fail, check browser cookie settings.</li>';
+  }
+  errors.forEach(function(l){ html += '<li style="color:#f44336">' + _esc(l.raw) + '</li>'; });
+  warns.forEach(function(l){ html += '<li style="color:#ff9800">' + _esc(l.raw) + '</li>'; });
+  html += '</ul>';
+  s.innerHTML = html;
+}
+</script>
+</body>
+</html>
