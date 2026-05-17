@@ -376,19 +376,6 @@
         </div>
     </main>
 
-    <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/YOUR_TAWK_PROPERTY_ID/default';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-    })();
-    </script>
-    <!--End of Tawk.to Script-->
 
     <!-- Journey Navigation -->
     <script src="/journey-manager.js"></script>
@@ -532,15 +519,30 @@
     };
     async function _ppGo(url) {
         // Ensure pp_access cookie is set before navigating to a gated /journey/* URL.
-        // Cap the wait so a slow grant never freezes navigation.
-        if (!window.__ppVrReady && typeof window.ppGrantVrAccess === 'function') {
-            try {
-                await Promise.race([
-                    window.ppGrantVrAccess().then(function(){ window.__ppVrReady = true; }),
-                    new Promise(function(res){ setTimeout(res, 1500); })
-                ]);
-            } catch(e){}
+        // We verify success via the non-HttpOnly sentinel cookie pp_access_ok=1,
+        // which is set alongside pp_access by /api/grant-vr-access. If the browser
+        // silently dropped the cookie (3rd-party cookie blocker, ITP, etc.) we
+        // abort instead of navigating into the gate and getting bounced back.
+        function _hasSentinel() {
+            return /(?:^|;\s*)pp_access_ok=1/.test(document.cookie || '');
         }
+        async function _grantOnce() {
+            if (typeof window.ppGrantVrAccess !== 'function') return false;
+            try { return !!(await window.ppGrantVrAccess()); } catch(e){ return false; }
+        }
+        if (!_hasSentinel()) {
+            await Promise.race([_grantOnce(), new Promise(function(res){ setTimeout(res, 2500); })]);
+        }
+        if (!_hasSentinel()) {
+            // Retry once after a brief delay (covers slow networks / first-request races)
+            await new Promise(function(r){ setTimeout(r, 250); });
+            await Promise.race([_grantOnce(), new Promise(function(res){ setTimeout(res, 2500); })]);
+        }
+        if (!_hasSentinel()) {
+            _showToast('Could not establish VR session. Please sign out and sign in again.', 5000);
+            return;
+        }
+        window.__ppVrReady = true;
         window.location.href = url;
     }
     function goToHajjCard(n) {

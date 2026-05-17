@@ -71,7 +71,16 @@ module.exports = async function handler(req, res) {
   const flags = isHttps
     ? 'HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=2592000'
     : 'HttpOnly; SameSite=Lax; Path=/; Max-Age=2592000';
-  res.setHeader('Set-Cookie', `pp_access=${accessToken}; ${flags}`);
+  // Sentinel cookie (non-HttpOnly) so client JS can confirm the browser
+  // actually accepted the auth cookie before navigating into the VR gate.
+  // Without this, a silently-blocked Set-Cookie causes a /login redirect loop.
+  const sentinelFlags = isHttps
+    ? 'Secure; SameSite=Lax; Path=/; Max-Age=2592000'
+    : 'SameSite=Lax; Path=/; Max-Age=2592000';
+  res.setHeader('Set-Cookie', [
+    `pp_access=${accessToken}; ${flags}`,
+    `pp_access_ok=1; ${sentinelFlags}`,
+  ]);
 
   return res.status(200).json({ ok: true });
 };
