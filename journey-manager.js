@@ -1,28 +1,30 @@
 ﻿// ═══ HAJJ JOURNEY STATE MANAGER ═══
-// Central source of truth for the 14-step Hajj journey
+// Central source of truth for the 16-step Hajj journey
 // Manages navigation, progress tracking, and localStorage persistence
 
 (function(){
 
 // ─────────────────────────────────────────────────────────────
-// 14-Step Hajj Journey Definition
+// 16-Step Hajj Journey Definition
 // All URLs are relative to the server root (no leading slash)
 // ─────────────────────────────────────────────────────────────
 const HAJJ_JOURNEY = [
-  {id: 1, step: 1, name: 'Tawaf (Initial)', url: '/journey/tawaf/index.htm', type: 'vr', context: 'initial'},
-  {id: 2, step: 2, name: 'Safa & Marwa', url: '/journey/sai/index.htm', type: 'vr', context: 'sa-i'},
-  {id: 3, step: 3, name: 'Mina (8th Day)', url: '/journey/mina/index.htm', type: 'vr', context: '8th-day'},
-  {id: 4, step: 4, name: 'Arafah (9th Day)', url: '/journey/arafah/index.htm', type: 'vr', context: '9th-day'},
-  {id: 5, step: 5, name: 'Muzdalifah', url: '/journey/muzdalifah/index.htm', type: 'vr', context: 'pebbles'},
-  {id: 6, step: 6, name: 'Jamarat (10th Day)', url: '/journey/jamarat-rooftop/index.htm', type: 'vr', context: '10th-day'},
-  {id: 7, step: 7, name: 'Qurbani (Sacrifice)', url: '/journey/rami/qurbani-scene.html', type: 'html', context: 'sacrifice'},
-  {id: 8, step: 8, name: 'Barber (Hair Shaving)', url: '/journey/rami/barber-scene.html', type: 'html', context: 'barber'},
-  {id: 9, step: 9, name: 'Tawaf al-Ifadha', url: '/journey/tawaf/index.htm', type: 'vr', context: 'ifadha'},
-  {id: 10, step: 10, name: 'Jamarat (11th Day)', url: '/journey/jamarat-rooftop/index.htm', type: 'vr', context: '11th-day'},
-  {id: 11, step: 11, name: 'Jamarat (12th Day)', url: '/journey/jamarat-rooftop/index.htm', type: 'vr', context: '12th-day'},
-  {id: 12, step: 12, name: 'Jamarat (13th Day)', url: '/journey/jamarat-rooftop/index.htm', type: 'vr', context: '13th-day'},
-  {id: 13, step: 13, name: 'Tawaf al-Wida (Farewell)', url: '/journey/tawaf/index.htm', type: 'vr', context: 'farewell'},
-  {id: 14, step: 14, name: 'Hajj Complete', url: '#', type: 'final', context: 'complete'}
+  {id: 1,  step: 1,  name: 'Tawaf x7',                      url: '/journey/tawaf/index.htm',               type: 'vr',   context: 'initial'},
+  {id: 2,  step: 2,  name: "Sa'i — Safa & Marwa",          url: '/journey/sai/index.htm',                 type: 'vr',   context: 'sa-i'},
+  {id: 3,  step: 3,  name: 'Clip/Shave Hair (Umrah)',       url: '/journey/rami/umrah-trim-scene.html',    type: 'html', context: 'umrah-trim'},
+  {id: 4,  step: 4,  name: 'Resting & Praying',             url: '/journey/ihram/rest-scene.html',         type: 'html', context: 'rest'},
+  {id: 5,  step: 5,  name: 'Re-enter State of Ihram',       url: '/journey/ihram/ihram-scene.html',        type: 'html', context: 're-enter'},
+  {id: 6,  step: 6,  name: 'Arrive at Mina (8th Day)',      url: '/journey/mina/index.htm',               type: 'vr',   context: '8th-day'},
+  {id: 7,  step: 7,  name: 'Day of Arafah',                 url: '/journey/arafah/index.htm',             type: 'vr',   context: '9th-day'},
+  {id: 8,  step: 8,  name: 'Muzdalifah',                    url: '/journey/muzdalifah/index.htm',         type: 'vr',   context: 'pebbles'},
+  {id: 9,  step: 9,  name: 'Rami al-Aqabah (10th Day)',     url: '/journey/jamarat-aqabah/index.htm',     type: 'vr',   context: '10th-day'},
+  {id: 10, step: 10, name: 'Qurbani (Sacrifice)',           url: '/journey/rami/qurbani-scene.html',      type: 'html', context: 'sacrifice'},
+  {id: 11, step: 11, name: 'Shave Head (Halaq)',            url: '/journey/rami/barber-scene.html',       type: 'html', context: 'barber'},
+  {id: 12, step: 12, name: 'Tawaf al-Ifadha',               url: '/journey/tawaf/index.htm',              type: 'vr',   context: 'ifadha'},
+  {id: 13, step: 13, name: 'Rami — All Pillars (11th Day)', url: '/journey/jamarat-rooftop/index.htm',    type: 'vr',   context: '11th-day'},
+  {id: 14, step: 14, name: 'Spend Night at Mina',           url: '/journey/mina/index.htm',               type: 'vr',   context: 'tents-12th'},
+  {id: 15, step: 15, name: 'Rami — All Pillars (12th Day)', url: '/journey/jamarat-base-12/index.htm',    type: 'vr',   context: '12th-day'},
+  {id: 16, step: 16, name: "Farewell Tawaf al-Wida'",     url: '/journey/tawaf/index.htm',              type: 'vr',   context: 'farewell'}
 ];
 
 // ── JourneyManager Class ──
@@ -104,7 +106,8 @@ class JourneyManager {
       }
       
       // Navigate to the step URL
-      const url = step.url + (step.type === 'vr' ? `?journey=${index}&context=${step.context}` : `?journey=${index}`);
+      const joiner = step.url.indexOf('?') === -1 ? '?' : '&';
+      const url = step.url + joiner + `journey=${index}` + (step.context ? `&context=${step.context}` : '');
       window.location.href = url;
     }
   }

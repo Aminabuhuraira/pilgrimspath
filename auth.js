@@ -127,6 +127,41 @@ async function getSession() {
 }
 
 /**
+ * Resolve a live session that is safe to use for server-side verification.
+ * Local storage can hold stale session data, so we verify it and refresh once
+ * before trusting it for protected VR entry.
+ */
+async function getVerifiedSession() {
+    try {
+        let session = await getSession();
+        const expiresSoon = session && session.expires_at && ((session.expires_at * 1000) - Date.now() < 60000);
+
+        if (!session || !session.access_token || expiresSoon) {
+            const { data, error } = await _sb.auth.refreshSession();
+            if (!error && data && data.session) session = data.session;
+        }
+
+        if (!session || !session.access_token) return null;
+
+        const { data, error } = await _sb.auth.getUser(session.access_token);
+        if (!error && data && data.user) return session;
+
+        const refreshed = await _sb.auth.refreshSession();
+        if (refreshed.error || !refreshed.data || !refreshed.data.session) return null;
+
+        session = refreshed.data.session;
+        if (!session || !session.access_token) return null;
+
+        const verifyRefreshed = await _sb.auth.getUser(session.access_token);
+        if (verifyRefreshed.error || !verifyRefreshed.data || !verifyRefreshed.data.user) return null;
+
+        return session;
+    } catch (e) {
+        return null;
+    }
+}
+
+/**
  * Send password reset email
  */
 async function resetPassword(email) {
@@ -235,9 +270,11 @@ async function recordTransaction(transaction = {}) {
  * success, false otherwise. Awaiting this BEFORE navigating to /journey/*
  * prevents the requireVrAccess → /login loop.
  */
-async function ppGrantVrAccess() {
+async function ppGrantVrAccess(sessionOrToken) {
     try {
-        const session = await getSession();
+        const session = typeof sessionOrToken === 'string'
+            ? { access_token: sessionOrToken }
+            : (sessionOrToken && sessionOrToken.access_token ? sessionOrToken : await getVerifiedSession());
         if (!session || !session.access_token) return false;
         const r = await fetch('/api/grant-vr-access', {
             method: 'POST',
@@ -254,7 +291,7 @@ if (typeof window !== 'undefined') window.ppGrantVrAccess = ppGrantVrAccess;
  * Call this at the top of protected pages (e.g. dashboard).
  */
 async function requireAuth() {
-    const session = await getSession();
+    const session = await getVerifiedSession();
     if (!session) {
         // Save where they wanted to go
         sessionStorage.setItem('redirectAfterLogin', window.location.href);
@@ -268,7 +305,7 @@ async function requireAuth() {
  * Redirect away from login/register if already authenticated
  */
 async function redirectIfLoggedIn(destination = '/dashboard') {
-    const session = await getSession();
+    const session = await getVerifiedSession();
     if (session) {
         window.location.href = destination;
     }

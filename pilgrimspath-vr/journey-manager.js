@@ -1,11 +1,11 @@
 ﻿// ═══ HAJJ JOURNEY STATE MANAGER ═══
-// Central source of truth for the 18-step Hajj journey
+// Central source of truth for the 16-step Hajj journey
 // Manages navigation, progress tracking, and localStorage persistence
 
 (function(){
 
 // ─────────────────────────────────────────────────────────────
-// 18-Step Hajj Journey Definition
+// 16-Step Hajj Journey Definition
 // All URLs are relative to the server root (no leading slash)
 // ─────────────────────────────────────────────────────────────
 const HAJJ_JOURNEY = [
@@ -102,8 +102,9 @@ class JourneyManager {
         return;
       }
       
-      // Navigate to the step URL — always include both journey index and context
-      const url = step.url + `?journey=${index}` + (step.context ? `&context=${step.context}` : '');
+      // Preserve any existing cache-buster params on step.url.
+      const joiner = step.url.indexOf('?') === -1 ? '?' : '&';
+      const url = step.url + joiner + `journey=${index}` + (step.context ? `&context=${step.context}` : '');
       window.location.href = url;
     }
   }
