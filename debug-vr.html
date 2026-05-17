@@ -3,340 +3,450 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VR Auth & Activity Debugger — Pilgrim's Path</title>
 <!-- Supabase MUST load before auth.js — auth.js calls window.supabase.createClient() at parse time -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<title>VR Auth Debugger — Pilgrim's Path</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Courier New',monospace;background:#0a0a0a;color:#e0e0e0;padding:16px;font-size:13px}
-  h1{color:#f0c040;margin-bottom:8px;font-size:16px}
+  body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#0a0a0a;color:#e0e0e0;padding:14px;font-size:13px;line-height:1.5}
+  h1{color:#f0c040;margin-bottom:6px;font-size:18px}
   .meta{color:#888;font-size:11px;margin-bottom:12px}
-  .controls{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
-  button{padding:6px 14px;border:none;border-radius:4px;cursor:pointer;font-size:12px;font-weight:bold}
-  .btn-run{background:#1a7f3c;color:#fff}
-  .btn-run:hover{background:#22a050}
-  .btn-grant{background:#1a4a7f;color:#fff}
-  .btn-grant:hover{background:#225aaa}
-  .btn-clear{background:#5a1a1a;color:#fff}
-  .btn-clear:hover{background:#8a2222}
-  .btn-copy{background:#3a3a3a;color:#fff}
-  .btn-copy:hover{background:#555}
-  #log{background:#111;border:1px solid #333;border-radius:6px;padding:12px;min-height:300px;max-height:70vh;overflow-y:auto;white-space:pre-wrap;word-break:break-all;line-height:1.6}
+
+  .tabs{display:flex;gap:4px;margin-bottom:10px;border-bottom:1px solid #333}
+  .tab{padding:8px 16px;cursor:pointer;color:#888;font-size:12px;font-weight:bold;border-bottom:2px solid transparent;user-select:none}
+  .tab.active{color:#f0c040;border-bottom-color:#f0c040}
+  .tab .pill{display:inline-block;margin-left:6px;background:#333;color:#fff;font-size:10px;padding:1px 6px;border-radius:8px}
+  .panel{display:none}
+  .panel.active{display:block}
+
+  .controls{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center}
+  button{padding:6px 12px;border:none;border-radius:4px;cursor:pointer;font-size:12px;font-weight:bold}
+  .btn-run    { background:#1a7f3c; color:#fff }
+  .btn-run:hover    { background:#22a050 }
+  .btn-grant  { background:#1a4a7f; color:#fff }
+  .btn-grant:hover  { background:#225aaa }
+  .btn-clear  { background:#5a1a1a; color:#fff }
+  .btn-clear:hover  { background:#8a2222 }
+  .btn-copy   { background:#3a3a3a; color:#fff }
+  .btn-copy:hover   { background:#555 }
+  .btn-toggle { background:#7f4a1a; color:#fff }
+  .btn-toggle.on { background:#1a7f4a }
+
+  .filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;font-size:11px}
+  .filters label{background:#1a1a1a;padding:3px 8px;border-radius:4px;cursor:pointer;border:1px solid #333;user-select:none}
+  .filters label input{margin-right:4px;vertical-align:middle}
+  .filters input[type=search]{background:#111;border:1px solid #333;color:#ddd;padding:4px 8px;border-radius:4px;font:inherit;width:200px}
+
+  #log,#events{background:#111;border:1px solid #333;border-radius:6px;padding:10px;min-height:300px;max-height:75vh;overflow-y:auto;white-space:pre-wrap;word-break:break-word;line-height:1.55;font-family:'SF Mono',Menlo,Consolas,monospace;font-size:11.5px}
+  .row{padding:1px 0;display:flex;gap:6px;align-items:flex-start}
+  .row .ts{color:#666;flex:0 0 90px;font-size:10.5px}
+  .row .kind{flex:0 0 110px;font-weight:bold;font-size:10.5px}
+  .row .body{flex:1;color:#ccc;font-size:11px;word-break:break-word}
+  .row .pg{color:#666;font-size:10px;flex:0 0 170px;text-align:right}
+
+  .k-pageload,.k-monitorinstalled{color:#9c88ff}
+  .k-click       {color:#f0c040}
+  .k-fetch       {color:#64b5f6}
+  .k-fetcherror,.k-error,.k-errorpromise{color:#f44336}
+  .k-navassign,.k-navreplace,.k-historypush,.k-historyreplace{color:#4caf50}
+  .k-unload      {color:#888}
+  .k-authstate   {color:#ff9800}
+  .k-consolelog  {color:#bbb}
+  .k-consolewarn {color:#ff9800}
+  .k-consoleerror{color:#f44336}
+  .k-consoleinfo {color:#64b5f6}
+  .k-cookies     {color:#9c88ff}
+
   .t-ok{color:#4caf50}
   .t-err{color:#f44336}
   .t-warn{color:#ff9800}
   .t-info{color:#64b5f6}
   .t-dim{color:#666}
   .t-head{color:#f0c040;font-weight:bold}
-  .status-bar{margin-top:8px;font-size:11px;color:#666}
-  #summary{margin-top:10px;background:#1a1a2a;border:1px solid #2a2a5a;border-radius:6px;padding:10px;display:none}
-  #summary h2{color:#9c88ff;font-size:13px;margin-bottom:6px}
-  #summary ul{list-style:none;padding:0}
-  #summary li{padding:2px 0}
+
+  #status{margin-top:6px;font-size:11px;color:#666}
+  .status-banner{padding:8px 12px;border-radius:4px;margin-bottom:10px;font-size:12px}
+  .status-on  {background:#0d4a23;color:#9eff9e;border:1px solid #1f7f3c}
+  .status-off {background:#4a1a1a;color:#ff9e9e;border:1px solid #7f2929}
 </style>
 </head>
 <body>
-<h1>🔍 Pilgrim's Path — VR Auth Debugger</h1>
-<p class="meta">Logs persist in localStorage across page reloads and redirects. Run the full test to see exactly where the flow breaks.</p>
-<div class="controls">
-  <button class="btn-run" onclick="runFullTest()">▶ Run Full Test</button>
-  <button class="btn-grant" onclick="runGrantOnly()">🍪 Test Grant Only</button>
-  <button class="btn-copy" onclick="copyLogs()">📋 Copy All Logs</button>
-  <button class="btn-clear" onclick="clearLogs()">🗑 Clear Logs</button>
-</div>
-<div id="log"><span class="t-dim">← logs will appear here. Previous session logs are loaded below.\n\nClick "▶ Run Full Test" to start diagnosis.</span></div>
-<div class="status-bar" id="status">Ready.</div>
-<div id="summary"></div>
 
+<h1>🔍 Pilgrim's Path — VR Auth & Activity Debugger</h1>
+<p class="meta">Captures cookies, console, fetches, clicks, and navigations across pages. Toggle monitoring to record activity from any page on the site.</p>
+
+<div id="monitorBanner" class="status-banner status-off">
+  Activity monitoring is <b>OFF</b>. Click "Enable Monitoring" to record events across pages.
+</div>
+
+<div class="controls">
+  <button id="toggleBtn" class="btn-toggle" onclick="toggleMonitor()">▶ Enable Monitoring</button>
+  <button class="btn-run" onclick="runFullTest()">🧪 Run Full Test</button>
+  <button class="btn-grant" onclick="runGrantOnly()">🍪 Test Grant Only</button>
+  <button class="btn-copy" onclick="copyAll()">📋 Copy</button>
+  <button class="btn-clear" onclick="clearAll()">🗑 Clear</button>
+</div>
+
+<div class="tabs">
+  <div class="tab active" data-tab="events" onclick="switchTab('events')">Activity <span class="pill" id="eventCount">0</span></div>
+  <div class="tab" data-tab="log" onclick="switchTab('log')">Diagnostic <span class="pill" id="logCount">0</span></div>
+  <div class="tab" data-tab="state" onclick="switchTab('state')">Current State</div>
+</div>
+
+<!-- ===== ACTIVITY PANEL ===== -->
+<div id="panel-events" class="panel active">
+  <div class="filters">
+    <label><input type="checkbox" data-filter="pageload" checked> pageload</label>
+    <label><input type="checkbox" data-filter="click" checked> clicks</label>
+    <label><input type="checkbox" data-filter="fetch" checked> fetch</label>
+    <label><input type="checkbox" data-filter="nav" checked> navigation</label>
+    <label><input type="checkbox" data-filter="console" checked> console</label>
+    <label><input type="checkbox" data-filter="error" checked> errors</label>
+    <label><input type="checkbox" data-filter="auth" checked> auth</label>
+    <label><input type="checkbox" data-filter="cookies" checked> cookies</label>
+    <input type="search" id="search" placeholder="filter text…" oninput="renderEvents()">
+    <label><input type="checkbox" id="autoRefresh" checked> auto-refresh 2s</label>
+  </div>
+  <div id="events"></div>
+</div>
+
+<!-- ===== DIAGNOSTIC PANEL ===== -->
+<div id="panel-log" class="panel">
+  <div id="log"></div>
+</div>
+
+<!-- ===== STATE PANEL ===== -->
+<div id="panel-state" class="panel">
+  <div id="state" style="background:#111;border:1px solid #333;border-radius:6px;padding:12px;font-family:'SF Mono',Menlo,monospace;font-size:11.5px;white-space:pre-wrap"></div>
+</div>
+
+<div id="status">Ready.</div>
+
+<script>window.__PP_DBG_V = '20260517d';</script>
 <script src="auth.js?v=20260517d"></script>
 <script>
-// ─── Persistent logger ────────────────────────────────────────────────────────
+// ─── Storage keys (kept in sync with debug-monitor.js) ─────
+var EVT_KEY = '_pp_debug_events';
 var LOG_KEY = '_pp_debug_log';
-var _logLines = [];
+var ENABLE_KEY = 'pp_debug_enabled';
 
-function _ts() {
-  var d = new Date();
-  return d.toTimeString().slice(0,8) + '.' + String(d.getMilliseconds()).padStart(3,'0');
+// ─── Tabs ──────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(function (t) { t.classList.toggle('active', t.dataset.tab === name); });
+  document.querySelectorAll('.panel').forEach(function (p) { p.classList.toggle('active', p.id === 'panel-' + name); });
+  if (name === 'events') renderEvents();
+  if (name === 'log')    renderLog();
+  if (name === 'state')  renderState();
 }
 
-function _persist() {
-  try { localStorage.setItem(LOG_KEY, JSON.stringify(_logLines.slice(-500))); } catch(e){}
-}
-
-function _loadPersisted() {
-  try {
-    var stored = JSON.parse(localStorage.getItem(LOG_KEY) || '[]');
-    _logLines = stored;
-  } catch(e) { _logLines = []; }
-}
-
-function _render() {
-  var el = document.getElementById('log');
-  if (!_logLines.length) {
-    el.innerHTML = '<span class="t-dim">No logs yet. Click "▶ Run Full Test".</span>';
-    return;
+// ─── Toggle ────────────────────────────────────────────────
+function refreshToggleBtn() {
+  var on = localStorage.getItem(ENABLE_KEY) === '1';
+  var btn = document.getElementById('toggleBtn');
+  var banner = document.getElementById('monitorBanner');
+  if (on) {
+    btn.textContent = '■ Disable Monitoring';
+    btn.classList.add('on');
+    banner.className = 'status-banner status-on';
+    banner.innerHTML = '✓ Activity monitoring is <b>ON</b>. Every page load on this browser is being recorded. Browse the site normally, then return here to review.';
+  } else {
+    btn.textContent = '▶ Enable Monitoring';
+    btn.classList.remove('on');
+    banner.className = 'status-banner status-off';
+    banner.innerHTML = 'Activity monitoring is <b>OFF</b>. Click "Enable Monitoring" to record events across pages.';
   }
-  el.textContent = _logLines.map(function(l){ return l.raw; }).join('\n');
-  // Apply colour classes
-  el.innerHTML = _logLines.map(function(l) {
+}
+function toggleMonitor() {
+  var on = localStorage.getItem(ENABLE_KEY) === '1';
+  if (on) {
+    localStorage.removeItem(ENABLE_KEY);
+    refreshToggleBtn();
+    setStatus('Monitoring disabled. Hard-refresh other tabs to stop capturing there too.');
+  } else {
+    localStorage.setItem(ENABLE_KEY, '1');
+    refreshToggleBtn();
+    setStatus('Monitoring enabled. Open the site in another tab — events will appear here in real time.');
+    // Inject monitor into THIS page right now too
+    if (!window.__ppDebugMonitorInstalled) {
+      var s = document.createElement('script');
+      s.src = '/debug-monitor.js?v=' + (window.__PP_DBG_V || '1') + '&t=' + Date.now();
+      document.head.appendChild(s);
+    }
+  }
+}
+
+function clearAll() {
+  if (!confirm('Clear all recorded events and diagnostic logs?')) return;
+  localStorage.removeItem(EVT_KEY);
+  localStorage.removeItem(LOG_KEY);
+  renderEvents();
+  renderLog();
+  setStatus('Cleared.');
+}
+
+function copyAll() {
+  var evts = JSON.parse(localStorage.getItem(EVT_KEY) || '[]');
+  var lines = evts.map(function (e) {
+    return '[' + e.t + '] ' + (e.page || '') + ' ' + e.kind + ' ' + (typeof e.data === 'string' ? e.data : JSON.stringify(e.data));
+  });
+  var diag = (JSON.parse(localStorage.getItem(LOG_KEY) || '[]')).map(function (l) { return l.raw; });
+  var text = '=== ACTIVITY ===\n' + lines.join('\n') + '\n\n=== DIAGNOSTIC ===\n' + diag.join('\n');
+  navigator.clipboard.writeText(text).then(
+    function () { setStatus('✓ Copied ' + text.length + ' chars to clipboard'); },
+    function () { prompt('Copy:', text); }
+  );
+}
+
+function setStatus(msg) { document.getElementById('status').textContent = msg; }
+
+// ─── Activity rendering ────────────────────────────────────
+function _esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function _kindClass(k) { return 'k-' + k.replace(/[.\-_]/g,'').toLowerCase(); }
+function _shortPage(p) {
+  if (!p) return '';
+  if (p.length > 38) return '…' + p.slice(-37);
+  return p;
+}
+function _bodyText(e) {
+  var d = e.data;
+  if (d == null) return '';
+  if (typeof d === 'string') return d;
+  if (e.kind === 'fetch')      return d.method + ' ' + d.url + ' → ' + d.status + ' (' + d.ms + 'ms)' + (d.body ? '  body=' + d.body : '');
+  if (e.kind === 'fetch.error')return d.method + ' ' + d.url + ' ERROR: ' + d.err;
+  if (e.kind === 'click')      return '[' + d.tag + '] "' + d.text + '"' + (d.href ? '  href=' + d.href : '') + (d.onclick ? '  onclick=' + d.onclick : '');
+  if (e.kind === 'pageload')   return d.url + (d.referrer ? '  ← ' + d.referrer : '');
+  if (e.kind === 'cookies')    return 'count=' + d.count + ' ok=' + d.hasPpAccessOk + ' [' + (d.names || []).join(', ') + ']';
+  if (e.kind === 'auth.state') return d.event + (d.user ? '  user=' + d.user : '') + (d.expires_at ? '  exp=' + new Date(d.expires_at*1000).toISOString() : '');
+  if (/^nav\.|^history\./.test(e.kind)) return d.url;
+  if (/^console\./.test(e.kind)) return String(d);
+  if (/^error/.test(e.kind))     return JSON.stringify(d);
+  return JSON.stringify(d);
+}
+
+function _filterPasses(e) {
+  var search = document.getElementById('search').value.trim().toLowerCase();
+  var enabled = {};
+  document.querySelectorAll('.filters input[data-filter]').forEach(function (cb) { enabled[cb.dataset.filter] = cb.checked; });
+  var grp;
+  if (e.kind === 'pageload') grp = 'pageload';
+  else if (e.kind === 'click') grp = 'click';
+  else if (e.kind.indexOf('fetch') === 0) grp = 'fetch';
+  else if (/^nav\.|^history\.|^unload/.test(e.kind)) grp = 'nav';
+  else if (e.kind.indexOf('console.') === 0) grp = 'console';
+  else if (e.kind.indexOf('error') === 0) grp = 'error';
+  else if (e.kind === 'auth.state') grp = 'auth';
+  else if (e.kind === 'cookies' || e.kind === 'monitor.installed') grp = 'cookies';
+  else grp = 'other';
+  if (grp !== 'other' && enabled[grp] === false) return false;
+  if (search) {
+    var hay = (e.kind + ' ' + (e.page || '') + ' ' + _bodyText(e)).toLowerCase();
+    if (hay.indexOf(search) === -1) return false;
+  }
+  return true;
+}
+
+function renderEvents() {
+  var arr = [];
+  try { arr = JSON.parse(localStorage.getItem(EVT_KEY) || '[]'); } catch (e) {}
+  document.getElementById('eventCount').textContent = arr.length;
+  var filtered = arr.filter(_filterPasses);
+  var html = filtered.map(function (e) {
+    var t = e.t.slice(11, 23); // HH:MM:SS.mmm
+    var cls = _kindClass(e.kind);
+    return '<div class="row">' +
+      '<span class="ts">' + t + '</span>' +
+      '<span class="kind ' + cls + '">' + _esc(e.kind) + '</span>' +
+      '<span class="body">' + _esc(_bodyText(e)) + '</span>' +
+      '<span class="pg">' + _esc(_shortPage(e.page)) + '</span>' +
+    '</div>';
+  }).join('');
+  var box = document.getElementById('events');
+  var atBottom = box.scrollTop + box.clientHeight >= box.scrollHeight - 30;
+  box.innerHTML = html || '<div style="color:#666;padding:30px;text-align:center">No events yet. Enable monitoring, then navigate the site.</div>';
+  if (atBottom) box.scrollTop = box.scrollHeight;
+}
+
+// Wire filter checkboxes
+document.querySelectorAll('.filters input[data-filter]').forEach(function (cb) {
+  cb.addEventListener('change', renderEvents);
+});
+
+// Auto-refresh
+setInterval(function () {
+  if (document.getElementById('autoRefresh').checked && document.querySelector('.tab.active').dataset.tab === 'events') {
+    renderEvents();
+  }
+}, 2000);
+
+// ─── Diagnostic log (existing test output) ─────────────────
+var _logLines = [];
+function _loadLog() { try { _logLines = JSON.parse(localStorage.getItem(LOG_KEY) || '[]'); } catch(e){ _logLines = []; } }
+function _persistLog() { try { localStorage.setItem(LOG_KEY, JSON.stringify(_logLines.slice(-500))); } catch(e){} }
+function _ts() { var d = new Date(); return d.toTimeString().slice(0,8) + '.' + String(d.getMilliseconds()).padStart(3,'0'); }
+function log(msg, type) {
+  _logLines.push({ raw: '[' + _ts() + '] ' + msg, type: type || 'dim' });
+  _persistLog();
+  renderLog();
+  setStatus(msg.slice(0,100));
+}
+function logHead(m){log('══ '+m+' ══','head')} function logOk(m){log('✓  '+m,'ok')}
+function logErr(m){log('✗  '+m,'err')} function logWarn(m){log('⚠  '+m,'warn')}
+function logInfo(m){log('ℹ  '+m,'info')} function logDim(m){log('   '+m,'dim')}
+
+function renderLog() {
+  var el = document.getElementById('log');
+  document.getElementById('logCount').textContent = _logLines.length;
+  if (!_logLines.length) { el.innerHTML = '<span class="t-dim">No diagnostic runs yet. Click "🧪 Run Full Test".</span>'; return; }
+  el.innerHTML = _logLines.map(function (l) {
     var cls = l.type === 'ok' ? 't-ok' : l.type === 'err' ? 't-err' : l.type === 'warn' ? 't-warn' : l.type === 'head' ? 't-head' : l.type === 'info' ? 't-info' : 't-dim';
     return '<span class="' + cls + '">' + _esc(l.raw) + '</span>';
   }).join('\n');
   el.scrollTop = el.scrollHeight;
 }
 
-function _esc(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+// ─── Current state snapshot ────────────────────────────────
+async function renderState() {
+  var lines = [];
+  lines.push('=== URL ===');
+  lines.push('  href     : ' + location.href);
+  lines.push('');
+  lines.push('=== COOKIES (readable to JS) ===');
+  var c = document.cookie || '';
+  if (!c) lines.push('  (none readable — pp_access is HttpOnly so this is normal)');
+  else c.split(';').forEach(function(p){ lines.push('  ' + p.trim()); });
+  lines.push('  pp_access_ok sentinel: ' + (/(?:^|;\s*)pp_access_ok=1/.test(c) ? 'YES ✓' : 'NO ✗'));
+  lines.push('');
+  lines.push('=== AUTH ===');
+  try {
+    var s = typeof getSession === 'function' ? await getSession() : null;
+    if (!s) lines.push('  No Supabase session in localStorage');
+    else {
+      lines.push('  email     : ' + (s.user && s.user.email));
+      lines.push('  user_id   : ' + (s.user && s.user.id));
+      lines.push('  expires_at: ' + (s.expires_at ? new Date(s.expires_at*1000).toISOString() + ' (in ' + Math.round((s.expires_at*1000-Date.now())/1000) + 's)' : '(none)'));
+      lines.push('  token     : ' + (s.access_token || '').slice(0, 40) + '…');
+    }
+  } catch (e) { lines.push('  getSession threw: ' + e.message); }
+  lines.push('');
+  lines.push('=== SERVER COOKIE ECHO (/api/debug-cookies) ===');
+  try {
+    var r = await fetch('/api/debug-cookies', { credentials: 'include' });
+    var j = await r.json();
+    lines.push('  ' + JSON.stringify(j, null, 2));
+  } catch (e) { lines.push('  fetch failed: ' + e.message); }
+  lines.push('');
+  lines.push('=== ENV ===');
+  lines.push('  cookieEnabled: ' + navigator.cookieEnabled);
+  lines.push('  localStorage : ' + (function(){try{return Object.keys(localStorage).length+' keys';}catch(e){return 'BLOCKED';}})());
+  lines.push('  monitor      : ' + (localStorage.getItem(ENABLE_KEY) === '1' ? 'ON' : 'OFF'));
+  lines.push('  UA           : ' + navigator.userAgent);
+  document.getElementById('state').textContent = lines.join('\n');
 }
 
-function log(msg, type) {
-  var line = '[' + _ts() + '] ' + msg;
-  _logLines.push({ raw: line, type: type || 'dim' });
-  _persist();
-  _render();
-  document.getElementById('status').textContent = msg.slice(0,100);
-}
-
-function logHead(msg) { log('══ ' + msg + ' ══', 'head'); }
-function logOk(msg)   { log('✓  ' + msg, 'ok'); }
-function logErr(msg)  { log('✗  ' + msg, 'err'); }
-function logWarn(msg) { log('⚠  ' + msg, 'warn'); }
-function logInfo(msg) { log('ℹ  ' + msg, 'info'); }
-function logDim(msg)  { log('   ' + msg, 'dim'); }
-
-// ─── Load previous logs on page open ─────────────────────────────────────────
-_loadPersisted();
-_render();
-
-// ─── Controls ─────────────────────────────────────────────────────────────────
-function clearLogs() {
-  _logLines = [];
-  localStorage.removeItem(LOG_KEY);
-  _render();
-  document.getElementById('summary').style.display = 'none';
-}
-
-function copyLogs() {
-  var text = _logLines.map(function(l){ return l.raw; }).join('\n');
-  navigator.clipboard.writeText(text).then(function(){
-    document.getElementById('status').textContent = '✓ Copied to clipboard!';
-  }).catch(function(){
-    prompt('Copy from here:', text);
-  });
-}
-
-// ─── Full diagnostic test ─────────────────────────────────────────────────────
+// ─── Full diagnostic test ──────────────────────────────────
 async function runFullTest() {
+  switchTab('log');
   log('', 'dim');
   logHead('FULL VR AUTH DIAGNOSTIC — ' + new Date().toISOString());
 
-  // 1. Check auth.js loaded
   logHead('1. Script availability');
   logInfo('window.ppGrantVrAccess = ' + typeof window.ppGrantVrAccess);
-  logInfo('typeof getSession = ' + typeof getSession);
+  logInfo('typeof getSession         = ' + typeof getSession);
   logInfo('typeof getVerifiedSession = ' + typeof getVerifiedSession);
-  logInfo('typeof requireAuth = ' + typeof requireAuth);
-  if (typeof window.ppGrantVrAccess !== 'function') {
-    logErr('ppGrantVrAccess missing — auth.js not loaded or export missing!');
-  }
 
-  // 2. Raw Supabase session
   logHead('2. Supabase getSession()');
-  var rawSession = null;
+  var raw = null;
   try {
-    rawSession = await getSession();
-    if (!rawSession) {
-      logErr('getSession() returned null/undefined — NOT logged in');
-    } else {
-      logOk('getSession() returned a session');
-      logDim('  user email : ' + (rawSession.user && rawSession.user.email || '(none)'));
-      logDim('  user id    : ' + (rawSession.user && rawSession.user.id || '(none)'));
-      var ea = rawSession.expires_at;
-      if (ea) {
-        var expiresIn = Math.round((ea*1000 - Date.now()) / 1000);
-        logDim('  expires_at : ' + new Date(ea*1000).toISOString() + ' (' + expiresIn + 's from now)');
-        if (expiresIn < 0) logErr('  TOKEN IS EXPIRED by ' + (-expiresIn) + ' seconds!');
-        else if (expiresIn < 300) logWarn('  Token expires in < 5 min — will trigger refresh');
-      } else {
-        logWarn('  No expires_at on session');
-      }
-      logDim('  access_token: ' + (rawSession.access_token ? rawSession.access_token.slice(0,30) + '...' : '(missing)'));
+    raw = await getSession();
+    if (!raw) logErr('NOT logged in');
+    else {
+      logOk('session present — ' + (raw.user && raw.user.email));
+      var exp = raw.expires_at ? raw.expires_at * 1000 : 0;
+      var rem = Math.round((exp - Date.now()) / 1000);
+      if (exp && rem < 0) logErr('  ACCESS TOKEN IS EXPIRED by ' + (-rem) + 's — this is the loop trigger');
+      else if (exp && rem < 300) logWarn('  expires in ' + rem + 's — will refresh');
+      else logDim('  expires in ' + rem + 's (healthy)');
     }
-  } catch(e) {
-    logErr('getSession() threw: ' + e.message);
-  }
+  } catch (e) { logErr('getSession threw: ' + e.message); }
 
-  // 3. getVerifiedSession
   logHead('3. getVerifiedSession()');
-  var verSession = null;
+  var ver = null;
   try {
-    verSession = await getVerifiedSession();
-    if (!verSession) {
-      logErr('getVerifiedSession() returned null — will fail to grant');
-    } else {
-      logOk('getVerifiedSession() returned a session');
-      logDim('  token start: ' + (verSession.access_token || '').slice(0,30) + '...');
-      logDim('  same token as raw? ' + (rawSession && verSession.access_token === rawSession.access_token ? 'YES (cached)' : 'NO (refreshed)'));
+    ver = await getVerifiedSession();
+    if (!ver) logErr('returned null — cannot grant');
+    else {
+      logOk('returned a session');
+      logDim('  same token as raw? ' + (raw && ver.access_token === raw.access_token ? 'YES (cached)' : 'NO (refreshed)'));
     }
-  } catch(e) {
-    logErr('getVerifiedSession() threw: ' + e.message);
-  }
+  } catch (e) { logErr('threw: ' + e.message); }
 
-  // 4. Cookies BEFORE grant
-  logHead('4. Cookies before grant');
+  logHead('4. Cookies BEFORE grant');
   _showCookies();
 
-  // 5. POST /api/grant-vr-access
   logHead('5. POST /api/grant-vr-access');
-  if (!verSession || !verSession.access_token) {
-    logErr('Skipping grant — no session token available');
-  } else {
+  if (!ver) logErr('Skipped — no session');
+  else {
     try {
       var t0 = Date.now();
-      var grantResp = await fetch('/api/grant-vr-access', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Authorization': 'Bearer ' + verSession.access_token }
-      });
-      var dur = Date.now() - t0;
-      logInfo('  HTTP status : ' + grantResp.status + ' (' + dur + 'ms)');
-      var body = '';
-      try { body = await grantResp.text(); } catch(e){}
-      logDim('  response    : ' + body.slice(0,200));
-      if (grantResp.ok) {
-        logOk('Grant request succeeded (HTTP 200)');
-      } else {
-        logErr('Grant request FAILED with HTTP ' + grantResp.status);
-        logErr('Response body: ' + body);
-      }
-    } catch(e) {
-      logErr('fetch /api/grant-vr-access threw: ' + e.message);
-    }
+      var r = await fetch('/api/grant-vr-access', { method:'POST', credentials:'include', headers:{ Authorization:'Bearer '+ver.access_token } });
+      var body = await r.text();
+      logInfo('  status: ' + r.status + ' (' + (Date.now()-t0) + 'ms)');
+      logDim('  body  : ' + body.slice(0,200));
+      if (r.ok) logOk('Grant OK'); else logErr('Grant FAILED — ' + body);
+    } catch (e) { logErr('fetch threw: ' + e.message); }
   }
 
-  // 6. Cookies AFTER grant
-  logHead('6. Cookies after grant');
+  logHead('6. Cookies AFTER grant');
   _showCookies();
+  if (/(?:^|;\s*)pp_access_ok=1/.test(document.cookie||'')) logOk('pp_access_ok=1 sentinel present');
+  else logErr('pp_access_ok=1 sentinel MISSING — cookies are not landing in browser');
 
-  // 7. Sentinel check
-  logHead('7. Sentinel cookie check');
-  var hasSentinel = /(?:^|;\s*)pp_access_ok=1/.test(document.cookie || '');
-  if (hasSentinel) {
-    logOk('pp_access_ok=1 IS present in document.cookie');
-  } else {
-    logErr('pp_access_ok=1 is NOT in document.cookie');
-    logWarn('Possible causes:');
-    logWarn('  a) Cookies are blocked by browser (3rd-party cookie restriction)');
-    logWarn('  b) Server is on a different domain and SameSite=Strict is blocking');
-    logWarn('  c) grant-vr-access returned non-200 (see step 5 above)');
-    logWarn('  d) pp_access_ok was already set but expired / deleted');
-  }
+  logHead('7. Server cookie echo');
+  try {
+    var d = await fetch('/api/debug-cookies', { credentials:'include' }).then(function(r){return r.json();});
+    logInfo('  server sees: ' + JSON.stringify(d));
+    if (d.hasPpAccess) logOk('  pp_access cookie IS reaching the server'); else logErr('  pp_access NOT reaching server');
+  } catch (e) { logErr('  echo fetch failed: ' + e.message); }
 
-  // 8. Navigate test (dry-run — reads HAJJ_CARD_URLS from dashboard or checks route exists)
-  logHead('8. Test VR route reachability');
-  await _testRoute('/journey/tawaf/index.htm?journey=1&context=initial');
-
-  // 8b. Ask the server what cookies it actually sees
-  logHead('8b. What cookies does the SERVER see?');
-  await _echoServerCookies();
-
-  // 9. Environment info
-  logHead('9. Environment');
-  logDim('  URL          : ' + window.location.href);
-  logDim('  Origin       : ' + window.location.origin);
-  logDim('  localStorage : ' + (function(){ try{ return Object.keys(localStorage).length + ' keys'; }catch(e){ return 'BLOCKED'; } })());
-  logDim('  sessionStorage: ' + (function(){ try{ return Object.keys(sessionStorage).length + ' keys'; }catch(e){ return 'BLOCKED'; } })());
-  logDim('  cookieEnabled: ' + navigator.cookieEnabled);
-  logDim('  UA           : ' + navigator.userAgent.slice(0,80));
+  logHead('8. VR route reachability — HEAD /journey/tawaf/index.htm');
+  try {
+    var rr = await fetch('/journey/tawaf/index.htm?journey=1&context=initial', { method:'HEAD', credentials:'include', redirect:'manual' });
+    if (rr.status === 200) logOk('  → 200 (VR route is reachable!)');
+    else if (rr.type === 'opaqueredirect' || rr.status === 0) logWarn('  → REDIRECTED (cookie not accepted by gate)');
+    else logErr('  → HTTP ' + rr.status);
+  } catch (e) { logErr('  threw: ' + e.message); }
 
   logHead('DONE');
-  _buildSummary();
 }
 
 async function runGrantOnly() {
-  log('', 'dim');
-  logHead('GRANT-ONLY TEST — ' + new Date().toISOString());
+  switchTab('log');
+  log('','dim');
+  logHead('GRANT-ONLY TEST');
   _showCookies();
-  logHead('Calling ppGrantVrAccess()...');
   try {
-    var result = await window.ppGrantVrAccess();
-    logInfo('ppGrantVrAccess() returned: ' + result);
-    if (result) logOk('Grant succeeded'); else logErr('Grant returned false');
-  } catch(e) {
-    logErr('ppGrantVrAccess() threw: ' + e.message);
-  }
+    var r = await window.ppGrantVrAccess();
+    logInfo('ppGrantVrAccess() = ' + r);
+    if (r) logOk('grant returned true'); else logErr('grant returned false');
+  } catch (e) { logErr('threw: ' + e.message); }
   _showCookies();
 }
 
 function _showCookies() {
-  var all = document.cookie || '';
-  if (!all) {
-    logWarn('  document.cookie is empty (no readable cookies)');
-    return;
-  }
-  var parts = all.split(';').map(function(s){ return s.trim(); });
-  parts.forEach(function(p) {
-    var relevant = p.startsWith('pp_') || p.startsWith('sb-');
-    if (relevant) logInfo('  cookie: ' + p);
-    else logDim('  cookie: ' + p.slice(0,60));
+  var c = document.cookie || '';
+  if (!c) { logWarn('  document.cookie is empty'); return; }
+  c.split(';').forEach(function (p) {
+    var pp = p.trim();
+    if (pp.startsWith('pp_') || pp.startsWith('sb-')) logInfo('  ' + pp.slice(0,80));
+    else logDim('  ' + pp.slice(0,60));
   });
 }
 
-async function _testRoute(url) {
-  try {
-    var r = await fetch(url, { method: 'HEAD', credentials: 'include', redirect: 'manual' });
-    logDim('  HEAD ' + url);
-    if (r.status === 200) logOk('  → 200 OK (route accessible with current cookies)');
-    else if (r.status === 0 || r.type === 'opaqueredirect') logWarn('  → Redirected (likely to /login — cookie missing or expired)');
-    else if (r.status === 302 || r.status === 301) logWarn('  → ' + r.status + ' Redirect (likely to /login)');
-    else logErr('  → HTTP ' + r.status);
-  } catch(e) {
-    logErr('  → fetch threw: ' + e.message);
-  }
-}
-
-async function _echoServerCookies() {
-  // Hits a lightweight endpoint that echoes what cookies the server received.
-  // We use the grant endpoint with a deliberately empty bearer so it returns
-  // 401 quickly, but the server logs what cookies it saw.
-  // Instead, we call /api/debug-cookies if it exists, otherwise use a non-auth route.
-  try {
-    var r = await fetch('/api/debug-cookies', { credentials: 'include' });
-    if (r.ok) {
-      var j = await r.json();
-      logInfo('  Server received cookies: ' + JSON.stringify(j));
-    } else {
-      logDim('  /api/debug-cookies not available (' + r.status + ') — checking via grant endpoint response');
-      // Fall back: try grant with empty bearer to see response headers
-      var r2 = await fetch('/api/grant-vr-access', {
-        method: 'POST', credentials: 'include',
-        headers: { Authorization: 'Bearer ECHO_TEST' }
-      });
-      logDim('  Grant-echo response: ' + r2.status + ' (expected 401 for test token)');
-    }
-  } catch(e) {
-    logWarn('  Server cookie echo failed: ' + e.message);
-  }
-  // Check if pp_access_ok cookie appeared AFTER the route test
-  var hasOk = /(?:^|;\s*)pp_access_ok=1/.test(document.cookie || '');
-  if (hasOk) logOk('  pp_access_ok=1 IS now present (cookies ARE landing in browser)');
-  else logErr('  pp_access_ok=1 STILL absent — server cookies are not landing in browser');
-}
-
-function _buildSummary() {
-  var errors = _logLines.filter(function(l){ return l.type === 'err'; });
-  var warns  = _logLines.filter(function(l){ return l.type === 'warn'; });
-  var s = document.getElementById('summary');
-  s.style.display = 'block';
-  var html = '<h2>📊 Diagnostic Summary</h2><ul>';
-  if (!errors.length && !warns.length) {
-    html += '<li style="color:#4caf50">✓ No errors detected — if links still fail, check browser cookie settings.</li>';
-  }
-  errors.forEach(function(l){ html += '<li style="color:#f44336">' + _esc(l.raw) + '</li>'; });
-  warns.forEach(function(l){ html += '<li style="color:#ff9800">' + _esc(l.raw) + '</li>'; });
-  html += '</ul>';
-  s.innerHTML = html;
-}
+// ─── Init ──────────────────────────────────────────────────
+_loadLog();
+refreshToggleBtn();
+renderEvents();
+renderLog();
 </script>
 </body>
 </html>

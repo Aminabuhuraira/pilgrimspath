@@ -2,6 +2,19 @@
 // Pilgrim's Path — Supabase Auth Module
 // ===================================
 
+// Debug monitor — auto-loaded on every page when the operator has flipped
+// the switch from /debug-vr.html. Captures console, clicks, fetch, and
+// navigation events to localStorage so the dashboard can show the full
+// flow across redirects (including the login → /journey/* round-trip).
+try {
+    if (localStorage.getItem('pp_debug_enabled') === '1' && !window.__ppDebugMonitorInstalled) {
+        var _dbg = document.createElement('script');
+        _dbg.src = '/debug-monitor.js?v=' + (window.__PP_DBG_V || '1');
+        _dbg.async = false;
+        (document.head || document.documentElement).appendChild(_dbg);
+    }
+} catch (e) { /* localStorage blocked — silent */ }
+
 // Supabase project credentials (public — safe for frontend)
 const SUPABASE_URL = 'https://giftctxrqvlfekhzpcaa.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpZnRjdHhycXZsZmVraHpwY2FhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3MTg0NjQsImV4cCI6MjA4ODI5NDQ2NH0.Dm4tb6lvLMf9CDLo04qA9msYVLjBT-Web48pgk0BOYc';
