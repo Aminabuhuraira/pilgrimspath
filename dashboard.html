@@ -517,11 +517,10 @@
         4:  '/journey/rami/umrah-trim-scene.html?journey=3&context=umrah-trim'
     };
     async function _ppGo(url) {
-        // Ensure pp_access cookie is set before navigating to a gated /journey/* URL.
-        // We verify success via the non-HttpOnly sentinel cookie pp_access_ok=1,
-        // which is set alongside pp_access by /api/grant-vr-access. If the browser
-        // silently dropped the cookie (3rd-party cookie blocker, ITP, etc.) we
-        // abort instead of navigating into the gate and getting bounced back.
+        // Try to ensure pp_access + sentinel cookies are set before navigating.
+        // The sentinel (pp_access_ok=1) is the fast path — confirms cookies land.
+        // If grant fails after two attempts we navigate anyway: the server will
+        // redirect to /login which auto-grants the cookie and bounces back once.
         function _hasSentinel() {
             return /(?:^|;\s*)pp_access_ok=1/.test(document.cookie || '');
         }
@@ -537,11 +536,9 @@
             await new Promise(function(r){ setTimeout(r, 250); });
             await Promise.race([_grantOnce(), new Promise(function(res){ setTimeout(res, 2500); })]);
         }
-        if (!_hasSentinel()) {
-            _showToast('Could not establish VR session. Please sign out and sign in again.', 5000);
-            return;
-        }
-        window.__ppVrReady = true;
+        // Navigate regardless — if pp_access cookie is absent the server redirects
+        // to /login which auto-grants and returns here (single round-trip, no loop).
+        window.__ppVrReady = _hasSentinel();
         window.location.href = url;
     }
     function goToHajjCard(n) {

@@ -128,34 +128,26 @@ async function getSession() {
 
 /**
  * Resolve a live session that is safe to use for server-side verification.
- * Local storage can hold stale session data, so we verify it and refresh once
- * before trusting it for protected VR entry.
+ * Trusts the locally-stored Supabase JWT (which is self-verifying). Only
+ * makes a network call when the token is expired or expiring within 5 minutes.
  */
 async function getVerifiedSession() {
     try {
         let session = await getSession();
-        const expiresSoon = session && session.expires_at && ((session.expires_at * 1000) - Date.now() < 60000);
+        if (!session || !session.access_token) return null;
 
-        if (!session || !session.access_token || expiresSoon) {
-            const { data, error } = await _sb.auth.refreshSession();
-            if (!error && data && data.session) session = data.session;
+        // Proactively refresh if expiring within 5 minutes
+        const expiresAt = session.expires_at ? session.expires_at * 1000 : 0;
+        if (!expiresAt || Date.now() > expiresAt - 300_000) {
+            try {
+                const { data } = await _sb.auth.refreshSession();
+                if (data && data.session && data.session.access_token) {
+                    session = data.session;
+                }
+            } catch (_) { /* non-fatal — use existing token */ }
         }
 
-        if (!session || !session.access_token) return null;
-
-        const { data, error } = await _sb.auth.getUser(session.access_token);
-        if (!error && data && data.user) return session;
-
-        const refreshed = await _sb.auth.refreshSession();
-        if (refreshed.error || !refreshed.data || !refreshed.data.session) return null;
-
-        session = refreshed.data.session;
-        if (!session || !session.access_token) return null;
-
-        const verifyRefreshed = await _sb.auth.getUser(session.access_token);
-        if (verifyRefreshed.error || !verifyRefreshed.data || !verifyRefreshed.data.user) return null;
-
-        return session;
+        return session && session.access_token ? session : null;
     } catch (e) {
         return null;
     }
