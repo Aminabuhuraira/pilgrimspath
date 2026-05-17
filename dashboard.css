@@ -304,7 +304,10 @@ body {
 .ritual-card-dash.completed .ritual-status { color: #27ae60; }
 .ritual-card-dash.current .ritual-status { color: var(--gold); }
 .ritual-card-dash.locked .ritual-status { color: #ccc; }
-.ritual-card-dash.locked { opacity: .55; pointer-events: none; }
+.ritual-card-dash.locked { opacity: .55; }
+.ritual-card-dash.locked:hover { opacity: .75; }
+/* Hide the redundant text badge — opacity + status icon already convey state */
+.ritual-badge { display: none; }
 .ritual-icon {
     width: 44px; height: 44px; border-radius: 12px;
     background: var(--gold-light); color: var(--gold);

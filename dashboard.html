@@ -532,8 +532,14 @@
     };
     async function _ppGo(url) {
         // Ensure pp_access cookie is set before navigating to a gated /journey/* URL.
+        // Cap the wait so a slow grant never freezes navigation.
         if (!window.__ppVrReady && typeof window.ppGrantVrAccess === 'function') {
-            try { await window.ppGrantVrAccess(); window.__ppVrReady = true; } catch(e){}
+            try {
+                await Promise.race([
+                    window.ppGrantVrAccess().then(function(){ window.__ppVrReady = true; }),
+                    new Promise(function(res){ setTimeout(res, 1500); })
+                ]);
+            } catch(e){}
         }
         window.location.href = url;
     }
@@ -583,10 +589,17 @@
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
         _showToast('⬇ Preparing…');
 
+        // Ensure pp_access cookie before requesting gated scene assets.
+        var ready = (window.__ppVrReady || typeof window.ppGrantVrAccess !== 'function')
+            ? Promise.resolve()
+            : window.ppGrantVrAccess().then(function(){ window.__ppVrReady = true; }).catch(function(){});
+
         // Step 1 — fetch the scene HTML to discover its preloaded assets
-        fetch(sceneBase, { cache: 'no-cache' })
+        ready.then(function(){
+            return fetch(sceneBase, { cache: 'no-cache', credentials: 'include', redirect: 'follow' });
+        })
           .then(function(r) {
-              if (!r.ok) throw new Error(r.status);
+              if (!r.ok) throw new Error('HTTP ' + r.status);
               return r.text();
           })
           .then(function(html) {
@@ -621,7 +634,7 @@
                   return caches.match(u)
                     .then(function(hit) {
                         if (hit) return; // already cached
-                        return fetch(u)
+                        return fetch(u, { credentials: 'include', redirect: 'follow' })
                           .then(function(res) {
                               if (res.ok) {
                                   return caches.open(_swCacheName(u))
@@ -664,22 +677,24 @@
     // Wire click handlers to all ritual cards and sidebar mini-steps
     (function initCardNav() {
         var hasSW = 'serviceWorker' in navigator;
-        // Hajj ritual cards (11 total)
+        // Hajj ritual cards (11 total) — always clickable; goToHajjCard gates Umrah-first.
         var hajjCards = document.querySelectorAll('#hajjTab .ritual-card-dash');
         [1,2,3,4,5,6,7,8,9,10,11].forEach(function(n, i) {
             if (hajjCards[i]) {
-                hajjCards[i].addEventListener('click', function() {
-                    if (!hajjCards[i].classList.contains('locked')) goToHajjCard(n);
+                hajjCards[i].addEventListener('click', function(e) {
+                    if (e.target.closest('.card-dl-btn')) return;
+                    goToHajjCard(n);
                 });
                 if (hasSW && HAJJ_CARD_URLS[n]) _addDlBtn(hajjCards[i], HAJJ_CARD_URLS[n]);
             }
         });
-        // Umrah ritual cards (4 total)
+        // Umrah ritual cards (4 total) — always clickable.
         var umrahCards = document.querySelectorAll('#umrahTab .ritual-card-dash');
         [1,2,3,4].forEach(function(n, i) {
             if (umrahCards[i]) {
-                umrahCards[i].addEventListener('click', function() {
-                    if (!umrahCards[i].classList.contains('locked')) goToUmrahCard(n);
+                umrahCards[i].addEventListener('click', function(e) {
+                    if (e.target.closest('.card-dl-btn')) return;
+                    goToUmrahCard(n);
                 });
                 if (hasSW && UMRAH_CARD_URLS[n]) _addDlBtn(umrahCards[i], UMRAH_CARD_URLS[n]);
             }
