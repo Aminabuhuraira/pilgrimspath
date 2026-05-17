@@ -813,10 +813,9 @@
             try { sessionStorage.setItem('redirectAfterLogin', nextParam); } catch(e){}
         }
     })();
-    // If already signed in AND a redirect target is pending, grant cookie and
-    // bounce immediately — this prevents the loop where a signed-in user gets
-    // sent to /login by the VR gate but then has to manually log in again.
-    // Loop guard: skip auto-redirect if we redirected to this same dest < 8s ago.
+    // If already signed in AND a redirect target is pending, grant VR cookie
+    // and bounce immediately — prevents the loop where the VR gate sends a
+    // logged-in user to /login?next=... and they just see the login form.
     (async function(){
         try {
             if (typeof getSession !== 'function') return;
@@ -824,17 +823,10 @@
             if (!session) return;
             var dest = sessionStorage.getItem('redirectAfterLogin');
             if (!dest) return;
-            // Prevent rapid redirect loops: if we already tried this dest recently, bail out.
-            var guardKey = '_pp_grant_ts_' + dest;
-            var lastTs = parseInt(sessionStorage.getItem(guardKey) || '0', 10);
-            if (Date.now() - lastTs < 8000) {
-                sessionStorage.removeItem('redirectAfterLogin');
-                return; // show the login form so the user can re-authenticate
-            }
-            sessionStorage.setItem(guardKey, Date.now());
             sessionStorage.removeItem('redirectAfterLogin');
+            // Grant VR cookie before redirecting so the gate passes on first try.
             if (typeof window.ppGrantVrAccess === 'function') {
-                try { await window.ppGrantVrAccess(); } catch(e){}
+                try { await window.ppGrantVrAccess(session); } catch(e){}
             }
             window.location.replace(dest);
         } catch(e){}
