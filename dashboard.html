@@ -401,6 +401,19 @@
     (async () => {
         const user = await requireAuth();
         if (user) {
+            // Grant VR access cookie (server-side JWT) so /journey/* scenes load
+            // without redirecting back to /hajj-vr in a loop. Fire-and-forget.
+            try {
+                const session = await getSession();
+                if (session && session.access_token) {
+                    fetch('/api/grant-vr-access', {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: { 'Authorization': 'Bearer ' + session.access_token }
+                    }).catch(function(){});
+                }
+            } catch(e) {}
+
             // Update user name & avatar
             const nameEl = document.querySelector('.user-name');
             const avatarEl = document.querySelector('.user-avatar');

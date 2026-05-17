@@ -54,9 +54,12 @@ app.use((req, res, next) => {
 function requireVrAccess(req, res, next) {
   const token = req.cookies && req.cookies.pp_access;
   if (!token) {
-    // Redirect browser requests to the VR launch page; reject asset fetches
+    // Redirect browser requests to login (with return target) so we never
+    // loop back into /hajj-vr's Begin Virtual Tour → /journey/* → /hajj-vr.
+    // Reject asset fetches.
     if (req.headers.accept && req.headers.accept.includes('text/html')) {
-      return res.redirect(302, '/hajj-vr');
+      const next = encodeURIComponent(req.originalUrl || req.url);
+      return res.redirect(302, '/login?next=' + next);
     }
     return res.status(403).send('Forbidden');
   }
@@ -71,7 +74,8 @@ function requireVrAccess(req, res, next) {
   } catch {
     res.clearCookie('pp_access', { path: '/' });
     if (req.headers.accept && req.headers.accept.includes('text/html')) {
-      return res.redirect(302, '/hajj-vr');
+      const nextUrl = encodeURIComponent(req.originalUrl || req.url);
+      return res.redirect(302, '/login?next=' + nextUrl);
     }
     return res.status(403).send('Forbidden');
   }
