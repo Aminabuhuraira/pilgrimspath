@@ -581,7 +581,7 @@
 
     <!-- Supabase JS SDK (CDN) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="auth.js?v=20260517c"></script>
+    <script src="auth.js?v=20260517d"></script>
 
     <script>
     // ===== Tab Switching =====
@@ -772,8 +772,14 @@
     // after >2 attempts, stop trying and show the form with an error.
     (async function autoRedirect() {
         try {
-            if (typeof getSession !== 'function') return;
-            const session = await getSession();
+            // Use the VERIFIED session — refreshes the Supabase access_token
+            // if it has expired (>1hr old). Using the raw getSession() here
+            // was the bug that caused the VR-loop: a stale token makes the
+            // server reject the grant with 401, the cookie never lands, the
+            // browser bounces back to /login, and the attempt counter trips.
+            const session = (typeof getVerifiedSession === 'function')
+                ? await getVerifiedSession()
+                : (typeof getSession === 'function' ? await getSession() : null);
             if (!session) return; // not logged in — show the form
 
             const nextParam = new URLSearchParams(location.search).get('next');
@@ -791,19 +797,22 @@
             }
             sessionStorage.setItem(guardKey, attempts + 1);
 
-            // For VR destinations, attempt to grant the pp_access cookie.
-            // We do NOT block on the result — the cookie may be set in the
-            // browser jar even if document.cookie does not yet reflect it.
-            // The next request will carry it. If the cookie genuinely failed
-            // to land, we will return here and the attempt counter trips.
+            // For VR destinations, attempt to grant the pp_access cookie
+            // with the freshly-refreshed token before navigating.
             const isVrRoute = dest.startsWith('/journey/') || dest.startsWith('/pilgrimspath-vr');
             if (isVrRoute && typeof window.ppGrantVrAccess === 'function') {
-                try { await window.ppGrantVrAccess(session); } catch(e){}
+                const ok = await window.ppGrantVrAccess(session).catch(() => false);
+                if (!ok) {
+                    // Grant truly failed (e.g. Supabase rejected even the
+                    // refreshed token). Reset the counter so the user can
+                    // re-authenticate cleanly instead of being looped.
+                    sessionStorage.removeItem(guardKey);
+                    showMessage('Your session has expired. Please sign in again.', 'error');
+                    try { await signOut(); } catch(e){}
+                    return;
+                }
             }
 
-            // Clear the counter on the destination side via a one-shot URL
-            // param — the destination doesn't need to know about it, but if
-            // navigation succeeds the counter just stays at 1 (stale, harmless).
             location.replace(dest);
         } catch (e) { console.warn('[login] auto-redirect error', e); }
     })();

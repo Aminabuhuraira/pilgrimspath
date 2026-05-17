@@ -264,16 +264,44 @@ async function recordTransaction(transaction = {}) {
  */
 async function ppGrantVrAccess(sessionOrToken) {
     try {
-        const session = typeof sessionOrToken === 'string'
-            ? { access_token: sessionOrToken }
-            : (sessionOrToken && sessionOrToken.access_token ? sessionOrToken : await getVerifiedSession());
+        // Resolve a session. If caller passed a session OBJECT, check whether
+        // its access_token has expired and refresh if so — otherwise the
+        // server's Supabase verification rejects the stale Bearer with 401
+        // and the cookie never lands, sending the user into the /login loop.
+        let session;
+        if (typeof sessionOrToken === 'string') {
+            session = { access_token: sessionOrToken };
+        } else if (sessionOrToken && sessionOrToken.access_token) {
+            const expMs = sessionOrToken.expires_at ? sessionOrToken.expires_at * 1000 : 0;
+            const stale = !expMs || Date.now() > expMs - 60_000; // within 60s of expiry
+            session = stale ? await getVerifiedSession() : sessionOrToken;
+        } else {
+            session = await getVerifiedSession();
+        }
         if (!session || !session.access_token) return false;
+
         const r = await fetch('/api/grant-vr-access', {
             method: 'POST',
             credentials: 'include',
             headers: { 'Authorization': 'Bearer ' + session.access_token }
         });
-        return r.ok;
+        if (r.ok) return true;
+
+        // If the server rejected the token (401), try ONCE more with a
+        // freshly-refreshed session. This handles the edge case where the
+        // token expired between getVerifiedSession() and the fetch.
+        if (r.status === 401 && typeof sessionOrToken !== 'string') {
+            const fresh = await getVerifiedSession();
+            if (fresh && fresh.access_token && fresh.access_token !== session.access_token) {
+                const r2 = await fetch('/api/grant-vr-access', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Authorization': 'Bearer ' + fresh.access_token }
+                });
+                return r2.ok;
+            }
+        }
+        return false;
     } catch (e) { return false; }
 }
 if (typeof window !== 'undefined') window.ppGrantVrAccess = ppGrantVrAccess;
