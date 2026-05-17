@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Supabase MUST load before auth.js — auth.js calls window.supabase.createClient() at parse time -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <title>VR Auth Debugger — Pilgrim's Path</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
@@ -234,6 +236,10 @@ async function runFullTest() {
   logHead('8. Test VR route reachability');
   await _testRoute('/journey/tawaf/index.htm?journey=1&context=initial');
 
+  // 8b. Ask the server what cookies it actually sees
+  logHead('8b. What cookies does the SERVER see?');
+  await _echoServerCookies();
+
   // 9. Environment info
   logHead('9. Environment');
   logDim('  URL          : ' + window.location.href);
@@ -287,6 +293,34 @@ async function _testRoute(url) {
   } catch(e) {
     logErr('  → fetch threw: ' + e.message);
   }
+}
+
+async function _echoServerCookies() {
+  // Hits a lightweight endpoint that echoes what cookies the server received.
+  // We use the grant endpoint with a deliberately empty bearer so it returns
+  // 401 quickly, but the server logs what cookies it saw.
+  // Instead, we call /api/debug-cookies if it exists, otherwise use a non-auth route.
+  try {
+    var r = await fetch('/api/debug-cookies', { credentials: 'include' });
+    if (r.ok) {
+      var j = await r.json();
+      logInfo('  Server received cookies: ' + JSON.stringify(j));
+    } else {
+      logDim('  /api/debug-cookies not available (' + r.status + ') — checking via grant endpoint response');
+      // Fall back: try grant with empty bearer to see response headers
+      var r2 = await fetch('/api/grant-vr-access', {
+        method: 'POST', credentials: 'include',
+        headers: { Authorization: 'Bearer ECHO_TEST' }
+      });
+      logDim('  Grant-echo response: ' + r2.status + ' (expected 401 for test token)');
+    }
+  } catch(e) {
+    logWarn('  Server cookie echo failed: ' + e.message);
+  }
+  // Check if pp_access_ok cookie appeared AFTER the route test
+  var hasOk = /(?:^|;\s*)pp_access_ok=1/.test(document.cookie || '');
+  if (hasOk) logOk('  pp_access_ok=1 IS now present (cookies ARE landing in browser)');
+  else logErr('  pp_access_ok=1 STILL absent — server cookies are not landing in browser');
 }
 
 function _buildSummary() {

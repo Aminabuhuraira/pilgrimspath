@@ -148,6 +148,19 @@ app.get('/sanctum-admin-7f3k9q2m', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
+// ── Debug: echo cookies visible to server ─────────────────────
+// Only available from same origin. Helps diagnose cookie delivery issues.
+app.get('/api/debug-cookies', (req, res) => {
+  const c = req.cookies || {};
+  res.json({
+    hasPpAccess: !!c.pp_access,
+    ppAccessOk: c.pp_access_ok || null,
+    cookieNames: Object.keys(c),
+    proto: req.headers['x-forwarded-proto'] || 'none',
+    host: req.headers.host || 'none'
+  });
+});
+
 // ── /login shortcut ───────────────────────────────────────────
 // If the visitor already holds a valid pp_access JWT cookie AND the URL
 // includes ?next=, skip rendering the form and go straight to the target.
