@@ -685,20 +685,32 @@
         var fg = document.getElementById('ppRingFg');
         var loader = document.getElementById('ppLoader');
         if (!fg || !loader) return;
-        var C = 150.8, prog = 0;
+        var C = 150.8, prog = 0, hidden = false;
         function setP(p){ fg.style.strokeDashoffset = C * (1 - p / 100); }
         var t = setInterval(function(){
             prog = Math.min(prog + (90 - prog) * 0.12 + 0.8, 90);
             setP(prog);
         }, 40);
-        window.addEventListener('load', function(){
+        function hideLoader(){
+            if (hidden) return;
+            hidden = true;
             clearInterval(t);
             setP(100);
             setTimeout(function(){
                 loader.classList.add('done');
                 setTimeout(function(){ loader.style.display = 'none'; }, 500);
-            }, 200);
-        });
+            }, 150);
+        }
+        // Primary: dismiss as soon as DOM is parsed (dashboard is interactive then)
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function(){ setTimeout(hideLoader, 250); });
+        } else {
+            setTimeout(hideLoader, 250);
+        }
+        // Backup: ensure dismiss on full load
+        window.addEventListener('load', hideLoader);
+        // Hard safety: never hold the screen for more than 3.5s, no matter what
+        setTimeout(hideLoader, 3500);
     })();
     </script>
 
