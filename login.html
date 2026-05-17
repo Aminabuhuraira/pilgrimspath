@@ -803,12 +803,13 @@
             if (isVrRoute && typeof window.ppGrantVrAccess === 'function') {
                 const ok = await window.ppGrantVrAccess(session).catch(() => false);
                 if (!ok) {
-                    // Grant truly failed (e.g. Supabase rejected even the
-                    // refreshed token). Reset the counter so the user can
-                    // re-authenticate cleanly instead of being looped.
+                    // Grant failed — do NOT sign the user out (the Supabase
+                    // session is still valid; the problem is server-side).
+                    // Stop the loop, clear the counter, and surface an error
+                    // so the support team can read what went wrong from the
+                    // debug dashboard logs.
                     sessionStorage.removeItem(guardKey);
-                    showMessage('Your session has expired. Please sign in again.', 'error');
-                    try { await signOut(); } catch(e){}
+                    showMessage('VR access could not be granted. Please contact support — your account is fine, but the server rejected the session.', 'error');
                     return;
                 }
             }

@@ -43,7 +43,17 @@ module.exports = async function handler(req, res) {
       },
     });
     if (!r.ok) {
-      return res.status(401).json({ error: 'Invalid Supabase session' });
+      let body = '';
+      try { body = (await r.text() || '').slice(0, 300); } catch (e) {}
+      console.error('[grant-vr-access] Supabase /auth/v1/user rejected token:',
+        'status=', r.status,
+        ' url=', `${SUPABASE_URL}/auth/v1/user`,
+        ' apikey_len=', (SUPABASE_ANON || '').length,
+        ' token_prefix=', (supabaseToken || '').slice(0, 20),
+        ' token_len=', (supabaseToken || '').length,
+        ' body=', body
+      );
+      return res.status(401).json({ error: 'Invalid Supabase session', supabase_status: r.status, supabase_body: body });
     }
     const u = await r.json();
     email = (u && u.email) || '';
@@ -51,7 +61,8 @@ module.exports = async function handler(req, res) {
       return res.status(401).json({ error: 'No email on Supabase session' });
     }
   } catch (e) {
-    return res.status(502).json({ error: 'Supabase verification failed' });
+    console.error('[grant-vr-access] Supabase fetch threw:', e && e.message, e && e.stack);
+    return res.status(502).json({ error: 'Supabase verification failed', detail: (e && e.message) || 'unknown' });
   }
 
   // Issue a pp_access cookie. 30-day expiry since this is the free tier.
