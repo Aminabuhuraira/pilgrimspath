@@ -402,17 +402,10 @@
         const user = await requireAuth();
         if (user) {
             // Grant VR access cookie (server-side JWT) so /journey/* scenes load
-            // without redirecting back to /hajj-vr in a loop. Fire-and-forget.
-            try {
-                const session = await getSession();
-                if (session && session.access_token) {
-                    fetch('/api/grant-vr-access', {
-                        method: 'POST',
-                        credentials: 'include',
-                        headers: { 'Authorization': 'Bearer ' + session.access_token }
-                    }).catch(function(){});
-                }
-            } catch(e) {}
+            // without redirecting back to /login in a loop. AWAIT so subsequent
+            // card clicks navigate with the cookie already in place.
+            try { await window.ppGrantVrAccess(); } catch(e) {}
+            window.__ppVrReady = true;
 
             // Update user name & avatar
             const nameEl = document.querySelector('.user-name');
@@ -537,14 +530,21 @@
         3:  '/journey/sai/index.htm?journey=2&context=sa-i',
         4:  '/journey/rami/barber-scene.html?journey=8&context=barber'
     };
+    async function _ppGo(url) {
+        // Ensure pp_access cookie is set before navigating to a gated /journey/* URL.
+        if (!window.__ppVrReady && typeof window.ppGrantVrAccess === 'function') {
+            try { await window.ppGrantVrAccess(); window.__ppVrReady = true; } catch(e){}
+        }
+        window.location.href = url;
+    }
     function goToHajjCard(n) {
         if (!localStorage.getItem('pp_umrah_completed')) {
             _showToast('\uD83D\uDD11 Complete Umrah first to unlock the Hajj journey', 3500);
             return;
         }
-        if (HAJJ_CARD_URLS[n]) window.location.href = HAJJ_CARD_URLS[n];
+        if (HAJJ_CARD_URLS[n]) _ppGo(HAJJ_CARD_URLS[n]);
     }
-    function goToUmrahCard(n) { if (UMRAH_CARD_URLS[n]) window.location.href = UMRAH_CARD_URLS[n]; }
+    function goToUmrahCard(n) { if (UMRAH_CARD_URLS[n]) _ppGo(UMRAH_CARD_URLS[n]); }
 
     // ── Download-experience pre-fetch ──────────────────────────
     var _dlToast = null;

@@ -655,7 +655,10 @@
             
             const redirect = sessionStorage.getItem('redirectAfterLogin') || 'dashboard.html';
             sessionStorage.removeItem('redirectAfterLogin');
-            setTimeout(() => { window.location.href = redirect; }, 800);
+            // Grant the VR access cookie BEFORE navigating so /journey/* URLs
+            // don't bounce back to /login (which would loop).
+            try { if (typeof window.ppGrantVrAccess === 'function') await window.ppGrantVrAccess(); } catch(e){}
+            setTimeout(() => { window.location.href = redirect; }, 600);
         } catch (err) {
             showMessage(err.message || 'Invalid email or password.');
             btn.disabled = false;
@@ -692,9 +695,10 @@
             if (result.session) {
                 // Email confirmation disabled — user is logged in immediately
                 showMessage('Account created! Redirecting to dashboard...', 'success');
-                setTimeout(() => {
+                setTimeout(async () => {
                     const redirect = sessionStorage.getItem('redirectAfterLogin') || 'dashboard.html';
                     sessionStorage.removeItem('redirectAfterLogin');
+                    try { if (typeof window.ppGrantVrAccess === 'function') await window.ppGrantVrAccess(); } catch(e){}
                     window.location.href = redirect;
                 }, 1000);
             } else {
@@ -791,6 +795,23 @@
         if (nextParam) {
             try { sessionStorage.setItem('redirectAfterLogin', nextParam); } catch(e){}
         }
+    })();
+    // If already signed in AND a redirect target is pending, grant cookie and
+    // bounce immediately — this prevents the loop where a signed-in user gets
+    // sent to /login by the VR gate but then has to manually log in again.
+    (async function(){
+        try {
+            if (typeof getSession !== 'function') return;
+            var session = await getSession();
+            if (!session) return;
+            var dest = sessionStorage.getItem('redirectAfterLogin');
+            if (!dest) return;
+            sessionStorage.removeItem('redirectAfterLogin');
+            if (typeof window.ppGrantVrAccess === 'function') {
+                try { await window.ppGrantVrAccess(); } catch(e){}
+            }
+            window.location.replace(dest);
+        } catch(e){}
     })();
     // Session & visit tracking for admin analytics
     (function(){try{var st=Date.now();window.addEventListener('beforeunload',function(){var d=Math.floor((Date.now()-st)/1000);var s=JSON.parse(localStorage.getItem('pp_sessions')||'[]');s.push(d);if(s.length>100)s.splice(0,s.length-100);localStorage.setItem('pp_sessions',JSON.stringify(s));});var v=JSON.parse(localStorage.getItem('pp_visits')||'[]');v.push({time:new Date().toISOString(),referrer:document.referrer||'direct',page:location.pathname});if(v.length>500)v.splice(0,v.length-500);localStorage.setItem('pp_visits',JSON.stringify(v));}catch(e){}})();

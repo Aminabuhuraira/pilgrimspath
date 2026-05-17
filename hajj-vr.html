@@ -1029,7 +1029,7 @@
         // ── State ──
         let selectedLang = 'en';
 
-        // ── On load: show Umrah gate if not yet completed ──
+        // ── On load: auto-skip for returning pilgrims, else show Umrah gate or language picker ──
         (function() {
             var umrahDone = localStorage.getItem('pp_umrah_completed');
             var startScreen = umrahDone ? 'screenLang' : 'screenUmrahGate';
@@ -1039,6 +1039,27 @@
             var gate = document.getElementById(startScreen);
             if (gate) gate.classList.add('active');
         })();
+
+        // If the visitor is signed in AND has prior journey progress, they
+        // shouldn't be asked to pick a language again — send them straight to
+        // the dashboard where they can continue from their saved step.
+        window.addEventListener('load', async function(){
+            try {
+                var st = JSON.parse(localStorage.getItem('journeyState') || '{}');
+                var done = Array.isArray(st.completedSteps) ? st.completedSteps : [];
+                var cur  = parseInt(st.currentStep, 10) || 0;
+                if (cur < 2 && done.length === 0) return; // no real progress yet
+                if (!window.supabase) return;
+                var sb = window.supabase.createClient(
+                    'https://giftctxrqvlfekhzpcaa.supabase.co',
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpZnRjdHhycXZsZmVraHpwY2FhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3MTg0NjQsImV4cCI6MjA4ODI5NDQ2NH0.Dm4tb6lvLMf9CDLo04qA9msYVLjBT-Web48pgk0BOYc'
+                );
+                var session = (await sb.auth.getSession()).data.session;
+                if (!session) return;
+                // Returning signed-in user with progress — skip language screen.
+                window.location.replace('/dashboard');
+            } catch(e){}
+        });
 
         // ── Skip the Umrah gate (user already did Umrah) ──
         function skipUmrahGate() {
@@ -1092,9 +1113,8 @@
             if (loader) loader.classList.add('active');
 
             // Grant VR access cookie first if the visitor is signed in;
-            // otherwise send them to /login (which redirects back here).
-            // Either way, we never want to land them on a gated /journey/*
-            // URL without a cookie, because that loops back to /hajj-vr.
+            // otherwise send them to /login with the journey URL as ?next= so
+            // they're returned directly to the tour after authenticating.
             (async function(){
                 var dest = '/journey/tawaf/index.htm?journey=1&context=initial';
                 try {
@@ -1104,19 +1124,24 @@
                     ) : null;
                     var session = sb ? (await sb.auth.getSession()).data.session : null;
                     if (!session) {
-                        // No login → send to login, return here on success
-                        try { sessionStorage.setItem('redirectAfterLogin', location.href); } catch(e){}
-                        window.location.href = '/login';
+                        // Not logged in — send to login with the journey URL as next.
+                        // Avoid setting redirectAfterLogin to the current /hajj-vr URL,
+                        // which would just dump the user back on this screen.
+                        try { sessionStorage.setItem('redirectAfterLogin', dest); } catch(e){}
+                        window.location.href = '/login?next=' + encodeURIComponent(dest);
                         return;
                     }
-                    // Logged in → grant pp_access cookie before navigating
+                    // Logged in — await pp_access cookie grant BEFORE navigating.
                     await fetch('/api/grant-vr-access', {
                         method: 'POST',
                         credentials: 'include',
                         headers: { 'Authorization': 'Bearer ' + session.access_token }
                     }).catch(function(){});
+                    window.location.href = dest;
+                    return;
                 } catch(e) {}
-                setTimeout(function(){ window.location.href = dest; }, 600);
+                // Fallback if Supabase failed to load at all
+                window.location.href = dest;
             })();
         }
 

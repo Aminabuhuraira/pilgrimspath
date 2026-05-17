@@ -230,6 +230,26 @@ async function recordTransaction(transaction = {}) {
 }
 
 /**
+ * Grant the server-side pp_access VR cookie using the current Supabase
+ * session. Idempotent and safe to call multiple times. Resolves true on
+ * success, false otherwise. Awaiting this BEFORE navigating to /journey/*
+ * prevents the requireVrAccess → /login loop.
+ */
+async function ppGrantVrAccess() {
+    try {
+        const session = await getSession();
+        if (!session || !session.access_token) return false;
+        const r = await fetch('/api/grant-vr-access', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Authorization': 'Bearer ' + session.access_token }
+        });
+        return r.ok;
+    } catch (e) { return false; }
+}
+if (typeof window !== 'undefined') window.ppGrantVrAccess = ppGrantVrAccess;
+
+/**
  * Require authentication — redirects to login if not signed in.
  * Call this at the top of protected pages (e.g. dashboard).
  */
