@@ -101,8 +101,16 @@ app.use((req, res, next) => {
   const dir = JOURNEY_SLUG_MAP[m[1]];
   if (!dir) return next();
   const tail = m[2] && m[2].length > 1 ? m[2] : '/index.htm';
-  req.url = '/pilgrimspath-vr/pilgrims%20path%20main/' +
+  const real = '/pilgrimspath-vr/pilgrims%20path%20main/' +
     encodeURIComponent(dir).replace(/%2F/g, '/') + tail;
+  // HTML navigation: 302 to the real path so relative asset URLs (lib/, media/, locale/, skin/, script.js)
+  // resolve under /pilgrimspath-vr/* (which nginx proxies to Node) instead of /journey/* (which nginx
+  // serves as static files and 404s for asset extensions, producing a white 3DVista panorama).
+  const isHtmlNav = req.method === 'GET' &&
+    req.headers.accept && req.headers.accept.indexOf('text/html') !== -1;
+  if (isHtmlNav) return res.redirect(302, real);
+  // Non-HTML (legacy direct asset fetches): internal rewrite as before.
+  req.url = real;
   next();
 });
 

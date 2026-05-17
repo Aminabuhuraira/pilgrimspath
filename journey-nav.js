@@ -13,7 +13,12 @@ if(typeof jm === 'undefined'){
 // ── CSS for navigation UI ──
 const journeyNavCSS = `
 /* Journey Navigation Container */
+/* Hidden per design request — the bottom-right green completed-step dots were
+   distracting and duplicated the bottom-rail (#scnRail) navigation. The
+   container is still rendered so jm progress state stays wired, but it is
+   visually removed from the VR scene. */
 #journeyNav {
+  display: none !important;
   position: fixed;
   bottom: 20px;
   right: 20px;
