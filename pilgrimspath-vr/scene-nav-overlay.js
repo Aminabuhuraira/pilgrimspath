@@ -118,6 +118,11 @@
       /* Scene-specific action buttons must clear the rail (~70px tall on desktop) */
       '#jamarThrowBtn,#minaContinue,#umrahTrimContinue,#barberContinue{bottom:82px !important;}',
       '#jamarAimHint{bottom:calc(82px + 54px) !important;}',  /* aim hint above throw btn */
+      /* Push path-cue toast above the throw button so it is never obscured */
+      'body:has(#jamarThrowBtn) #pathCueToast{bottom:150px !important;}',
+      'body:has(#minaContinue) #pathCueToast{bottom:150px !important;}',
+      'body:has(#umrahTrimContinue) #pathCueToast{bottom:150px !important;}',
+      'body:has(#barberContinue) #pathCueToast{bottom:150px !important;}',
       /* ===== Mobile: bottom rail stays at bottom — compact items, horizontal scroll ===== */
       '@media(max-width:640px){',
         '#scnRailInner{gap:4px;padding:4px 6px 5px;}',
@@ -140,6 +145,8 @@
         /* On mobile, action buttons need extra clearance for safe area + rail */
         '#jamarThrowBtn,#minaContinue,#umrahTrimContinue,#barberContinue{bottom:calc(70px + env(safe-area-inset-bottom,0px)) !important;}',
         '#jamarAimHint{bottom:calc(126px + env(safe-area-inset-bottom,0px)) !important;}',
+        /* Mobile: ensure toast clears the action button + safe area */
+        'body:has(#jamarThrowBtn) #pathCueToast,body:has(#minaContinue) #pathCueToast,body:has(#umrahTrimContinue) #pathCueToast,body:has(#barberContinue) #pathCueToast{bottom:calc(130px + env(safe-area-inset-bottom,0px)) !important;}',
         /* add safe-area-inset-bottom to rail inner so content isn\'t hidden under home bar */
         '#scnRailInner{padding-bottom:calc(5px + env(safe-area-inset-bottom,0px)) !important;}',
         'body.ppOverlayActive #scnRail,.ppOverlayActive #scnRail{display:none !important;opacity:0 !important;pointer-events:none !important;}',

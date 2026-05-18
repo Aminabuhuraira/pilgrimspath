@@ -157,3 +157,27 @@ User confirmed the VR experience now loads.
 - `a64b2f62` — feat(debug): live activity dashboard at /debug-vr.html *(the diagnostic that cracked it)*
 - `92934792` — debug(grant-vr): log Supabase rejection details + stop sign-out on grant fail
 - *(no commit)* — sed replacement of `SUPABASE_ANON_KEY` placeholder on VPS + `pm2 restart --update-env` *(the actual fix)*
+
+---
+
+## Post-fix VR Rendering Issues (2026-05-17 → 18)
+
+### White screen on VR tour
+
+**Root cause:** The `/journey/<slug>` → `/pilgrimspath-vr/...` middleware was using an internal URL rewrite (`req.url = '/pilgrimspath-vr/...'`) for HTML page navigation. nginx intercepts the original `/journey/<slug>/lib/*.js`, `/journey/<slug>/media/*` etc. requests and returns 404 because those paths don't exist as static files — only the `/pilgrimspath-vr/**` path tree does. The 3DVista player (tdvplayer.js) never loads, leaving the viewport white.
+
+**Fix (server.js):** For HTML `GET` navigations, replaced the internal rewrite with a `302` redirect to the canonical `/pilgrimspath-vr/...` URL. This moves the browser's origin to the correct path, so all relative asset URLs (`lib/`, `media/`, `script.js`, `locale/`) resolve correctly via the gated `/pilgrimspath-vr` static-file handler.
+
+```js
+if (isHtmlNav) return res.redirect(302, real);
+req.url req.url req.url req.url req.url req.url req.url req.url req.url req.n bottom-right dots removed
+
+**Root cause:** `#journeyNav` (the `journey-dots` completed-step cluster in `journey-nav.js`) was rendered at `position:fixed; bottom:20px; right:20px` with green `.journey-dot.completed` elements (`#22c55e`). These were visually distracting and duplicated the bottom rail.
+
+**Fix (journey-nav.js):** Added `display:none !important` to `#journeyNav`. The underlying `jm` progress state still runs; only the visual is hidden.
+
+### "Hajj is a journey of seeking" toast blocked by Throw Stone button (2026-05-18)
+
+**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:**Root cause:*old**utton
+
+**Fix (scene-nav-overlay.js):** Added CSS `:**Fix (scene-nav-overlay.js):** Added CSS `:**Fix (scene-nav-overlay.js):** Added CSS `:**Fix (scene-narea-inset-bottom,0px))` (mobile ≤640px) whenever the conflicting action button is present on the page. Covers all four action-button scenarios (`#jamarThrowBtn`, `#minaContinue`, `#umrahTrimContinue`, `#barberContinue`).
