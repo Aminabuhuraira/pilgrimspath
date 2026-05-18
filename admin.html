@@ -754,26 +754,26 @@ Example: Write 5 Instagram captions for promoting our VR Hajj experience during 
     <div class="stats-grid">
         <div class="stat-card gold">
             <div class="stat-icon"><i class="fas fa-wallet"></i></div>
-            <div class="stat-label">Monthly Revenue</div>
-            <div class="stat-value">$4,280</div>
-            <div class="stat-trend up"><i class="fas fa-arrow-up"></i> 24% vs last month</div>
+            <div class="stat-label">Total Revenue</div>
+            <div class="stat-value" id="statRevMonthly">—</div>
+            <div class="stat-trend up" id="statRevTrendRow"><i class="fas fa-chart-line"></i> All time</div>
         </div>
         <div class="stat-card green">
             <div class="stat-icon"><i class="fas fa-credit-card"></i></div>
-            <div class="stat-label">Active Subs</div>
-            <div class="stat-value">187</div>
-            <div class="stat-trend up"><i class="fas fa-arrow-up"></i> 12 new</div>
+            <div class="stat-label">Paid Subscribers</div>
+            <div class="stat-value" id="statActiveSubs">—</div>
+            <div class="stat-trend up"><i class="fas fa-crown"></i> Individual + Agency</div>
         </div>
         <div class="stat-card blue">
             <div class="stat-icon"><i class="fas fa-hand-holding-dollar"></i></div>
-            <div class="stat-label">Donations</div>
-            <div class="stat-value">$890</div>
+            <div class="stat-label">Total Donations</div>
+            <div class="stat-value" id="statTotalDonations">—</div>
         </div>
         <div class="stat-card orange">
             <div class="stat-icon"><i class="fas fa-percent"></i></div>
             <div class="stat-label">Churn Rate</div>
-            <div class="stat-value">2.1%</div>
-            <div class="stat-trend down"><i class="fas fa-arrow-down"></i> -0.5%</div>
+            <div class="stat-value" id="statChurnRate">—</div>
+            <div class="stat-trend" id="statChurnTrendRow"><i class="fas fa-users"></i> Inactive 30d+</div>
         </div>
     </div>
 
@@ -818,24 +818,24 @@ Example: Write 5 Instagram captions for promoting our VR Hajj experience during 
 
     <div class="stats-grid">
         <div class="stat-card gold">
-            <div class="stat-icon"><i class="fas fa-handshake"></i></div>
-            <div class="stat-label">Total Leads</div>
-            <div class="stat-value">42</div>
+            <div class="stat-icon"><i class="fas fa-envelope"></i></div>
+            <div class="stat-label">Email Leads</div>
+            <div class="stat-value" id="statCrmLeads">—</div>
         </div>
         <div class="stat-card green">
             <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
             <div class="stat-label">Active Partners</div>
-            <div class="stat-value">8</div>
+            <div class="stat-value" id="statCrmPartners">—</div>
         </div>
         <div class="stat-card blue">
             <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
             <div class="stat-label">Pipeline Value</div>
-            <div class="stat-value">$38K</div>
+            <div class="stat-value" id="statCrmPipeline">—</div>
         </div>
         <div class="stat-card purple">
             <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
             <div class="stat-label">Win Rate</div>
-            <div class="stat-value">28%</div>
+            <div class="stat-value" id="statCrmWinRate">—</div>
         </div>
     </div>
 
@@ -1047,7 +1047,7 @@ function showDashboard(){
         .catch(function(){});
 })();
 </script>
-<script src="admin-dashboard.js?v=6"></script>
+<script src="admin-dashboard.js?v=7"></script>
 <script src="panorama-catalog.js?v=1"></script>
 <script src="button-catalog.js?v=2"></script>
 <script src="admin-journey-content.js?v=22"></script>

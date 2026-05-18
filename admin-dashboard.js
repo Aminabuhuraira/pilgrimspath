@@ -324,10 +324,33 @@ function renderLiveStats(){
         if(!u.joined) return false;
         return (Date.now() - new Date(u.joined).getTime()) < 7*86400000;
     }).length;
+    const activeCount = LIVE.users.filter(u => u.status === 'active').length;
     setStat('usersNewWeek', newThisWeek);
     setStat('usersActive30', activeCount);
     setStat('usersPremium', LIVE.users.filter(u => u.plan === 'Individual').length);
     setStat('usersAgency', LIVE.users.filter(u => u.plan === 'Agency').length);
+
+    // Revenue section stat cards
+    const txs = LIVE.transactions || [];
+    const completedTxs = txs.filter(t => t.status === 'completed');
+    const now2 = new Date();
+    const thisMonthKey2 = now2.getFullYear() + '-' + String(now2.getMonth() + 1).padStart(2, '0');
+    const monthlyRev = completedTxs
+        .filter(t => (t.date || '').startsWith(thisMonthKey2))
+        .reduce((s, t) => s + (t.amountNum || 0), 0);
+    const totalDonations = completedTxs
+        .filter(t => (t.type || '').toLowerCase().includes('donation'))
+        .reduce((s, t) => s + (t.amountNum || 0), 0);
+    const paidSubs = LIVE.users.filter(u => u.plan === 'Individual' || u.plan === 'Agency').length;
+    setStat('statRevMonthly', monthlyRev > 0 ? '$' + monthlyRev.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) : (LIVE.revenue > 0 ? '$' + Number(LIVE.revenue).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) : '$0.00'));
+    setStat('statActiveSubs', paidSubs);
+    setStat('statTotalDonations', totalDonations > 0 ? '$' + totalDonations.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) : '$0.00');
+    // Churn: users who went inactive/churned vs total users
+    const churnedUsers = LIVE.users.filter(u => u.status === 'churned').length;
+    const churnRate = LIVE.users.length > 0 ? ((churnedUsers / LIVE.users.length) * 100).toFixed(1) : '0.0';
+    setStat('statChurnRate', churnRate + '%');
+    // CRM leads stat card
+    setStat('statCrmLeads', LIVE.leads);
 }
 
 function setStat(id, val){
@@ -779,6 +802,17 @@ function populateCRMPipeline() {
         { id: 'closed', title: 'Closed Won', color: 'var(--success)' }
     ];
     const allLeads = LIVE.crmLeads || [];
+
+    // CRM stat cards — computed from real pipeline data (localStorage) + Supabase leads count
+    const closedLeads = allLeads.filter(l => l.stage === 'closed');
+    const pipelineVal = allLeads.filter(l => l.stage !== 'closed')
+        .reduce((s, l) => s + (parseFloat((l.value || '0').replace(/[^0-9.]/g, '')) || 0), 0);
+    const winRate = allLeads.length > 0 ? Math.round((closedLeads.length / allLeads.length) * 100) : 0;
+    setStat('statCrmLeads', LIVE.leads || 0);
+    setStat('statCrmPartners', closedLeads.length);
+    setStat('statCrmPipeline', pipelineVal > 0 ? '$' + (pipelineVal >= 1000 ? (pipelineVal/1000).toFixed(1) + 'K' : pipelineVal.toFixed(0)) : '$0');
+    setStat('statCrmWinRate', allLeads.length > 0 ? winRate + '%' : '—');
+
     if(allLeads.length === 0){
         el.innerHTML = '<div style="grid-column:1/-1;padding:40px;text-align:center;color:var(--text-muted);background:var(--bg-input);border-radius:12px"><i class="fas fa-handshake" style="font-size:2rem;display:block;margin-bottom:10px;opacity:.5"></i><strong>No agency leads yet</strong><p style="margin-top:6px;font-size:0.82rem">Use “Add Lead” to start your B2B pipeline. Leads are stored locally in this browser until a CRM table is added to Supabase.</p></div>';
         return;
