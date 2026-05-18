@@ -253,6 +253,15 @@ function renderLiveStats(){
     setStat('statLeads', LIVE.leads);
     setStat('statLeadsTrend', '—');
 
+    // Website visitors = total registered users (best available real-time metric)
+    const visitorCount = LIVE.users.length;
+    setStat('statWebVisitors', visitorCount);
+    const el = document.getElementById('statWebVisitorsTrend');
+    if (el) {
+        const activeCount = LIVE.users.filter(u => u.status === 'active').length;
+        el.innerHTML = '<i class="fas fa-circle" style="color:#22c55e;font-size:7px;vertical-align:middle"></i> ' + activeCount.toLocaleString() + ' active';
+    }
+
     // Per-tab user metrics
     const newThisWeek = LIVE.users.filter(u => {
         if(!u.joined) return false;
