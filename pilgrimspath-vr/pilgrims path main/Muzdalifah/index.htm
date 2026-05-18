@@ -436,7 +436,9 @@ function renderPebbles(panoId) {
     const el = document.createElement('div');
     el.className = 'pebble-spot';
     el.style.left = spot.x + '%';
-    el.style.top = spot.y + '%';
+    // On desktop (≥769px) shift pebbles up by 12% so they clear the ~80px scene nav rail at the bottom
+    var yOffset = window.innerWidth >= 769 ? -12 : 0;
+    el.style.top = Math.max(2, spot.y + yOffset) + '%';
     el.style.width = spot.s + 'px';
     el.style.height = spot.s + 'px';
     // Randomize animation delay for natural look
