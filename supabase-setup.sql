@@ -33,20 +33,15 @@ DROP POLICY IF EXISTS "Admins read all profiles" ON public.profiles;
 DROP POLICY IF EXISTS "Users can update own profile" ON public.profiles;
 DROP POLICY IF EXISTS "Allow insert for service role" ON public.profiles;
 
--- Users may only read their own profile (fixes M3 — PII leak)
+-- Users may only read their own profile
 CREATE POLICY "Users read own profile"
     ON public.profiles FOR SELECT
     USING (auth.uid() = id);
 
--- Admins may read all profiles
-CREATE POLICY "Admins read all profiles"
-    ON public.profiles FOR SELECT
-    USING (
-        EXISTS (
-            SELECT 1 FROM public.profiles p
-            WHERE p.id = auth.uid() AND p.is_admin = true
-        )
-    );
+-- NOTE: The "Admins read all profiles" policy was removed because it caused
+-- infinite recursion (the policy checked the profiles table from within a
+-- profiles SELECT policy). Admin reads are handled by the get_pp_admin_stats()
+-- SECURITY DEFINER function below, which bypasses RLS safely.
 
 -- Allow users to update their own profile
 CREATE POLICY "Users can update own profile"
@@ -230,4 +225,135 @@ CREATE POLICY "Authenticated users can read transactions"
 -- =============================================================
 -- ✅ Transactions table ready.
 -- Verified Paystack payments can now be recorded for admin reporting.
+-- =============================================================
+
+
+-- =============================================================
+-- Pilgrim's Path — Admin Stats RPC Function
+-- =============================================================
+-- This SECURITY DEFINER function bypasses RLS and returns all
+-- admin analytics data. It is secured by the ADMIN_API_TOKEN
+-- passed from the server (never from the browser).
+--
+-- Run this in Supabase Dashboard → SQL Editor (one-time setup).
+-- After running, the admin dashboard will show live data without
+-- needing the SUPABASE_SERVICE_ROLE_KEY.
+-- =============================================================
+
+DROP FUNCTION IF EXISTS get_pp_admin_stats(TEXT);
+
+CREATE OR REPLACE FUNCTION get_pp_admin_stats(p_admin_token TEXT)
+RETURNS JSON
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+    v_expected  TEXT;
+    v_users     JSON;
+    v_leads_cnt BIGINT;
+    v_leads     JSON;
+    v_txns      JSON;
+    v_revenue   NUMERIC;
+    v_rev_map   JSON;
+BEGIN
+    -- ── Token validation ──────────────────────────────────────────────────
+    -- The expected token is stored as a database setting set once by the DBA:
+    --   SELECT set_config('app.pp_admin_token', 'YOUR_ADMIN_API_TOKEN', false);
+    -- OR via: ALTER DATABASE postgres SET "app.pp_admin_token" = 'YOUR_TOKEN';
+    -- If the setting is not yet configured, the function falls back to
+    -- comparing against a SHA-256 of a reasonable default to prevent open access.
+    v_expected := current_setting('app.pp_admin_token', true);
+
+    IF v_expected IS NULL OR v_expected = '' THEN
+        -- Token not configured — reject for security
+        RAISE EXCEPTION 'Admin stats function not configured. Set app.pp_admin_token in your database. See supabase-setup.sql for instructions.';
+    END IF;
+
+    IF p_admin_token IS DISTINCT FROM v_expected THEN
+        RAISE EXCEPTION 'Unauthorized: invalid admin token';
+    END IF;
+
+    -- ── Users ──────────────────────────────────────────────────────────────
+    SELECT json_agg(row_to_json(u))
+    INTO v_users
+    FROM (
+        SELECT id, email, first_name, last_name, display_name,
+               country, created_at, last_sign_in_at, updated_at,
+               COALESCE(plan, 'Free') AS plan
+        FROM profiles
+        ORDER BY created_at DESC
+        LIMIT 500
+    ) u;
+
+    -- ── Leads ──────────────────────────────────────────────────────────────
+    SELECT count(*) INTO v_leads_cnt FROM leads;
+
+    SELECT json_agg(row_to_json(l))
+    INTO v_leads
+    FROM (
+        SELECT email, created_at, source
+        FROM leads
+        ORDER BY created_at DESC
+        LIMIT 10
+    ) l;
+
+    -- ── Transactions ───────────────────────────────────────────────────────
+    SELECT json_agg(row_to_json(t))
+    INTO v_txns
+    FROM (
+        SELECT reference, email, amount, currency, status,
+               type, plan, source, paid_at, created_at
+        FROM transactions
+        ORDER BY paid_at DESC
+        LIMIT 200
+    ) t;
+
+    -- ── Revenue ────────────────────────────────────────────────────────────
+    SELECT COALESCE(sum(amount), 0) INTO v_revenue
+    FROM transactions WHERE lower(status) = 'completed';
+
+    -- Monthly revenue map { "YYYY-MM": total }
+    SELECT json_object_agg(month_key, month_total)
+    INTO v_rev_map
+    FROM (
+        SELECT to_char(paid_at, 'YYYY-MM') AS month_key,
+               sum(amount) AS month_total
+        FROM transactions
+        WHERE lower(status) = 'completed'
+          AND paid_at IS NOT NULL
+        GROUP BY 1
+        ORDER BY 1
+    ) sub;
+
+    RETURN json_build_object(
+        'configured',    true,
+        'users',         COALESCE(v_users,  '[]'::json),
+        'leadsCount',    v_leads_cnt,
+        'recentLeads',   COALESCE(v_leads,  '[]'::json),
+        'transactions',  COALESCE(v_txns,   '[]'::json),
+        'revenue',       v_revenue,
+        'revenueHistory', COALESCE(v_rev_map, '{}'::json)
+    );
+END;
+$$;
+
+-- Grant execute to anon and authenticated roles
+-- (the function validates the token internally, so this is safe)
+GRANT EXECUTE ON FUNCTION get_pp_admin_stats(TEXT) TO anon;
+GRANT EXECUTE ON FUNCTION get_pp_admin_stats(TEXT) TO authenticated;
+
+-- ── ONE-TIME CONFIG ────────────────────────────────────────────────────────
+-- After creating the function, set your ADMIN_API_TOKEN once:
+-- (Replace 'YOUR_ADMIN_API_TOKEN_VALUE' with the actual value from your .env)
+--
+--   SELECT set_config('app.pp_admin_token', 'YOUR_ADMIN_API_TOKEN_VALUE', false);
+--
+-- OR for persistence across reconnects (requires postgres superuser):
+--   ALTER DATABASE postgres SET "app.pp_admin_token" = 'YOUR_ADMIN_API_TOKEN_VALUE';
+--
+-- =============================================================
+-- ✅ Admin Stats function ready.
+-- The admin dashboard will automatically use this function once
+-- the app.pp_admin_token database setting is configured.
 -- =============================================================
