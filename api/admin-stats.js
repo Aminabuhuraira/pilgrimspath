@@ -97,6 +97,36 @@ function mapTx(t) {
   };
 }
 
+// ---- Page views fetcher (anon key, open select policy) ------------------
+async function fetchPageViews() {
+  try {
+    // Total count
+    const countRes = await sbFetchWithKey(
+      '/page_views?select=id&limit=1', ANON_KEY);
+    const total = (countRes && countRes._count) || 0;
+
+    // Per-page aggregation (last 30 days)
+    const since = new Date(Date.now() - 30 * 86400000).toISOString();
+    const rows = await sbFetchWithKey(
+      '/page_views?select=page,visited_at&visited_at=gte.' + since + '&limit=5000', ANON_KEY);
+    const pageCounts = {};
+    const dayCounts = {};
+    (rows || []).forEach(function(r) {
+      pageCounts[r.page] = (pageCounts[r.page] || 0) + 1;
+      const day = (r.visited_at || '').slice(0, 10);
+      if (day) dayCounts[day] = (dayCounts[day] || 0) + 1;
+    });
+    const topPages = Object.entries(pageCounts)
+      .sort(function(a, b) { return b[1] - a[1]; })
+      .slice(0, 20)
+      .map(function(e) { return { page: e[0], views: e[1] }; });
+    return { total: total, topPages: topPages, daily: dayCounts };
+  } catch (e) {
+    console.warn('[admin-stats] fetchPageViews failed:', e.message);
+    return { total: 0, topPages: [], daily: {} };
+  }
+}
+
 // ---- Strategy 1: SECURITY DEFINER RPC (anon key + ADMIN_API_TOKEN) -------
 // Requires get_pp_admin_stats() SQL function in Supabase (see supabase-setup.sql).
 async function tryRpcStrategy(adminToken) {
@@ -117,6 +147,8 @@ async function tryRpcStrategy(adminToken) {
     const users = (data.users || []).map(profileToUser);
     const transactions = (data.transactions || []).map(mapTx);
     const completed = transactions.filter(function(t) { return t.status === 'completed'; });
+    // Also fetch page_views with anon key (page_views has open select policy)
+    const pageViews = await fetchPageViews();
     return {
       configured: true,
       users: users,
@@ -126,7 +158,8 @@ async function tryRpcStrategy(adminToken) {
       }),
       transactions: transactions,
       revenue: completed.reduce(function(s, t) { return s + t.amountNum; }, 0),
-      revenueHistory: data.revenueHistory || {}
+      revenueHistory: data.revenueHistory || {},
+      pageViews: pageViews
     };
   } catch (e) {
     console.warn('[admin-stats] RPC strategy failed:', e.message);
@@ -163,10 +196,12 @@ async function tryServiceRoleStrategy() {
       const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
       revenueHistory[key] = (revenueHistory[key] || 0) + t.amountNum;
     });
+    const pageViews = await fetchPageViews();
     return {
       configured: true, users: users, leadsCount: leadsCount,
       recentLeads: recentLeads, transactions: transactions,
-      revenue: revenue, revenueHistory: revenueHistory
+      revenue: revenue, revenueHistory: revenueHistory,
+      pageViews: pageViews
     };
   } catch (e) {
     console.warn('[admin-stats] service role strategy failed:', e.message);

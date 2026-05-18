@@ -162,35 +162,35 @@
     </div>
 
     <div class="stats-grid" id="overviewStats">
-        <div class="stat-card gold">
+        <div class="stat-card gold" onclick="openStatModal('users')" style="cursor:pointer" title="Click to view all users">
             <div class="stat-icon"><i class="fas fa-users"></i></div>
             <div class="stat-label">Total Users</div>
             <div class="stat-value" id="statTotalUsers">—</div>
             <div class="stat-trend" id="usersMonthTrendRow"><i class="fas fa-arrow-up"></i> <span id="statUsersTrend">—</span> this month</div>
         </div>
-        <div class="stat-card blue">
+        <div class="stat-card blue" onclick="switchModule('users')" style="cursor:pointer" title="Click to manage users">
             <div class="stat-icon"><i class="fas fa-vr-cardboard"></i></div>
             <div class="stat-label">VR Sessions</div>
             <div class="stat-value" id="statVRSessions">—</div>
             <div class="stat-trend up"><i class="fas fa-arrow-up"></i> <span id="statVRTrend">0%</span> this week</div>
         </div>
-        <div class="stat-card green">
+        <div class="stat-card green" onclick="switchModule('revenue')" style="cursor:pointer" title="Click to view revenue">
             <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
             <div class="stat-label">Revenue (MTD)</div>
             <div class="stat-value" id="statRevenue">—</div>
             <div class="stat-trend" id="revMonthTrendRow"><i class="fas fa-arrow-up"></i> <span id="statRevTrend">—</span> vs last month</div>
         </div>
-        <div class="stat-card orange">
+        <div class="stat-card orange" onclick="openStatModal('leads')" style="cursor:pointer" title="Click to view leads">
             <div class="stat-icon"><i class="fas fa-envelope-open"></i></div>
             <div class="stat-label">Email Leads</div>
             <div class="stat-value" id="statLeads">—</div>
             <div class="stat-trend" id="leadsWeekTrendRow"><i class="fas fa-arrow-up"></i> <span id="statLeadsTrend">—</span></div>
         </div>
-        <div class="stat-card purple">
-            <div class="stat-icon"><i class="fas fa-id-badge"></i></div>
-            <div class="stat-label">Registered Users</div>
+        <div class="stat-card purple" onclick="openStatModal('visitors')" style="cursor:pointer" title="Click to view page analytics">
+            <div class="stat-icon"><i class="fas fa-globe"></i></div>
+            <div class="stat-label">Website Visitors</div>
             <div class="stat-value" id="statWebVisitors">—</div>
-            <div class="stat-trend" id="statWebVisitorsTrend">Active in last 7 days</div>
+            <div class="stat-trend" id="statWebVisitorsTrend">Last 30 days</div>
         </div>
     </div>
     <!-- Setup banner shown when SUPABASE_SERVICE_ROLE_KEY is not configured -->
@@ -242,7 +242,41 @@
             </div>
         </div>
     </div>
+
+    <!-- Page Analytics -->
+    <div class="card" id="pageAnalyticsCard">
+        <div class="card-header">
+            <h3><i class="fas fa-chart-bar" style="color:var(--gold);margin-right:8px"></i>Page Analytics <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;margin-left:6px">(last 30 days)</span></h3>
+            <span style="font-size:0.78rem;color:var(--text-muted)" id="pageViewsTotalLabel">Loading...</span>
+        </div>
+        <div class="card-body" style="padding:0">
+            <table class="data-table" id="pageAnalyticsTable">
+                <thead>
+                    <tr>
+                        <th style="width:50px">#</th>
+                        <th>Page</th>
+                        <th style="width:130px;text-align:right">Views</th>
+                        <th style="width:160px">Traffic Share</th>
+                    </tr>
+                </thead>
+                <tbody id="pageAnalyticsBody">
+                    <tr><td colspan="4" style="text-align:center;padding:30px;color:var(--text-muted);font-size:0.82rem"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </section>
+
+<!-- ===== STAT DETAIL MODAL ===== -->
+<div id="statModal" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);overflow-y:auto" onclick="if(event.target===this)closeStatModal()">
+    <div style="margin:40px auto;max-width:820px;width:95%;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border)">
+            <h3 id="statModalTitle" style="margin:0;font-size:1rem;color:var(--text-primary)">Details</h3>
+            <button onclick="closeStatModal()" style="background:none;border:none;color:var(--text-muted);font-size:1.2rem;cursor:pointer"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="statModalBody" style="padding:24px;max-height:70vh;overflow-y:auto"></div>
+    </div>
+</div>
 
 <!-- ============================================ -->
 <!-- MODULE 2: USER MANAGEMENT                    -->
@@ -1013,7 +1047,7 @@ function showDashboard(){
         .catch(function(){});
 })();
 </script>
-<script src="admin-dashboard.js?v=5"></script>
+<script src="admin-dashboard.js?v=6"></script>
 <script src="panorama-catalog.js?v=1"></script>
 <script src="button-catalog.js?v=2"></script>
 <script src="admin-journey-content.js?v=22"></script>

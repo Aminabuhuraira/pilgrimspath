@@ -3,6 +3,21 @@
 // Mobile Optimized
 // ===================================
 
+// Page-view beacon — fires once per page load, non-blocking
+(function() {
+    try {
+        var data = JSON.stringify({
+            page: window.location.pathname,
+            referrer: document.referrer || ''
+        });
+        if (navigator.sendBeacon) {
+            navigator.sendBeacon('/api/track-visit', new Blob([data], { type: 'application/json' }));
+        } else {
+            fetch('/api/track-visit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: data, keepalive: true }).catch(function(){});
+        }
+    } catch(e) {}
+})();
+
 // Preloader - faster on mobile
 window.addEventListener('load', () => {
     const preloader = document.getElementById('preloader');

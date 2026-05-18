@@ -229,6 +229,47 @@ CREATE POLICY "Authenticated users can read transactions"
 
 
 -- =============================================================
+-- Pilgrim's Path — Page Views Table (Visitor Analytics)
+-- =============================================================
+-- Stores one row per page load, written by the server-side
+-- /api/track-visit endpoint. No PII — only page path, referrer,
+-- user-agent, and timestamp.
+-- =============================================================
+
+CREATE TABLE IF NOT EXISTS public.page_views (
+    id BIGSERIAL PRIMARY KEY,
+    page TEXT NOT NULL,
+    referrer TEXT DEFAULT '',
+    ua TEXT DEFAULT '',
+    visited_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS page_views_visited_at_idx ON public.page_views (visited_at DESC);
+CREATE INDEX IF NOT EXISTS page_views_page_idx ON public.page_views (page);
+
+-- Auto-purge rows older than 90 days to keep the table lean
+-- (run as a scheduled job in Supabase or via a cron endpoint)
+
+ALTER TABLE public.page_views ENABLE ROW LEVEL SECURITY;
+
+-- Allow the server (anon key) to insert page views
+CREATE POLICY "Anyone can insert page_views"
+    ON public.page_views FOR INSERT
+    WITH CHECK (true);
+
+-- Allow anon reads so the admin-stats API (which uses anon key) can aggregate
+CREATE POLICY "Anyone can read page_views"
+    ON public.page_views FOR SELECT
+    USING (true);
+
+-- =============================================================
+-- ✅ Page views table ready.
+-- The /api/track-visit endpoint will now record visits.
+-- The admin dashboard will display top pages and total counts.
+-- =============================================================
+
+
+-- =============================================================
 -- Pilgrim's Path — Admin Stats RPC Function
 -- =============================================================
 -- This SECURITY DEFINER function bypasses RLS and returns all

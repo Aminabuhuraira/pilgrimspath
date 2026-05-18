@@ -185,6 +185,7 @@ async function loadLiveData() {
             plan: t.plan, amount: t.amount, status: t.status
         }));
         LIVE.revenue = statsData.revenue || 0;
+        LIVE.pageViews = statsData.pageViews || { total: 0, topPages: [], daily: {} };
 
         // Build chart series from monthly revenue map
         const revenueHistoryMap = statsData.revenueHistory || {};
@@ -241,6 +242,7 @@ async function loadLiveData() {
     populateCRMPipeline();
     populateAudienceSegments();
     populateTransactions();
+    populatePageAnalytics();
     renderCalendar();
     renderUpcoming();
     loadSavedDrafts();
@@ -306,14 +308,15 @@ function renderLiveStats(){
     const leadsThisWeek = (LIVE.notifications||[]).filter(n => n.icon === 'fa-envelope' && n.time && new Date(n.time).getTime() >= weekStart).length;
     setStat('statLeadsTrend', leadsThisWeek > 0 ? '+' + leadsThisWeek + ' this week' : '—');
 
-    // 5th card: Registered Users (better label for what we're actually showing)
-    const activeCount = LIVE.users.filter(u => u.status === 'active').length;
-    setStat('statWebVisitors', LIVE.users.length);
-    const el = document.getElementById('statWebVisitorsTrend');
-    if (el) {
-        el.innerHTML = activeCount > 0
-            ? '<i class="fas fa-circle" style="color:#22c55e;font-size:7px;vertical-align:middle"></i> ' + activeCount.toLocaleString() + ' active (7d)'
-            : '<span style="color:var(--text-muted)">No recent logins</span>';
+    // 5th card: Website Visitors (from page_views table)
+    const pv = LIVE.pageViews || { total: 0, topPages: [] };
+    setStat('statWebVisitors', pv.total);
+    const elV = document.getElementById('statWebVisitorsTrend');
+    if (elV) {
+        const topPage = pv.topPages && pv.topPages[0];
+        elV.innerHTML = topPage
+            ? '<i class="fas fa-fire" style="color:#C9A84C;font-size:9px"></i> Top: ' + escapeHTML(topPage.page)
+            : '<span style="color:var(--text-muted)">Tracking active</span>';
     }
 
     // Per-tab user metrics
@@ -566,6 +569,106 @@ function populateRecentActivity() {
             </div>
         </div>
     `).join('');
+}
+
+function populatePageAnalytics() {
+    const body = document.getElementById('pageAnalyticsBody');
+    const label = document.getElementById('pageViewsTotalLabel');
+    if (!body) return;
+    const pv = LIVE.pageViews || { total: 0, topPages: [] };
+    if (label) label.textContent = pv.total.toLocaleString() + ' total views';
+    if (!pv.topPages || pv.topPages.length === 0) {
+        body.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:30px;color:var(--text-muted);font-size:0.82rem"><i class="fas fa-chart-bar" style="display:block;font-size:1.4rem;opacity:.3;margin-bottom:8px"></i>No page views recorded yet.<br>Visits will appear here as users browse the site.</td></tr>';
+        return;
+    }
+    const maxViews = pv.topPages[0].views || 1;
+    body.innerHTML = pv.topPages.map((p, i) => {
+        const pct = Math.round((p.views / maxViews) * 100);
+        const label = p.page === '/' ? 'Home' : p.page.replace(/^\//, '').replace(/\.html?$/, '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) || p.page;
+        return `<tr>
+            <td style="color:var(--text-muted);font-size:0.78rem">${i + 1}</td>
+            <td>
+                <div style="font-size:0.82rem;color:var(--text-primary);font-weight:500">${escapeHTML(label)}</div>
+                <div style="font-size:0.72rem;color:var(--text-muted)">${escapeHTML(p.page)}</div>
+            </td>
+            <td style="text-align:right;font-weight:700;color:var(--text-primary)">${p.views.toLocaleString()}</td>
+            <td>
+                <div style="display:flex;align-items:center;gap:8px">
+                    <div style="flex:1;height:6px;background:var(--bg-input);border-radius:3px;overflow:hidden">
+                        <div style="width:${pct}%;height:100%;background:var(--gold);border-radius:3px"></div>
+                    </div>
+                    <span style="font-size:0.72rem;color:var(--text-muted);min-width:30px">${pct}%</span>
+                </div>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+// ---- Stat Card Modals ----
+function openStatModal(type) {
+    const modal = document.getElementById('statModal');
+    const title = document.getElementById('statModalTitle');
+    const body = document.getElementById('statModalBody');
+    if (!modal || !body) return;
+
+    if (type === 'users') {
+        title.textContent = 'Registered Users (' + LIVE.users.length + ')';
+        if (LIVE.users.length === 0) {
+            body.innerHTML = '<p style="text-align:center;color:var(--text-muted)">No users yet.</p>';
+        } else {
+            body.innerHTML = `<table class="data-table" style="width:100%">
+                <thead><tr><th>Name</th><th>Email</th><th>Country</th><th>Plan</th><th>Joined</th><th>Last Active</th><th>Status</th></tr></thead>
+                <tbody>${LIVE.users.map(u => `<tr>
+                    <td><strong>${escapeHTML(u.name)}</strong></td>
+                    <td style="font-size:0.78rem;color:var(--text-muted)">${escapeHTML(u.email)}</td>
+                    <td>${escapeHTML(u.country || '—')}</td>
+                    <td><span class="status-badge ${u.plan === 'Free' ? '' : 'paid'}">${escapeHTML(u.plan || 'Free')}</span></td>
+                    <td style="font-size:0.78rem">${escapeHTML(u.joined || '—')}</td>
+                    <td style="font-size:0.78rem">${escapeHTML(u.lastActive || '—')}</td>
+                    <td><span class="status-badge ${u.status === 'active' ? 'active' : u.status === 'churned' ? 'churned' : ''}">${u.status || '—'}</span></td>
+                </tr>`).join('')}</tbody>
+            </table>`;
+        }
+    } else if (type === 'leads') {
+        const leads = (LIVE.notifications || []).filter(n => n.icon === 'fa-envelope');
+        title.textContent = 'Email Leads (' + LIVE.leads + ' total)';
+        if (leads.length === 0) {
+            body.innerHTML = '<p style="text-align:center;color:var(--text-muted)">No recent leads recorded.</p>';
+        } else {
+            body.innerHTML = `<table class="data-table" style="width:100%">
+                <thead><tr><th>Email</th><th>Source</th><th>When</th></tr></thead>
+                <tbody>${leads.map(n => `<tr>
+                    <td style="font-size:0.82rem">${n.text.replace(/<[^>]+>/g, '')}</td>
+                    <td style="font-size:0.78rem;color:var(--text-muted)">${escapeHTML(n.source || '—')}</td>
+                    <td style="font-size:0.78rem;color:var(--text-muted)">${escapeHTML(n.time || '')}</td>
+                </tr>`).join('')}</tbody>
+            </table>`;
+        }
+    } else if (type === 'visitors') {
+        const pv = LIVE.pageViews || { total: 0, topPages: [] };
+        title.textContent = 'Website Visitors — Page Analytics';
+        body.innerHTML = `<p style="color:var(--text-muted);font-size:0.82rem;margin-bottom:16px">${pv.total.toLocaleString()} total page views in the last 30 days.</p>
+            <table class="data-table" style="width:100%">
+                <thead><tr><th>#</th><th>Page</th><th style="text-align:right">Views</th></tr></thead>
+                <tbody>${(pv.topPages || []).length === 0
+                    ? '<tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:20px">No data yet — will populate as visitors browse.</td></tr>'
+                    : (pv.topPages || []).map((p, i) => `<tr>
+                        <td style="color:var(--text-muted)">${i + 1}</td>
+                        <td style="font-size:0.82rem">${escapeHTML(p.page)}</td>
+                        <td style="text-align:right;font-weight:700">${p.views.toLocaleString()}</td>
+                    </tr>`).join('')
+                }</tbody>
+            </table>`;
+    }
+
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeStatModal() {
+    const modal = document.getElementById('statModal');
+    if (modal) modal.style.display = 'none';
+    document.body.style.overflow = '';
 }
 
 function populateTopArticles() {
