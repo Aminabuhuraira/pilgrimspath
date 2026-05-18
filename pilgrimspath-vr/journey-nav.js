@@ -1590,6 +1590,14 @@ function showPathCue(){
     var t = document.createElement('div');
     t.id = 'pathCueToast';
     t.textContent = msg;
+    // Lift the toast clear of bottom-centre action buttons that share the same viewport zone.
+    // Use inline style so it wins regardless of CSS load order or :has() browser support.
+    if (document.getElementById('jamarThrowBtn') ||
+        document.getElementById('minaContinue') ||
+        document.getElementById('umrahTrimContinue') ||
+        document.getElementById('barberContinue')) {
+      t.style.bottom = '160px';
+    }
     _overlayRoot.appendChild(t);
     // Show after a short delay so it doesn't collide with banner opening
     setTimeout(function(){ t.classList.add('visible'); }, 1400);
