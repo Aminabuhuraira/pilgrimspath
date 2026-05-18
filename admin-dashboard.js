@@ -158,42 +158,65 @@ async function loadLiveData() {
         if(savedLeads) LIVE.crmLeads = JSON.parse(savedLeads);
     } catch(e) { console.warn('localStorage restore failed', e); }
 
-    // 1. Profiles → users
-    const profiles = await supabaseFetch('profiles', '?select=*&order=created_at.desc&limit=500');
-    LIVE.users = (profiles || []).map(profileToUser);
+    // 1. Fetch all live data via the secure server-side endpoint.
+    //    /api/admin-stats uses the SUPABASE_SERVICE_ROLE_KEY (server .env only)
+    //    so it bypasses RLS and returns all rows, not just the current user's.
+    let statsData = null;
+    try {
+        const statsRes = await fetch('/api/admin-stats', { credentials: 'same-origin' });
+        if (statsRes.ok) statsData = await statsRes.json();
+    } catch(e) { console.warn('[admin] /api/admin-stats failed:', e.message); }
 
-    // 2. Leads count
-    const leads = await supabaseFetch('leads', '?select=id&limit=1');
-    LIVE.leads = (leads && typeof leads._count === 'number') ? leads._count : (leads ? leads.length : 0);
+    if (statsData && !statsData.configured) {
+        // Service role key not set — show banner and continue with empty data
+        const banner = document.getElementById('adminSetupBanner');
+        if (banner) {
+            banner.textContent = '⚠️  ' + statsData.message;
+            banner.style.display = 'block';
+        }
+    }
 
-    // 2b. Transactions / revenue
-    const transactions = await supabaseFetch('transactions', '?select=reference,email,amount,currency,status,type,plan,source,paid_at,created_at&order=paid_at.desc&limit=200');
-    LIVE.transactions = (transactions || []).map(t => ({
-        date: (t.paid_at || t.created_at || '').split('T')[0] || '—',
-        user: t.email || 'Unknown',
-        type: (t.type || 'purchase').replace(/(^.|-.)/g, function(v){ return v.replace('-', ' ').toUpperCase(); }),
-        plan: t.plan || '—',
-        amount: `${t.currency || 'USD'} ${Number(t.amount || 0).toFixed(2)}`,
-        status: (t.status || 'completed').toLowerCase()
-    }));
-    const completedTransactions = (transactions || []).filter(t => String(t.status || '').toLowerCase() === 'completed');
-    LIVE.revenue = completedTransactions.reduce((sum, t) => sum + Number(t.amount || 0), 0);
-    const monthlyRevenue = {};
-    completedTransactions.forEach(t => {
-        const paidAt = new Date(t.paid_at || t.created_at || Date.now());
-        if (Number.isNaN(paidAt.getTime())) return;
-        const key = `${paidAt.getFullYear()}-${String(paidAt.getMonth() + 1).padStart(2, '0')}`;
-        monthlyRevenue[key] = (monthlyRevenue[key] || 0) + Number(t.amount || 0);
-    });
-    const revenueKeys = Object.keys(monthlyRevenue).sort();
-    LIVE.months = revenueKeys.map(key => {
-        const parts = key.split('-');
-        const date = new Date(Number(parts[0]), Number(parts[1]) - 1, 1);
-        return date.toLocaleString('en-US', { month: 'short', year: '2-digit' });
-    });
-    LIVE.revenueHistory = revenueKeys.map(key => Number(monthlyRevenue[key].toFixed(2)));
+    if (statsData && statsData.configured) {
+        // Populate from server-side data
+        LIVE.users = statsData.users || [];
+        LIVE.leads = statsData.leadsCount || 0;
+        LIVE.transactions = (statsData.transactions || []).map(t => ({
+            date: t.date, user: t.user, type: t.type,
+            plan: t.plan, amount: t.amount, status: t.status
+        }));
+        LIVE.revenue = statsData.revenue || 0;
 
-    // 3. Aggregate countries from profiles
+        // Build chart series from monthly revenue map
+        const revenueHistoryMap = statsData.revenueHistory || {};
+        const revenueKeys = Object.keys(revenueHistoryMap).sort();
+        LIVE.months = revenueKeys.map(key => {
+            const parts = key.split('-');
+            const date = new Date(Number(parts[0]), Number(parts[1]) - 1, 1);
+            return date.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+        });
+        LIVE.revenueHistory = revenueKeys.map(key => Number(revenueHistoryMap[key].toFixed(2)));
+
+        // Build notifications from recent signups + recent leads
+        const recentLeads = statsData.recentLeads || [];
+        LIVE.notifications = [];
+        LIVE.users.slice(0, 5).forEach(u => {
+            LIVE.notifications.push({
+                icon: 'fa-user-plus', cls: 'gold',
+                text: `<strong>${escapeHTML(u.name)}</strong> joined Pilgrim's Path`,
+                time: timeAgo(u.joined), unread: false
+            });
+        });
+        recentLeads.forEach(l => {
+            LIVE.notifications.push({
+                icon: 'fa-envelope', cls: 'blue',
+                text: `<strong>${escapeHTML(l.email)}</strong> signed up via ${escapeHTML(l.source || 'site')}`,
+                time: timeAgo(l.created_at), unread: false
+            });
+        });
+        LIVE.notifications.sort((a, b) => a.time.localeCompare(b.time));
+    }
+
+    // 2. Aggregate countries from profiles
     const countryCounts = {};
     LIVE.users.forEach(u => { if(u.country) countryCounts[u.country] = (countryCounts[u.country]||0)+1; });
     LIVE.countries = Object.entries(countryCounts)
@@ -206,26 +229,7 @@ async function loadLiveData() {
             count
         }));
 
-    // 4. Recent activity = recent signups + recent leads
-    const recentLeads = await supabaseFetch('leads', '?select=email,created_at,source&order=created_at.desc&limit=5');
-    LIVE.notifications = [];
-    LIVE.users.slice(0,5).forEach(u => {
-        LIVE.notifications.push({
-            icon:'fa-user-plus', cls:'gold',
-            text:`<strong>${escapeHTML(u.name)}</strong> joined Pilgrim's Path`,
-            time: timeAgo(u.joined), unread:false
-        });
-    });
-    (recentLeads||[]).forEach(l => {
-        LIVE.notifications.push({
-            icon:'fa-envelope', cls:'blue',
-            text:`<strong>${escapeHTML(l.email)}</strong> signed up via ${escapeHTML(l.source||'site')}`,
-            time: timeAgo(l.created_at), unread:false
-        });
-    });
-    LIVE.notifications.sort((a,b)=> a.time.localeCompare(b.time));
-
-    // 5. Render everything
+    // 3. Render everything
     renderLiveStats();
     populateUsersTable(LIVE.users);
     populateCountries(LIVE.countries);
@@ -245,21 +249,71 @@ async function loadLiveData() {
 
 function renderLiveStats(){
     setStat('statTotalUsers', LIVE.users.length);
-    setStat('statUsersTrend', '—');
-    setStat('statVRSessions', LIVE.vrSessions==null ? '—' : LIVE.vrSessions);
-    setStat('statVRTrend', '—');
-    setStat('statRevenue', LIVE.revenue==null ? '—' : ('$'+LIVE.revenue.toLocaleString()));
-    setStat('statRevTrend', '—');
-    setStat('statLeads', LIVE.leads);
-    setStat('statLeadsTrend', '—');
 
-    // Website visitors = total registered users (best available real-time metric)
-    const visitorCount = LIVE.users.length;
-    setStat('statWebVisitors', visitorCount);
+    // Users trend: new this month vs last month
+    const now = new Date();
+    const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+    const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1).getTime();
+    const newThisMonth = LIVE.users.filter(u => u.createdAt && new Date(u.createdAt).getTime() >= thisMonthStart).length;
+    const newLastMonth = LIVE.users.filter(u => {
+        const t = u.createdAt ? new Date(u.createdAt).getTime() : 0;
+        return t >= lastMonthStart && t < thisMonthStart;
+    }).length;
+    const userTrendPct = newLastMonth > 0 ? Math.round(((newThisMonth - newLastMonth) / newLastMonth) * 100) : null;
+    setStat('statUsersTrend', userTrendPct !== null ? (userTrendPct >= 0 ? '+' : '') + userTrendPct + '%' : (newThisMonth > 0 ? '+' + newThisMonth + ' this month' : '—'));
+    // Update arrow direction
+    const userTrendRow = document.getElementById('usersMonthTrendRow');
+    if (userTrendRow && userTrendPct !== null) {
+        userTrendRow.className = 'stat-trend ' + (userTrendPct >= 0 ? 'up' : 'down');
+        userTrendRow.querySelector('i').className = userTrendPct >= 0 ? 'fas fa-arrow-up' : 'fas fa-arrow-down';
+    }
+
+    setStat('statVRSessions', LIVE.vrSessions == null ? '—' : LIVE.vrSessions);
+    setStat('statVRTrend', '—');
+
+    setStat('statRevenue', LIVE.revenue == null ? '—' : ('$' + Number(LIVE.revenue).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})));
+
+    // Revenue trend: this month vs last month
+    const thisMonthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+    const lastMonthKey = `${now.getMonth() === 0 ? now.getFullYear()-1 : now.getFullYear()}-${String(now.getMonth() === 0 ? 12 : now.getMonth()).padStart(2,'0')}`;
+    const thisMonthRev = (LIVE.revenueHistory && LIVE.months) ? (LIVE.revenueHistory[LIVE.months.indexOf(new Date(now.getFullYear(), now.getMonth(), 1).toLocaleString('en-US',{month:'short',year:'2-digit'}))] || 0) : 0;
+    // simpler: look up from the revenueHistory map on statsData directly — use the keys
+    // Instead derive from transactions array
+    const txThisMonth = (LIVE.transactions||[]).filter(t => {
+        const d = t.date || '';
+        return d.startsWith(thisMonthKey) && t.status === 'completed';
+    });
+    const txLastMonth = (LIVE.transactions||[]).filter(t => {
+        const d = t.date || '';
+        return d.startsWith(lastMonthKey) && t.status === 'completed';
+    });
+    const revThisMonth = txThisMonth.reduce((s,t) => s + parseFloat((t.amount||'0 0').split(' ')[1]||0), 0);
+    const revLastMonth = txLastMonth.reduce((s,t) => s + parseFloat((t.amount||'0 0').split(' ')[1]||0), 0);
+    const revTrendPct = revLastMonth > 0 ? Math.round(((revThisMonth - revLastMonth) / revLastMonth) * 100) : null;
+    setStat('statRevTrend', revTrendPct !== null ? (revTrendPct >= 0 ? '+' : '') + revTrendPct + '%' : '—');
+    // Update revenue arrow direction
+    const revTrendRow = document.getElementById('revMonthTrendRow');
+    if (revTrendRow && revTrendPct !== null) {
+        revTrendRow.className = 'stat-trend ' + (revTrendPct >= 0 ? 'up' : 'down');
+        revTrendRow.querySelector('i').className = revTrendPct >= 0 ? 'fas fa-arrow-up' : 'fas fa-arrow-down';
+    }
+
+    setStat('statLeads', LIVE.leads);
+
+    // Leads trend: leads this week vs last week (derived from recent notifications)
+    const weekStart = now.getTime() - 7*86400000;
+    const prevWeekStart = weekStart - 7*86400000;
+    const leadsThisWeek = (LIVE.notifications||[]).filter(n => n.icon === 'fa-envelope' && n.time && new Date(n.time).getTime() >= weekStart).length;
+    setStat('statLeadsTrend', leadsThisWeek > 0 ? '+' + leadsThisWeek + ' this week' : '—');
+
+    // 5th card: Registered Users (better label for what we're actually showing)
+    const activeCount = LIVE.users.filter(u => u.status === 'active').length;
+    setStat('statWebVisitors', LIVE.users.length);
     const el = document.getElementById('statWebVisitorsTrend');
     if (el) {
-        const activeCount = LIVE.users.filter(u => u.status === 'active').length;
-        el.innerHTML = '<i class="fas fa-circle" style="color:#22c55e;font-size:7px;vertical-align:middle"></i> ' + activeCount.toLocaleString() + ' active';
+        el.innerHTML = activeCount > 0
+            ? '<i class="fas fa-circle" style="color:#22c55e;font-size:7px;vertical-align:middle"></i> ' + activeCount.toLocaleString() + ' active (7d)'
+            : '<span style="color:var(--text-muted)">No recent logins</span>';
     }
 
     // Per-tab user metrics
@@ -268,7 +322,7 @@ function renderLiveStats(){
         return (Date.now() - new Date(u.joined).getTime()) < 7*86400000;
     }).length;
     setStat('usersNewWeek', newThisWeek);
-    setStat('usersActive30', LIVE.users.filter(u => u.status === 'active').length);
+    setStat('usersActive30', activeCount);
     setStat('usersPremium', LIVE.users.filter(u => u.plan === 'Individual').length);
     setStat('usersAgency', LIVE.users.filter(u => u.plan === 'Agency').length);
 }

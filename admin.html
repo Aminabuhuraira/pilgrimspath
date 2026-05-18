@@ -166,7 +166,7 @@
             <div class="stat-icon"><i class="fas fa-users"></i></div>
             <div class="stat-label">Total Users</div>
             <div class="stat-value" id="statTotalUsers">—</div>
-            <div class="stat-trend up"><i class="fas fa-arrow-up"></i> <span id="statUsersTrend">0%</span> this month</div>
+            <div class="stat-trend" id="usersMonthTrendRow"><i class="fas fa-arrow-up"></i> <span id="statUsersTrend">—</span> this month</div>
         </div>
         <div class="stat-card blue">
             <div class="stat-icon"><i class="fas fa-vr-cardboard"></i></div>
@@ -178,21 +178,23 @@
             <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
             <div class="stat-label">Revenue (MTD)</div>
             <div class="stat-value" id="statRevenue">—</div>
-            <div class="stat-trend up"><i class="fas fa-arrow-up"></i> <span id="statRevTrend">0%</span> vs last month</div>
+            <div class="stat-trend" id="revMonthTrendRow"><i class="fas fa-arrow-up"></i> <span id="statRevTrend">—</span> vs last month</div>
         </div>
         <div class="stat-card orange">
             <div class="stat-icon"><i class="fas fa-envelope-open"></i></div>
             <div class="stat-label">Email Leads</div>
             <div class="stat-value" id="statLeads">—</div>
-            <div class="stat-trend up"><i class="fas fa-arrow-up"></i> <span id="statLeadsTrend">0%</span> this week</div>
+            <div class="stat-trend" id="leadsWeekTrendRow"><i class="fas fa-arrow-up"></i> <span id="statLeadsTrend">—</span></div>
         </div>
         <div class="stat-card purple">
-            <div class="stat-icon"><i class="fas fa-globe"></i></div>
-            <div class="stat-label">Website Visitors</div>
+            <div class="stat-icon"><i class="fas fa-id-badge"></i></div>
+            <div class="stat-label">Registered Users</div>
             <div class="stat-value" id="statWebVisitors">—</div>
-            <div class="stat-trend" id="statWebVisitorsTrend"><i class="fas fa-clock"></i> registered users</div>
+            <div class="stat-trend" id="statWebVisitorsTrend">Active in last 7 days</div>
         </div>
     </div>
+    <!-- Setup banner shown when SUPABASE_SERVICE_ROLE_KEY is not configured -->
+    <div id="adminSetupBanner" style="display:none;margin-bottom:20px;padding:12px 16px;background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.4);border-radius:10px;color:#FCD34D;font-size:0.82rem;font-family:'DM Sans',sans-serif"></div>
 
     <div class="grid-2-1">
         <div class="card">
@@ -1011,7 +1013,7 @@ function showDashboard(){
         .catch(function(){});
 })();
 </script>
-<script src="admin-dashboard.js?v=4"></script>
+<script src="admin-dashboard.js?v=5"></script>
 <script src="panorama-catalog.js?v=1"></script>
 <script src="button-catalog.js?v=2"></script>
 <script src="admin-journey-content.js?v=22"></script>
