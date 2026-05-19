@@ -1179,10 +1179,27 @@ function initPauseMenu(){
       } else {
         statusLine = 'Score 80%+ on 80% of questions to earn your certificate.';
       }
+      // Build the three stat chips: total asked, total correct, live percentage
+      var statsHtml =
+        '<div style="display:flex;gap:8px;margin:8px 0 0;flex-wrap:wrap;">' +
+          '<span style="flex:1;min-width:60px;background:rgba(201,168,76,.12);border-radius:8px;padding:6px 8px;text-align:center;">' +
+            '<div style="font-size:16px;font-weight:700;color:#3D2B1F;line-height:1.1;">' + qz.totalQuestions + '</div>' +
+            '<div style="font-size:10px;color:#8B6914;margin-top:2px;">asked</div>' +
+          '</span>' +
+          '<span style="flex:1;min-width:60px;background:rgba(201,168,76,.12);border-radius:8px;padding:6px 8px;text-align:center;">' +
+            '<div style="font-size:16px;font-weight:700;color:#3D2B1F;line-height:1.1;">' + qz.correct + '</div>' +
+            '<div style="font-size:10px;color:#8B6914;margin-top:2px;">correct</div>' +
+          '</span>' +
+          '<span style="flex:1;min-width:60px;background:' + (pct>=80 ? 'rgba(34,197,94,.14)' : 'rgba(201,168,76,.12)') + ';border-radius:8px;padding:6px 8px;text-align:center;">' +
+            '<div style="font-size:16px;font-weight:700;color:' + (pct>=80 ? '#16a34a' : '#3D2B1F') + ';line-height:1.1;">' + pct + '%</div>' +
+            '<div style="font-size:10px;color:#8B6914;margin-top:2px;">score</div>' +
+          '</span>' +
+        '</div>';
       quizBlock =
         '<div class="ppMenuProgress" style="margin-top:0;">' +
-          '<div class="ppMenuProgLbl"><span>📝 Quiz score</span><span>' + qz.correct + ' / ' + qz.totalQuestions + ' &middot; ' + pct + '%</span></div>' +
-          '<div class="ppMenuProgBar"><div class="ppMenuProgFill" style="width:' + pct + '%;background:' + barColor + ';"></div></div>' +
+          '<div class="ppMenuProgLbl"><span>📝 Quiz progress</span></div>' +
+          statsHtml +
+          '<div class="ppMenuProgBar" style="margin-top:10px;"><div class="ppMenuProgFill" style="width:' + pct + '%;background:' + barColor + ';"></div></div>' +
           '<div style="font-size:11px;color:' + (earned ? '#16a34a' : '#8B6914') + ';margin-top:6px;font-weight:' + (earned ? '700' : '500') + ';">' + statusLine + '</div>' +
         '</div>';
     }
