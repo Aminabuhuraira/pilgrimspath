@@ -36,6 +36,19 @@
     /* ── Download toast notification ── */
     #ppDlToast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(30,24,14,.92);color:#fff;border-radius:24px;padding:10px 22px;font-size:.8rem;font-family:'Poppins',sans-serif;z-index:10010;pointer-events:none;opacity:0;transition:opacity .3s;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.4)}
     #ppDlToast.show{opacity:1}
+    /* ── Hajj Readiness Certificate section ── */
+    .cert-section{margin:0 0 28px;border-radius:16px;overflow:hidden;border:1.5px solid rgba(201,162,39,.3);}
+    .cert-locked{display:flex;align-items:center;gap:16px;padding:20px 24px;background:linear-gradient(135deg,#fafaf5,#f5f0e8);}
+    .cert-lock-icon{width:48px;height:48px;border-radius:12px;background:rgba(201,162,39,.12);display:flex;align-items:center;justify-content:center;color:rgba(201,162,39,.5);font-size:1.4rem;flex-shrink:0;}
+    .cert-lock-body h3{margin:0 0 4px;font-size:.95rem;color:var(--text-primary,#2C1810);}
+    .cert-lock-body p{margin:0;font-size:.82rem;color:var(--text-muted,#7D5A45);}
+    .cert-earned{display:flex;align-items:center;gap:16px;padding:20px 24px;background:linear-gradient(135deg,#fffbe6,#fef3cc);}
+    .cert-earn-icon{width:48px;height:48px;border-radius:12px;background:rgba(201,162,39,.15);display:flex;align-items:center;justify-content:center;color:#C9A227;font-size:1.6rem;flex-shrink:0;}
+    .cert-earn-body h3{margin:0 0 4px;font-size:.95rem;color:#2C1810;}
+    .cert-earn-body p{margin:0 0 10px;font-size:.82rem;color:#5C4033;}
+    .cert-dl-btn{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#C9A227,#8B6914);color:#fff;border:none;border-radius:999px;padding:8px 20px;font-size:.82rem;font-weight:600;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 2px 10px rgba(201,162,39,.3);}
+    .cert-dl-btn:hover{transform:scale(1.04);box-shadow:0 4px 16px rgba(201,162,39,.45);}
+    .cert-dl-btn:active{transform:scale(.97);}
     </style>
 </head>
 <body>
@@ -344,6 +357,27 @@
             </div>
         </div>
 
+        <!-- ── Hajj Readiness Certificate ── -->
+        <div class="cert-section" id="certSection">
+            <!-- locked state — shown until hajj is completed -->
+            <div class="cert-locked" id="certLocked">
+                <div class="cert-lock-icon"><i class="fas fa-lock"></i></div>
+                <div class="cert-lock-body">
+                    <h3>Hajj Readiness Certificate</h3>
+                    <p>Complete all 16 steps of the Hajj journey to unlock your personalised certificate.</p>
+                </div>
+            </div>
+            <!-- earned state — shown after completion -->
+            <div class="cert-earned" id="certEarned" style="display:none;">
+                <div class="cert-earn-icon"><i class="fas fa-award"></i></div>
+                <div class="cert-earn-body">
+                    <h3>Hajj Readiness Certificate</h3>
+                    <p id="certEarnedMsg">You have completed the full Hajj preparation journey.</p>
+                    <button class="cert-dl-btn" id="certDlBtn"><i class="fas fa-download"></i> Download Certificate</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Achievements Row -->
         <div class="achievements-row">
             <h3><i class="fas fa-trophy"></i> Recent Achievements</h3>
@@ -403,6 +437,8 @@
             const avatarUrl = meta.avatar_url || localStorage.getItem('pp_avatar_b64') || '';
 
             if (nameEl) nameEl.textContent = name.split(' ')[0];
+            // Cache display name so VR scenes can personalise the certificate
+            localStorage.setItem('pp_user_display_name', name);
             if (avatarEl) {
                 if (avatarUrl) {
                     avatarEl.innerHTML = '<img src="' + avatarUrl + '" alt="" style="width:36px;height:36px;border-radius:10px;object-fit:cover;">';
@@ -897,7 +933,61 @@
 
     <!-- Deferred analytics (non-blocking) -->
     <script>
-    // ── Hajj: visual gate lock until Umrah complete ──────────────────────────────
+    // ─── Hajj Certificate Section ─────────────────────────────────────────
+    (function initCertSection(){
+        var certified = localStorage.getItem('pp_hajj_certified') === '1';
+        var certName  = localStorage.getItem('pp_hajj_certified_name') || localStorage.getItem('pp_user_display_name') || 'Valued Pilgrim';
+        var certDate  = localStorage.getItem('pp_hajj_certified_date') || '';
+        var locked  = document.getElementById('certLocked');
+        var earned  = document.getElementById('certEarned');
+        var msg     = document.getElementById('certEarnedMsg');
+        var dlBtn   = document.getElementById('certDlBtn');
+        if (!locked || !earned) return;
+        if (certified) {
+            locked.style.display = 'none';
+            earned.style.display = 'flex';
+            if (msg) msg.textContent = 'Completed on ' + (certDate || 'your Hajj journey') + '. Mabrook, ' + certName + '!';
+            if (dlBtn) {
+                dlBtn.addEventListener('click', function() {
+                    // Draw certificate on demand
+                    var W = 960, H = 680;
+                    var canvas = document.createElement('canvas');
+                    canvas.width = W; canvas.height = H;
+                    var ctx = canvas.getContext('2d');
+                    // Background
+                    ctx.fillStyle = '#FDF6E3'; ctx.fillRect(0,0,W,H);
+                    // Gold border
+                    ctx.strokeStyle = '#C9A227'; ctx.lineWidth = 6;
+                    ctx.strokeRect(14,14,W-28,H-28);
+                    ctx.lineWidth = 1.5; ctx.strokeRect(26,26,W-52,H-52);
+                    // Corner marks
+                    function corner(x,y,s,sy){ctx.save();ctx.translate(x,y);ctx.strokeStyle='#C9A227';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(s*10,sy*40);ctx.lineTo(s*10,sy*10);ctx.lineTo(s*40,sy*10);ctx.stroke();ctx.restore();}
+                    corner(26,26,1,1);corner(W-26,26,-1,1);corner(26,H-26,1,-1);corner(W-26,H-26,-1,-1);
+                    function hRule(y,a){var g=ctx.createLinearGradient(80,y,W-80,y);g.addColorStop(0,'rgba(201,162,39,0)');g.addColorStop(.3,'rgba(201,162,39,'+a+')');g.addColorStop(.7,'rgba(201,162,39,'+a+')');g.addColorStop(1,'rgba(201,162,39,0)');ctx.fillStyle=g;ctx.fillRect(80,y-1,W-160,2);}
+                    ctx.font='52px serif';ctx.textAlign='center';ctx.fillText('\uD83D\uDD4B',W/2,110);
+                    ctx.fillStyle='#8B6914';ctx.font='bold 36px Georgia,serif';ctx.fillText('Hajj Readiness Certificate',W/2,168);
+                    hRule(190,.5);
+                    ctx.fillStyle='#5C4033';ctx.font='italic 17px Georgia,serif';ctx.fillText('This certifies that',W/2,240);
+                    ctx.fillStyle='#2C1810';ctx.font='bold 42px Georgia,serif';ctx.fillText(certName,W/2,308);
+                    hRule(330,.4);
+                    ctx.fillStyle='#5C4033';ctx.font='16px Georgia,serif';
+                    ctx.fillText('has successfully completed the full virtual Hajj preparation journey',W/2,376);
+                    ctx.fillText('on the Pilgrim\u2019s Path platform, covering all 16 rituals of Hajj.',W/2,402);
+                    hRule(430,.35);
+                    ctx.fillStyle='#7D5A45';ctx.font='14px Georgia,serif';
+                    ctx.fillText('Date of Completion: '+(certDate||''),W/2,468);
+                    ctx.fillStyle='#C9A227';ctx.font='22px serif';
+                    ctx.fillText('\u062A\u0642\u0628\u0644 \u0627\u0644\u0644\u0647 \u0645\u0646\u0643 \u2014 May Allah accept from you',W/2,514);
+                    ctx.fillStyle='#8B6914';ctx.font='bold 18px Georgia,serif';ctx.fillText('\uD83D\uDD4B\uFE0F Pilgrim\u2019s Path',W/2,574);
+                    ctx.fillStyle='#7D5A45';ctx.font='12px Georgia,serif';ctx.fillText('pilgrimspath.io',W/2,594);
+                    var link = document.createElement('a');
+                    link.download = 'hajj-readiness-certificate.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                });
+            }
+        }
+    })();
     (function(){
         if (localStorage.getItem('pp_umrah_completed')) return;
         // Visual gate banner inside Hajj tab

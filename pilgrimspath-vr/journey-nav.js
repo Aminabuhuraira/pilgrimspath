@@ -462,26 +462,34 @@ body.ppMenuOpen #viewer { z-index: 99490 !important; }
   #ppQuizOverlay .ppQuizOpt { font-size: 13px; padding: 10px 14px; }
 }
 
-/* Journey Complete Banner */
+/* Journey Complete Overlay */
 #journeyComplete {
   display: none;
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0;
   z-index: 6000;
-  background: repeating-linear-gradient(45deg, transparent, transparent 14px, rgba(201, 168, 76, 0.045) 14px, rgba(201, 168, 76, 0.045) 15px),
-              repeating-linear-gradient(-45deg, transparent, transparent 14px, rgba(201, 168, 76, 0.045) 14px, rgba(201, 168, 76, 0.045) 15px),
+  background: rgba(44, 24, 16, 0.82);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#journeyComplete > div {
+  background: repeating-linear-gradient(45deg, transparent, transparent 14px, rgba(201,168,76,.045) 14px, rgba(201,168,76,.045) 15px),
+              repeating-linear-gradient(-45deg, transparent, transparent 14px, rgba(201,168,76,.045) 14px, rgba(201,168,76,.045) 15px),
               #FAF5EB;
   border: 3px solid #C9A84C;
   border-radius: 24px;
-  padding: 44px 48px;
+  padding: 40px 44px;
   max-width: 600px;
-  width: 92vw;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
   text-align: center;
   font-family: 'DM Sans', Arial, sans-serif;
   color: #2C1810;
-  box-shadow: 0 0 0 4px #E8E0D4, 0 0 0 8px rgba(201, 168, 76, 0.35), 0 24px 64px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 0 4px #E8E0D4, 0 0 0 8px rgba(201,168,76,.35), 0 24px 64px rgba(0,0,0,.35);
 }
 
 #journeyComplete h2 {
@@ -495,34 +503,31 @@ body.ppMenuOpen #viewer { z-index: 99490 !important; }
   color: #3D2B1F;
   font-size: 16px;
   line-height: 1.8;
-  margin: 0 0 24px;
+  margin: 0 0 12px;
 }
 
 #journeyComplete .subtext {
   color: #6B5B4F;
   font-size: 14px;
   font-style: italic;
-  margin: 0 0 28px;
+  margin: 0 0 16px;
 }
 
 #journeyComplete button {
-  background: linear-gradient(135deg, #C9A84C, #8B6914);
   color: #fff;
   border: none;
   border-radius: 12px;
-  padding: 10px 28px;
+  padding: 12px 24px;
   font-size: 14px;
   font-weight: 600;
   font-family: 'DM Sans', Arial, sans-serif;
   cursor: pointer;
-  margin-top: 14px;
-  box-shadow: 0 4px 16px rgba(201, 168, 76, 0.3);
+  box-shadow: 0 4px 16px rgba(201,168,76,.3);
   transition: transform 0.15s;
 }
 
-#journeyComplete button:active {
-  transform: scale(0.96);
-}
+#journeyComplete button:hover { transform: scale(1.04); }
+#journeyComplete button:active { transform: scale(0.96); }
 
 @media (max-width: 768px) {
   #journeyNav {
@@ -540,8 +545,8 @@ body.ppMenuOpen #viewer { z-index: 99490 !important; }
     font-size: 14px;
   }
 
-  #journeyComplete {
-    padding: 28px 22px;
+  #journeyComplete > div {
+    padding: 28px 20px;
     border-radius: 18px;
   }
 
@@ -1641,24 +1646,85 @@ if(document.readyState === 'loading'){
   setTimeout(showPathCue, 600);
 }
 
+// ── Certificate canvas renderer ──────────────────────────────────────
+function _drawCertificate(pilgrimName, dateStr) {
+  var W = 960, H = 680;
+  var canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  var ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#FDF6E3'; ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = '#C9A227'; ctx.lineWidth = 6;
+  ctx.strokeRect(14, 14, W-28, H-28);
+  ctx.lineWidth = 1.5; ctx.strokeRect(26, 26, W-52, H-52);
+  function corner(x,y,s,sy){ctx.save();ctx.translate(x,y);ctx.strokeStyle='#C9A227';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(s*10,sy*40);ctx.lineTo(s*10,sy*10);ctx.lineTo(s*40,sy*10);ctx.stroke();ctx.restore();}
+  corner(26,26,1,1);corner(W-26,26,-1,1);corner(26,H-26,1,-1);corner(W-26,H-26,-1,-1);
+  function hRule(y,a){var g=ctx.createLinearGradient(80,y,W-80,y);g.addColorStop(0,'rgba(201,162,39,0)');g.addColorStop(.3,'rgba(201,162,39,'+a+')');g.addColorStop(.7,'rgba(201,162,39,'+a+')');g.addColorStop(1,'rgba(201,162,39,0)');ctx.fillStyle=g;ctx.fillRect(80,y-1,W-160,2);}
+  ctx.font='52px serif';ctx.textAlign='center';ctx.fillText('\uD83D\uDD4B',W/2,110);
+  ctx.fillStyle='#8B6914';ctx.font='bold 36px Georgia,serif';ctx.fillText('Hajj Readiness Certificate',W/2,168);
+  hRule(190,.5);
+  ctx.fillStyle='#5C4033';ctx.font='italic 17px Georgia,serif';ctx.fillText('This certifies that',W/2,240);
+  ctx.fillStyle='#2C1810';ctx.font='bold 42px Georgia,serif';ctx.fillText(pilgrimName,W/2,308);
+  hRule(330,.4);
+  ctx.fillStyle='#5C4033';ctx.font='16px Georgia,serif';
+  ctx.fillText('has successfully completed the full virtual Hajj preparation journey',W/2,376);
+  ctx.fillText('on the Pilgrim\u2019s Path platform, covering all 16 rituals of Hajj.',W/2,402);
+  hRule(430,.35);
+  ctx.fillStyle='#7D5A45';ctx.font='14px Georgia,serif';
+  ctx.fillText('Date of Completion: '+dateStr,W/2,468);
+  ctx.fillStyle='#C9A227';ctx.font='22px serif';
+  ctx.fillText('\u062A\u0642\u0628\u0644 \u0627\u0644\u0644\u0647 \u0645\u0646\u0643 \u2014 May Allah accept from you',W/2,514);
+  ctx.fillStyle='#8B6914';ctx.font='bold 18px Georgia,serif';ctx.fillText('\uD83D\uDD4B\uFE0F Pilgrim\u2019s Path',W/2,574);
+  ctx.fillStyle='#7D5A45';ctx.font='12px Georgia,serif';ctx.fillText('pilgrimspath.io',W/2,594);
+  return canvas;
+}
+
 window.showJourneyComplete = function() {
   // Remove next button if exists
   const nextBtn = document.getElementById('nextStopBtn');
   if(nextBtn) nextBtn.remove();
-  
-  // Show completion banner
-  const complete = document.createElement('div');
-  complete.id = 'journeyComplete';
-  complete.style.display = 'block';
-  complete.innerHTML = `
-    <h2>🕋 Hajj Complete!</h2>
-    <p>Congratulations! You have completed all sacred rituals of Hajj.</p>
-    <p class="subtext">May Allah accept your pilgrimage and forgive your sins.</p>
-    <p>May you return home with increased faith and spiritual renewal.</p>
-    <button onclick="window.jm.resetJourney()">Return Home</button>
-  `;
-  
-  _overlayRoot.appendChild(complete);
+
+  var pilgrimName = localStorage.getItem('pp_user_display_name') || 'Valued Pilgrim';
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  localStorage.setItem('pp_hajj_certified', '1');
+  localStorage.setItem('pp_hajj_certified_name', pilgrimName);
+  localStorage.setItem('pp_hajj_certified_date', dateStr);
+
+  var certCanvas = _drawCertificate(pilgrimName, dateStr);
+
+  var overlay = document.createElement('div');
+  overlay.id = 'journeyComplete';
+  overlay.style.cssText = 'display:flex;align-items:center;justify-content:center;';
+  overlay.innerHTML =
+    '<div>' +
+    '<h2>\uD83C\uDF89 Mabrook, ' + pilgrimName + '!</h2>' +
+    '<p>You have completed the full virtual Hajj journey \u2014 all 16 sacred rituals, from Ihram through to Tawaf al-Wida.</p>' +
+    '<p class="subtext">May Allah accept your preparation and grant you the opportunity to perform the real Hajj. \u0622\u0645\u064A\u0646</p>' +
+    '<canvas id="certCanvas" style="width:100%;max-width:480px;border-radius:10px;box-shadow:0 4px 24px rgba(0,0,0,.18);margin:18px 0 8px;display:block;"></canvas>' +
+    '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:4px;">' +
+    '<button id="certDownloadBtn" style="background:linear-gradient(135deg,#C9A227,#8B6914);">\u2B07\uFE0F Download Certificate</button>' +
+    '<a href="/dashboard" style="display:inline-flex;align-items:center;background:#2C1810;color:#fff;border:none;border-radius:12px;padding:12px 24px;font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2);">\uD83D\uDCCA Go to Dashboard</a>' +
+    '</div>' +
+    '</div>';
+
+  _overlayRoot.appendChild(overlay);
+
+  var el = document.getElementById('certCanvas');
+  if (el) {
+    el.width = certCanvas.width; el.height = certCanvas.height;
+    el.getContext('2d').drawImage(certCanvas, 0, 0);
+  }
+
+  var dlBtn = document.getElementById('certDownloadBtn');
+  if (dlBtn) {
+    dlBtn.addEventListener('click', function() {
+      var link = document.createElement('a');
+      link.download = 'hajj-readiness-certificate.png';
+      link.href = certCanvas.toDataURL('image/png');
+      link.click();
+    });
+  }
 };
 
 // ── Initialize on DOM content loaded ──
