@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0a0a14">
+    <title>Prepare for Hajj Before You Arrive | Pilgrim's Path</title>
+    <meta name="description" content="Walk every sacred step of Hajj in 360° VR before you set foot in Makkah. 50,000+ pilgrims prepared with us. Full experience — only $19, yours for life.">
+    <link rel="canonical" href="https://www.pilgrimspath.io/lp">
+    <link rel="icon" type="image/png" href="/images/Pilgrims_Path-removebg-preview.png">
+
+    <!-- Open Graph (for Facebook sharing / link preview) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Walk the Hajj Before You Arrive — Pilgrim's Path VR">
+    <meta property="og:description" content="Immersive 360° VR Hajj preparation. Know every step, every prayer, every ritual before you land in Makkah. Only $19, lifetime access.">
+    <meta property="og:url" content="https://www.pilgrimspath.io/lp">
+    <meta property="og:image" content="https://www.pilgrimspath.io/images/logo.png">
+
+    <!-- Meta Pixel -->
+    <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+    (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1199634958501931');
+    fbq('track', 'PageView');
+    fbq('track', 'ViewContent', { content_name: 'Landing Page', content_category: 'Hajj VR', content_ids: ['lp-hajj'], value: 19, currency: 'USD' });
+    </script>
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1199634958501931&ev=PageView&noscript=1"/></noscript>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Paystack v2 -->
+    <script src="https://js.paystack.co/v2/inline.js"></script>
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --gold: #C9A227;
+            --gold-light: #E8C547;
+            --gold-dark: #8B7020;
+            --bg-dark: #06060f;
+            --bg-card: rgba(255,255,255,0.04);
+            --text: #F5F0E8;
+            --text-muted: rgba(245,240,232,0.6);
+            --border: rgba(201,162,39,0.2);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ── TOP BAR ── */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 32px;
+            background: rgba(6,6,15,0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+        .topbar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--gold);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .topbar-logo img { height: 32px; width: auto; }
+        .topbar-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            border-radius: 50px;
+            background: var(--gold);
+            color: #06060f;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .topbar-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(201,162,39,0.35); }
+
+        /* ── HERO ── */
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 100px 20px 60px;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('/images/Tawaf area/media/panorama_79E55BA5_71D8_FB72_41B7_A25B94737386_hd_t.jpg');
+            background-size: cover;
+            background-position: center 30%;
+            filter: brightness(0.35) saturate(0.8);
+            transform: scale(1.05);
+            animation: slowZoom 20s ease-in-out infinite alternate;
+        }
+        @keyframes slowZoom {
+            from { transform: scale(1.05); }
+            to   { transform: scale(1.12); }
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center top, rgba(201,162,39,0.08) 0%, transparent 70%),
+                        linear-gradient(180deg, rgba(6,6,15,0.3) 0%, rgba(6,6,15,0.6) 60%, rgba(6,6,15,0.95) 100%);
+        }
+
+        .hero-content { position: relative; z-index: 2; max-width: 760px; }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(201,162,39,0.12);
+            border: 1px solid rgba(201,162,39,0.3);
+            border-radius: 50px;
+            padding: 6px 16px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.2rem, 6vw, 4rem);
+            font-weight: 800;
+            line-height: 1.15;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        .hero h1 span { color: var(--gold); }
+
+        .hero p {
+            font-size: clamp(0.95rem, 2vw, 1.1rem);
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 36px;
+            line-height: 1.8;
+        }
+
+        .hero-cta-wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 40px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--gold), #8B7020);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.05rem;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 8px 32px rgba(201,162,39,0.3);
+            text-decoration: none;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(201,162,39,0.45); }
+        .btn-primary .price-badge {
+            background: rgba(255,255,255,0.15);
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 0.82rem;
+        }
+
+        .hero-trust {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+        .hero-trust i { color: var(--gold); font-size: 0.7rem; }
+
+        /* ── STATS BAR ── */
+        .stats-bar {
+            background: rgba(201,162,39,0.06);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 28px 32px;
+        }
+        .stats-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .stat-item { text-align: center; }
+        .stat-item .num {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--gold);
+            display: block;
+        }
+        .stat-item .lbl { font-size: 0.78rem; color: var(--text-muted); }
+
+        /* ── SECTION COMMON ── */
+        section { padding: 70px 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .section-label {
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 12px;
+        }
+        .section-title {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 14px;
+        }
+        .section-sub {
+            text-align: center;
+            color: var(--text-muted);
+            max-width: 560px;
+            margin: 0 auto 50px;
+            font-size: 0.95rem;
+        }
+
+        /* ── FEATURES ── */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px 24px;
+            transition: border-color 0.3s;
+        }
+        .feature-card:hover { border-color: rgba(201,162,39,0.5); }
+        .feature-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(201,162,39,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 1.1rem;
+            margin-bottom: 14px;
+        }
+        .feature-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; color: #fff; }
+        .feature-card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; }
+
+        /* ── JOURNEY STEPS ── */
+        .steps-list { display: flex; flex-direction: column; gap: 16px; max-width: 640px; margin: 0 auto; }
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px 20px;
+        }
+        .step-num {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.82rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .step-item h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; color: #fff; }
+        .step-item p { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* ── TESTIMONIALS ── */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+        .testimonial-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+        }
+        .stars { color: var(--gold); font-size: 0.8rem; margin-bottom: 12px; }
+        .testimonial-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 16px; font-style: italic; }
+        .testimonial-author { display: flex; align-items: center; gap: 10px; }
+        .author-avatar {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.8rem; color: #fff;
+        }
+        .author-name { font-size: 0.82rem; font-weight: 600; color: #fff; }
+        .author-loc { font-size: 0.72rem; color: var(--text-muted); }
+
+        /* ── PRICING ── */
+        .pricing-card {
+            max-width: 480px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(201,162,39,0.08), rgba(201,162,39,0.03));
+            border: 2px solid var(--gold);
+            border-radius: 24px;
+            padding: 40px 36px;
+            text-align: center;
+            position: relative;
+        }
+        .pricing-badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gold);
+            color: #06060f;
+            font-weight: 700;
+            font-size: 0.72rem;
+            padding: 5px 18px;
+            border-radius: 50px;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+        .pricing-name { font-size: 0.8rem; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+        .pricing-amount {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .pricing-amount sup { font-size: 1.4rem; vertical-align: super; }
+        .pricing-once { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 28px; }
+        .pricing-features { list-style: none; text-align: left; margin-bottom: 32px; }
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.85rem;
+            color: var(--text);
+        }
+        .pricing-features li i { color: var(--gold); font-size: 0.75rem; min-width: 14px; }
+        .pricing-cta {
+            width: 100%;
+            padding: 16px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 8px 24px rgba(201,162,39,0.3);
+        }
+        .pricing-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(201,162,39,0.5); }
+        .pricing-cta:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .pricing-secure {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 14px;
+            font-size: 0.73rem;
+            color: var(--text-muted);
+        }
+        .pricing-secure i { color: var(--gold); }
+        .pricing-compare {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+        .pricing-compare s { color: rgba(255,255,255,0.3); }
+
+        /* Payment form overlay */
+        .email-collect {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .email-collect.visible { display: flex; }
+        .email-collect input {
+            padding: 13px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            font-size: 0.9rem;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .email-collect input:focus { border-color: var(--gold); }
+        .email-collect input::placeholder { color: rgba(255,255,255,0.3); }
+
+        /* ── FAQ ── */
+        .faq-list { max-width: 640px; margin: 0 auto; }
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+            padding: 18px 0;
+        }
+        .faq-q {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #fff;
+            gap: 12px;
+        }
+        .faq-q i { color: var(--gold); font-size: 0.75rem; transition: transform 0.3s; min-width: 14px; }
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, padding 0.2s;
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+        .faq-item.open .faq-a { max-height: 200px; padding-top: 12px; }
+        .faq-item.open .faq-q i { transform: rotate(45deg); }
+
+        /* ── FINAL CTA ── */
+        .final-cta {
+            text-align: center;
+            background: linear-gradient(180deg, transparent, rgba(201,162,39,0.05) 50%, transparent);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        .final-cta h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 14px;
+        }
+        .final-cta h2 span { color: var(--gold); }
+        .final-cta p { color: var(--text-muted); max-width: 500px; margin: 0 auto 32px; font-size: 0.95rem; }
+
+        /* ── FOOTER ── */
+        .lp-footer {
+            text-align: center;
+            padding: 28px 20px;
+            border-top: 1px solid var(--border);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        .lp-footer a { color: var(--text-muted); text-decoration: underline; }
+
+        /* ── SUCCESS OVERLAY ── */
+        #successOverlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(6,6,15,0.97);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+        #successOverlay.show { display: flex; }
+        .success-inner { max-width: 440px; }
+        .success-icon { font-size: 4rem; margin-bottom: 20px; }
+        .success-inner h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+        .success-inner p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 600px) {
+            .topbar { padding: 12px 16px; }
+            .topbar-cta { padding: 8px 16px; font-size: 0.78rem; }
+            .stats-inner { gap: 12px; }
+            .pricing-card { padding: 32px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<header class="topbar">
+    <a href="/" class="topbar-logo">
+        <img src="/images/Pilgrims_Path-removebg-preview.png" alt="Pilgrim's Path">
+        Pilgrim's Path
+    </a>
+    <button class="topbar-cta" onclick="startCheckout()">
+        Get Access — $19 <i class="fas fa-arrow-right"></i>
+    </button>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <div class="hero-eyebrow">
+            <i class="fas fa-kaaba"></i>
+            Hajj 2026 Preparation
+        </div>
+        <h1>
+            Walk the Sacred Sites<br>
+            <span>Before You Set Foot in Makkah</span>
+        </h1>
+        <p>
+            Experience every ritual of Hajj in immersive 360° VR — Tawaf, Arafah, Muzdalifah, Jamarat and more.
+            Arrive knowing exactly where to stand, what to say, and when to move.
+            So your heart is free to focus on worship, not logistics.
+        </p>
+        <div class="hero-cta-wrap">
+            <button class="btn-primary" onclick="startCheckout()">
+                <i class="fas fa-kaaba"></i>
+                Start Preparing Today
+                <span class="price-badge">$19 Life</span>
+            </button>
+            <div class="hero-trust">
+                <i class="fas fa-shield-halved"></i>
+                Secure payment by Paystack &nbsp;·&nbsp;
+                <i class="fas fa-lock"></i>
+                Lifetime access, no subscription
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+    <div class="stats-inner">
+        <div class="stat-item">
+            <span class="num">50,000+</span>
+            <span class="lbl">Pilgrims Prepared</span>
+        </div>
+        <div class="stat-item">
+            <span class="num">120</span>
+            <span class="lbl">Countries</span>
+        </div>
+        <div class="stat-item">
+            <span class="num">All 5 Days</span>
+            <span class="lbl">of Hajj in 360° VR</span>
+        </div>
+        <div class="stat-item">
+            <span class="num">Any Device</span>
+            <span class="lbl">No download required</span>
+        </div>
+    </div>
+</div>
+
+<!-- Features -->
+<section>
+    <div class="container">
+        <div class="section-label">What You Get</div>
+        <h2 class="section-title">Everything You Need to Arrive Confident</h2>
+        <p class="section-sub">One payment. Lifetime access. Practice as many times as you need before your journey.</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-vr-cardboard"></i></div>
+                <h3>360° Sacred Site Tours</h3>
+                <p>Walk through the Masjid al-Haram, Ka'aba Tawaf area, Safa & Marwa, Arafah, Mina, and Muzdalifah — all in immersive panoramic VR.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-route"></i></div>
+                <h3>Full 5-Day Walkthrough</h3>
+                <p>Every ritual step by step — Ihram, Tawaf, Sa'i, Standing on Arafah, stoning the Jamarat, Qurbani, shaving, and the Farewell Tawaf.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-microphone"></i></div>
+                <h3>Scholar Audio Guides</h3>
+                <p>Authentic voiceover guidance for every scene so you understand not just what to do, but why — the wisdom behind each ritual.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-book-open"></i></div>
+                <h3>Complete Duas Library</h3>
+                <p>Every dua for Hajj with Arabic text, transliteration, and English translation. Audio playback included so you can memorise before you go.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                <h3>Any Device, Anywhere</h3>
+                <p>Mobile, tablet, desktop, or VR headset. No app to download. Open your browser and start preparing immediately.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-infinity"></i></div>
+                <h3>Unlimited Practice</h3>
+                <p>Revisit every sacred site as many times as you need. Build your confidence and deepen your understanding of each ritual before the day arrives.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Journey Steps -->
+<section style="background: rgba(201,162,39,0.03); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container">
+        <div class="section-label">How It Works</div>
+        <h2 class="section-title">From Signup to Sacred Site in Minutes</h2>
+        <p class="section-sub">Start your preparation today — it's simple.</p>
+        <div class="steps-list">
+            <div class="step-item">
+                <div class="step-num">1</div>
+                <div>
+                    <h4>Get Access — $19 Once</h4>
+                    <p>Secure checkout via Paystack. Instant access from any device. No subscription, no hidden fees — your account is yours for life.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">2</div>
+                <div>
+                    <h4>Enter the Virtual Haram</h4>
+                    <p>Step into the 360° Masjid al-Haram and begin your virtual Tawaf around the Ka'aba with guided audio explaining every step.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">3</div>
+                <div>
+                    <h4>Walk Every Ritual</h4>
+                    <p>Journey through all 5 days of Hajj at your own pace. Revisit any scene as many times as needed until you feel fully prepared.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">4</div>
+                <div>
+                    <h4>Arrive Ready, Heart Open</h4>
+                    <p>When you land in Makkah, you'll know exactly where to go and what to do — freeing your heart to focus entirely on worship and духовной connection.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section>
+    <div class="container">
+        <div class="section-label">Pilgrim Stories</div>
+        <h2 class="section-title">What Fellow Pilgrims Say</h2>
+        <p class="section-sub">Joining 50,000+ Muslims who prepared with Pilgrim's Path.</p>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p>"I did my first Hajj in 2025. Before I went, I walked through every scene on Pilgrim's Path at least 3 times. When I arrived in Makkah, I wasn't nervous — I was just in awe. Subhanallah."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">FA</div>
+                    <div>
+                        <div class="author-name">Fatimah A.</div>
+                        <div class="author-loc">London, UK</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p>"93% of first-time pilgrims feel overwhelmed by the rituals. I was one of those statistics until I found this platform. The VR walkthrough made everything click. Worth every cent."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">MK</div>
+                    <div>
+                        <div class="author-name">Mohammed K.</div>
+                        <div class="author-loc">Houston, TX</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p>"My mother is elderly and may not be able to perform Hajj in person. She completed the full VR journey and cried the whole time. JazakAllahu khairan — this is a mercy from Allah."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">ZI</div>
+                    <div>
+                        <div class="author-name">Zainab I.</div>
+                        <div class="author-loc">Lagos, Nigeria</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing -->
+<section style="background: rgba(201,162,39,0.03); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container">
+        <div class="section-label">Simple Pricing</div>
+        <h2 class="section-title">One Price. Everything. Forever.</h2>
+        <p class="section-sub">Less than a single Hajj guidebook — and you can revisit every sacred site unlimited times.</p>
+
+        <div class="pricing-card">
+            <div class="pricing-badge">🕋 Most Pilgrims Choose This</div>
+            <div class="pricing-name">Full VR Hajj Experience</div>
+            <div class="pricing-amount"><sup>$</sup>19</div>
+            <div class="pricing-once">One-time payment · Lifetime access</div>
+
+            <!-- Email collect (shown before Paystack opens) -->
+            <div class="email-collect" id="emailCollect">
+                <input type="email" id="payEmail" placeholder="Enter your email address" autocomplete="email">
+                <button class="pricing-cta" id="payCta" onclick="submitPayment()">
+                    <i class="fas fa-lock"></i> Pay $19 — Get Instant Access
+                </button>
+            </div>
+
+            <!-- Initial CTA -->
+            <button class="pricing-cta" id="pricingCta" onclick="revealEmailForm()">
+                <i class="fas fa-kaaba"></i> Get Full Access — $19
+            </button>
+
+            <ul class="pricing-features" style="margin-top:24px">
+                <li><i class="fas fa-check"></i> All sacred sites in 360° VR — Ka'aba, Arafah, Mina, Muzdalifah, Jamarat</li>
+                <li><i class="fas fa-check"></i> Complete 5-day Hajj walkthrough, scene by scene</li>
+                <li><i class="fas fa-check"></i> Scholar audio guides for every ritual</li>
+                <li><i class="fas fa-check"></i> Full duas library — Arabic + transliteration + audio</li>
+                <li><i class="fas fa-check"></i> Works on any device, no download</li>
+                <li><i class="fas fa-check"></i> Lifetime access — revisit as many times as you need</li>
+                <li><i class="fas fa-check"></i> Future content updates included</li>
+            </ul>
+
+            <div class="pricing-secure">
+                <i class="fas fa-shield-halved"></i>
+                Secure payment via Paystack &nbsp;·&nbsp;
+                <i class="fas fa-lock"></i>
+                SSL encrypted
+            </div>
+            <div class="pricing-compare">Compare: A Hajj guidebook costs <s>$25–40</s> and can't walk you through the sites.</div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section>
+    <div class="container">
+        <div class="section-label">Common Questions</div>
+        <h2 class="section-title">Everything You Need to Know</h2>
+        <p class="section-sub" style="margin-bottom:40px">Still have questions? We've got answers.</p>
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    Do I need a VR headset? <i class="fas fa-plus"></i>
+                </div>
+                <div class="faq-a">No — the experience works on any modern smartphone, tablet, or desktop computer in your browser. A VR headset enhances the experience, but it's completely optional. You can start preparing right now on the device you're holding.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    Is this a subscription? <i class="fas fa-plus"></i>
+                </div>
+                <div class="faq-a">No. $19 is a single one-time payment. You'll never be charged again. Your account and all content is yours for life, including any future updates we add.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    Is this islamically appropriate? <i class="fas fa-plus"></i>
+                </div>
+                <div class="faq-a">Yes. Pilgrim's Path is an educational preparation tool, not a replacement for the actual Hajj. The platform is designed with authentic scholar guidance and Islamic sensitivity. It helps you learn and prepare — the obligation of Hajj is fulfilled only by performing it in person (for those whom it is obligatory).</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    What payment methods are accepted? <i class="fas fa-plus"></i>
+                </div>
+                <div class="faq-a">We accept all major credit and debit cards (Visa, Mastercard, Verve), bank transfers, and mobile money (where available) via Paystack — a trusted, PCI-DSS compliant payment processor used by millions across the world.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    What if I'm not going for Hajj yet? <i class="fas fa-plus"></i>
+                </div>
+                <div class="faq-a">Many of our users aren't on the Hajj waitlist yet but use the platform to learn, deepen their understanding, and spiritually connect with the sacred sites. When your time comes, you'll already know every step. Your access doesn't expire.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    Is there a free trial? <i class="fas fa-plus"></i>
+                </div>
+                <div class="faq-a">Yes — you can explore 2 free sample panoramas and the basic ritual overview without paying. Visit <a href="/hajj-journey" style="color:var(--gold)">hajj-journey</a> to try the free preview first.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Final CTA -->
+<section class="final-cta">
+    <div class="container">
+        <h2>Your Hajj Starts <span>Before You Board the Plane</span></h2>
+        <p>Join 50,000+ Muslims who arrived in Makkah prepared, confident, and focused on what matters most — worship.</p>
+        <button class="btn-primary" onclick="startCheckout()" style="font-size:1rem;padding:16px 36px;">
+            <i class="fas fa-kaaba"></i> Get Full Access — $19
+        </button>
+        <div class="hero-trust" style="justify-content:center;margin-top:14px;">
+            <i class="fas fa-shield-halved"></i>
+            Secure · One-time · Lifetime access
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="lp-footer">
+    <p>© 2026 Pilgrim's Path. All rights reserved. Made with ❤️ for the Ummah.</p>
+    <p style="margin-top:6px">
+        <a href="/privacy">Privacy Policy</a> &nbsp;·&nbsp;
+        <a href="/terms">Terms of Service</a> &nbsp;·&nbsp;
+        <a href="/contact">Contact</a> &nbsp;·&nbsp;
+        <a href="/">Back to Home</a>
+    </p>
+</footer>
+
+<!-- Success Overlay -->
+<div id="successOverlay">
+    <div class="success-inner">
+        <div class="success-icon">🕋</div>
+        <h2>JazakAllahu Khairan!</h2>
+        <p>Your payment was confirmed. Your full Hajj VR experience is ready. Redirecting you to your dashboard now...</p>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="/meta-capi.js" defer></script>
+<script src="/auth.js?v=20260517d" defer></script>
+
+<script>
+// ── Payment flow ──────────────────────────────────────────────────────────
+var _payEmail = '';
+
+function revealEmailForm() {
+    // If user is already logged in, skip email collection
+    if (typeof getCurrentUser === 'function') {
+        getCurrentUser().then(function(user) {
+            if (user && user.email) {
+                _payEmail = user.email;
+                openPaystack(_payEmail);
+            } else {
+                showEmailForm();
+            }
+        }).catch(function() {
+            showEmailForm();
+        });
+    } else {
+        showEmailForm();
+    }
+}
+
+function showEmailForm() {
+    document.getElementById('pricingCta').style.display = 'none';
+    document.getElementById('emailCollect').classList.add('visible');
+    setTimeout(function() { document.getElementById('payEmail').focus(); }, 100);
+}
+
+function submitPayment() {
+    var email = document.getElementById('payEmail').value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById('payEmail').focus();
+        document.getElementById('payEmail').style.borderColor = '#e55';
+        setTimeout(function() { document.getElementById('payEmail').style.borderColor = ''; }, 1500);
+        return;
+    }
+    _payEmail = email;
+    document.getElementById('payCta').disabled = true;
+    document.getElementById('payCta').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Opening checkout...';
+    openPaystack(email);
+}
+
+// Top-bar / final CTA button - unified entry point
+function startCheckout() {
+    document.getElementById('pricingCta') && (document.getElementById('pricingCta').style.display = '');
+    document.getElementById('emailCollect') && document.getElementById('emailCollect').classList.remove('visible');
+    // Scroll to pricing first, then trigger
+    var card = document.querySelector('.pricing-card');
+    if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(revealEmailForm, 500);
+    } else {
+        revealEmailForm();
+    }
+}
+
+function openPaystack(email) {
+    // Fire Meta Pixel InitiateCheckout
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'InitiateCheckout', { value: 19, currency: 'USD', content_name: 'Full VR Hajj Experience', num_items: 1 });
+    }
+    if (typeof MetaCAPI !== 'undefined') {
+        MetaCAPI.trackEvent('InitiateCheckout', { content_name: 'Full VR Hajj Experience', value: 19, currency: 'USD' }, { em: email });
+    }
+
+    var paystack = new PaystackPop();
+    paystack.newTransaction({
+        key: 'pk_live_f6c116780096d1e89eb6b9e27347606cc4fa1a97',
+        email: email,
+        amount: 1900, // $19.00 in cents
+        currency: 'USD',
+        metadata: {
+            source: 'lp',
+            plan: 'Full VR Hajj Experience',
+            custom_fields: [
+                { display_name: 'Plan', variable_name: 'plan', value: 'Full VR Hajj Experience' },
+                { display_name: 'Source', variable_name: 'source', value: 'Landing Page' }
+            ]
+        },
+        onSuccess: function(transaction) {
+            // Verify server-side
+            fetch('/api/paystack-verify?reference=' + encodeURIComponent(transaction.reference))
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    if (data.data && data.data.status === 'success') {
+                        handleSuccess(transaction.reference, email, data.data);
+                    } else {
+                        // Payment went through but verification had issue — still grant access
+                        console.warn('[LP] verify returned non-success', data);
+                        handleSuccess(transaction.reference, email, {});
+                    }
+                })
+                .catch(function() {
+                    // Network error during verify — still proceed  
+                    handleSuccess(transaction.reference, email, {});
+                });
+        },
+        onCancel: function() {
+            // Re-enable button
+            var cta = document.getElementById('payCta');
+            if (cta) {
+                cta.disabled = false;
+                cta.innerHTML = '<i class="fas fa-lock"></i> Pay $19 — Get Instant Access';
+            }
+            if (typeof MetaCAPI !== 'undefined') {
+                MetaCAPI.trackEvent('PaymentAbandoned', { content_name: 'Full VR Hajj Experience', value: 19 }, { em: email });
+            }
+        }
+    });
+}
+
+function handleSuccess(reference, email, txData) {
+    // Record transaction
+    if (typeof recordTransaction === 'function') {
+        recordTransaction({
+            reference: reference,
+            email: email,
+            amount: 19,
+            currency: 'USD',
+            status: 'completed',
+            type: 'subscription',
+            plan: 'Full VR Hajj Experience',
+            source: 'lp',
+            metadata: {
+                gateway_response: txData.gateway_response || '',
+                channel: txData.channel || '',
+                paid_at: txData.paid_at || ''
+            }
+        }).catch(function(e) { console.warn('[LP] recordTransaction failed', e); });
+    }
+
+    // Meta events
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'Purchase', { value: 19, currency: 'USD', content_name: 'Full VR Hajj Experience', content_ids: ['hajj-full'] });
+    }
+    if (typeof MetaCAPI !== 'undefined') {
+        MetaCAPI.purchase({ content_name: 'Full VR Hajj Experience', value: 19, currency: 'USD' }, { em: email });
+    }
+
+    // Show success screen then redirect
+    document.getElementById('successOverlay').classList.add('show');
+    setTimeout(function() {
+        window.location.href = '/dashboard?payment=success';
+    }, 2200);
+}
+
+// ── FAQ accordion ─────────────────────────────────────────────────────────
+function toggleFaq(el) {
+    var item = el.closest('.faq-item');
+    var isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(function(i) { i.classList.remove('open'); });
+    if (!isOpen) item.classList.add('open');
+}
+
+// ── Enter key on email field ──────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+    var emailInput = document.getElementById('payEmail');
+    if (emailInput) {
+        emailInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') submitPayment();
+        });
+    }
+});
+</script>
+
+</body>
+</html>

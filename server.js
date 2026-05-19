@@ -156,6 +156,11 @@ app.get('/sanctum-admin-7f3k9q2m', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
+// ── Landing page clean URL ─────────────────────────────────────
+app.get('/lp', (req, res) => {
+  res.sendFile(path.join(__dirname, 'lp.html'));
+});
+
 // ── Debug: echo cookies visible to server ─────────────────────
 // Only available from same origin. Helps diagnose cookie delivery issues.
 app.get('/api/debug-cookies', (req, res) => {
