@@ -858,11 +858,11 @@ function quizTotalAvailable(){
 }
 function certificateEarned(){
   var s = quizAggregateScore();
-  // Earn the cert once the user has answered at least 80% of all available
-  // questions AND scored 80% on what they answered.
+  // Earn the cert once the user has answered at least 60% of all available
+  // questions AND scored 60% on what they answered.
   var avail = quizTotalAvailable();
   var coverage = avail ? (s.totalQuestions / avail) : 0;
-  return s.percent >= 80 && coverage >= 0.8;
+  return s.percent >= 60 && coverage >= 0.6;
 }
 try{ window.quizAggregateScore = quizAggregateScore; window.certificateEarned = certificateEarned; }catch(e){}
 function loadQuizContent(cb){
@@ -1170,14 +1170,14 @@ function initPauseMenu(){
     var quizBlock = '';
     if(quizEnabled() || qz.totalQuestions > 0){
       var pct = qz.percent;
-      var barColor = earned ? 'linear-gradient(90deg,#22c55e,#16a34a)' : (pct>=80 ? 'linear-gradient(90deg,#22c55e,#16a34a)' : (pct>=50 ? 'linear-gradient(90deg,#C9A84C,#8B6914)' : 'linear-gradient(90deg,#94a3b8,#64748b)'));
+      var barColor = earned ? 'linear-gradient(90deg,#22c55e,#16a34a)' : (pct>=60 ? 'linear-gradient(90deg,#22c55e,#16a34a)' : (pct>=40 ? 'linear-gradient(90deg,#C9A84C,#8B6914)' : 'linear-gradient(90deg,#94a3b8,#64748b)'));
       var statusLine;
       if(earned){
         statusLine = '🏆 Hajj Readiness Certificate earned!';
       } else if(qz.totalQuestions === 0){
         statusLine = 'Answer questions after each scene to earn your certificate.';
       } else {
-        statusLine = 'Score 80%+ on 80% of questions to earn your certificate.';
+        statusLine = 'Score 60%+ on 60% of questions to earn your certificate.';
       }
       // Build the three stat chips: total asked, total correct, live percentage
       var statsHtml =
@@ -1190,8 +1190,8 @@ function initPauseMenu(){
             '<div style="font-size:16px;font-weight:700;color:#3D2B1F;line-height:1.1;">' + qz.correct + '</div>' +
             '<div style="font-size:10px;color:#8B6914;margin-top:2px;">correct</div>' +
           '</span>' +
-          '<span style="flex:1;min-width:60px;background:' + (pct>=80 ? 'rgba(34,197,94,.14)' : 'rgba(201,168,76,.12)') + ';border-radius:8px;padding:6px 8px;text-align:center;">' +
-            '<div style="font-size:16px;font-weight:700;color:' + (pct>=80 ? '#16a34a' : '#3D2B1F') + ';line-height:1.1;">' + pct + '%</div>' +
+          '<span style="flex:1;min-width:60px;background:' + (pct>=60 ? 'rgba(34,197,94,.14)' : 'rgba(201,168,76,.12)') + ';border-radius:8px;padding:6px 8px;text-align:center;">' +
+            '<div style="font-size:16px;font-weight:700;color:' + (pct>=60 ? '#16a34a' : '#3D2B1F') + ';line-height:1.1;">' + pct + '%</div>' +
             '<div style="font-size:10px;color:#8B6914;margin-top:2px;">score</div>' +
           '</span>' +
         '</div>';
@@ -1560,9 +1560,7 @@ window.showJourneyNextButton = function() {
       return;
     }
     window.proceedWithQuiz(function(){
-      if(jm.currentStep < jm.getJourneyArray().length) {
-        jm.goToNext();
-      }
+      jm.goToNext();
     });
   });
   
@@ -1704,26 +1702,52 @@ window.showJourneyComplete = function() {
   var now = new Date();
   var dateStr = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
-  localStorage.setItem('pp_hajj_certified', '1');
-  localStorage.setItem('pp_hajj_certified_name', pilgrimName);
-  localStorage.setItem('pp_hajj_certified_date', dateStr);
+  var passed = certificateEarned();
+
+  if(passed){
+    localStorage.setItem('pp_hajj_certified', '1');
+    localStorage.setItem('pp_hajj_certified_name', pilgrimName);
+    localStorage.setItem('pp_hajj_certified_date', dateStr);
+  }
 
   var certCanvas = _drawCertificate(pilgrimName, dateStr);
 
   var overlay = document.createElement('div');
   overlay.id = 'journeyComplete';
   overlay.style.cssText = 'display:flex;align-items:center;justify-content:center;';
-  overlay.innerHTML =
-    '<div>' +
-    '<h2>\uD83C\uDF89 Mabrook, ' + pilgrimName + '!</h2>' +
-    '<p>You have completed the full virtual Hajj journey \u2014 all 16 sacred rituals, from Ihram through to Tawaf al-Wida.</p>' +
-    '<p class="subtext">May Allah accept your preparation and grant you the opportunity to perform the real Hajj. \u0622\u0645\u064A\u0646</p>' +
-    '<canvas id="certCanvas" style="width:100%;max-width:480px;border-radius:10px;box-shadow:0 4px 24px rgba(0,0,0,.18);margin:18px 0 8px;display:block;"></canvas>' +
-    '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:4px;">' +
-    '<button id="certDownloadBtn" style="background:linear-gradient(135deg,#C9A227,#8B6914);">\u2B07\uFE0F Download Certificate</button>' +
-    '<a href="/dashboard" style="display:inline-flex;align-items:center;background:#2C1810;color:#fff;border:none;border-radius:12px;padding:12px 24px;font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2);">\uD83D\uDCCA Go to Dashboard</a>' +
-    '</div>' +
-    '</div>';
+
+  if(passed){
+    overlay.innerHTML =
+      '<div>' +
+      '<h2>\uD83C\uDF89 Mabrook, ' + pilgrimName + '!</h2>' +
+      '<p>You have completed the full virtual Hajj journey \u2014 all 16 sacred rituals, from Ihram through to Tawaf al-Wida.</p>' +
+      '<p class="subtext">May Allah accept your preparation and grant you the opportunity to perform the real Hajj. \u0622\u0645\u064A\u0646</p>' +
+      '<canvas id="certCanvas" style="width:100%;max-width:480px;border-radius:10px;box-shadow:0 4px 24px rgba(0,0,0,.18);margin:18px 0 8px;display:block;"></canvas>' +
+      '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:4px;">' +
+      '<button id="certDownloadBtn" style="background:linear-gradient(135deg,#C9A227,#8B6914);">\u2B07\uFE0F Download Certificate</button>' +
+      '<a href="/dashboard" style="display:inline-flex;align-items:center;background:#2C1810;color:#fff;border:none;border-radius:12px;padding:12px 24px;font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2);">\uD83D\uDCCA Go to Dashboard</a>' +
+      '</div>' +
+      '</div>';
+  } else {
+    overlay.innerHTML =
+      '<div>' +
+      '<h2 style="color:#8B6914;">\uD83D\uDEB6 Journey Complete, ' + pilgrimName + '</h2>' +
+      '<p>You have walked through all 16 steps of the virtual Hajj journey. Mash\u0101\u02beAll\u0101h!</p>' +
+      '<p class="subtext" style="color:#C0392B;font-style:normal;font-weight:600;">Score 60% or higher on the reflection quizzes to unlock your Hajj Readiness Certificate.</p>' +
+      '<div style="position:relative;display:inline-block;width:100%;max-width:480px;margin:18px 0 4px;">' +
+      '<canvas id="certCanvas" style="width:100%;border-radius:10px;box-shadow:0 4px 24px rgba(0,0,0,.18);display:block;filter:grayscale(60%) opacity(0.35);"></canvas>' +
+      '<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(44,24,16,0.45);border-radius:10px;">' +
+      '<span style="font-size:32px;">&#128274;</span>' +
+      '<span style="color:#fff;font-size:13px;font-weight:700;margin-top:6px;text-shadow:0 1px 3px rgba(0,0,0,.7);">Certificate Locked</span>' +
+      '</div>' +
+      '</div>' +
+      '<p style="font-size:13px;color:#6B5B4F;margin:6px 0 14px;">Retake the quizzes on each scene to improve your score.</p>' +
+      '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:4px;">' +
+      '<a href="/hajj-vr.html" style="display:inline-flex;align-items:center;background:linear-gradient(135deg,#C9A227,#8B6914);color:#fff;border:none;border-radius:12px;padding:12px 24px;font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;box-shadow:0 4px 16px rgba(201,162,39,.3);">\uD83D\uDD04 Retry Quizzes</a>' +
+      '<a href="/dashboard" style="display:inline-flex;align-items:center;background:#2C1810;color:#fff;border:none;border-radius:12px;padding:12px 24px;font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2);">\uD83D\uDCCA Go to Dashboard</a>' +
+      '</div>' +
+      '</div>';
+  }
 
   _overlayRoot.appendChild(overlay);
 
@@ -1733,14 +1757,16 @@ window.showJourneyComplete = function() {
     el.getContext('2d').drawImage(certCanvas, 0, 0);
   }
 
-  var dlBtn = document.getElementById('certDownloadBtn');
-  if (dlBtn) {
-    dlBtn.addEventListener('click', function() {
-      var link = document.createElement('a');
-      link.download = 'hajj-readiness-certificate.png';
-      link.href = certCanvas.toDataURL('image/png');
-      link.click();
-    });
+  if(passed){
+    var dlBtn = document.getElementById('certDownloadBtn');
+    if (dlBtn) {
+      dlBtn.addEventListener('click', function() {
+        var link = document.createElement('a');
+        link.download = 'hajj-readiness-certificate.png';
+        link.href = certCanvas.toDataURL('image/png');
+        link.click();
+      });
+    }
   }
 };
 
