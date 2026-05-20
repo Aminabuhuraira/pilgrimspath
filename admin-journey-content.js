@@ -711,8 +711,11 @@ function styleBlock(){
   '</style>';
 }
 
+var _shellDelegationBound = false;
 function bindShell(){
   var root = document.getElementById('journeyContentMount');
+  if(!_shellDelegationBound){
+    _shellDelegationBound = true;
   root.addEventListener('click', function(e){
     var btn = e.target.closest('[data-jc]'); if(!btn) return;
     var act = btn.getAttribute('data-jc');
@@ -754,6 +757,12 @@ function bindShell(){
     handleFieldEdit(el);
   });
   root.addEventListener('change', function(e){
+    // Also handle data-jc-field on <select> elements (change fires but not always input)
+    var field = e.target.closest('[data-jc-field]');
+    if(field && e.target.tagName === 'SELECT'){
+      handleFieldEdit(field);
+      return;
+    }
     var sel = e.target.closest('[data-jc="set-trigger"]');
     if(sel){
       var sc1 = findScene(activeSceneKey); if(!sc1) return;
@@ -775,6 +784,7 @@ function bindShell(){
       }catch(_){ }
     }
   });
+  } // end if(!_shellDelegationBound)
   root.querySelector('#jcImportFile').addEventListener('change', function(e){
     var f = e.target.files[0]; if(!f) return;
     var r = new FileReader();

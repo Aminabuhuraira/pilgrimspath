@@ -44,6 +44,7 @@ audiores_89F818BE_95C4_CA02_41C9_C922F5D69C87.mp3Url = media/audio_8AC7545F_95C5
 audiores_89F818BE_95C4_CA02_41C9_C922F5D69C87.mp3Url = media/audio_8AC7545F_95C5_BA02_41D0_B163F76BD965_en.mp3
 audiores_89F818BE_95C4_CA02_41C9_C922F5D69C87.mp3Url = media/audio_8AC7545F_95C5_BA02_41D0_B163F76BD965_en.mp3
 audiores_89F818BE_95C4_CA02_41C9_C922F5D69C87.mp3Url = media/audio_8AC7545F_95C5_BA02_41D0_B163F76BD965_en.mp3
+audiores_EE01E5E5_FCE1_4409_41E7_7B5CADCB0B36.mp3Url = media/audio_ED7AEB03_FCEF_CC09_41E8_800275ABE120_en.mp3
 
 ### Audio Subtitles
 
@@ -65,4 +66,4 @@ panorama_7F9209F0_71D8_66D3_41BA_B1BDEA583A8F.label = st1
 ### Description
 
 ### Title
-tour.name = tawaf area
+tour.name = tawaf area (Duplicated)
