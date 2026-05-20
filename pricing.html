@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" sizes="512x512" href="/images/Pilgrims_Path-removebg-preview.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="/images/Pilgrims_Path-removebg-preview.png">
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1199634958501931');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1199634958501931&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#C9A227">
+    <meta name="description" content="Simple, honest pricing for your Hajj & Umrah preparation. One-time lifetime access — no subscriptions, no renewals. Prepare spiritually at your own pace.">
+    <meta name="keywords" content="hajj VR price, umrah VR cost, hajj preparation app price, virtual hajj cost, pilgrim's path pricing, lifetime access hajj VR, one time payment hajj app">
+    <title>Pricing — Lifetime Access to Hajj &amp; Umrah VR | Pilgrim's Path</title>
+    <link rel="canonical" href="https://www.pilgrimspath.io/pricing">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Pricing — Lifetime Access to Hajj & Umrah VR">
+    <meta property="og:description" content="One-time payment. Lifetime access. Start preparing for your Hajj & Umrah journey today.">
+    <meta property="og:url" content="https://www.pilgrimspath.io/pricing">
+    <meta property="og:site_name" content="Pilgrim's Path">
+    <meta property="og:image" content="https://www.pilgrimspath.io/images/logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Pricing — Lifetime Access to Hajj & Umrah VR">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== Pricing page styles ===== */
+        .pricing-hero {
+            padding: 160px 40px 100px;
+            background: linear-gradient(180deg, #FFFEF7 0%, #FDF6E3 40%, #F4E4BC 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .pricing-hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23D4AF37' fill-opacity='0.04'%3E%3Cpath d='M40 0l40 40-40 40L0 40 40 0zm0 10L10 40l30 30 30-30-30-30z'/%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+        .pricing-hero .section-tag { margin-bottom: 20px; }
+        .pricing-hero h1 {
+            font-family: 'Playfair Display', serif; font-size: 3.2rem;
+            font-weight: 700; margin-bottom: 20px; color: var(--text-primary);
+            line-height: 1.2;
+        }
+        .pricing-hero p {
+            font-size: 1.15rem; color: var(--text-secondary);
+            max-width: 620px; margin: 0 auto 32px; line-height: 1.8;
+        }
+        .highlight {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Trust badges */
+        .trust-badges {
+            display: flex; gap: 32px; justify-content: center; flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        .trust-badge {
+            display: flex; align-items: center; gap: 8px;
+            font-size: .85rem; color: var(--text-secondary);
+        }
+        .trust-badge i { color: var(--primary-gold); font-size: .9rem; }
+
+        /* Pricing section */
+        .pricing-section {
+            padding: 100px 0;
+            background: var(--soft-white);
+        }
+        .pricing-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 30px; margin-top: 60px; align-items: start;
+        }
+        .price-card {
+            background: white; border-radius: 24px; padding: 44px 36px;
+            border: 1px solid rgba(212,175,55,.12); text-align: center;
+            transition: var(--transition-smooth); position: relative;
+        }
+        .price-card.featured {
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 0 1px var(--primary-gold), 0 24px 70px rgba(212,175,55,.22);
+            transform: scale(1.04);
+        }
+        .pop-tag {
+            position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+            color: white; padding: 6px 24px; border-radius: 50px;
+            font-size: .72rem; font-weight: 700; letter-spacing: 1.2px;
+            white-space: nowrap; text-transform: uppercase;
+        }
+        .price-card:not(.featured):hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(212,175,55,.14);
+        }
+        .price-card.featured:hover { transform: scale(1.04) translateY(-6px); }
+
+        .price-name {
+            font-size: 1rem; font-weight: 700; letter-spacing: .5px;
+            text-transform: uppercase; color: var(--primary-gold-dark);
+            margin-bottom: 12px;
+        }
+        .price-amount {
+            font-family: 'Playfair Display', serif; font-size: 3rem;
+            font-weight: 700; line-height: 1; margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+        .price-amount span {
+            font-family: 'Poppins', sans-serif; font-size: 1.3rem;
+            font-weight: 600; vertical-align: super; margin-right: 2px;
+        }
+        .price-amount.contact-price {
+            font-size: 2rem; display: flex; align-items: center; justify-content: center;
+        }
+        .price-period {
+            font-size: .85rem; color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+        .price-subline {
+            font-size: .82rem; font-weight: 600; margin-bottom: 28px;
+            padding: 6px 14px; border-radius: 50px; display: inline-block;
+        }
+        .price-subline.basic-sub {
+            background: rgba(212,175,55,.08);
+            color: var(--text-secondary);
+        }
+        .price-subline.pro-sub {
+            background: linear-gradient(135deg, rgba(212,175,55,.15), rgba(212,175,55,.08));
+            color: var(--primary-gold-dark);
+        }
+        .price-subline.ent-sub {
+            background: rgba(212,175,55,.08);
+            color: var(--text-secondary);
+        }
+        .price-divider {
+            height: 1px; background: rgba(212,175,55,.1);
+            margin: 0 0 28px;
+        }
+        .price-features {
+            list-style: none; text-align: left; margin-bottom: 36px;
+        }
+        .price-features li {
+            display: flex; align-items: flex-start; gap: 12px; padding: 10px 0;
+            font-size: .9rem; color: var(--text-secondary);
+            border-bottom: 1px solid rgba(0,0,0,.04);
+        }
+        .price-features li:last-child { border-bottom: none; }
+        .price-features li i {
+            color: var(--primary-gold); font-size: .8rem;
+            width: 18px; flex-shrink: 0; margin-top: 3px; text-align: center;
+        }
+        .price-features li i.fa-times { color: #c0b090; }
+
+        .price-btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 15px 32px; border-radius: 50px; font-family: 'Poppins', sans-serif;
+            font-weight: 600; font-size: .95rem; border: 2px solid var(--primary-gold);
+            background: transparent; color: var(--primary-gold-dark); cursor: pointer;
+            transition: var(--transition-smooth); width: 100%; text-decoration: none;
+        }
+        .price-btn:hover { background: var(--primary-gold); color: white; }
+        .price-card.featured .price-btn {
+            background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+            color: white; border-color: transparent;
+            box-shadow: 0 4px 24px rgba(201,162,39,.35);
+        }
+        .price-card.featured .price-btn:hover {
+            box-shadow: 0 8px 36px rgba(201,162,39,.45);
+            transform: translateY(-1px);
+        }
+
+        /* Comparison table */
+        .compare-section {
+            padding: 80px 0 100px;
+            background: linear-gradient(180deg, #FDF6E3, #F4E4BC);
+        }
+        .compare-table {
+            width: 100%; border-collapse: collapse; margin-top: 50px;
+            background: white; border-radius: 20px; overflow: hidden;
+            box-shadow: 0 4px 30px rgba(212,175,55,.1);
+        }
+        .compare-table th, .compare-table td {
+            padding: 16px 24px; text-align: center; font-size: .9rem;
+        }
+        .compare-table thead th {
+            background: linear-gradient(135deg, #FFFEF7, #FDF6E3);
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem; font-weight: 600;
+            border-bottom: 2px solid rgba(212,175,55,.15);
+            color: var(--text-primary);
+        }
+        .compare-table thead th:first-child { text-align: left; }
+        .compare-table thead th.featured-col {
+            background: linear-gradient(135deg, rgba(212,175,55,.12), rgba(212,175,55,.06));
+            color: var(--primary-gold-dark);
+        }
+        .compare-table tbody tr { border-bottom: 1px solid rgba(212,175,55,.07); }
+        .compare-table tbody tr:last-child { border-bottom: none; }
+        .compare-table tbody tr:hover { background: rgba(212,175,55,.03); }
+        .compare-table td:first-child { text-align: left; color: var(--text-secondary); }
+        .compare-table td.featured-col { background: rgba(212,175,55,.04); }
+        .compare-table .check { color: var(--primary-gold); font-size: .85rem; }
+        .compare-table .cross { color: #c0b090; font-size: .85rem; }
+        .compare-table .row-label {
+            font-weight: 500; color: var(--text-primary);
+        }
+        .compare-table .row-section {
+            background: linear-gradient(90deg, rgba(212,175,55,.06), transparent);
+            font-weight: 700; font-size: .8rem; text-transform: uppercase;
+            letter-spacing: 1px; color: var(--primary-gold-dark);
+        }
+        .compare-table .row-section td { padding: 10px 24px; }
+
+        /* FAQ */
+        .pricing-faq {
+            padding: 100px 0;
+            background: var(--soft-white);
+        }
+        .faq-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr);
+            gap: 24px; margin-top: 50px;
+        }
+        .faq-item {
+            background: white; border-radius: 16px; padding: 28px 32px;
+            border: 1px solid rgba(212,175,55,.1);
+            transition: var(--transition-smooth);
+        }
+        .faq-item:hover {
+            border-color: rgba(212,175,55,.3);
+            box-shadow: 0 8px 30px rgba(212,175,55,.1);
+        }
+        .faq-item h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem; margin-bottom: 10px; color: var(--text-primary);
+        }
+        .faq-item p { font-size: .9rem; color: var(--text-secondary); line-height: 1.7; }
+
+        /* CTA Banner */
+        .pricing-cta {
+            padding: 90px 0;
+            background: linear-gradient(135deg, #FFFEF7, #FDF6E3);
+            text-align: center;
+        }
+        .pricing-cta h2 {
+            font-family: 'Playfair Display', serif; font-size: 2.4rem;
+            margin-bottom: 16px;
+        }
+        .pricing-cta p {
+            color: var(--text-secondary); max-width: 560px;
+            margin: 0 auto 36px; font-size: 1rem; line-height: 1.7;
+        }
+        .cta-row {
+            display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+        }
+        .cta-row .primary-btn, .cta-row .secondary-btn {
+            min-width: 200px; justify-content: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .pricing-grid { grid-template-columns: 1fr; max-width: 440px; margin-left: auto; margin-right: auto; }
+            .price-card.featured { transform: none; }
+            .price-card.featured:hover { transform: translateY(-6px); }
+            .faq-grid { grid-template-columns: 1fr; }
+            .compare-section { overflow-x: auto; }
+        }
+        @media (max-width: 768px) {
+            .pricing-hero { padding: 130px 20px 70px; }
+            .pricing-hero h1 { font-size: 2.2rem; }
+            .trust-badges { gap: 20px; }
+            .compare-table th, .compare-table td { padding: 12px 14px; font-size: .82rem; }
+        }
+        @media (max-width: 480px) {
+            .pricing-hero h1 { font-size: 1.8rem; }
+        }
+    </style>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Pilgrim's Path — Lifetime Hajj & Umrah VR Access",
+      "description": "Immersive 360° VR preparation platform for Hajj and Umrah. Lifetime one-time access with full ritual walkthroughs, audio guides, duas, and progress tracking.",
+      "url": "https://www.pilgrimspath.io/pricing",
+      "brand": { "@type": "Organization", "name": "Pilgrim's Path", "url": "https://www.pilgrimspath.io" },
+      "offers": [
+        { "@type": "Offer", "name": "Lifetime Basic", "price": "19.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock" },
+        { "@type": "Offer", "name": "Lifetime Pro", "price": "99.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock" }
+      ]
+    }
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <img src="images/logo.png" alt="Pilgrim's Path" class="logo-img">
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/hajj-journey">Hajj</a></li>
+                <li><a href="/umrah-journey">Umrah</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/articles">Articles</a></li>
+                <li><a href="/enterprise">Enterprise</a></li>
+            </ul>
+            <button class="cta-btn nav-cta" onclick="window.location.href='login.html?tab=register'">
+                <span>Start Free Journey</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <a href="/donate" class="nav-donate" style="display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:50px;border:1.5px solid rgba(201,162,39,0.3);color:#C9A227;font-size:.85rem;font-weight:500;text-decoration:none;transition:all .3s;">Donate <i class="fas fa-hand-holding-heart"></i></a>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/hajj-journey">Hajj Journey</a></li>
+            <li><a href="/umrah-journey">Umrah Journey</a></li>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/articles">Articles</a></li>
+            <li><a href="/enterprise">Enterprise</a></li>
+            <li><a href="/login?tab=register" class="cta-btn mobile-cta">Start Free Journey</a></li>
+            <li><a href="/donate" style="display:inline-flex;align-items:center;gap:8px;color:#C9A227;"><i class="fas fa-hand-holding-heart"></i> Donate</a></li>
+        </ul>
+    </div>
+
+    <!-- Hero -->
+    <section class="pricing-hero">
+        <span class="section-tag">Simple Pricing</span>
+        <h1>One Payment. <span class="highlight">Lifetime Access.</span></h1>
+        <p>No subscriptions. No renewals. Pay once and prepare for your Hajj or Umrah journey at your own pace — forever.</p>
+        <div class="trust-badges">
+            <div class="trust-badge"><i class="fas fa-lock"></i> Secure payment</div>
+            <div class="trust-badge"><i class="fas fa-infinity"></i> Lifetime access</div>
+            <div class="trust-badge"><i class="fas fa-shield-alt"></i> 30-day guarantee</div>
+            <div class="trust-badge"><i class="fas fa-users"></i> 50,000+ pilgrims prepared</div>
+        </div>
+    </section>
+
+    <!-- Pricing Cards -->
+    <section class="pricing-section" id="plans">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Choose Your Plan</span>
+                <h2 class="section-title">Access Built <span class="highlight">Around You</span></h2>
+                <p class="section-subtitle">Whether you want the essentials or everything we have to offer — and for organizations needing a custom solution.</p>
+            </div>
+
+            <div class="pricing-grid">
+
+                <!-- Basic -->
+                <div class="price-card">
+                    <div class="price-name">Lifetime Basic</div>
+                    <div class="price-amount"><span>$</span>19</div>
+                    <div class="price-period">one-time payment</div>
+                    <div class="price-subline basic-sub">Current content, forever</div>
+                    <div class="price-divider"></div>
+                    <ul class="price-features">
+                        <li><i class="fas fa-check-circle"></i> Full Hajj VR journey (12 scenes)</li>
+                        <li><i class="fas fa-check-circle"></i> Full Umrah VR journey (6 scenes)</li>
+                        <li><i class="fas fa-check-circle"></i> 360° panoramic scenes</li>
+                        <li><i class="fas fa-check-circle"></i> Audio guides &amp; narration</li>
+                        <li><i class="fas fa-check-circle"></i> Duas &amp; prayers library</li>
+                        <li><i class="fas fa-check-circle"></i> Progress tracking</li>
+                        <li><i class="fas fa-check-circle"></i> Mobile &amp; desktop access</li>
+                        <li><i class="fas fa-times"></i> Future scene updates</li>
+                        <li><i class="fas fa-times"></i> New feature releases</li>
+                    </ul>
+                    <button class="price-btn" onclick="window.location.href='/login?tab=register&plan=basic'">
+                        Get Lifetime Basic <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- Pro — Featured -->
+                <div class="price-card featured">
+                    <div class="pop-tag">Most Popular</div>
+                    <div class="price-name">Lifetime Pro</div>
+                    <div class="price-amount"><span>$</span>99</div>
+                    <div class="price-period">one-time payment</div>
+                    <div class="price-subline pro-sub">Everything, including all future updates</div>
+                    <div class="price-divider"></div>
+                    <ul class="price-features">
+                        <li><i class="fas fa-check-circle"></i> Full Hajj VR journey (12 scenes)</li>
+                        <li><i class="fas fa-check-circle"></i> Full Umrah VR journey (6 scenes)</li>
+                        <li><i class="fas fa-check-circle"></i> 360° panoramic scenes</li>
+                        <li><i class="fas fa-check-circle"></i> Audio guides &amp; narration</li>
+                        <li><i class="fas fa-check-circle"></i> Duas &amp; prayers library</li>
+                        <li><i class="fas fa-check-circle"></i> Progress tracking</li>
+                        <li><i class="fas fa-check-circle"></i> Mobile &amp; desktop access</li>
+                        <li><i class="fas fa-check-circle"></i> All future scene updates</li>
+                        <li><i class="fas fa-check-circle"></i> All new feature releases</li>
+                    </ul>
+                    <button class="price-btn" onclick="window.location.href='/login?tab=register&plan=pro'">
+                        Get Lifetime Pro <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- Enterprise -->
+                <div class="price-card">
+                    <div class="price-name">Enterprise</div>
+                    <div class="price-amount contact-price"><i class="fas fa-envelope" style="font-size:1.8rem;color:var(--primary-gold);margin-right:10px;"></i>Custom</div>
+                    <div class="price-period">tailored to your organization</div>
+                    <div class="price-subline ent-sub">White-label · API · Multi-seat</div>
+                    <div class="price-divider"></div>
+                    <ul class="price-features">
+                        <li><i class="fas fa-check-circle"></i> Everything in Lifetime Pro</li>
+                        <li><i class="fas fa-check-circle"></i> White-label &amp; custom branding</li>
+                        <li><i class="fas fa-check-circle"></i> API access &amp; integrations</li>
+                        <li><i class="fas fa-check-circle"></i> Bulk seat licenses</li>
+                        <li><i class="fas fa-check-circle"></i> Admin analytics dashboard</li>
+                        <li><i class="fas fa-check-circle"></i> Multi-language deployment</li>
+                        <li><i class="fas fa-check-circle"></i> Custom domain &amp; hosting</li>
+                        <li><i class="fas fa-check-circle"></i> Dedicated account manager</li>
+                        <li><i class="fas fa-check-circle"></i> SLA &amp; priority support</li>
+                    </ul>
+                    <button class="price-btn" onclick="window.location.href='/enterprise'">
+                        Contact Sales <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Table -->
+    <section class="compare-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Feature Breakdown</span>
+                <h2 class="section-title">Compare <span class="highlight">Every Detail</span></h2>
+                <p class="section-subtitle">See exactly what's included in each plan before you decide.</p>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="compare-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align:left;min-width:220px;">Feature</th>
+                            <th>Basic<br><small style="font-weight:400;font-size:.8rem;color:var(--text-muted);">$19 lifetime</small></th>
+                            <th class="featured-col">Pro ★<br><small style="font-weight:400;font-size:.8rem;">$99 lifetime</small></th>
+                            <th>Enterprise<br><small style="font-weight:400;font-size:.8rem;color:var(--text-muted);">Custom</small></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="row-section"><td colspan="4">Core Content</td></tr>
+                        <tr>
+                            <td class="row-label">Hajj VR journey (12 scenes)</td>
+                            <td><i class="fas fa-check check"></i></td>
+                            <td class="featured-col"><i class="fas fa-check check"></i></td>
+                            <td><i class="fas fa-check check"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Umrah VR journey (6 scenes)</td>
+                            <td><i class="fas fa-check check"></i></td>
+                            <td class="featured-col"><i class="fas fa-check check"></i></td>
+                            <td><i class="fas fa-check check"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">360° panoramic scenes</td>
+                            <td><i class="fas fa-check check"></i></td>
+                            <td class="featured-col"><i class="fas fa-check check"></i></td>
+                            <td><i class="fas fa-check check"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Audio narration &amp; guides</td>
+                            <td><i class="fas fa-check check"></i></td>
+                            <td class="featured-col"><i class="fas fa-check check"></i></td>
+                            <td><i class="fas fa-check check"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Duas &amp; prayers library</td>
+                            <td><i class="fas fa-check check"></i></td>
+                            <td class="featured-col"><i class="fas fa-check check"></i></td>
+                            <td><i class="fas fa-check check"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Progress tracking</td>
+                            <td><i class="fas fa-check check"></i></td>
+                            <td class="featured-col"><i class="fas fa-check check"></i></td>
+                            <td><i class="fas fa-check check"></i></td>
+                        </tr>
+                        <tr class="row-section"><td colspan="4">Access &amp; Updates</td></tr>
+                        <tr>
+                            <td class="row-label">Lifetime access (no renewals)</td>
+                            <td><i class="fas fa-check check"></i></td>
+                            <td class="featured-col"><i class="fas fa-check check"></i></td>
+                            <td><i class="fas fa-check check"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Mobile &amp; desktop</td>
+                            <td><i class="fas fa-check check"></i></td>
+                            <td class="featured-col"><i class="fas fa-check check"></i></td>
+                            <td><i class="fas fa-check check"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Future scene updates</td>
+                            <td><i class="fas fa-times cross"></i></td>
+                            <td class="featured-col"><i class="fas fa-check check"></i></td>
+                            <td><i class="fas fa-check check"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">New features &amp; releases</td>
+                            <td><i class="fas fa-times cross"></i></td>
+                            <td class="featured-col"><i class="fas fa-check check"></i></td>
+                            <td><i class="fas fa-check check"></i></td>
+                        </tr>
+                        <tr class="row-section"><td colspan="4">Enterprise Only</td></tr>
+                        <tr>
+                            <td class="row-label">White-label &amp; custom branding</td>
+                            <td><i class="fas fa-times cross"></i></td>
+                            <td class="featured-col"><i class="fas fa-times cross"></i></td>
+                            <td><i class="fas fa-check check"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">API access &amp; integrations</td>
+                            <td><i class="fas fa-times cross"></i></td>
+                            <td class="featured-col"><i class="fas fa-times cross"></i></td>
+                            <td><i class="fas fa-check check"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Bulk seat licenses</td>
+                            <td><i class="fas fa-times cross"></i></td>
+                            <td class="featured-col"><i class="fas fa-times cross"></i></td>
+                            <td><i class="fas fa-check check"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Analytics dashboard</td>
+                            <td><i class="fas fa-times cross"></i></td>
+                            <td class="featured-col"><i class="fas fa-times cross"></i></td>
+                            <td><i class="fas fa-check check"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Dedicated account manager</td>
+                            <td><i class="fas fa-times cross"></i></td>
+                            <td class="featured-col"><i class="fas fa-times cross"></i></td>
+                            <td><i class="fas fa-check check"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="pricing-faq">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Questions</span>
+                <h2 class="section-title">Frequently <span class="highlight">Asked</span></h2>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h4>What's the difference between Basic and Pro?</h4>
+                    <p>Both give you full access to every Hajj and Umrah scene available today. Pro additionally includes all future content — new scenes, improved narration, new rituals, language additions, and every new feature we release. It's a one-time upgrade for everything, forever.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Is access really lifetime?</h4>
+                    <p>Yes. Pay once, access forever. There are no monthly or annual subscription charges. Log in anytime — before your journey, during preparation, or years later — and your content will still be there.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Can I try before buying?</h4>
+                    <p>Absolutely. Create a free account and explore the first scene of the Hajj and Umrah journeys at no cost. No credit card required. When you're ready to unlock everything, simply upgrade.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Is there a refund policy?</h4>
+                    <p>We offer a 30-day satisfaction guarantee. If you're not happy with your purchase for any reason, contact us within 30 days and we'll issue a full refund — no questions asked.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>What devices does it work on?</h4>
+                    <p>Pilgrim's Path works on all modern smartphones, tablets, laptops, and desktop computers via your web browser — no app download needed. For an immersive VR experience, it also supports cardboard headsets and WebXR-compatible devices.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>What is the Enterprise plan?</h4>
+                    <p>Enterprise is for mosques, Islamic schools, travel agencies, hospitals, and organizations that want to offer Hajj & Umrah preparation under their own brand. It includes white-labeling, bulk access, API integrations, and a dedicated support team. <a href="/enterprise" style="color:var(--primary-gold);font-weight:600;">Learn more →</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="pricing-cta">
+        <div class="container">
+            <span class="section-tag">Begin Today</span>
+            <h2>Start Your <span class="highlight">Sacred Preparation</span></h2>
+            <p>Join over 50,000 pilgrims who have used Pilgrim's Path to prepare spiritually and practically — so when they arrive in Makkah, their heart is free to worship.</p>
+            <div class="cta-row">
+                <button class="primary-btn" onclick="window.location.href='/login?tab=register&plan=basic'">
+                    <span>Get Lifetime Basic — $19</span>
+                    <div class="btn-glow"></div>
+                </button>
+                <button class="primary-btn" onclick="window.location.href='/login?tab=register&plan=pro'" style="background:linear-gradient(135deg,var(--primary-gold),var(--primary-gold-dark));border-color:transparent;">
+                    <span>Get Lifetime Pro — $99</span>
+                    <div class="btn-glow"></div>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="footer-logo">
+                        <img src="images/logo.png" alt="Pilgrim's Path" class="footer-logo-img">
+                    </a>
+                    <p class="footer-tagline">Bridging technology and spirituality to bring the sacred pilgrimage experience to Muslims worldwide.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Experience</h4>
+                    <ul>
+                        <li><a href="/hajj-journey">Hajj Journey</a></li>
+                        <li><a href="/umrah-journey">Umrah Journey</a></li>
+                        <li><a href="/vr-features">VR Features</a></li>
+                        <li><a href="/duas">Duas &amp; Prayers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="/articles">Articles &amp; Guides</a></li>
+                        <li><a href="/duas">Duas &amp; Prayers</a></li>
+                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/contact">Support</a></li>
+                        <li><a href="/pricing">Pricing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/enterprise">Enterprise</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Pilgrim's Path. All rights reserved. Made with ❤️ for the Ummah.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js?v=20260517d"></script>
+    <script src="script.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof updateNavForAuth === 'function') updateNavForAuth();
+    });
+    (function(){try{var st=Date.now();window.addEventListener('beforeunload',function(){var d=Math.floor((Date.now()-st)/1000);var s=JSON.parse(localStorage.getItem('pp_sessions')||'[]');s.push(d);if(s.length>100)s.splice(0,s.length-100);localStorage.setItem('pp_sessions',JSON.stringify(s));});var v=JSON.parse(localStorage.getItem('pp_visits')||'[]');v.push({time:new Date().toISOString(),referrer:document.referrer||'direct',page:location.pathname});if(v.length>500)v.splice(0,v.length-500);localStorage.setItem('pp_visits',JSON.stringify(v));}catch(e){}})();
+    </script>
+    <script src="lead-capture.js" defer></script>
+    <script src="meta-capi.js" defer></script>
+</body>
+</html>
