@@ -863,6 +863,22 @@
         if (uFill) uFill.style.strokeDashoffset = C * (1 - umrahPct / 100);
         if (uPctEl) uPctEl.textContent = umrahPct + '%';
 
+        // ── Umrah mini-steps ─────────────────────────────────────────────────
+        var umMap  = [0, 1, 2, 3]; // Ihram=0, Tawaf=1, Sa'i=2, Halq/Taqsir=3
+        var umMini = document.querySelectorAll('#umrahMiniSteps .mini-step');
+        umMini.forEach(function(el, i){
+            var sn = umMap[i];
+            el.querySelector('i').className = 'fas fa-lock';
+            el.className = 'mini-step';
+            if (done(sn)) {
+                el.className = 'mini-step done';
+                el.querySelector('i').className = 'fas fa-check';
+            } else if (inProgress(sn)) {
+                el.className = 'mini-step current';
+                el.querySelector('i').className = 'fas fa-circle';
+            }
+        });
+
         // ── Umrah ritual cards ───────────────────────────────────────────────
         var umCardSteps = [0, 1, 2, 3];
         var umCards = document.querySelectorAll('#umrahTab .ritual-card-dash');

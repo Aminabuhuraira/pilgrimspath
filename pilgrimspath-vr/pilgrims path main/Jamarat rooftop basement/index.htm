@@ -195,7 +195,7 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ba
 
 <!-- Throw Button -->
 <button id="jamarThrowBtn" onclick="throwStone()">
-  <span class="icon">&#x1FAA8;</span> Throw Stone <span id="throwLabel">(1/7)</span>
+  <span class="icon">&#x1FAA8;</span> Throw Stone <span id="throwLabel">(0/7)</span>
 </button>
 
 <!-- Counter HUD -->
@@ -321,7 +321,7 @@ function updateHUD() {
   document.getElementById('hudTotal').textContent = total + '/21';
 
   if (currentPillar && jamarState[currentPillar] < 7) {
-    throwLabel.textContent = '(' + (jamarState[currentPillar] + 1) + '/7)';
+    throwLabel.textContent = '(' + jamarState[currentPillar] + '/7)';
   }
 }
 
@@ -397,7 +397,7 @@ function checkPanorama(panoramaId) {
     arrow.style.display = 'block';
     aimHint.style.display = 'block';
     debugYaw.style.display = 'block';
-    throwLabel.textContent = '(' + (jamarState[pillar] + 1) + '/7)';
+    throwLabel.textContent = '(' + jamarState[pillar] + '/7)';
     updateAimState();
   } else if (pillar && jamarState[pillar] >= 7) {
     throwBtn.style.display = 'none';
@@ -540,7 +540,7 @@ function resetJamarat() {
     arrow.style.display = 'block';
     aimHint.style.display = 'block';
     debugYaw.style.display = 'block';
-    throwLabel.textContent = '(1/7)';
+    throwLabel.textContent = '(0/7)';
     updateAimState();
   }
 }
