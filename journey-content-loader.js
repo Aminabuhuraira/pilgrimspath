@@ -799,6 +799,10 @@ function boot(){
   fireSceneLoad();
   installFirstInteractionVO();
   autoWireButtons();
+  // Fetch admin-published languages from server so any language added via the
+  // Journey Content Manager is available on ALL users' devices, not just the
+  // admin's browser. If server returns a different list, reinject the switcher.
+  _fetchServerLanguages();
   try{
     var mo = new MutationObserver(function(){
       if(boot._t) return;
@@ -807,6 +811,32 @@ function boot(){
     mo.observe(document.body, {childList:true, subtree:true});
   }catch(_){ }
   waitForCompletionHook();
+}
+
+function _fetchServerLanguages(){
+  try{
+    fetch('/api/journey-languages', {cache:'no-store', credentials:'include'})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(serverLangs){
+        if(!serverLangs || !Array.isArray(serverLangs) || serverLangs.length < 1) return;
+        var current = (data && data.languages) || [];
+        // Check if anything changed (different count or codes)
+        var changed = serverLangs.length !== current.length ||
+          serverLangs.some(function(sl, i){ return !current[i] || current[i].code !== sl.code; });
+        if(!changed) return;
+        // Merge server languages into local data and persist so future loads are fast
+        if(!data) data = {};
+        data.languages = serverLangs;
+        try{ localStorage.setItem(KEY, JSON.stringify(data)); }catch(_){}
+        // Reinject the language switcher with the updated list
+        var sw = document.getElementById('ppLangSwitcher');
+        if(sw){ sw.remove(); }
+        var sc = document.getElementById('ppLangSwitcherCss');
+        if(sc){ sc.remove(); }
+        injectLangSwitcher();
+      })
+      .catch(function(){});
+  }catch(_){}
 }
 if(document.readyState==='loading'){
   document.addEventListener('DOMContentLoaded', boot);

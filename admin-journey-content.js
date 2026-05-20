@@ -454,8 +454,57 @@ function save(silent){
   dirty = false;
   if(!silent) flash('Saved');
   if(typeof renderStatus==='function') renderStatus();
+  // Sync language list to server so users on all devices see admin-added languages
+  _syncLanguages();
+}
+function _syncLanguages(){
+  try{
+    fetch('/api/journey-languages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      credentials:'include',
+      body:JSON.stringify(data.languages||[])
+    }).catch(function(){});
+  }catch(_){}
 }
 function markDirty(){ dirty = true; renderStatus(); }
+
+/* ─── Body text format helpers ───────────────────────────────────────────────
+   Admin edits in a simplified plain-text format (no HTML class tags visible).
+   Stored value is always proper HTML; conversion happens on read/write.
+
+   Simple format markers:
+     Plain text line     → <p class="bb">…</p>  (body paragraph)
+     [ar] Arabic text    → <p class="ba">…</p>  (Arabic / dua)
+     [tr] Translation    → <p class="bt">…</p>  (italic sub-text)
+     ---                 → <div class="sep"></div>
+     Lines starting with < are kept as-is (raw HTML: <ul>, <li>, …)
+──────────────────────────────────────────────────────────────────────────── */
+function htmlToSimple(html){
+  if(!html) return '';
+  var s = html;
+  s = s.replace(/<div\b[^>]*\bclass=["']sep["'][^>]*>\s*(?:<\/div>)?/gi, '---');
+  s = s.replace(/<p\b[^>]*\bclass=["']ba["'][^>]*>([\s\S]*?)<\/p>/gi, function(_,t){ return '[ar] '+t.trim(); });
+  s = s.replace(/<p\b[^>]*\bclass=["']bt["'][^>]*>([\s\S]*?)<\/p>/gi, function(_,t){ return '[tr] '+t.trim(); });
+  s = s.replace(/<p\b[^>]*\bclass=["']bb["'][^>]*>([\s\S]*?)<\/p>/gi, function(_,t){ return t.trim(); });
+  return s.replace(/\n{3,}/g,'\n\n').trim();
+}
+function simpleToHtml(text){
+  if(!text) return '';
+  // Already has <p class=…> wrappers → store as-is (backward compat)
+  if(/^<p\s/.test(text.trim())) return text;
+  var lines = text.split('\n'), out = [];
+  for(var i=0;i<lines.length;i++){
+    var line = lines[i].trim();
+    if(!line) continue;
+    if(line==='---'){ out.push('<div class="sep"></div>'); }
+    else if(/^\[ar\]\s*/i.test(line)){ out.push('<p class="ba">'+line.replace(/^\[ar\]\s*/i,'')+'</p>'); }
+    else if(/^\[tr\]\s*/i.test(line)){ out.push('<p class="bt">'+line.replace(/^\[tr\]\s*/i,'')+'</p>'); }
+    else if(/^</.test(line)){ out.push(line); } // raw HTML element
+    else{ out.push('<p class="bb">'+line+'</p>'); }
+  }
+  return out.join('');
+}
 
 function flash(msg, isErr){
   var el = document.getElementById('jcFlash'); if(!el) return;
@@ -991,7 +1040,9 @@ function bannerCard(b){
       '</div>'+
       '</div>' : '')+
     '<div class="jc-row"><label>Title <small style="color:var(--gold)">['+esc(lang)+']</small></label><input type="text" data-jc-field="title" data-id="'+esc(b.id)+'" data-lang="'+esc(lang)+'" value="'+esc(t.title)+'"'+(hasLang?'':' disabled')+'></div>'+
-    '<div class="jc-row"><label>Body HTML <small style="color:var(--gold)">['+esc(lang)+']</small></label><textarea data-jc-field="body" data-id="'+esc(b.id)+'" data-lang="'+esc(lang)+'"'+(hasLang?'':' disabled')+' placeholder="HTML allowed: &lt;p class=\'bb\'&gt;…&lt;/p&gt;">'+esc(t.body)+'</textarea></div>'+
+    '<div class="jc-row">'+
+    '<label>Body <small style="color:var(--gold)">['+esc(lang)+']</small><br><span style="font-size:.6rem;color:var(--text-muted);font-weight:400">plain=body &nbsp;·&nbsp; <code>[ar]</code>=Arabic &nbsp;·&nbsp; <code>[tr]</code>=translation &nbsp;·&nbsp; <code>---</code>=line</span></label>'+
+    '<textarea data-jc-field="body" data-id="'+esc(b.id)+'" data-lang="'+esc(lang)+'"'+(hasLang?'':' disabled')+' placeholder="Type body text here.&#10;[ar] Arabic / dua text&#10;[tr] Translation&#10;---  (separator line)">'+esc(htmlToSimple(t.body))+'</textarea></div>'+
     '<div class="jc-row"><label>Audio file <small style="color:var(--gold)">['+esc(lang)+']</small></label>'+
       renderAudioPickerHint(lang)+
       '<div class="jc-audio-grp">'+
@@ -1185,7 +1236,7 @@ function handleFieldEdit(el){
   else if(field==='panorama'){ b.panorama = el.value; }
   else if(field==='title'||field==='body'){
     b.text = b.text||{}; b.text[lang] = b.text[lang]||{title:'',body:''};
-    b.text[lang][field] = el.value;
+    b.text[lang][field] = field==='body' ? simpleToHtml(el.value) : el.value;
   }
   else if(field==='audio'){ b.audio = b.audio||{}; b.audio[lang] = el.value; }
   else if(field==='audioChain'){ b.audioChain = b.audioChain||{}; b.audioChain[lang] = el.value; }
