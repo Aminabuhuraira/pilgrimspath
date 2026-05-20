@@ -385,6 +385,28 @@ body {
     box-shadow: 0 6px 35px rgba(212, 175, 55, 0.4);
 }
 
+.nav-signin {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 10px 22px;
+    border-radius: 50px;
+    border: 1.5px solid rgba(201, 162, 39, 0.4);
+    transition: var(--transition-smooth);
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-right: 6px;
+}
+
+.nav-signin:hover {
+    border-color: var(--primary-gold);
+    color: var(--primary-gold-dark);
+    background: rgba(212, 175, 55, 0.07);
+}
+
 .hamburger {
     display: none;
     flex-direction: column;
@@ -444,6 +466,26 @@ body {
 .mobile-cta {
     margin-top: 20px;
     width: 100%;
+}
+
+.mobile-signin {
+    display: inline-block;
+    color: var(--primary-gold-dark);
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    border: 1.5px solid rgba(201, 162, 39, 0.5);
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    transition: var(--transition-smooth);
+}
+
+.mobile-signin:hover {
+    background: rgba(212, 175, 55, 0.08);
+    border-color: var(--primary-gold);
 }
 
 /* ===================================
@@ -3159,7 +3201,8 @@ body {
     
     .nav-links,
     .nav-cta,
-    .nav-donate {
+    .nav-donate,
+    .nav-signin {
         display: none;
     }
     
