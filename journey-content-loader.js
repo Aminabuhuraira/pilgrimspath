@@ -723,8 +723,11 @@ function getCurrentSceneVO(){
   if(!s || !s.banners || !s.banners.length) return null;
   var guide = s.banners.find(function(b){return /^guide-screen-/.test(b.trigger||'') && audioFile(b);});
   if(guide) return { audio:audioFile(guide), chain:audioChainFile(guide) };
-  var any = s.banners.find(function(b){return audioFile(b);});
-  if(any) return { audio:audioFile(any), chain:audioChainFile(any) };
+  // Only scene-load banners should auto-play on first interaction.
+  // Button, panorama, sequence, and completion banners must NOT fire here —
+  // they have their own dedicated trigger paths (click handler / panorama enter).
+  var sceneLoad = s.banners.find(function(b){return b.trigger==='scene-load' && audioFile(b);});
+  if(sceneLoad) return { audio:audioFile(sceneLoad), chain:audioChainFile(sceneLoad) };
   return null;
 }
 function installFirstInteractionVO(){
