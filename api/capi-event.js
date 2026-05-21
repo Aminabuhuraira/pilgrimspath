@@ -87,6 +87,13 @@ module.exports = async function handler(req, res) {
   // 60 events / minute / IP — generous for legit page traffic, blocks floods.
   if (!rateLimit(req, res, { windowMs: 60_000, max: 60 })) return;
 
+  // If the CAPI access token is not configured (empty or still a placeholder),
+  // return a silent no-op so the browser console stays clean. The Facebook
+  // browser pixel still fires normally — CAPI is just disabled server-side.
+  if (!ACCESS_TOKEN || ACCESS_TOKEN.length < 20 || ACCESS_TOKEN.startsWith('your-')) {
+    return res.status(200).json({ events_received: 0, skipped: true, reason: 'CAPI token not configured' });
+  }
+
   try {
     const data = req.body;
     const clientIP = (req.headers['x-forwarded-for'] || '').split(',')[0].trim()

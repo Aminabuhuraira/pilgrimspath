@@ -49,10 +49,14 @@ async function verifyJwt(jwt) {
 // --- Supabase REST helpers ---------------------------------------------------
 // Uses the service role key when available (bypasses RLS), otherwise falls back
 // to authenticating as the user via their JWT (requires RLS policies to exist).
+// Guard: only treat the service role key as valid if it looks like a real JWT
+// (3 dot-separated segments, > 100 chars). Placeholder values like "eyJ..." or
+// "your-key-here" fail this check so we fall back to the user's own JWT + RLS.
 function dbHeaders(userJwt) {
   const svcKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
-  const key    = svcKey ? svcKey : SUPABASE_ANON;
-  const bearer = svcKey ? svcKey : userJwt;
+  const validSvcKey = svcKey && svcKey.split('.').length === 3 && svcKey.length > 100;
+  const key    = validSvcKey ? svcKey : SUPABASE_ANON;
+  const bearer = validSvcKey ? svcKey : userJwt;
   return {
     'apikey':        key,
     'Authorization': 'Bearer ' + bearer,
