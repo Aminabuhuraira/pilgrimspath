@@ -191,6 +191,13 @@ app.get(['/login', '/login.html'], (req, res, next) => {
   if (!token || !dest) return next();
   // Only follow safe local destinations (must start with a single '/').
   if (!/^\/[^/]/.test(dest)) return next();
+  // pp_access is a VR-gate cookie, not a general auth cookie. Only bypass
+  // the login form for VR/journey destinations. For /dashboard and other
+  // Supabase-protected pages, let the login form load so it can verify the
+  // Supabase session — otherwise a user whose Supabase token has expired
+  // (but whose 30-day pp_access cookie is still valid) gets bounced in an
+  // infinite loop: dashboard → /login?next=/dashboard → server 302 → dashboard.
+  if (!dest.startsWith('/journey/') && !dest.startsWith('/pilgrimspath-vr')) return next();
   const secret = process.env.JWT_SECRET;
   if (!secret) return next();
   try {
