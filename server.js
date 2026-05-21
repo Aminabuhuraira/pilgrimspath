@@ -19,6 +19,12 @@ const PORT = process.env.PORT || 3000;
 app.use(cookieParser());
 
 // ── Body parsers ──────────────────────────────────────────────
+// journey-content POST can be ~500 KB (full content JSON).
+// journey-audio POST can be ~20 MB (base64-encoded MP3).
+// Other endpoints only need small payloads — the large limit only kicks in
+// on the /api/journey-* routes so we don't open the server to general abuse.
+app.use('/api/journey-audio',   express.json({ limit: '25mb' }));
+app.use('/api/journey-content', express.json({ limit: '2mb' }));
 app.use(express.json({ limit: '100kb' }));
 app.use(express.urlencoded({ extended: false, limit: '100kb' }));
 

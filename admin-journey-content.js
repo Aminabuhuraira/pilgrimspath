@@ -384,13 +384,41 @@ var dirty = false;
 var injectedTplCss = {}; // template ID → true once injected
 
 /* ─── Storage ─── */
+// Internal: apply migration + seed logic to a raw parsed data object.
+function _migrateData(d){
+  d.scenes.forEach(function(s){
+    if(!s.panoramas) s.panoramas = [];
+    s.banners.forEach(function(b){
+      if(!b.template) b.template = (/^guide-screen-/.test(b.trigger)?'ihram-guide':'classic-gold');
+      if(!b.position) b.position = {x:50,y:50,align:'center',width:'auto'};
+    });
+  });
+  if(d.languages){
+    var defFolders = {en:'English/',ar:'Arabic/',fr:'French/',ur:'Urdu/',tr:'Turkish/',id:'Indonesian/',ms:'Malay/',es:'Spanish/',fa:'Persian/'};
+    d.languages.forEach(function(l){
+      if(!l.folder) l.folder = defFolders[l.code] || (l.name?l.name.replace(/[^A-Za-z]/g,'')+'/':'');
+    });
+  }
+  return d;
+}
+// Internal: finish initialising after data is set (used by both sync and async load paths).
+function _finishLoad(){
+  if(!data) data = JSON.parse(JSON.stringify(DEFAULT_DATA));
+  _migrateData(data);
+  if((data.seedVersion||0) < SEED_VERSION){
+    resyncFromDefaults();
+    data.seedVersion = SEED_VERSION;
+    save(true);
+  }
+  activeSceneKey = data.scenes[0]&&data.scenes[0].key;
+  activeLang = (data.languages.find(function(l){return l.isDefault;})||data.languages[0]).code;
+}
 function load(){
+  // Step 1: load from localStorage as fast immediate fallback (keeps UI snappy)
   try{
     var raw = localStorage.getItem(STORAGE_KEY);
     // Mojibake guard: Windows-1252 mis-read of UTF-8 emoji produces U+00F0 + U+0178
     // (ð + Ÿ). If detected, wipe the key and re-seed from clean DEFAULT_DATA.
-    // Use the full pattern identical to the loader's _MOJI_RE so both scripts
-    // always detect the same corruption. \u00f0[\u0178\u009f] was the old narrow form.
     if(raw && /\u00f0[\u0178\u009f\u0094\u0097\u0098\u00a4\u00b9]/.test(raw)){
       console.warn('[JourneyContent] mojibake in stored data — clearing and re-seeding');
       try{ localStorage.removeItem(STORAGE_KEY); }catch(_){}
@@ -398,37 +426,39 @@ function load(){
     }
     if(raw){
       data = JSON.parse(raw);
-      // Migrate older entries: add template/position defaults
-      data.scenes.forEach(function(s){
-        if(!s.panoramas) s.panoramas = [];
-        s.banners.forEach(function(b){
-          if(!b.template) b.template = (/^guide-screen-/.test(b.trigger)?'ihram-guide':'classic-gold');
-          if(!b.position) b.position = {x:50,y:50,align:'center',width:'auto'};
-        });
-      });
-      // Migrate languages: ensure each has a folder so multi-language audio works
-      if(data.languages){
-        var defFolders = {en:'English/',ar:'Arabic/',fr:'French/',ur:'Urdu/',tr:'Turkish/',id:'Indonesian/',ms:'Malay/',es:'Spanish/',fa:'Persian/'};
-        data.languages.forEach(function(l){
-          if(!l.folder) l.folder = defFolders[l.code] || (l.name?l.name.replace(/[^A-Za-z]/g,'')+'/':'');
-        });
-      }
-      // Re-sync text/audio from defaults if seed version changed.
-      // This pulls in updated body HTML, audio chains, and any newly-added banners
-      // without discarding user-set template/position fields.
-      if((data.seedVersion||0) < SEED_VERSION){
-        resyncFromDefaults();
-        data.seedVersion = SEED_VERSION;
-        save(true);
-      }
+    } else {
+      data = JSON.parse(JSON.stringify(DEFAULT_DATA));
+      data.seedVersion = SEED_VERSION;
     }
-    else { data = JSON.parse(JSON.stringify(DEFAULT_DATA)); data.seedVersion = SEED_VERSION; save(true); }
+    _finishLoad();
   }catch(e){
     console.error('[JourneyContent] load failed, resetting',e);
     data = JSON.parse(JSON.stringify(DEFAULT_DATA));
+    _finishLoad();
   }
-  activeSceneKey = data.scenes[0]&&data.scenes[0].key;
-  activeLang = (data.languages.find(function(l){return l.isDefault;})||data.languages[0]).code;
+  // Step 2: fetch latest from server. If server has newer data, override and re-render.
+  _loadFromServer(function(serverData){
+    if(!serverData) return; // nothing on server yet — keep localStorage version
+    // Prefer server data if its seedVersion is >= local OR it has more scenes
+    var localSeed = (data && data.seedVersion) || 0;
+    var serverSeed = serverData.seedVersion || 0;
+    var serverHasMore = serverData.scenes.length >= (data ? data.scenes.length : 0);
+    if(serverSeed >= localSeed || serverHasMore){
+      data = serverData;
+      _migrateData(data);
+      // If seed version behind, run the resync (new defaults may be available)
+      if((data.seedVersion||0) < SEED_VERSION){
+        resyncFromDefaults();
+        data.seedVersion = SEED_VERSION;
+      }
+      try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }catch(_){}
+      activeSceneKey = data.scenes[0]&&data.scenes[0].key;
+      activeLang = (data.languages.find(function(l){return l.isDefault;})||data.languages[0]).code;
+      // Re-render the admin UI with the freshest data
+      if(typeof mount === 'function') mount();
+      flash('✓ Loaded latest content from server');
+    }
+  });
 }
 // Mojibake guard regex — UTF-8 4-byte emoji decoded as Windows-1252:
 // F0 9F... becomes U+00F0 (ð) followed by U+0178 (Ÿ) or U+009F etc.
@@ -454,8 +484,9 @@ function save(silent){
   dirty = false;
   if(!silent) flash('Saved');
   if(typeof renderStatus==='function') renderStatus();
-  // Sync language list to server so users on all devices see admin-added languages
+  // Sync language list + full content to server so ALL devices see the latest content
   _syncLanguages();
+  _syncContentToServer(silent);
 }
 function _syncLanguages(){
   try{
@@ -466,6 +497,47 @@ function _syncLanguages(){
       body:JSON.stringify(data.languages||[])
     }).catch(function(){});
   }catch(_){}
+}
+// Push full journey content to server so it is available on every device.
+// The server strips base64 audio (those were already uploaded individually).
+function _syncContentToServer(silent){
+  try{
+    fetch('/api/journey-content',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      credentials:'include',
+      body:JSON.stringify(data)
+    })
+    .then(function(r){
+      if(!r.ok){
+        r.json().then(function(j){ console.warn('[JCM] server sync failed:',j.error); }).catch(function(){});
+        if(!silent) flash('⚠ Saved locally — server sync failed. Try again.', true);
+      } else {
+        if(!silent) flash('Saved & synced to server ✓');
+      }
+    })
+    .catch(function(e){
+      console.warn('[JCM] server sync error:',e);
+      if(!silent) flash('⚠ Saved locally — no server connection.', true);
+    });
+  }catch(_){}
+}
+// Fetch the latest content from the server on admin load so the admin always
+// sees the most recently published version regardless of which computer saved it.
+function _loadFromServer(cb){
+  try{
+    fetch('/api/journey-content',{cache:'no-store',credentials:'include'})
+      .then(function(r){
+        if(r.status===204){ cb(null); return; } // nothing published yet
+        if(!r.ok){ cb(null); return; }
+        return r.json();
+      })
+      .then(function(serverData){
+        if(!serverData||!serverData.scenes){ cb(null); return; }
+        cb(serverData);
+      })
+      .catch(function(){ cb(null); });
+  }catch(_){ cb(null); }
 }
 function markDirty(){ dirty = true; renderStatus(); }
 
@@ -707,6 +779,7 @@ function styleBlock(){
   '.jc-pano-hint{font-size:.62rem;color:var(--text-muted);margin-top:3px;font-family:Monaco,monospace}'+
   '.jc-audio-warn{font-size:.7rem;color:#ffb84a;background:rgba(255,184,74,.08);border:1px solid rgba(255,184,74,.3);padding:5px 8px;border-radius:4px;margin-bottom:5px;line-height:1.4}'+
   '.jc-audio-warn code{background:rgba(0,0,0,.25);padding:1px 5px;border-radius:3px;font-size:.66rem}'+
+  '.jc-audio-server-badge{font-size:.68rem;color:#5fd084;background:rgba(95,208,132,.08);border:1px solid rgba(95,208,132,.3);padding:3px 8px;border-radius:4px;margin-bottom:4px;line-height:1.4}'+
   '.jc-empty-lang{padding:10px;background:rgba(212,175,55,0.06);border:1px dashed rgba(212,175,55,0.3);border-radius:5px;font-size:.74rem;color:var(--text-muted);text-align:center;margin-bottom:9px}'+
   '.jc-empty-lang button{background:var(--gold);color:#1a1a2e;border:none;border-radius:4px;padding:4px 10px;font-size:.7rem;font-weight:600;cursor:pointer;margin-left:6px}'+
   /* Template chooser */
@@ -1002,7 +1075,9 @@ function bannerCard(b){
   var hasLang = b.text && b.text[lang];
   var t = hasLang ? b.text[lang] : {title:'',body:''};
   var a = (b.audio&&b.audio[lang])||'';
+  var aName = (b.audio&&b.audio[lang+'_name']) || (a && !a.startsWith('data:') ? a.replace(/.*[/\\]/,'').replace(/\?.*$/,'') : (a?'(base64)':''));
   var ac = (b.audioChain&&b.audioChain[lang])||'';
+  var acName = (b.audioChain&&b.audioChain[lang+'_name']) || (ac && !ac.startsWith('data:') ? ac.replace(/.*[/\\]/,'').replace(/\?.*$/,'') : (ac?'(base64)':''));
   var emptyHint = !hasLang ?
     '<div class="jc-empty-lang">No <strong>'+esc(lang)+'</strong> translation yet.<button data-jc="seed-lang-banner" data-id="'+esc(b.id)+'">Add '+esc(lang)+' fields</button></div>' : '';
   var triggerLabel = b.trigger||'';
@@ -1045,18 +1120,20 @@ function bannerCard(b){
     '<textarea data-jc-field="body" data-id="'+esc(b.id)+'" data-lang="'+esc(lang)+'"'+(hasLang?'':' disabled')+' placeholder="Type body text here.&#10;[ar] Arabic / dua text&#10;[tr] Translation&#10;---  (separator line)">'+esc(htmlToSimple(t.body))+'</textarea></div>'+
     '<div class="jc-row"><label>Audio file <small style="color:var(--gold)">['+esc(lang)+']</small></label>'+
       renderAudioPickerHint(lang)+
+      (a && a.startsWith('/api/journey-audio') ? '<div class="jc-audio-server-badge">☁ Server: <strong>'+esc(aName)+'</strong></div>' : '')+
       '<div class="jc-audio-grp">'+
-        '<input type="text" list="jc-audio-files-'+esc(lang)+'" data-jc-field="audio" data-id="'+esc(b.id)+'" data-lang="'+esc(lang)+'" value="'+esc(a)+'" placeholder="filename.mp3 or full URL"'+(hasLang?'':' disabled')+' autocomplete="off">'+
-        '<button data-jc="upload-audio" data-id="'+esc(b.id)+'" data-field="audio" title="Upload"><i class="fas fa-upload"></i></button>'+
+        '<input type="text" list="jc-audio-files-'+esc(lang)+'" data-jc-field="audio" data-id="'+esc(b.id)+'" data-lang="'+esc(lang)+'" value="'+esc(a.startsWith('/api/') ? aName : a)+'" placeholder="filename.mp3 or full URL"'+(hasLang?'':' disabled')+' autocomplete="off">'+
+        '<button data-jc="upload-audio" data-id="'+esc(b.id)+'" data-field="audio" title="Upload audio file"><i class="fas fa-upload"></i></button>'+
         (a?'<button data-jc="play-audio" data-file="'+esc(a)+'" title="Preview"><i class="fas fa-play"></i></button>':'')+
         (a?'<button data-jc="clear-audio" data-id="'+esc(b.id)+'" data-field="audio" title="Remove audio file (keeps text)" style="color:#ff6b78"><i class="fas fa-trash"></i></button>':'')+
       '</div>'+
     '</div>'+
     (b.trigger==='guide-screen-1' || b.trigger==='button' || b.audioChain ?
       '<div class="jc-row"><label>Chained audio</label>'+
+      (ac && ac.startsWith('/api/journey-audio') ? '<div class="jc-audio-server-badge">☁ Server: <strong>'+esc(acName)+'</strong></div>' : '')+
       '<div class="jc-audio-grp">'+
-        '<input type="text" list="jc-audio-files-'+esc(lang)+'" data-jc-field="audioChain" data-id="'+esc(b.id)+'" data-lang="'+esc(lang)+'" value="'+esc(ac)+'" placeholder="(optional) follow-up audio file" autocomplete="off">'+
-        '<button data-jc="upload-audio" data-id="'+esc(b.id)+'" data-field="audioChain" title="Upload"><i class="fas fa-upload"></i></button>'+
+        '<input type="text" list="jc-audio-files-'+esc(lang)+'" data-jc-field="audioChain" data-id="'+esc(b.id)+'" data-lang="'+esc(lang)+'" value="'+esc(ac.startsWith('/api/') ? acName : ac)+'" placeholder="(optional) follow-up audio file" autocomplete="off">'+
+        '<button data-jc="upload-audio" data-id="'+esc(b.id)+'" data-field="audioChain" title="Upload chained audio file"><i class="fas fa-upload"></i></button>'+
         (ac?'<button data-jc="play-audio" data-file="'+esc(ac)+'" title="Preview"><i class="fas fa-play"></i></button>':'')+
         (ac?'<button data-jc="clear-audio" data-id="'+esc(b.id)+'" data-field="audioChain" title="Remove chained audio file" style="color:#ff6b78"><i class="fas fa-trash"></i></button>':'')+
       '</div></div>' : '')+
@@ -1238,8 +1315,21 @@ function handleFieldEdit(el){
     b.text = b.text||{}; b.text[lang] = b.text[lang]||{title:'',body:''};
     b.text[lang][field] = field==='body' ? simpleToHtml(el.value) : el.value;
   }
-  else if(field==='audio'){ b.audio = b.audio||{}; b.audio[lang] = el.value; }
-  else if(field==='audioChain'){ b.audioChain = b.audioChain||{}; b.audioChain[lang] = el.value; }
+  else if(field==='audio'){
+    b.audio = b.audio||{};
+    // Don't overwrite a server URL with its own display name (input shows friendly name)
+    var curA = b.audio[lang]||'';
+    var curAName = b.audio[lang+'_name']||'';
+    if(el.value !== curAName) { b.audio[lang] = el.value; }
+    else if(!curA) { b.audio[lang] = el.value; }
+  }
+  else if(field==='audioChain'){
+    b.audioChain = b.audioChain||{};
+    var curAC = b.audioChain[lang]||'';
+    var curACName = b.audioChain[lang+'_name']||'';
+    if(el.value !== curACName) { b.audioChain[lang] = el.value; }
+    else if(!curAC) { b.audioChain[lang] = el.value; }
+  }
   else if(field==='buttonId'){ b.buttonId = el.value; }
   else if(field==='buttonLabel'){ b.buttonLabel = el.value; }
   else if(field==='continueAfter'){ b.continueAfter = el.checked; }
@@ -1465,14 +1555,32 @@ function uploadAudioFor(bannerId, field){
   inp.type='file'; inp.accept='audio/*';
   inp.onchange=function(){
     var f=inp.files[0]; if(!f) return;
-    if(f.size > 6*1024*1024){ if(!confirm('File is '+(f.size/1024/1024).toFixed(1)+' MB. Storing as base64 in localStorage may exceed quota. Continue?')) return; }
     var r=new FileReader();
     r.onload=function(){
       var sc=findScene(activeSceneKey); var b=findBanner(sc,bannerId); if(!b) return;
-      b[field] = b[field]||{};
-      b[field][activeLang] = r.result;
-      markDirty(); renderEditor();
-      flash('Audio uploaded — remember to Save');
+      flash('Uploading "'+f.name+'" to server…');
+      fetch('/api/journey-audio',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        credentials:'include',
+        body:JSON.stringify({filename:f.name, lang:activeLang, data:r.result})
+      })
+      .then(function(res){ return res.json(); })
+      .then(function(j){
+        if(!j.ok){ flash('Upload failed: '+(j.error||'unknown error'), true); return; }
+        var sc2=findScene(activeSceneKey); var b2=findBanner(sc2,bannerId); if(!b2) return;
+        b2[field] = b2[field]||{};
+        // Store the server URL so it works on every device.
+        // The original filename is embedded in the URL via the stored name
+        // and also kept in a _name sub-key for display in the admin UI.
+        b2[field][activeLang] = j.url;
+        b2[field][activeLang+'_name'] = j.originalName;
+        markDirty(); renderEditor();
+        flash('✓ "'+j.originalName+'" uploaded & saved to server');
+      })
+      .catch(function(e){
+        flash('Upload error: '+e.message, true);
+      });
     };
     r.readAsDataURL(f);
   };

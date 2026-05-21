@@ -41,3 +41,9 @@ pilgrimspath-vr/pilgrims path main/*.bak
 pilgrimspath-vr/pilgrims path main/**/*.bak
 # VR scene update sources (not for deployment)
 pilgrimspath-vr/pilgrims path main/updates/
+
+# === Server-generated content (written at runtime, VPS-only) ===
+data/journey-content.json
+data/audio/*
+!data/audio/.gitkeep
+!data/.gitkeep

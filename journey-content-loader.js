@@ -803,6 +803,9 @@ function boot(){
   // Journey Content Manager is available on ALL users' devices, not just the
   // admin's browser. If server returns a different list, reinject the switcher.
   _fetchServerLanguages();
+  // Fetch admin-published content from server so edits made in the admin
+  // dashboard on any computer are reflected on all devices immediately.
+  _fetchServerContent();
   try{
     var mo = new MutationObserver(function(){
       if(boot._t) return;
@@ -838,6 +841,31 @@ function _fetchServerLanguages(){
       .catch(function(){});
   }catch(_){}
 }
+
+/* Fetch admin-published content JSON from server so journey content edited on
+   any device (admin dashboard) is reflected for all visitors immediately.
+   If the server has a newer or equal seedVersion, it overrides localStorage. */
+function _fetchServerContent(){
+  try{
+    fetch('/api/journey-content', {cache:'no-store', credentials:'include'})
+      .then(function(r){ if(r.status===204||!r.ok) return null; return r.json(); })
+      .then(function(serverData){
+        if(!serverData||!serverData.scenes) return;
+        var localSeed  = (data && data.seedVersion) || 0;
+        var serverSeed = serverData.seedVersion     || 0;
+        // Use server data if it's at least as current (avoids falling back to
+        // stale local data after the admin publishes new content from any machine)
+        if(serverSeed >= localSeed){
+          data = serverData;
+          try{ localStorage.setItem(KEY, JSON.stringify(data)); }catch(_){}
+          // Re-arm scene audio so any newly loaded audio fields take effect
+          fireSceneLoad();
+        }
+      })
+      .catch(function(){});
+  }catch(_){}
+}
+
 if(document.readyState==='loading'){
   document.addEventListener('DOMContentLoaded', boot);
 } else { boot(); }
