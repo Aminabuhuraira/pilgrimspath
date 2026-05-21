@@ -4,3 +4,6 @@ capi-server.py
 netlify/
 .DS_Store
 node_modules/
+api/
+server.js
+ecosystem.config.js

@@ -7,6 +7,9 @@ banners, text, audio, panorama references, and button wiring.  All changes made
 through the admin dashboard are now **universal** — editing on any computer,
 any browser, propagates to every visitor of the experience.
 
+Separately, **user journey progress** is synced to the server so a logged-in user
+sees the same progress on any device they log in from.
+
 ---
 
 ## Architecture
@@ -25,6 +28,21 @@ journey-content-loader.js          Served via GET /api/journey-audio?file=<lang>
        │
        ▼
 All VR / journey pages (hajj-journey.html, umrah-journey.html, etc.)
+
+
+User Journey Progress (cross-device)
+──────────────────────────────────────
+journey-manager.js  (root + pilgrimspath-vr/)
+       │  saveState() called on every step/advance
+       ├──▶ localStorage.setItem('journeyState', ...)   ← instant, always available
+       └──▶ POST /api/user-progress                     ← async, fire-and-forget
+
+       │  loadState() called on page load
+       ├──▶ localStorage.getItem('journeyState')        ← phase 1: synchronous, fast
+       └──▶ GET /api/user-progress                      ← phase 2: async merge
+              │  (fires 'jm:synced' event when done)
+              ▼
+       dashboard.html  window._applyJourneyProgress()   ← re-runs on 'jm:synced'
 ```
 
 ---
@@ -197,3 +215,104 @@ The dashboard fetches the server version on load.  If the server has no content
 yet (`data/journey-content.json` doesn't exist), it returns 204 and the editor
 falls back to localStorage (which IS the source of truth until the first Save).
 Click **Save** once to push the current localStorage state to the server.
+
+---
+
+## User Journey Progress Sync
+
+### Overview
+
+Journey progress (`currentStep`, `currentContext`, `completedSteps`, plus the
+`pp_umrah_completed` flag) is persisted in Supabase via `api/user-progress.js`.
+A logged-in user with progress on device A will see the same progress on device B
+the moment they open the dashboard.
+
+### Database Table — `user_progress`
+
+Run the SQL in `supabase-setup.sql` (bottom section) in the Supabase SQL Editor
+to create the table before this feature is used.
+
+```sql
+user_progress (
+  user_id         UUID  PRIMARY KEY  -- Supabase auth.users.id
+  journey_state   JSONB             -- { currentStep, currentContext, completedSteps[] }
+  umrah_completed BOOLEAN
+  updated_at      TIMESTAMPTZ
+)
+```
+
+RLS is enabled.  Users can only read and write their own row.
+
+### API — `GET /api/user-progress`
+
+- **Auth**: `Authorization: Bearer <supabase-user-jwt>`
+- Returns `{ journey_state, umrah_completed }` — or **204** if no record yet.
+
+### API — `POST /api/user-progress`
+
+- **Auth**: `Authorization: Bearer <supabase-user-jwt>`
+- Body: `{ journey_state: { currentStep, currentContext, completedSteps }, umrah_completed }`
+- Upserts (merge-duplicate) the user's row.  Returns `{ ok: true }`.
+
+### How Sync Works in the Browser
+
+**On every step advance (`saveState()`):**
+```
+journey-manager.js
+  1. localStorage.setItem('journeyState', ...)    ← instant, never blocked
+  2. _pushToServer() — fire-and-forget POST        ← async, no await
+```
+
+**On every page load (`loadState()`):**
+```
+journey-manager.js
+  Phase 1 (sync):  read localStorage → populate this.currentStep etc.
+  Phase 2 (async): GET /api/user-progress
+    ├─ no JWT / 204 → do nothing
+    └─ server step > local step (or more completedSteps)
+         → override localStorage + instance
+         → dispatch window.CustomEvent('jm:synced', { detail: { didUpdate: true } })
+```
+
+**Dashboard re-render:**
+```
+dashboard.html
+  window._applyJourneyProgress()   ← runs immediately on page load (localStorage)
+  window.addEventListener('jm:synced', ...)
+    └─ if didUpdate → window._applyJourneyProgress()  ← re-runs with server data
+```
+
+### JWT Extraction (works without auth.js)
+
+VR scene pages (3DVista `index.htm` files) do not load `auth.js`.
+`_getJwt()` in `journey-manager.js` reads the Supabase token directly from
+storage using the key `sb-giftctxrqvlfekhzpcaa-auth-token`, so sync works in
+VR scenes too.
+
+### `pp_umrah_completed` Flag
+
+This boolean lives in localStorage and is set by various HTML pages.  Rather
+than modifying every page, the sync layer:
+- Reads it from localStorage and includes it in every POST
+- Writes it back to localStorage (on any device) when `umrah_completed: true` is
+  returned from the server
+
+### File Locations on the VPS
+
+| Path | Purpose |
+|---|---|
+| `/var/www/pilgrimspath/api/user-progress.js` | Progress read/write endpoint |
+| `/var/www/pilgrimspath/journey-manager.js` | Root journey manager (all HTML pages) |
+| `/var/www/pilgrimspath/pilgrimspath-vr/journey-manager.js` | VR scene journey manager |
+
+### Troubleshooting
+
+**Progress not syncing to another device**
+Check that the `user_progress` table has been created in Supabase (run the SQL
+in `supabase-setup.sql`).  Also check `pm2 logs pilgrimspath` for errors from
+`api/user-progress.js`.
+
+**Dashboard progress ring not updating after server sync**
+Open DevTools → Console.  You should see `[JourneyManager] Initialized` and the
+`jm:synced` event should fire ~1 second later.  If it doesn't, check the network
+tab for `/api/user-progress` — a 401 means the JWT wasn't found in storage.
