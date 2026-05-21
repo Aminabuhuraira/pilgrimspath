@@ -1,6 +1,8 @@
 ﻿// ═══ HAJJ JOURNEY STATE MANAGER ═══
 // Central source of truth for the 16-step Hajj journey
-// Manages navigation, progress tracking, and localStorage persistence
+// Manages navigation, progress tracking, and localStorage + server persistence.
+// Progress is synced to /api/user-progress (Supabase-backed) so a logged-in
+// user sees the same journey state on every device they log in from.
 
 (function(){
 
@@ -27,6 +29,90 @@ const HAJJ_JOURNEY = [
   {id: 16, step: 16, name: "Farewell Tawaf al-Wida'",     url: '/journey/tawaf/index.htm',              type: 'vr',   context: 'farewell'}
 ];
 
+// ─────────────────────────────────────────────────────────────
+// Server-sync helpers (gracefully degrade when not logged in)
+// ─────────────────────────────────────────────────────────────
+
+// Extract the Supabase session JWT from storage without requiring auth.js.
+// The Supabase client stores the token under 'sb-<projectRef>-auth-token'
+// in whichever storage was active when the user logged in.
+function _getJwt() {
+  try {
+    var key = 'sb-giftctxrqvlfekhzpcaa-auth-token';
+    var raw = (window.sessionStorage && window.sessionStorage.getItem(key))
+           || (window.localStorage   && window.localStorage.getItem(key));
+    if (!raw) return null;
+    var d = JSON.parse(raw);
+    // Handle both { access_token } and older { session: { access_token } } shapes
+    return d && (d.access_token || (d.session && d.session.access_token)) || null;
+  } catch (_) { return null; }
+}
+
+// POST current state to /api/user-progress (fire-and-forget).
+function _pushToServer(currentStep, currentContext, completedSteps) {
+  var jwt = _getJwt();
+  if (!jwt) return;
+  var umrahCompleted = false;
+  try { umrahCompleted = !!localStorage.getItem('pp_umrah_completed'); } catch (_) {}
+  var body = JSON.stringify({
+    journey_state: { currentStep: currentStep, currentContext: currentContext, completedSteps: completedSteps },
+    umrah_completed: umrahCompleted
+  });
+  fetch('/api/user-progress', {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt },
+    body: body
+  }).catch(function () {});
+}
+
+// GET saved state from /api/user-progress and merge into localStorage + instance.
+// Calls onDone(didUpdate) when finished (true = server had newer/more progress).
+function _pullFromServer(instance, onDone) {
+  var jwt = _getJwt();
+  if (!jwt) { if (onDone) onDone(false); return; }
+  fetch('/api/user-progress', {
+    credentials: 'include',
+    headers: { 'Authorization': 'Bearer ' + jwt }
+  })
+  .then(function (r) {
+    if (r.status === 204 || !r.ok) return null;
+    return r.json();
+  })
+  .then(function (data) {
+    if (!data || !data.journey_state) { if (onDone) onDone(false); return; }
+    var srv   = data.journey_state;
+    var srvStep = parseInt(srv.currentStep, 10) || 0;
+    var srvDone = Array.isArray(srv.completedSteps) ? srv.completedSteps : [];
+    var didUpdate = false;
+
+    // Adopt server state if it represents MORE progress (step is further,
+    // or same step but more completed steps recorded).
+    if (srvStep > instance.currentStep ||
+        (srvStep === instance.currentStep && srvDone.length > instance.completedSteps.length)) {
+      instance.currentStep    = srvStep;
+      instance.currentContext = srv.currentContext || '';
+      instance.completedSteps = srvDone;
+      try {
+        localStorage.setItem('journeyState', JSON.stringify({
+          currentStep:    instance.currentStep,
+          currentContext: instance.currentContext,
+          completedSteps: instance.completedSteps
+        }));
+      } catch (_) {}
+      didUpdate = true;
+    }
+
+    // Always restore umrah_completed flag if server says it's done
+    if (data.umrah_completed) {
+      try { localStorage.setItem('pp_umrah_completed', '1'); } catch (_) {}
+    }
+
+    if (onDone) onDone(didUpdate);
+  })
+  .catch(function () { if (onDone) onDone(false); });
+}
+
 // ── JourneyManager Class ──
 class JourneyManager {
   constructor(){
@@ -34,26 +120,49 @@ class JourneyManager {
   }
 
   loadState(){
-    // Load from localStorage
-    const saved = localStorage.getItem('journeyState');
-    if(saved){
-      const data = JSON.parse(saved);
-      this.currentStep = data.currentStep || 0;
-      this.currentContext = data.currentContext || '';
-      this.completedSteps = data.completedSteps || [];
-    } else {
-      this.currentStep = 0;
+    // Phase 1 — synchronous: populate from localStorage immediately so the UI
+    // is never blocked waiting for a network request.
+    try {
+      const saved = localStorage.getItem('journeyState');
+      if (saved) {
+        const data = JSON.parse(saved);
+        this.currentStep    = data.currentStep    || 0;
+        this.currentContext = data.currentContext || '';
+        this.completedSteps = data.completedSteps || [];
+      } else {
+        this.currentStep    = 0;
+        this.currentContext = '';
+        this.completedSteps = [];
+      }
+    } catch (_) {
+      this.currentStep    = 0;
       this.currentContext = '';
       this.completedSteps = [];
     }
+
+    // Phase 2 — async: fetch from server and override if server has more progress.
+    // Fires a 'jm:synced' event on window when complete so the dashboard (and
+    // any page that needs it) can re-render after server data arrives.
+    const self = this;
+    setTimeout(function () {
+      _pullFromServer(self, function (didUpdate) {
+        try {
+          var evt = new CustomEvent('jm:synced', { detail: { didUpdate: didUpdate } });
+          window.dispatchEvent(evt);
+        } catch (_) {}
+      });
+    }, 0);
   }
 
   saveState(){
-    localStorage.setItem('journeyState', JSON.stringify({
-      currentStep: this.currentStep,
+    const state = {
+      currentStep:    this.currentStep,
       currentContext: this.currentContext,
       completedSteps: this.completedSteps
-    }));
+    };
+    try { localStorage.setItem('journeyState', JSON.stringify(state)); } catch (_) {}
+    // Push to server asynchronously (no await — never blocks navigation)
+    _pushToServer(this.currentStep, this.currentContext, this.completedSteps);
   }
 
   getCurrentStep(){
@@ -134,7 +243,7 @@ class JourneyManager {
   }
 
   resetJourney(){
-    this.currentStep = 0;
+    this.currentStep    = 0;
     this.currentContext = '';
     this.completedSteps = [];
     this.saveState();
@@ -143,10 +252,10 @@ class JourneyManager {
 
   getJourneyProgress(){
     return {
-      currentStep: this.currentStep,
-      totalSteps: HAJJ_JOURNEY.length,
-      percentage: Math.round((this.currentStep / HAJJ_JOURNEY.length) * 100),
-      stepsRemaining: Math.max(0, HAJJ_JOURNEY.length - this.currentStep)
+      currentStep:      this.currentStep,
+      totalSteps:       HAJJ_JOURNEY.length,
+      percentage:       Math.round((this.currentStep / HAJJ_JOURNEY.length) * 100),
+      stepsRemaining:   Math.max(0, HAJJ_JOURNEY.length - this.currentStep)
     };
   }
 
@@ -166,3 +275,4 @@ if(typeof window !== 'undefined'){
 }
 
 })();
+

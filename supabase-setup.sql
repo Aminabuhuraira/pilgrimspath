@@ -270,6 +270,55 @@ CREATE POLICY "Anyone can read page_views"
 
 
 -- =============================================================
+-- Pilgrim's Path — User Progress Table (Cross-Device Sync)
+-- =============================================================
+-- Stores each user's journey progress so it is identical on
+-- any device they log in from.  Written by /api/user-progress
+-- (server-verified Supabase JWT).  A service-role key bypasses
+-- RLS for server writes; RLS policies below protect direct
+-- anon/authenticated access.
+-- =============================================================
+
+CREATE TABLE IF NOT EXISTS public.user_progress (
+    user_id         UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+    journey_state   JSONB    NOT NULL DEFAULT '{"currentStep":0,"currentContext":"","completedSteps":[]}'::jsonb,
+    umrah_completed BOOLEAN  NOT NULL DEFAULT false,
+    updated_at      TIMESTAMPTZ      DEFAULT NOW()
+);
+
+ALTER TABLE public.user_progress ENABLE ROW LEVEL SECURITY;
+
+-- Drop policies first so this script is safe to re-run
+DROP POLICY IF EXISTS "Users manage own progress" ON public.user_progress;
+DROP POLICY IF EXISTS "Users read own progress"   ON public.user_progress;
+DROP POLICY IF EXISTS "Users write own progress"  ON public.user_progress;
+
+-- Authenticated users may only read and write their own row
+CREATE POLICY "Users read own progress"
+    ON public.user_progress FOR SELECT
+    USING (auth.uid() = user_id);
+
+CREATE POLICY "Users write own progress"
+    ON public.user_progress FOR INSERT
+    WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users update own progress"
+    ON public.user_progress FOR UPDATE
+    USING (auth.uid() = user_id);
+
+-- Index for fast lookups (primary key is already indexed, but explicit for clarity)
+CREATE INDEX IF NOT EXISTS user_progress_user_id_idx ON public.user_progress (user_id);
+
+-- =============================================================
+-- ✅ user_progress table ready.
+-- Run /api/user-progress to read/write cross-device journey state.
+-- =============================================================
+
+
+
+
+
+-- =============================================================
 -- Pilgrim's Path — Admin Stats RPC Function
 -- =============================================================
 -- This SECURITY DEFINER function bypasses RLS and returns all

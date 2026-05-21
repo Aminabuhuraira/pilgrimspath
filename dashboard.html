@@ -778,9 +778,9 @@
     })();
     </script>
 
-    <!-- Journey progress restoration from localStorage -->
+    <!-- Journey progress restoration from localStorage (re-runs after server sync) -->
     <script>
-    (function(){
+    window._applyJourneyProgress = function() {
         var state = {};
         try { state = JSON.parse(localStorage.getItem('journeyState') || '{}'); } catch(e) {}
         var completedSteps = state.completedSteps || [];
@@ -944,7 +944,19 @@
                 contBtn.onclick = function(){ goToHajjCard(stepToDash[nextStep]); };
             }
         }
-    })();
+    };
+
+    // Run immediately (uses localStorage data available right now)
+    window._applyJourneyProgress();
+
+    // Re-run when journey-manager.js pulls fresher data from the server.
+    // This fires once per page load (after the async /api/user-progress fetch
+    // completes) and only if the server state was newer than what was in localStorage.
+    window.addEventListener('jm:synced', function (e) {
+        if (e.detail && e.detail.didUpdate) {
+            window._applyJourneyProgress();
+        }
+    });
     </script>
 
     <!-- Deferred analytics (non-blocking) -->
