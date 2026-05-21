@@ -1023,7 +1023,18 @@ function _renderBannerPage(){
     el.innerHTML='<div class="sceneBannerBody"><h3>'+_bannerPager.title+'</h3>'+_bannerPager.pages[_bannerPager.index]+'<button onclick="dismissBanner()">'+btn+'</button></div>';
     el.style.display='block';
 }
-function openBanner(title,html){
+function openBanner(title,html,template,pos){
+    var el=document.getElementById('sceneBanner');
+    if(el){
+        // Clear stale opacity/transform left by any previous showAdminBanner dismiss
+        el.style.opacity='';el.style.transform='';
+        // Clear stale template/position marker blocks
+        var s=el.getAttribute('style')||'';
+        s=s.replace(/\/\*PPTPL\*\/[\s\S]*?\/\*\/PPTPL\*\//g,'').replace(/\/\*PPPOS\*\/[\s\S]*?\/\*\/PPPOS\*\//g,'');
+        el.setAttribute('style',s);
+        // Apply JCM template/position if provided
+        if(template&&window.PPContent&&window.PPContent.applyTemplate){window.PPContent.applyTemplate('#sceneBanner',template,pos||{x:50,y:50});}
+    }
     _bannerPager.title=title;
     _bannerPager.pages=_splitBannerHtml(html);
     _bannerPager.index=0;
@@ -1169,7 +1180,7 @@ function chk(id, idx) {
   shown[id] = true; // mark BEFORE showing so re-entrant calls are blocked
 
   if (b && (b.title || b.html)) {
-    openBanner(b.title, b.html);
+    openBanner(b.title, b.html, b.template, b.position);
   }
   if (vo) playVO(vo);
 

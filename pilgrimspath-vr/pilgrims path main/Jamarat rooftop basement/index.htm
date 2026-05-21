@@ -788,7 +788,7 @@ transition:transform .15s;box-shadow:0 4px 12px rgba(201,168,76,0.32);align-self
 var _bannerPager={title:'',pages:[],index:0};
 function _splitBannerHtml(html){var segs=html.match(/<h3[\s\S]*?<\/h3>|<p[\s\S]*?<\/p>|<div class="sep"><\/div>|<br\s*\/?\s*>/gi)||[html];var pages=[];var cur=[];var chars=0;for(var i=0;i<segs.length;i++){var s=segs[i];var txt=s.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();var len=txt.length;if(cur.length&&(chars+len>620||cur.length>=6)){pages.push(cur.join(''));cur=[];chars=0;}cur.push(s);chars+=len;}if(cur.length)pages.push(cur.join(''));return pages.length?pages:[html];}
 function _renderBannerPage(){var el=document.getElementById('sceneBanner');if(!el)return;var isLast=_bannerPager.index>=_bannerPager.pages.length-1;var btn=isLast?'Continue \u25B8':'Next \u25B8';el.innerHTML='<div class="sceneBannerBody"><h3>'+_bannerPager.title+'</h3>'+_bannerPager.pages[_bannerPager.index]+'<button onclick="dismissBanner()">'+btn+'</button></div>';el.style.display='block';if(_bannerPager.index===0)setTimeout(function(){var _c=window._voChainPending;if(!_c||typeof playVO!=='function')return;if(window._voAudio&&!window._voAudio.ended)return;window._voChainPending=null;playVO(_c);},100);}
-function openBanner(title,html){_bannerPager.title=title;_bannerPager.pages=_splitBannerHtml(html);_bannerPager.index=0;_renderBannerPage();}
+function openBanner(title,html,template,pos){var el=document.getElementById('sceneBanner');if(el){el.style.opacity='';el.style.transform='';var s=el.getAttribute('style')||'';s=s.replace(/\/\*PPTPL\*\/[\s\S]*?\/\*\/PPTPL\*\//g,'').replace(/\/\*PPPOS\*\/[\s\S]*?\/\*\/PPPOS\*\//g,'');el.setAttribute('style',s);if(template&&window.PPContent&&window.PPContent.applyTemplate){window.PPContent.applyTemplate('#sceneBanner',template,pos||{x:50,y:50});}}  _bannerPager.title=title;_bannerPager.pages=_splitBannerHtml(html);_bannerPager.index=0;_renderBannerPage();}
 function dismissBanner(){if(_bannerPager.pages.length&&_bannerPager.index<_bannerPager.pages.length-1){_bannerPager.index++;_renderBannerPage();return;}_bannerPager={title:'',pages:[],index:0};document.getElementById('sceneBanner').style.display='none';if(window._voUnlockBound&&window._voAudio&&window._voAudio.paused&&!window._voAudio.ended&&typeof playVO==='function'){var _p=window._voPending;if(_p)playVO(_p);}}
 var _jbChk;
 (function(){
@@ -801,7 +801,7 @@ var BANNERS={
   html:'<p class="bb">You will now begin by stoning Jamarat al-Aqabah with seven pebbles, reciting with each throw:</p><p class="ba">Bismillahi Allahu Akbar</p>'}
 };
 var shown={};
-_jbChk=function(id){var b=BANNERS[id];if(!b||shown[id])return;shown[id]=true;if(b.title||b.html)openBanner(b.title,b.html);};
+_jbChk=function(id){var b=BANNERS[id];if(!b||shown[id])return;shown[id]=true;if(b.title||b.html)openBanner(b.title,b.html,b.template,b.position);};
 setTimeout(function(){_jbChk('panorama_6F591A67_7C4B_CD8A_41C0_0DCF04356022');},2500);
 })();
 </script>
