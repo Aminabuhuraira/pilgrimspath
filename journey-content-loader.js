@@ -166,7 +166,8 @@ function langFolder(code){
 }
 function audioUrl(file, optLang){
   if(!file) return '';
-  if(/^(https?:|data:|blob:)/i.test(file)) return file;
+  // Pass through absolute URLs and server-relative paths (e.g. uploaded /api/journey-audio/...)
+  if(/^(https?:|data:|blob:)/i.test(file) || /^\//.test(file)) return file;
   var folder = langFolder(optLang || lang);
   return AUDIO_BASE_ROOT + folder.split('/').filter(Boolean).map(encodeURIComponent).join('/') + '/' + encodeURIComponent(file);
 }
@@ -790,6 +791,7 @@ function fireSceneLoad(){
   if(audio){
     // Mark so first-interaction handler doesn't fire again
     window._welcomeVoStarted = true;
+    window._ppSceneLoadAudioPlayed = true;
     ppPlayVOAuto(audio);
   }
 }
@@ -861,8 +863,20 @@ function _fetchServerContent(){
         if(serverSeed >= localSeed){
           data = serverData;
           try{ localStorage.setItem(KEY, JSON.stringify(data)); }catch(_){}
-          // Re-arm scene audio so any newly loaded audio fields take effect
-          fireSceneLoad();
+          // Re-arm scene audio so any newly loaded audio fields take effect.
+          // If the banner hasn't shown yet, fireSceneLoad handles everything.
+          // If the banner was already shown (from local cache) but had no audio,
+          // the _ppSceneLoadFired guard blocks fireSceneLoad — so we check directly
+          // and play the audio that the server just delivered.
+          var _freshB = getSceneLoadBanner();
+          var _freshAudio = _freshB && audioFile(_freshB);
+          if(!window._ppSceneLoadFired){
+            fireSceneLoad();
+          } else if(_freshAudio && !window._ppSceneLoadAudioPlayed){
+            window._ppSceneLoadAudioPlayed = true;
+            window._welcomeVoStarted = true;
+            ppPlayVOAuto(_freshAudio);
+          }
           // Re-apply JCM text to any hardcoded guide overlays (e.g. Tawaf ihramGuide)
           if(typeof window._ppGuideContentRefresh === 'function') window._ppGuideContentRefresh();
         }
