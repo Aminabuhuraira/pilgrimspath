@@ -651,7 +651,7 @@ function currentLangFolder(){
   if(f && !/\/$/.test(f)) f += '/';
   return f;
 }
-function audioUrl(file){ if(!file) return ''; if(/^(https?:|data:|blob:)/i.test(file)) return file; return AUDIO_BASE_ROOT + currentLangFolder().split('/').filter(Boolean).map(encodeURIComponent).join('/') + (currentLangFolder()?'/':'') + encodeURIComponent(file); }
+function audioUrl(file){ if(!file) return ''; if(/^(https?:|data:|blob:)/i.test(file) || /^\//.test(file)) return file; return AUDIO_BASE_ROOT + currentLangFolder().split('/').filter(Boolean).map(encodeURIComponent).join('/') + (currentLangFolder()?'/':'') + encodeURIComponent(file); }
 function injectTplCss(tplId){
   if(injectedTplCss[tplId]) return;
   var t = BANNER_TEMPLATES[tplId]; if(!t) return;
@@ -855,7 +855,7 @@ function bindShell(){
     else if(act==='add-banner'){ addBanner(); }
     else if(act==='del-banner'){ delBanner(btn.getAttribute('data-id')); }
     else if(act==='dup-banner'){ dupBanner(btn.getAttribute('data-id')); }
-    else if(act==='play-audio'){ playPreview(btn.getAttribute('data-file')); }
+    else if(act==='play-audio'){ playPreview(btn.getAttribute('data-file'), btn); }
     else if(act==='upload-audio'){ uploadAudioFor(btn.getAttribute('data-id'), btn.getAttribute('data-field')); }
     else if(act==='clear-audio'){ clearAudioFor(btn.getAttribute('data-id'), btn.getAttribute('data-field')); }
     else if(act==='seed-lang-banner'){ seedLangForBanner(btn.getAttribute('data-id')); }
@@ -1598,12 +1598,47 @@ function clearAudioFor(bannerId, field){
   markDirty(); save(); renderEditor();
   flash('Audio file removed');
 }
-function playPreview(file){
+function _jcSetPlayIcon(btn, playing){
+  if(!btn) return;
+  var ic = btn.querySelector('i'); if(!ic) return;
+  ic.className = playing ? 'fas fa-pause' : 'fas fa-play';
+}
+function playPreview(file, triggerBtn){
   if(!file) return;
-  if(window._jcPreview){window._jcPreview.pause();}
-  var a = new Audio(audioUrl(file));
+  var url = audioUrl(file);
+  // Same audio already loaded — toggle pause/resume
+  if(window._jcPreview && window._jcPreviewUrl === url){
+    if(!window._jcPreview.paused){
+      window._jcPreview.pause();
+      _jcSetPlayIcon(window._jcPreviewBtn, false);
+    } else {
+      window._jcPreview.play().catch(function(e){ flash('Audio playback failed: '+e.message, true); });
+      _jcSetPlayIcon(window._jcPreviewBtn, true);
+    }
+    return;
+  }
+  // Different file — stop whatever is playing
+  if(window._jcPreview){
+    window._jcPreview.pause();
+    _jcSetPlayIcon(window._jcPreviewBtn, false);
+    window._jcPreview = null;
+  }
+  var a = new Audio(url);
   window._jcPreview = a;
-  a.play().catch(function(e){ flash('Audio playback failed: '+e.message, true); });
+  window._jcPreviewUrl = url;
+  window._jcPreviewBtn = triggerBtn || null;
+  _jcSetPlayIcon(triggerBtn, true);
+  a.onended = function(){
+    _jcSetPlayIcon(window._jcPreviewBtn, false);
+    window._jcPreviewUrl = null;
+    window._jcPreviewBtn = null;
+  };
+  a.play().catch(function(e){
+    _jcSetPlayIcon(triggerBtn, false);
+    window._jcPreviewUrl = null;
+    window._jcPreviewBtn = null;
+    flash('Audio playback failed: '+e.message, true);
+  });
 }
 
 /* ─── Export ─── */
