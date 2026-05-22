@@ -45,4 +45,4 @@ panorama_73DA460C_7349_ED24_41D8_12878DA30034.label = VID_20260217_112855_00_421
 ### Description
 
 ### Title
-tour.name = Mina tents  (Duplicated)
+tour.name = Mina

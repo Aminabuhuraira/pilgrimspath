@@ -50,4 +50,4 @@ panorama_84B7D642_8BDC_C602_41C1_2E46B09DA139.label = VID_20260217_140155_00_507
 ### Description
 
 ### Title
-tour.name = Arafah (Duplicated)
+tour.name = Arafah

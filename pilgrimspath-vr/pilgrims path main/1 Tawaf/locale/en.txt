@@ -66,4 +66,4 @@ panorama_7F9209F0_71D8_66D3_41BA_B1BDEA583A8F.label = st1
 ### Description
 
 ### Title
-tour.name = tawaf area (Duplicated)
+tour.name = Tawaf

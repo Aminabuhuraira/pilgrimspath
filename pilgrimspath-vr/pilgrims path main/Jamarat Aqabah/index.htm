@@ -274,7 +274,7 @@ const JAMAR_PANORAMAS = {
 const PILLAR_TARGET = {
   small:  { yaw: -82.55, tolerance: 18 },
   medium: { yaw: 48.15,  tolerance: 18 },
-  large:  { yaw: -47.85, tolerance: 18 }   // tight cone &mdash; must actually face the pillar
+  large:  { yaw: -47.85, tolerance: 30 }   // Aqabah pillar — recalibrate with Save-Yaw button if still off
 };
 
 // State
@@ -391,7 +391,7 @@ function checkPanorama(panoramaId) {
     glow.style.display = 'block';
     arrow.style.display = 'block';
     aimHint.style.display = 'block';
-    debugYaw.style.display = 'none';
+    debugYaw.style.display = 'block';
     throwLabel.textContent = '(' + jamarState[pillar] + '/7)';
     updateAimState();
   } else if (pillar && jamarState[pillar] >= 7) {
@@ -724,6 +724,33 @@ function pollYaw() {
 // Init
 updateHUD();
 setTimeout(pollYaw, 2000);
+
+// --- YAW CALIBRATION HELPER ---
+// Navigate to face a pillar, then press "Save Yaw" to capture the calibrated angle.
+// The snippet is logged to console and shown on screen. Paste the value back into PILLAR_TARGET.
+(function(){
+  var btn = document.createElement('button');
+  btn.id = 'jamarCalibBtn';
+  btn.textContent = '🧭 Save Yaw';
+  btn.style.cssText = 'position:fixed;top:8px;left:230px;z-index:99999;background:#1a1a2e;color:#C9A84C;border:1px solid #C9A84C;border-radius:6px;padding:8px 14px;font-family:monospace;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.6)';
+  btn.title = 'Capture current yaw for this panorama (Aqabah calibration)';
+  document.body.appendChild(btn);
+  var toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;top:50px;left:230px;z-index:99999;background:#0f6b2c;color:#fff;padding:8px 14px;border-radius:6px;font-family:monospace;font-size:12px;display:none;max-width:520px;box-shadow:0 4px 16px rgba(0,0,0,.5)';
+  document.body.appendChild(toast);
+  btn.addEventListener('click', function(){
+    var pid = (typeof lastPanoId === 'string' && lastPanoId) ? lastPanoId : '(enter a Jamarat panorama first)';
+    var pillar = (typeof JAMAR_PANORAMAS !== 'undefined' && JAMAR_PANORAMAS[pid]) || 'large';
+    var y = (typeof currentYaw === 'number') ? currentYaw.toFixed(2) : '0';
+    var snippet = "  " + pillar + ":  { yaw: " + y + ", tolerance: 30 },  // Aqabah from panorama " + pid.slice(-8);
+    var msg = snippet;
+    try { navigator.clipboard.writeText(snippet); msg = '✓ copied: ' + snippet; } catch(e){}
+    console.log('[JamaratCalib-Aqabah]', snippet);
+    toast.textContent = msg;
+    toast.style.display = 'block';
+    setTimeout(function(){ toast.style.display = 'none'; }, 5000);
+  });
+})();
 </script>
 
 <!-- --- Scene Guide Banners --- -->
