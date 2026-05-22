@@ -262,19 +262,16 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ro
 // NOTE: 10th-day Rami is at Aqabah pillar ONLY. All panoramas in this scene
 // are mapped to 'large' so any throw counts toward Aqabah.
 const JAMAR_PANORAMAS = {
-  'panorama_691BD7D8_7C54_C286_41D8_87DAB3A1DC93': 'large',
-  'panorama_691BD070_7C54_DD86_41D9_025F4E408EDC': 'large',
-  'panorama_691B992A_7C54_CF9A_41A0_CFAD0184B4D8': 'large',
+  // Calibrated 2026-05-22 — only the facing panorama triggers the throw UI
   'panorama_691B217E_7C54_3E7A_41D3_35A255D72204': 'large'
 };
 
 // -- TARGET YAW for each pillar (degrees) --
-// The yaw angle where the pillar is visible in each panorama
-// Tolerance = how many degrees off-center is still accepted
+// Calibrated 2026-05-22 via in-scene Save Yaw button
 const PILLAR_TARGET = {
   small:  { yaw: -82.55, tolerance: 18 },
   medium: { yaw: 48.15,  tolerance: 18 },
-  large:  { yaw: -47.85, tolerance: 30 }   // Aqabah pillar — recalibrate with Save-Yaw button if still off
+  large:  { yaw: -91.58, tolerance: 30 }  // Aqabah pillar — panorama 35A255D72204
 };
 
 // State
@@ -391,7 +388,7 @@ function checkPanorama(panoramaId) {
     glow.style.display = 'block';
     arrow.style.display = 'block';
     aimHint.style.display = 'block';
-    debugYaw.style.display = 'block';
+    debugYaw.style.display = 'none';
     throwLabel.textContent = '(' + jamarState[pillar] + '/7)';
     updateAimState();
   } else if (pillar && jamarState[pillar] >= 7) {
@@ -724,33 +721,6 @@ function pollYaw() {
 // Init
 updateHUD();
 setTimeout(pollYaw, 2000);
-
-// --- YAW CALIBRATION HELPER ---
-// Navigate to face a pillar, then press "Save Yaw" to capture the calibrated angle.
-// The snippet is logged to console and shown on screen. Paste the value back into PILLAR_TARGET.
-(function(){
-  var btn = document.createElement('button');
-  btn.id = 'jamarCalibBtn';
-  btn.textContent = '🧭 Save Yaw';
-  btn.style.cssText = 'position:fixed;top:8px;left:230px;z-index:99999;background:#1a1a2e;color:#C9A84C;border:1px solid #C9A84C;border-radius:6px;padding:8px 14px;font-family:monospace;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.6)';
-  btn.title = 'Capture current yaw for this panorama (Aqabah calibration)';
-  document.body.appendChild(btn);
-  var toast = document.createElement('div');
-  toast.style.cssText = 'position:fixed;top:50px;left:230px;z-index:99999;background:#0f6b2c;color:#fff;padding:8px 14px;border-radius:6px;font-family:monospace;font-size:12px;display:none;max-width:520px;box-shadow:0 4px 16px rgba(0,0,0,.5)';
-  document.body.appendChild(toast);
-  btn.addEventListener('click', function(){
-    var pid = (typeof lastPanoId === 'string' && lastPanoId) ? lastPanoId : '(enter a Jamarat panorama first)';
-    var pillar = (typeof JAMAR_PANORAMAS !== 'undefined' && JAMAR_PANORAMAS[pid]) || 'large';
-    var y = (typeof currentYaw === 'number') ? currentYaw.toFixed(2) : '0';
-    var snippet = "  " + pillar + ":  { yaw: " + y + ", tolerance: 30 },  // Aqabah from panorama " + pid.slice(-8);
-    var msg = snippet;
-    try { navigator.clipboard.writeText(snippet); msg = '✓ copied: ' + snippet; } catch(e){}
-    console.log('[JamaratCalib-Aqabah]', snippet);
-    toast.textContent = msg;
-    toast.style.display = 'block';
-    setTimeout(function(){ toast.style.display = 'none'; }, 5000);
-  });
-})();
 </script>
 
 <!-- --- Scene Guide Banners --- -->
@@ -935,12 +905,7 @@ setTimeout(function(){_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},
   window.journeyActivityLabel = 'Throw all 7 stones at Jamrah al-\u02bbAqabah';
   window.journeyActivityComplete = false;
 
-  // Widen the large-pillar tolerance so BOTH visible stoning areas in this panorama count
-  // (the new Aqabah panorama shows two valid stoning bays &mdash; left and right of the pillar)
-  if(typeof PILLAR_TARGET!=='undefined' && PILLAR_TARGET.large){
-    PILLAR_TARGET.large.yaw = -47.85;
-    PILLAR_TARGET.large.tolerance = 110; // covers both stoning spots
-  }
+  // YAW calibrated 2026-05-22 — single panorama, single target angle
 
   function reduceAqabahAmbientGain(retries){
     retries=retries||0;

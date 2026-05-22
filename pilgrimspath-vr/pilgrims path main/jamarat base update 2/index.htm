@@ -247,20 +247,20 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ba
 // ====== JAMARAT STONE THROWING SYSTEM (BASE LEVEL) ======
 // Panorama IDs that face the Jamarat pillars (base level)
 const JAMAR_PANORAMAS = {
-  // VID_20260217_113534_00_425 (14-14-15) � Small pillar (Sughra)
+  // VID_20260217_113534_00_425 (14-14-15) — Small pillar (Sughra)
   'panorama_6F591FE4_7C4C_428E_41D7_A32CBCFD088E': 'small',
-  // VID_20260217_113948_00_430 (14-20-18) � Medium pillar (Wusta)
+  // VID_20260217_113948_00_430 (14-20-18) — Medium pillar (Wusta)
   'panorama_6F59F27A_7C4C_427A_41D0_44DDEFCC0BC1': 'medium',
-  // VID_20260217_114336_00_433 (14-22-46) � Large pillar (Aqaba)
-  'panorama_6F595EB7_7C4C_C28A_4188_BA3415271B80': 'large'
+  // VID_20260217_114336_00_433 (14-22-46) — Large pillar (Aqaba)
+  'panorama_6F5AA626_7C4C_C58A_41D3_2319D74A1D3A': 'large'
 };
 
 // -- TARGET YAW for each pillar (degrees) --
-// Calibrated 2026-05-01 via in-scene Save Yaw button.
+// Calibrated 2026-05-22 via in-scene Save Yaw button.
 const PILLAR_TARGET = {
-  small:  { yaw: -101.86, tolerance: 25 },  // looking at small pillar from 6F591FE4
-  medium: { yaw: -76.47,  tolerance: 25 },  // looking at medium pillar from 6F59F27A
-  large:  { yaw: -88.04,  tolerance: 25 }   // looking at large (Aqaba) pillar from 6F595EB7
+  small:  { yaw: -100.47, tolerance: 25 },  // looking at small pillar from 6F591FE4
+  medium: { yaw: -76.32,  tolerance: 25 },  // looking at medium pillar from 6F59F27A
+  large:  { yaw: -87.59,  tolerance: 25 }   // looking at large (Aqaba) pillar from 6F5AA626
 };
 
 // State (per-scene key so step 9 / 13 / 15 each have independent counts)
@@ -399,7 +399,7 @@ function checkPanorama(panoramaId) {
     glow.style.display = 'block';
     arrow.style.display = 'block';
     aimHint.style.display = 'block';
-    debugYaw.style.display = 'block';
+    debugYaw.style.display = 'none';
     throwLabel.textContent = '(' + jamarState[pillar] + '/7)';
     updateAimState();
   } else if (pillar && jamarState[pillar] >= 7) {
@@ -413,8 +413,7 @@ function checkPanorama(panoramaId) {
     glow.style.display = 'none';
     arrow.style.display = 'none';
     aimHint.style.display = 'none';
-    // Keep debug yaw visible so panorama ID is always readable for calibration
-    debugYaw.style.display = 'block';
+    debugYaw.style.display = 'none';
   }
 
 }
@@ -537,7 +536,7 @@ function resetJamarat() {
     glow.style.display = 'block';
     arrow.style.display = 'block';
     aimHint.style.display = 'block';
-    debugYaw.style.display = 'block';
+    debugYaw.style.display = 'none';
     throwLabel.textContent = '(0/7)';
     updateAimState();
   }
@@ -719,33 +718,6 @@ function pollYaw() {
 // Init
 updateHUD();
 setTimeout(pollYaw, 2000);
-
-// --- YAW CALIBRATION HELPER ---
-// Press the floating button while looking at a pillar to capture its yaw.
-// The snippet is copied to clipboard � paste back to the developer.
-(function(){
-  var btn = document.createElement('button');
-  btn.id = 'jamarCalibBtn';
-  btn.textContent = '🧭 Save Yaw';
-  btn.style.cssText = 'position:fixed;top:8px;left:230px;z-index:99999;background:#1a1a2e;color:#C9A84C;border:1px solid #C9A84C;border-radius:6px;padding:8px 14px;font-family:monospace;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.6)';
-  btn.title = 'Capture current yaw for this panorama';
-  document.body.appendChild(btn);
-  var toast = document.createElement('div');
-  toast.style.cssText = 'position:fixed;top:50px;left:230px;z-index:99999;background:#0f6b2c;color:#fff;padding:8px 14px;border-radius:6px;font-family:monospace;font-size:12px;display:none;max-width:520px;box-shadow:0 4px 16px rgba(0,0,0,.5)';
-  document.body.appendChild(toast);
-  btn.addEventListener('click', function(){
-    var pid = (typeof lastPanoId === 'string' && lastPanoId) ? lastPanoId : '(unknown panorama � enter a Jamarat panorama first)';
-    var pillar = (typeof JAMAR_PANORAMAS !== 'undefined' && JAMAR_PANORAMAS[pid]) || (typeof currentPillar !== 'undefined' && currentPillar) || 'unknown';
-    var y = (typeof currentYaw === 'number') ? currentYaw.toFixed(2) : '0';
-    var snippet = "  '" + pid + "': { yaw: " + y + ", tolerance: 25 },  // " + pillar + " pillar";
-    var msg = snippet;
-    try { navigator.clipboard.writeText(snippet); msg = '? copied: ' + snippet; } catch(e){}
-    console.log('[JamaratCalib]', snippet);
-    toast.textContent = msg;
-    toast.style.display = 'block';
-    setTimeout(function(){ toast.style.display = 'none'; }, 4000);
-  });
-})();
 </script>
 
 <!-- --- Scene Guide Banners --- -->

@@ -264,21 +264,27 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ro
 // ====== JAMARAT STONE THROWING SYSTEM ======
 // Panorama IDs that face the Jamarat pillars
 const JAMAR_PANORAMAS = {
-  // Panorama 1: VID_20260217_121959_00_480 (14-44-20)
+  // Jamarat Al-Ula (small)
   'panorama_92A5C87D_8C55_D2F6_41BD_CABD1E84B587': 'small',
-  // Panorama 2: missing area VID_20260217_121557_00_475 (16-31-07)
+  // Jamarat Al-Wusta (medium)
   'panorama_91BCCD88_8C4C_721C_41D8_71D5CA4654E5': 'medium',
-  // Panorama 3: VID_20260217_115635_00_436 (14-35-01)
-  'panorama_691B217E_7C54_3E7A_41D3_35A255D72204': 'large'
+  // Jamarat Al-Aqabah (large) — two viewpoints, each with its own target yaw
+  'panorama_691B217E_7C54_3E7A_41D3_35A255D72204': 'large',
+  'panorama_691BD070_7C54_DD86_41D9_025F4E408EDC': 'large'
+};
+
+// Per-panorama yaw override for panoramas of the same pillar viewed from different angles
+const PANO_YAW_OVERRIDE = {
+  'panorama_691B217E_7C54_3E7A_41D3_35A255D72204': -93.22,
+  'panorama_691BD070_7C54_DD86_41D9_025F4E408EDC': -136.47
 };
 
 // -- TARGET YAW for each pillar (degrees) --
-// The yaw angle where the pillar is visible in each panorama
-// Tolerance = how many degrees off-center is still accepted
+// Calibrated 2026-05-22 via in-scene Save Yaw button
 const PILLAR_TARGET = {
-  small:  { yaw: -82.55, tolerance: 25 },  // recalibrate with Save-Yaw button if off
-  medium: { yaw: 48.15,  tolerance: 25 },  // recalibrate with Save-Yaw button if off
-  large:  { yaw: -47.85, tolerance: 30 }   // recalibrate with Save-Yaw button if off
+  small:  { yaw: -82.33, tolerance: 25 },  // Ula pillar
+  medium: { yaw: 12.48,  tolerance: 25 },  // Wusta pillar
+  large:  { yaw: -93.22, tolerance: 30 }   // Aqabah pillar (default; overridden per panorama)
 };
 
 // State
@@ -389,6 +395,10 @@ function checkPanorama(panoramaId) {
   if(typeof _jbChk==='function') _jbChk(panoramaId);
   const pillar = JAMAR_PANORAMAS[panoramaId] || null;
   currentPillar = pillar;
+  // Apply per-panorama yaw override (same pillar viewed from different angles)
+  if(pillar && PANO_YAW_OVERRIDE[panoramaId] !== undefined){
+    PILLAR_TARGET[pillar].yaw = PANO_YAW_OVERRIDE[panoramaId];
+  }
   const total = jamarState.small + jamarState.medium + jamarState.large;
 
   // HUD is always visible on all Jamarat panoramas
@@ -401,7 +411,7 @@ function checkPanorama(panoramaId) {
     glow.style.display = 'block';
     arrow.style.display = 'block';
     aimHint.style.display = 'block';
-    debugYaw.style.display = 'block';
+    debugYaw.style.display = 'none';
     throwLabel.textContent = '(' + (jamarState[pillar] + 1) + '/7)';
     updateAimState();
   } else if (pillar && jamarState[pillar] >= 7) {
@@ -734,33 +744,6 @@ function pollYaw() {
 // Init
 updateHUD();
 setTimeout(pollYaw, 2000);
-
-// --- YAW CALIBRATION HELPER ---
-// Navigate to face each pillar, then press "Save Yaw" to capture the calibrated angle.
-// The snippet is logged to console and shown on screen. Paste the value back into PILLAR_TARGET.
-(function(){
-  var btn = document.createElement('button');
-  btn.id = 'jamarCalibBtn';
-  btn.textContent = '\uD83E\uDDED Save Yaw';
-  btn.style.cssText = 'position:fixed;top:8px;left:230px;z-index:99999;background:#1a1a2e;color:#C9A84C;border:1px solid #C9A84C;border-radius:6px;padding:8px 14px;font-family:monospace;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.6)';
-  btn.title = 'Capture current yaw for this panorama (Rooftop calibration)';
-  document.body.appendChild(btn);
-  var toast = document.createElement('div');
-  toast.style.cssText = 'position:fixed;top:50px;left:230px;z-index:99999;background:#0f6b2c;color:#fff;padding:8px 14px;border-radius:6px;font-family:monospace;font-size:12px;display:none;max-width:520px;box-shadow:0 4px 16px rgba(0,0,0,.5)';
-  document.body.appendChild(toast);
-  btn.addEventListener('click', function(){
-    var pid = (typeof lastPanoId === 'string' && lastPanoId) ? lastPanoId : '(enter a Jamarat panorama first)';
-    var pillar = (typeof JAMAR_PANORAMAS !== 'undefined' && JAMAR_PANORAMAS[pid]) || (typeof currentPillar !== 'undefined' && currentPillar) || 'unknown';
-    var y = (typeof currentYaw === 'number') ? currentYaw.toFixed(2) : '0';
-    var snippet = "  '" + pid + "': " + pillar + " \u2192 yaw: " + y + " | PILLAR_TARGET." + pillar + ".yaw = " + y;
-    var msg = snippet;
-    try { navigator.clipboard.writeText(snippet); msg = '\u2713 copied: ' + snippet; } catch(e){}
-    console.log('[JamaratCalib-Rooftop]', snippet);
-    toast.textContent = msg;
-    toast.style.display = 'block';
-    setTimeout(function(){ toast.style.display = 'none'; }, 5000);
-  });
-})();
 </script>
 
 <!-- --- Scene Guide Banners --- -->
