@@ -144,8 +144,7 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ba
 }
 #jamarThrowBtn.disabled:hover{transform:translateX(-50%) scale(1);box-shadow:0 4px 24px rgba(201,168,76,0.3);}
 
-/* Debug yaw display (HIDDEN � calibration complete) */
-#jamarDebugYaw, #jamarCalibBtn{ display:none !important; }
+/* Debug yaw display (RE-ENABLED for re-calibration) */
 #jamarDebugYaw{
   display:block; position:fixed; top:8px; left:8px; z-index:99999;
   font-family:monospace; font-size:14px; color:#C9A84C;
@@ -414,7 +413,8 @@ function checkPanorama(panoramaId) {
     glow.style.display = 'none';
     arrow.style.display = 'none';
     aimHint.style.display = 'none';
-    debugYaw.style.display = 'none';
+    // Keep debug yaw visible so panorama ID is always readable for calibration
+    debugYaw.style.display = 'block';
   }
 
 }
