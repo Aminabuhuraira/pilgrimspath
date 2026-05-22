@@ -211,6 +211,14 @@
         .ihram-col-niyyah .ihram-arabic { font-size: 1.15rem; margin: 5px 0 3px; }
         .ihram-col-niyyah .ihram-translit { font-size: 0.76rem; }
         .ihram-col-niyyah .ihram-translation { font-size: 0.76rem; }
+        /* JCM-injected body — matches guide card styling */
+        .jcm-guide-body { margin-top: 6px; }
+        .jcm-guide-body .bb { color: #1a1a2e; font-size: 0.88rem; line-height: 1.6; margin: 4px 0; display: block; }
+        .jcm-guide-body .ba { color: #C9A227; font-family: 'Amiri', Georgia, serif; font-size: 1.08rem; direction: rtl; display: block; text-align: center; margin: 8px 0 3px; line-height: 1.5; }
+        .jcm-guide-body .bt { color: rgba(26,26,46,0.6); font-style: italic; font-size: 0.78rem; display: block; margin: 2px 0 6px; }
+        .jcm-guide-body ul { list-style: none; padding: 0; margin: 4px 0; }
+        .jcm-guide-body li { font-size: 0.88rem; color: #1a1a2e; padding: 3px 0; line-height: 1.5; }
+        .jcm-guide-body strong { color: #C9A227; }
 
         /* Step indicator dots */
         .ihram-dots {
@@ -950,6 +958,82 @@
         // Trigger first banner check after Ihram guide dismisses
         setTimeout(function(){ if(typeof _bannerChk==='function') _bannerChk(_bannerFirstId); }, 1200);
     }
+
+    /* ─── Apply JCM text to Ihram guide card steps ─────────────────────────
+       The #ihramGuide HTML is hardcoded. This reads the Journey Content
+       Manager text for each guide step via PPContent.byId() and injects
+       it into the DOM so the admin can edit it from the dashboard.
+       Called on load AND after async server content arrives. */
+    function _applyJCMToGuide(){
+      if(!window.PPContent || typeof window.PPContent.byId !== 'function') return;
+      var SK = 'tawaf-initial';
+
+      // Step 0 — Welcome
+      (function(){
+        var b = window.PPContent.byId(SK,'tw-guide-0'); if(!b) return;
+        var s = document.querySelector('.ihram-step[data-step="0"]'); if(!s) return;
+        if(b.title){ var h=s.querySelector('.ihram-heading'); if(h) h.textContent=b.title; }
+        if(b.html){
+          var a=s.querySelector('.jcm-guide-body');
+          if(!a){
+            a=document.createElement('div'); a.className='jcm-guide-body';
+            var dv=s.querySelector('.ihram-divider');
+            if(dv) dv.insertAdjacentElement('afterend',a);
+            else s.querySelector('.ihram-btns').insertAdjacentElement('beforebegin',a);
+            s.querySelectorAll('.ihram-body,.ihram-dua').forEach(function(el){el.style.display='none';});
+          }
+          a.innerHTML=b.html;
+        }
+      })();
+
+      // Step 1 — Cleansing & Garments
+      (function(){
+        var b = window.PPContent.byId(SK,'tw-guide-1'); if(!b) return;
+        var s = document.querySelector('.ihram-step[data-step="1"]'); if(!s) return;
+        if(b.title){ var h=s.querySelector('.ihram-heading'); if(h) h.textContent=b.title; }
+        if(b.html){
+          var a=s.querySelector('.jcm-guide-body');
+          if(!a){
+            a=document.createElement('div'); a.className='jcm-guide-body';
+            var dv=s.querySelector('.ihram-divider');
+            if(dv) dv.insertAdjacentElement('afterend',a);
+            else s.querySelector('.ihram-btns').insertAdjacentElement('beforebegin',a);
+            s.querySelectorAll('.ihram-list').forEach(function(el){el.style.display='none';});
+          }
+          a.innerHTML=b.html;
+        }
+      })();
+
+      // Step 2 — Niyyah column: inject JCM body below the Miqat SVG,
+      //          replacing the hardcoded Arabic/translit/translation text.
+      (function(){
+        var b = window.PPContent.byId(SK,'tw-guide-2'); if(!b) return;
+        var s = document.querySelector('.ihram-step[data-step="2"]'); if(!s) return;
+        if(b.title){ var h=s.querySelector('.ihram-heading'); if(h) h.textContent=b.title; }
+        if(b.html){
+          var col=s.querySelector('.ihram-col-niyyah'); if(!col) return;
+          var a=col.querySelector('.jcm-guide-body');
+          if(!a){
+            a=document.createElement('div'); a.className='jcm-guide-body';
+            // Insert after the Miqat SVG; keep the animation, replace only text below it
+            var scene=col.querySelector('.miqat-scene');
+            if(scene) scene.insertAdjacentElement('afterend',a);
+            else col.querySelector('.ihram-niyyah-title').insertAdjacentElement('afterend',a);
+            // Hide all hardcoded text elements below the SVG
+            col.querySelectorAll('.miqat-callout,.ihram-body,.ihram-arabic,.ihram-translit,.ihram-translation').forEach(function(el){el.style.display='none';});
+          }
+          a.innerHTML=b.html;
+        }
+      })();
+    }
+
+    // Register as global hook so journey-content-loader re-fires after async server fetch
+    window._ppGuideContentRefresh = _applyJCMToGuide;
+    // Apply immediately (PPContent is sync from localStorage)
+    // Second pass catches the async server content update (~2-3 s)
+    if(document.readyState==='loading'){
+      document.addEventListener('DOMContentLoaded',function(){ _applyJCMToGuide(); setTimeout(_applyJCMToGuide,3000); });
+    } else { _applyJCMToGuide(); setTimeout(_applyJCMToGuide,3000); }
     </script>
 
 <!-- --- Scene Guide Banners --- -->

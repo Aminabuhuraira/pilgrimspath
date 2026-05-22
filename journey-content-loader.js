@@ -863,6 +863,8 @@ function _fetchServerContent(){
           try{ localStorage.setItem(KEY, JSON.stringify(data)); }catch(_){}
           // Re-arm scene audio so any newly loaded audio fields take effect
           fireSceneLoad();
+          // Re-apply JCM text to any hardcoded guide overlays (e.g. Tawaf ihramGuide)
+          if(typeof window._ppGuideContentRefresh === 'function') window._ppGuideContentRefresh();
         }
       })
       .catch(function(){});
