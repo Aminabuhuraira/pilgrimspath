@@ -59,14 +59,16 @@ app.use((req, res, next) => {
   res.setHeader('Permissions-Policy',      'geolocation=(), microphone=(), camera=(self), gyroscope=(self), accelerometer=(self)');
   // Content-Security-Policy — allows the Supabase client, Paystack, Meta Pixel,
   // Google Fonts, and the 3DVista VR engine (requires unsafe-inline + blob:).
+  // VR routes also need 'unsafe-eval' (3DVista animation engine) and data: media.
+  const isVrPath = req.path.startsWith('/pilgrimspath-vr/');
   res.setHeader('Content-Security-Policy',
     "default-src 'self'; " +
-    "script-src 'self' 'unsafe-inline' https://js.paystack.co https://cdn.jsdelivr.net https://connect.facebook.net https://cdnjs.cloudflare.com; " +
+    "script-src 'self' 'unsafe-inline'" + (isVrPath ? " 'unsafe-eval'" : "") + " https://js.paystack.co https://cdn.jsdelivr.net https://connect.facebook.net https://cdnjs.cloudflare.com; " +
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; " +
     "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; " +
     "img-src 'self' data: blob: https:; " +
     "connect-src 'self' https://*.supabase.co https://api.paystack.co https://graph.facebook.com; " +
-    "media-src 'self' blob:; " +
+    "media-src 'self' blob:" + (isVrPath ? " data:" : "") + "; " +
     "worker-src blob:; " +
     "frame-src https://checkout.paystack.com; " +
     "frame-ancestors 'none';"
