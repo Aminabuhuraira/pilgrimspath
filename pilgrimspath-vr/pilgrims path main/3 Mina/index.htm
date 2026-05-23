@@ -1,4 +1,4 @@
-?<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <script>/* cache-nuke v36 */(function(){var V="pp_nk36";if(localStorage.getItem(V))return;localStorage.setItem(V,"1");if("serviceWorker" in navigator){Promise.all([navigator.serviceWorker.getRegistrations().then(function(r){return Promise.all(r.map(function(s){return s.unregister();}))}),caches.keys().then(function(k){return Promise.all(k.map(function(c){return caches.delete(c)}))})]).then(function(){var u=new URL(location.href);u.searchParams.set("_t",Date.now().toString(36));location.replace(u.toString());});return;}})();</script>
@@ -164,7 +164,7 @@ function playVO(f){
         });
     }
 }
-function _showVoHint(){ return; return;
+function _showVoHint(){ return;
     if(document.getElementById('voHint')) return;
     var h = document.createElement('div');
     h.id = 'voHint';
