@@ -15,6 +15,9 @@ const jwt          = require('jsonwebtoken');
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
+// Suppress Express version fingerprinting from response headers
+app.disable('x-powered-by');
+
 // ── Cookie parser (needed to read pp_access and pp_admin_session) ─
 app.use(cookieParser());
 
@@ -27,6 +30,26 @@ app.use('/api/journey-audio',   express.json({ limit: '25mb' }));
 app.use('/api/journey-content', express.json({ limit: '2mb' }));
 app.use(express.json({ limit: '100kb' }));
 app.use(express.urlencoded({ extended: false, limit: '100kb' }));
+
+// ── Block direct access to source/config files ──────────────────
+// Prevents curious visitors or automated scanners from reading server-side
+// source code, credentials, and architecture docs via direct URL.
+app.use((req, res, next) => {
+  const p = req.path;
+  // Block all files in the data/ directory (journey-content.json, audio uploads)
+  if (p.startsWith('/data/')) return res.status(404).send('Not found');
+  // Block API source files — routes are mounted at /api/<name> (no extension)
+  if (p.startsWith('/api/') && /\.js$/.test(p)) return res.status(404).send('Not found');
+  // Block markdown documentation, SQL schema files, shell scripts, config files
+  if (/\.(md|sql|sh|log|conf|bak|env)$/i.test(p)) return res.status(404).send('Not found');
+  // Block sensitive root-level files by exact name
+  const BLOCKED_PATHS = [
+    '/server.js', '/auth.js', '/package.json', '/package-lock.json',
+    '/ecosystem.config.js', '/vercel.json', '/.env', '/robots.txt.bak'
+  ];
+  if (BLOCKED_PATHS.includes(p)) return res.status(404).send('Not found');
+  next();
+});
 
 // ── Security headers ──────────────────────────────────────────
 app.use((req, res, next) => {

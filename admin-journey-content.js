@@ -895,6 +895,13 @@ function bindShell(){
       markDirty(); renderEditor();
       return;
     }
+    var audioModeSel = e.target.closest('[data-jc="set-scene-audio-mode"]');
+    if(audioModeSel){
+      var scAM = findScene(activeSceneKey); if(!scAM) return;
+      scAM.sceneAudioMode = audioModeSel.value;
+      markDirty(); save(); flash('Audio mode saved');
+      return;
+    }
     var pick = e.target.closest('.jc-btn-pick');
     if(pick){
       var sc2 = findScene(activeSceneKey); if(!sc2) return;
@@ -994,16 +1001,37 @@ function renderEditor(){
   if(!sc){ c.innerHTML = '<p style="color:var(--text-muted)">No scene selected.</p>'; return; }
   c.innerHTML =
     '<div class="jc-editor-head">'+
-      '<div><h3>Step '+sc.step+' — '+esc(sc.title.replace(/^Step \d+ — /,''))+'</h3>'+
-      '<div class="meta">'+esc(sc.file)+(sc.context?' &nbsp;·&nbsp; <code>?context='+esc(sc.context)+'</code>':'')+'</div></div>'+
+      '<div><h3>Step '+sc.step+' \u2014 '+esc(sc.title.replace(/^Step \d+ \u2014 /,''))+'</h3>'+
+      '<div class="meta">'+esc(sc.file)+(sc.context?' &nbsp;\u00b7&nbsp; <code>?context='+esc(sc.context)+'</code>':'')+'</div></div>'+
       '<div><button class="btn btn-sm btn-primary" data-jc="add-banner"><i class="fas fa-plus"></i> Add banner</button></div>'+
     '</div>'+
+    renderSceneAudioSettings(sc)+
     renderAudioDatalist(activeLang)+
     sc.banners.map(bannerCard).join('')+
     (sc.banners.length===0?'<div style="text-align:center;padding:30px;color:var(--text-muted)">No banners yet for this scene.</div>':'');
   // Inject CSS for all templates used + bind drag handlers
   sc.banners.forEach(function(b){ injectTplCss(b.template); });
   sc.banners.forEach(function(b){ bindDrag(b.id); });
+}
+
+/* Renders per-scene audio mode settings panel at the top of the editor. */
+function renderSceneAudioSettings(sc){
+  if(!sc) return '';
+  var mode = sc.sceneAudioMode || 'auto';
+  return '<div class="jc-scene-settings" style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:18px">'+
+    '<div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.7px;color:var(--text-muted);margin-bottom:10px;font-weight:600">\uD83D\uDD0A Scene Audio Settings</div>'+
+    '<div class="jc-row" style="margin-bottom:0">'+
+      '<label style="min-width:160px">Scene-load VO trigger</label>'+
+      '<select data-jc="set-scene-audio-mode" style="max-width:340px">'+
+        '<option value="auto"'+(mode==='auto'?' selected':'')+'>Auto-play when scene loads</option>'+
+        '<option value="click"'+(mode==='click'?' selected':'')+'>Play only on first user interaction (click / tap)</option>'+
+      '</select>'+
+    '</div>'+
+    '<div style="font-size:.68rem;color:var(--text-muted);margin-top:6px;line-height:1.5">'+
+      '<strong>Auto-play:</strong> scene-load banner &amp; VO fire immediately on page load (browser autoplay policies may defer to first tap on mobile). '+
+      '<strong>Click/tap:</strong> VO never fires automatically \u2014 it only starts when the user first taps or clicks the scene.'+
+    '</div>'+
+  '</div>';
 }
 
 /* ─── Audio + Panorama dropdown helpers ─── */
@@ -1115,6 +1143,14 @@ function bannerCard(b){
           'Play VO then auto-advance (no &ldquo;Continue&rdquo; banner needed)'+
         '</label>'+
       '</div>'+
+      '</div>' : '')+
+    (b.trigger==='scene-load' ?
+      '<div class="jc-row" title="When checked: plays the VO silently on scene load then auto-advances \u2014 no banner or Continue button shown.">'+
+        '<label>Auto-continue after VO</label>'+
+        '<label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--text-secondary);font-size:.8rem;font-weight:400">'+
+          '<input type="checkbox" data-jc-field="continueAfter" data-id="'+esc(b.id)+'"'+(b.continueAfter?' checked':'')+' style="width:15px;height:15px;accent-color:#C9A84C;cursor:pointer">'+
+          'Play VO then auto-advance (no &ldquo;Continue&rdquo; banner needed)'+
+        '</label>'+
       '</div>' : '')+
     '<div class="jc-row"><label>Title <small style="color:var(--gold)">['+esc(lang)+']</small></label><input type="text" data-jc-field="title" data-id="'+esc(b.id)+'" data-lang="'+esc(lang)+'" value="'+esc(t.title)+'"'+(hasLang?'':' disabled')+'></div>'+
     '<div class="jc-row">'+

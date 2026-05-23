@@ -680,14 +680,18 @@ function wrapCompletionTrigger(){
       var completionReady = window.journeyActivityComplete === true || window.journeyIsLastPanorama === true;
       if(completionReady && !wrapped.__fired){
         wrapped.__fired = true;
-        var key = detectSceneKey();
-        var comp = key && byCompletion(key);
-        if(comp){
-          if(comp.audio){ ppPlayVOAuto(comp.audio); }
-          if(comp.title || comp.html){
-            var html = comp.html || '';
-            html += '<p style="margin-top:14px;font-size:.85rem;color:#FFD98A;text-align:center;font-style:italic">\u270e Tap <strong>Continue</strong>, then use the <strong>Next Stop \u2192</strong> button to proceed.</p>';
-            showAdminBanner({title:comp.title, html:html, template:comp.template, position:comp.position});
+        // When continueAfter auto-advance already handled this transition,
+        // skip the completion banner — it was already said "no Continue needed".
+        if(!window._ppContAfterFired){
+          var key = detectSceneKey();
+          var comp = key && byCompletion(key);
+          if(comp){
+            if(comp.audio){ ppPlayVOAuto(comp.audio); }
+            if(comp.title || comp.html){
+              var html = comp.html || '';
+              html += '<p style="margin-top:14px;font-size:.85rem;color:#FFD98A;text-align:center;font-style:italic">\u270e Tap <strong>Continue</strong>, then use the <strong>Next Stop \u2192</strong> button to proceed.</p>';
+              showAdminBanner({title:comp.title, html:html, template:comp.template, position:comp.position});
+            }
           }
         }
       }
@@ -777,14 +781,50 @@ function getSceneLoadBanner(){
 }
 function fireSceneLoad(){
   if(window._ppSceneLoadFired) return;
+  // In click-to-play mode: do not auto-fire — installFirstInteractionVO() will
+  // call this function on the user's first interaction instead.
+  if(window._ppSceneAudioMode === 'click') return;
   var b = getSceneLoadBanner();
   if(!b) return;
   window._ppSceneLoadFired = true;
   var t = textFor(b)||{};
   var audio = audioFile(b);
-  // Run through output-layer mojibake filter before displaying
   var safe = _cleanBanner({title:t.title||'', html:t.body||''});
-  // Show banner with smooth transition
+
+  // continueAfter on scene-load: play VO silently, then auto-advance — no banner.
+  if(b.continueAfter && audio){
+    window._welcomeVoStarted = true;
+    window._ppSceneLoadAudioPlayed = true;
+    try{ if(window._voAudio){ window._voAudio.pause(); window._voAudio = null; } }catch(_){ }
+    var _slA = new Audio(audioUrl(audio));
+    window._ppFallbackVO = _slA;
+    var _slDone = false;
+    var _slFinish = function(){
+      if(_slDone) return; _slDone = true;
+      window._ppContAfterFired = true;
+      setTimeout(function(){
+        window.journeyIsLastPanorama = true;
+        if(typeof window.showJourneyNextButton === 'function') window.showJourneyNextButton();
+        delete window._ppContAfterFired;
+      }, 1500);
+    };
+    _slA.addEventListener('ended', _slFinish);
+    _slA.addEventListener('error', _slFinish);
+    var _slP = _slA.play();
+    if(_slP && _slP.catch){ _slP.catch(function(){
+      // Autoplay blocked — retry on next user gesture
+      var _slUnlock = function(){
+        document.removeEventListener('click', _slUnlock, true);
+        document.removeEventListener('touchend', _slUnlock, true);
+        _slA.play().catch(_slFinish);
+      };
+      document.addEventListener('click', _slUnlock, true);
+      document.addEventListener('touchend', _slUnlock, true);
+    }); }
+    return;
+  }
+
+  // Normal scene-load: show banner and play audio
   if(safe && (safe.title || safe.html)){
     showAdminBanner({title:safe.title, html:safe.html, template:b.template, position:b.position});
   }
@@ -799,8 +839,13 @@ function fireSceneLoad(){
 /* ─── DOM-ready bootstrap ─── */
 function boot(){
   injectLangSwitcher();
+  // Determine scene audio mode: 'auto' (default) fires VO on load;
+  // 'click' defers to the first-interaction handler below.
+  var _bootKey = detectSceneKey();
+  var _bootScene = _bootKey ? getScene(_bootKey) : null;
+  window._ppSceneAudioMode = (_bootScene && _bootScene.sceneAudioMode) || 'auto';
   // Try scene-load FIRST so its banner+VO appears immediately. If autoplay
-  // is blocked the first-interaction handler is still armed as a fallback.
+  // is blocked (or mode='click') the first-interaction handler is still armed.
   fireSceneLoad();
   installFirstInteractionVO();
   autoWireButtons();
@@ -863,6 +908,12 @@ function _fetchServerContent(){
         if(serverSeed >= localSeed){
           data = serverData;
           try{ localStorage.setItem(KEY, JSON.stringify(data)); }catch(_){}
+          // Update the audio mode in case the server data changed it.
+          var _freshKey = detectSceneKey();
+          var _freshScene = _freshKey ? getScene(_freshKey) : null;
+          if(_freshScene && _freshScene.sceneAudioMode){
+            window._ppSceneAudioMode = _freshScene.sceneAudioMode;
+          }
           // Re-arm scene audio so any newly loaded audio fields take effect.
           // If the banner hasn't shown yet, fireSceneLoad handles everything.
           // If the banner was already shown (from local cache) but had no audio,
@@ -870,7 +921,7 @@ function _fetchServerContent(){
           // and play the audio that the server just delivered.
           var _freshB = getSceneLoadBanner();
           var _freshAudio = _freshB && audioFile(_freshB);
-          if(!window._ppSceneLoadFired){
+          if(!window._ppSceneLoadFired && window._ppSceneAudioMode !== 'click'){
             fireSceneLoad();
           } else if(_freshAudio && !window._ppSceneLoadAudioPlayed){
             window._ppSceneLoadAudioPlayed = true;
