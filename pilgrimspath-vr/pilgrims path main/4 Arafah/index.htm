@@ -160,10 +160,11 @@ var _arafahSeq = (window.PPContent && window.PPContent.hasData)
 // immediately so _fetchServerContent's async server fetch can't double-play it if
 // the admin later changes ar-seq-1 to a scene-load trigger on the server.
 if(_arafahSeq.length && _arafahSeq[0].audio){
-  // Claim the scene-load audio slot so _fetchServerContent can NEVER double-play
-  // even if the admin later changes ar-seq-1's trigger to 'scene-load' on the server.
-  // _ppSceneLoadFired prevents the !fired → fireSceneLoad() path in _fetchServerContent.
-  window._ppSceneLoadFired = true;
+  // Mark audio as started so _fetchServerContent's else-if branch doesn't replay.
+  // NOTE: _ppSceneLoadFired is intentionally NOT set here — fireSceneLoad() in
+  // _fetchServerContent must remain able to run so the correct server scene-load
+  // banner (ar-seq-1) can replace any stale LOCAL sequence banners (e.g. ar-seq-2
+  // added by admin Re-sync from DEFAULT_DATA that the server doesn't have).
   window._ppSceneLoadAudioPlayed = true;
   window._welcomeVoStarted = true;
 }
@@ -174,6 +175,12 @@ if(!_arafahSeq.length && window.PPContent && window.PPContent.hasData){
   window.__ppSceneBannerAfterClose = function(){ _showArafahDoneBtn(); };
 }
 function _showArafahIntro(){
+  // Refresh _arafahSeq from latest PPContent — if server data has already arrived
+  // (overriding stale LOCAL banners added by admin Re-sync), this prevents the
+  // wrong banner (e.g. ar-seq-2 'Travelling to Muzdalifah') from ever showing.
+  if(window.PPContent && window.PPContent.hasData){
+    _arafahSeq = window.PPContent.bySequence('arafah-9th') || [];
+  }
   var s=_arafahSeq[0];
   if(!s){
     // No sequence banners: scene-load banner is handled by fireSceneLoad.
@@ -300,6 +307,23 @@ function chk(id) {
 }
 function hookTDV(){if(typeof TDV==='undefined'||!TDV.Tour||!TDV.Tour.Script)return setTimeout(hookTDV,500);var o1=TDV.Tour.Script.setPlayListSelectedIndex;if(o1){TDV.Tour.Script.setPlayListSelectedIndex=function(a,b){try{var id=a.get('items')[b].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}catch(e){}return o1.apply(this,arguments);};}var o2=TDV.Tour.Script.setMainMediaByIndex;if(o2){TDV.Tour.Script.setMainMediaByIndex=function(a){try{var items=this.mainPlayList.get('items');if(a>=0&&a<items.length){var id=items[a].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}}catch(e){}return o2.apply(this,arguments);};}console.log('[Arafah] banner hooks installed');}
 hookTDV();
+// Rebuild _arafahSeq when server data arrives and ensure __ppSceneBannerAfterClose
+// is wired to _showArafahDoneBtn so fireSceneLoad's JCL banner can chain correctly
+// even when LOCAL data had stale sequence banners from an admin Re-sync.
+(function(){
+  var _prevAR = window._ppGuideContentRefresh;
+  window._ppGuideContentRefresh = function(){
+    if(typeof _prevAR === 'function') _prevAR();
+    if(window.PPContent && window.PPContent.hasData){
+      _arafahSeq = window.PPContent.bySequence('arafah-9th') || [];
+      // If server has no sequence banners, ensure fireSceneLoad's 'Continue' button
+      // chains into _showArafahDoneBtn via __ppSceneBannerAfterClose.
+      if(!_arafahSeq.length && !window.__ppSceneBannerAfterClose){
+        window.__ppSceneBannerAfterClose = function(){ _showArafahDoneBtn(); };
+      }
+    }
+  };
+})();
 // Force-jump to the entry panorama (84B0CD28). The TDV tour may default to a
 // different panorama (e.g. the summit 84B78C66) which would cause the
 // summit "Continue or Explore" landing prompt to appear on scene load.
