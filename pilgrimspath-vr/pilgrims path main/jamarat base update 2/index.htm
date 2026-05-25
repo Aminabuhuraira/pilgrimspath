@@ -788,6 +788,26 @@ function _ppMerge(){
 }
 _ppMerge();
 window.addEventListener('storage',function(e){if(e&&e.key==='pp_journey_content_v2'){_ppMerge();}});
+// Also rebuild from server-fetched content delivered via JCL hook.
+(function(){
+  var _prev = window._ppGuideContentRefresh;
+  window._ppGuideContentRefresh = function(){
+    if(typeof _prev === 'function') _prev();
+    _ppMerge();
+    try{
+      var t = TDV.PlayerAPI.getCurrentPlayer();
+      var pl = t && t.mainPlayList;
+      if(pl){
+        var idx = pl.get('selectedIndex');
+        var items = pl.get('items');
+        if(items && items[idx]){
+          var id = items[idx].get('media').get('id');
+          if(id && !shown[id] && typeof _jbChk==='function') _jbChk(id);
+        }
+      }
+    }catch(_){}
+  };
+})();
 _jbChk=function(id){var b=BANNERS[id];if(!b||shown[id])return;shown[id]=true;if(b.title||b.html)openBanner(b.title,b.html,b.template,b.position);
   try{
     var f=(window._jb12VOMap||{})[id];

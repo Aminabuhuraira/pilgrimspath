@@ -869,6 +869,32 @@ _jbChk=function(id){var b=BANNERS[id];if(!b||shown[id])return;shown[id]=true;if(
 if(_jVoCtx[id])playVO(_jVoCtx[id]);
 };
 setTimeout(function(){_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},2500);
+// Rebuild BANNERS/_jVoCtx and re-fire for current pano when server data arrives.
+(function(){
+  var _prev = window._ppGuideContentRefresh;
+  window._ppGuideContentRefresh = function(){
+    if(typeof _prev === 'function') _prev();
+    if(window.PPContent && window.PPContent.hasData){
+      var _sk = journeyContext==='11th-day'?'jamarat-11th':(journeyContext==='12th-day'||journeyContext==='13th-day')?'jamarat-12th':'jamarat-10th';
+      var _b2=window.PPContent.bannerMapByPano(_sk)||{};
+      Object.keys(_b2).forEach(function(k){BANNERS[k]=_b2[k];});
+      var _a2=window.PPContent.audioMapByPano(_sk)||{};
+      Object.keys(_a2).forEach(function(k){_jVoCtx[k]=_a2[k];});
+    }
+    try{
+      var t = TDV.PlayerAPI.getCurrentPlayer();
+      var pl = t && t.mainPlayList;
+      if(pl){
+        var idx = pl.get('selectedIndex');
+        var items = pl.get('items');
+        if(items && items[idx]){
+          var id = items[idx].get('media').get('id');
+          if(id && !shown[id]) _jbChk(id);
+        }
+      }
+    }catch(_){}
+  };
+})();
 })();
 </script>
 

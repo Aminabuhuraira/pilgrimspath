@@ -100,6 +100,11 @@ function playVO(f){
     if(window._voCurrentFile===f && window._voAudio && !window._voAudio.paused && !window._voAudio.ended) return;
     window._voCurrentFile = f;
     if(window._voAudio){ try{ window._voAudio.pause(); }catch(e){} window._voAudio=null; }
+    // Also cancel JCL's scene-load fallback audio so it doesn't overlap.
+    if(window._ppFallbackVO){ try{ window._ppFallbackVO.pause(); }catch(e){} window._ppFallbackVO=null; }
+    // Mark scene-load audio as handled so _fetchServerContent doesn't replay.
+    window._ppSceneLoadAudioPlayed = true;
+    window._ppSceneLoadFired = true;
     if(window._voChainPending && window._voChainPending !== f) window._voChainPending = null;
     window._voPending = f;
     var url = (window.PPContent && window.PPContent.audioUrl)
@@ -197,6 +202,32 @@ function chk(id) {
 // TDV hook only ? no PerformanceObserver/Image hijack (fires on adjacent-pano preloads)
 function hookTDV(){if(typeof TDV==='undefined'||!TDV.Tour||!TDV.Tour.Script)return setTimeout(hookTDV,500);var o1=TDV.Tour.Script.setPlayListSelectedIndex;if(o1){TDV.Tour.Script.setPlayListSelectedIndex=function(a,b){try{var id=a.get('items')[b].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}catch(e){}return o1.apply(this,arguments);};}var o2=TDV.Tour.Script.setMainMediaByIndex;if(o2){TDV.Tour.Script.setMainMediaByIndex=function(a){try{var items=this.mainPlayList.get('items');if(a>=0&&a<items.length){var id=items[a].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}}catch(e){}return o2.apply(this,arguments);};}console.log('[SafaMarwa] banner hooks installed');}
 hookTDV();
+
+// Rebuild banner/audio maps after async server fetch resolves — prevents stale
+// localStorage from blocking panorama-triggered banners.
+(function(){
+  var _prev = window._ppGuideContentRefresh;
+  window._ppGuideContentRefresh = function(){
+    if(typeof _prev === 'function') _prev();
+    if(window.PPContent && window.PPContent.hasData){
+      _bannerMap = window.PPContent.bannerMapByPano('safa-marwa') || {};
+      _audioMap  = window.PPContent.audioMapByPano('safa-marwa')  || {};
+    }
+    // Re-fire chk for currently-visible panorama in case it now matches a map entry
+    try{
+      var t = TDV.PlayerAPI.getCurrentPlayer();
+      var pl = t && t.mainPlayList;
+      if(pl){
+        var idx = pl.get('selectedIndex');
+        var items = pl.get('items');
+        if(items && items[idx]){
+          var id = items[idx].get('media').get('id');
+          if(id && !shown[id]) chk(id);
+        }
+      }
+    }catch(_){}
+  };
+})();
 
 // Fallback: after tour init, trigger banner for currently visible panorama
 setTimeout(function(){try{var t=TDV.PlayerAPI.getCurrentPlayer();var pl=t&&t.mainPlayList;if(!pl)return;var idx=pl.get('selectedIndex');var id=pl.get('items')[idx].get('media').get('id');if(id&&id!==lastId){lastId=id;chk(id);}}catch(e){var k=Object.keys(_bannerMap);if(k.length)chk(k[0]);}},3000);

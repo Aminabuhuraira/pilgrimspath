@@ -924,10 +924,33 @@
         if(window._ppContAfterFired) return;
         // Prevent double-play: auto-play on landing + any subsequent button click
         if(window._ihramStep2VOStarted) return;
+        // ALWAYS re-read PPContent at call time. The cached window._ihramStep2Audio
+        // values were captured at step-2 entry, which may have been BEFORE the async
+        // server fetch resolved. If localStorage was stale (e.g. tw-guide-2.audio="")
+        // those cached values are empty and audio never plays. Re-reading here picks
+        // up server overrides delivered by _fetchServerContent.
+        var _ov2 = window.PPContent && window.PPContent.byId('tawaf-initial','tw-guide-2');
+        var f  = (_ov2 && _ov2.audio)      || window._ihramStep2Audio      || '';
+        var f2 = (_ov2 && _ov2.audioChain) || window._ihramStep2AudioChain || '';
+        // Keep cached values in sync for any later callers
+        window._ihramStep2Audio = f;
+        window._ihramStep2AudioChain = f2;
+        if(!f || typeof playVO!=='function'){
+            // Defer: re-attempt after server data arrives. _ppGuideContentRefresh
+            // already fires when JCL's _fetchServerContent resolves.
+            if(!window._ihramStep2Deferred){
+                window._ihramStep2Deferred = true;
+                var _prevRef = window._ppGuideContentRefresh;
+                window._ppGuideContentRefresh = function(){
+                    if(typeof _prevRef === 'function') _prevRef();
+                    // Only retry if user is still on Screen 3
+                    var step2 = document.querySelector('.ihram-step[data-step="2"].active');
+                    if(step2 && !window._ihramStep2VOStarted){ ihramStep2PlayVO(); }
+                };
+            }
+            return;
+        }
         window._ihramStep2VOStarted = true;
-        var f = window._ihramStep2Audio;
-        var f2 = window._ihramStep2AudioChain;
-        if(!f || typeof playVO!=='function'){ window._ihramStep2VOStarted = false; return; }
         if(f2){
             var _u=(window.PPContent&&window.PPContent.audioUrl(f))||('/Hajj%20voiceover%20english/English/'+encodeURIComponent(f));
             var _a=new Audio(_u); window._voAudio=_a;
@@ -1150,6 +1173,12 @@ function playVO(f){
     if(window._voCurrentFile===f && window._voAudio && !window._voAudio.paused && !window._voAudio.ended) return;
     // Cancel any audio currently playing
     if(window._voAudio){ try{ window._voAudio.pause(); }catch(e){} window._voAudio=null; }
+    // Also cancel JCL's scene-load fallback audio so it doesn't overlap.
+    if(window._ppFallbackVO){ try{ window._ppFallbackVO.pause(); }catch(e){} window._ppFallbackVO=null; }
+    // Mark scene-load audio as handled so _fetchServerContent doesn't replay it
+    // (prevents double-fire when server data arrives after we've already played).
+    window._ppSceneLoadAudioPlayed = true;
+    window._ppSceneLoadFired = true;
     // Always update the LATEST pending intent so a stale unlock handler plays
     // the correct (most recent) requested track, never an outdated welcome clip.
     window._voPending = f;

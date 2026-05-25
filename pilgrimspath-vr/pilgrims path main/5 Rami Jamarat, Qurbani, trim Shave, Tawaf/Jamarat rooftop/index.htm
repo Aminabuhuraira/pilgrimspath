@@ -793,6 +793,8 @@ function playVO(f){
     // dedup: same file already playing -> no-op
     if(window._voCurrentFile===f && window._voAudio && !window._voAudio.paused && !window._voAudio.ended) return;
     if(window._voAudio){ try{ window._voAudio.pause(); }catch(e){} window._voAudio=null; }
+    if(window._ppFallbackVO){ try{ window._ppFallbackVO.pause(); }catch(e){} window._ppFallbackVO=null; }
+    window._ppSceneLoadAudioPlayed = true; window._ppSceneLoadFired = true;
     window._voPending = f;
     window._voCurrentFile = f;
     var url = (window.PPContent && window.PPContent.audioUrl)
@@ -877,6 +879,30 @@ _jbChk = function(id) {
   }
 };
 setTimeout(function(){_jbChk('panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1');},2500);
+
+// Rebuild maps when async server fetch resolves; re-fire chk for current pano.
+(function(){
+  var _prev = window._ppGuideContentRefresh;
+  window._ppGuideContentRefresh = function(){
+    if(typeof _prev === 'function') _prev();
+    if(window.PPContent && window.PPContent.hasData){
+      _bannerMap = window.PPContent.bannerMapByPano(_sceneKey) || {};
+      _audioMap  = window.PPContent.audioMapByPano(_sceneKey)  || {};
+    }
+    try{
+      var t = TDV.PlayerAPI.getCurrentPlayer();
+      var pl = t && t.mainPlayList;
+      if(pl){
+        var idx = pl.get('selectedIndex');
+        var items = pl.get('items');
+        if(items && items[idx]){
+          var id = items[idx].get('media').get('id');
+          if(id && !shown[id] && typeof _jbChk==='function') _jbChk(id);
+        }
+      }
+    }catch(_){}
+  };
+})();
 })();
 </script>
 

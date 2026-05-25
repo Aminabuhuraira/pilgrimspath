@@ -100,6 +100,11 @@ function playVO(f){
     if(window._voCurrentFile===f && window._voAudio && !window._voAudio.paused && !window._voAudio.ended) return;
     window._voCurrentFile = f;
     if(window._voAudio){ try{ window._voAudio.pause(); }catch(e){} window._voAudio=null; }
+    // Also cancel JCL's scene-load fallback audio so it doesn't overlap.
+    if(window._ppFallbackVO){ try{ window._ppFallbackVO.pause(); }catch(e){} window._ppFallbackVO=null; }
+    // Mark scene-load audio as handled so _fetchServerContent doesn't replay.
+    window._ppSceneLoadAudioPlayed = true;
+    window._ppSceneLoadFired = true;
     if(window._voChainPending && window._voChainPending !== f) window._voChainPending = null;
     window._voPending = f;
     var url = (window.PPContent && window.PPContent.audioUrl)
@@ -189,6 +194,12 @@ function _showArafahIntro(){
       window.__ppSceneBannerAfterClose = function(){ _showArafahDoneBtn(); };
     return;
   }
+  // Block JCL's fireSceneLoad / ppPlayVOAuto from double-firing after async
+  // server fetch resolves. Without this, when LOCAL has a stale sequence-1
+  // banner AND server has the same audio re-tagged as scene-load, both fire.
+  window._ppSceneLoadFired = true;
+  window._ppSceneLoadAudioPlayed = true;
+  window._welcomeVoStarted = true;
   openBanner(s.title,s.html,s.template,s.position);
   playVO(s.audio);
   setTimeout(function(){
