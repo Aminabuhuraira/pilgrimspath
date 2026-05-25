@@ -442,7 +442,12 @@ function findButtonElement(buttonId, buttonLabel){
   // Robust label matching — normalize both sides
   var target = normLabel(buttonLabel||buttonId||'');
   if(!target) return null;
-  var candidates = document.querySelectorAll('button, a[role="button"], [role="button"], .button, .btn');
+  var _rawC = document.querySelectorAll('button, a[role="button"], [role="button"], .button, .btn');
+  // Exclude buttons inside scene banners and admin banners — those are dismiss/nav controls,
+  // not admin-configured trigger buttons that should play audio or advance the journey.
+  var candidates = Array.prototype.filter.call(_rawC, function(c){
+    return !c.closest('#sceneBanner') && !c.closest('#pp-admin-banner');
+  });
   // Pass 1: exact normalized match
   for(var i=0;i<candidates.length;i++){
     if(normLabel(candidates[i].textContent||'') === target) return candidates[i];
