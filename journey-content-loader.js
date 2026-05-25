@@ -668,9 +668,10 @@ function autoWireButtons(){
       }
 
       if(b.audio){ ppPlayVOAuto(b.audio); if(b.audioChain) window._voChainPending = b.audioChain; }
-      if(b.title || b.html){
+      var _bt = textFor(b)||{};
+      if(_bt.title || _bt.body){
         window.__ppSceneBannerAfterClose = resume;
-        showAdminBanner({title:b.title, html:b.html, template:b.template, position:b.position});
+        showAdminBanner({title:_bt.title||'', html:_bt.body||'', template:b.template, position:b.position});
         return;
       }
       resume();
@@ -696,10 +697,11 @@ function wrapCompletionTrigger(){
           var comp = key && byCompletion(key);
           if(comp){
             if(comp.audio){ ppPlayVOAuto(comp.audio); }
-            if(comp.title || comp.html){
-              var html = comp.html || '';
+            var _ct = textFor(comp)||{};
+            if(_ct.title || _ct.body){
+              var html = _ct.body || '';
               html += '<p style="margin-top:14px;font-size:.85rem;color:#FFD98A;text-align:center;font-style:italic">\u270e Tap <strong>Continue</strong>, then use the <strong>Next Stop \u2192</strong> button to proceed.</p>';
-              showAdminBanner({title:comp.title, html:html, template:comp.template, position:comp.position});
+              showAdminBanner({title:_ct.title||'', html:html, template:comp.template, position:comp.position});
             }
           }
         }
@@ -969,7 +971,8 @@ window.PPContent = {
     var comp = k && byCompletion(k);
     if(!comp) return false;
     if(comp.audio) ppPlayVOAuto(comp.audio);
-    if(comp.title || comp.html) showAdminBanner({title:comp.title, html:comp.html, template:comp.template, position:comp.position});
+    var _ct = textFor(comp)||{};
+    if(_ct.title || _ct.body) showAdminBanner({title:_ct.title||'', html:_ct.body||'', template:comp.template, position:comp.position});
     return true;
   },
   setLang: function(l){ localStorage.setItem(LANG_KEY,l); location.reload(); }
