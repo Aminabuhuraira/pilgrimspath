@@ -116,6 +116,9 @@
       /* push other bottom-anchored UI up so they do not collide with the rail */
       '#muzdHud,#muzdPouch{bottom:80px !important;}',
       /* pebbleHUD — no desktop override; scene already sets top:74px right:16px (below pause btn) */
+      /* 2D scene-card pages: ensure card does not scroll under the rail (~100px on desktop) */
+      '.scene-wrap{padding-bottom:120px !important;}',
+      '.scene-card{max-height:calc(100dvh - 134px) !important;}',
       /* Scene-specific action buttons must clear the rail (~70px tall on desktop) */
       '#jamarThrowBtn,#minaContinue,#umrahTrimContinue,#barberContinue{bottom:82px !important;}',
       '#jamarAimHint{bottom:calc(82px + 54px) !important;}',  /* aim hint above throw btn */
