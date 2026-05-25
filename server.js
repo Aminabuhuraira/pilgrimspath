@@ -70,7 +70,7 @@ app.use((req, res, next) => {
     "connect-src 'self' https://*.supabase.co https://api.paystack.co https://graph.facebook.com; " +
     "media-src 'self' blob:" + (isVrPath ? " data:" : "") + "; " +
     "worker-src blob:; " +
-    "frame-src https://checkout.paystack.com; " +
+    "frame-src https://checkout.paystack.com https://www.youtube-nocookie.com https://www.youtube.com; " +
     "frame-ancestors 'none';"
   );
   if (req.secure || req.headers['x-forwarded-proto'] === 'https') {
