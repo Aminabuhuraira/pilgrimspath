@@ -1538,7 +1538,20 @@ border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:point
     laps++; sessionStorage.setItem(_lapKey, laps); render();
     if(laps===7){
       window._tawafActive = false;
-      setTimeout(function(){ document.getElementById('tawafComplete').style.display='block'; }, 250);
+      setTimeout(function(){
+        document.getElementById('tawafComplete').style.display='block';
+        // Apply admin-configured completion content (title, body, audio) if available.
+        // The admin stores this as trigger:'completion' via byCompletion().
+        var _ck = ctx==='ifadha' ? 'tawaf-ifadha' : ctx==='farewell' ? 'tawaf-farewell' : null;
+        if(_ck && window.PPContent && window.PPContent.hasData && typeof window.PPContent.byCompletion==='function'){
+          var _comp = window.PPContent.byCompletion(_ck);
+          if(_comp){
+            if(_comp.title) document.getElementById('tcTitle').textContent = _comp.title;
+            if(_comp.html)  document.getElementById('tcMsg').innerHTML = _comp.html;
+            if(_comp.audio && typeof playVO==='function') playVO(_comp.audio);
+          }
+        }
+      }, 250);
     }
   };
   window.tawafLapReset = function(){ laps=0; sessionStorage.setItem(_lapKey,'0'); render(); window._tawafActive = true; };

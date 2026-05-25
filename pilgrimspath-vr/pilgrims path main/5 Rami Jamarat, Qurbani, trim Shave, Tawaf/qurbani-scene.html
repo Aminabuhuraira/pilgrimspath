@@ -405,6 +405,37 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
+<!-- --- Continue button --- -->
+<style>
+#qurbaniContinue{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:10005;
+  background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;border:none;
+  border-radius:999px;padding:14px 30px;font-size:15px;font-weight:700;letter-spacing:0.3px;
+  font-family:'Poppins','DM Sans',Arial,sans-serif;cursor:pointer;
+  box-shadow:0 6px 24px rgba(201,168,76,0.55);transition:transform .15s,box-shadow .15s;
+  display:inline-flex;align-items:center;gap:8px;}
+#qurbaniContinue:hover{transform:translateX(-50%) scale(1.05);box-shadow:0 8px 30px rgba(201,168,76,0.7);}
+#qurbaniContinue .qcIcon{font-size:18px;}
+@media(max-width:480px){#qurbaniContinue{font-size:13px;padding:12px 22px;bottom:90px;}}
+</style>
+<button id="qurbaniContinue" data-pp-button="qurbaniContinue"><span class="qcIcon">✂️</span> <span id="qurbaniContinueLabel">Continue to Halaq ▸</span></button>
+<script>
+(function(){
+  var btn = document.getElementById('qurbaniContinue');
+  if(!btn) return;
+  btn.addEventListener('click', function(){
+    // If journey-content-loader has bound this button (admin banner/VO),
+    // yield to it on the first click so the banner/voiceover plays.
+    if(btn.dataset.ppBound === '1' && btn.dataset.ppAllowNative !== '1') return;
+    var nav = function(){
+      if(window.jm && typeof window.jm.goToStep==='function') window.jm.goToStep(11);
+      else window.location.href = 'barber-scene.html?journey=11&context=barber';
+    };
+    if(typeof window.proceedWithQuiz === 'function') window.proceedWithQuiz(nav);
+    else nav();
+  });
+})();
+</script>
+
 <!-- Meta Pixel Event: Qurbani VR Scene -->
 <script>
 fbq('track', 'ViewContent', {
