@@ -180,8 +180,9 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overfl
 
 /* --- Fit-to-screen overrides (no page scroll) --- */
 html,body{height:100%;overflow:hidden}
-.scene-wrap{height:100vh;height:100dvh;overflow:hidden;padding:14px 10px;align-items:flex-start;justify-content:center}
-.scene-card{width:100%;max-width:740px;max-height:calc(100vh - 28px);max-height:calc(100dvh - 28px);overflow-y:auto;overflow-x:hidden;padding:18px 22px;scrollbar-width:thin;scrollbar-color:#D4AF37 transparent}
+/* bottom:90px accounts for the ~82px scene nav rail fixed at the bottom */
+.scene-wrap{height:100vh;height:100dvh;overflow:hidden;padding:14px 10px 90px;align-items:flex-start;justify-content:center}
+.scene-card{width:100%;max-width:740px;max-height:calc(100vh - 104px);max-height:calc(100dvh - 104px);overflow-y:auto;overflow-x:hidden;padding:18px 22px;scrollbar-width:thin;scrollbar-color:#D4AF37 transparent}
 .scene-card,.scene-card *{word-wrap:break-word;overflow-wrap:break-word;min-width:0}
 .scene-card::-webkit-scrollbar{width:6px}
 .scene-card::-webkit-scrollbar-thumb{background:#D4AF37;border-radius:3px}
@@ -211,7 +212,7 @@ html,body{height:100%;overflow:hidden}
   .info-note{padding:7px 14px;font-size:.74rem}
 }
 @media(max-height:580px){
-  .scene-wrap{padding:8px}
+  .scene-wrap{padding:8px 8px 82px}
   .scene-card{padding:10px 14px;border-radius:16px}
   .scene-title{font-size:1rem}
   .barber-scene{height:120px;margin-bottom:8px}
