@@ -667,13 +667,17 @@ function autoWireButtons(){
         return;
       }
 
-      if(b.audio){ ppPlayVOAuto(b.audio); if(b.audioChain) window._voChainPending = b.audioChain; }
       var _bt = textFor(b)||{};
       if(_bt.title || _bt.body){
-        window.__ppSceneBannerAfterClose = resume;
+        // Audio plays when the banner's Continue button is clicked, not before banner opens
+        window.__ppSceneBannerAfterClose = function(){
+          if(b.audio){ ppPlayVOAuto(b.audio); if(b.audioChain) window._voChainPending = b.audioChain; }
+          resume();
+        };
         showAdminBanner({title:_bt.title||'', html:_bt.body||'', template:b.template, position:b.position});
         return;
       }
+      if(b.audio){ ppPlayVOAuto(b.audio); if(b.audioChain) window._voChainPending = b.audioChain; }
       resume();
     }, true);
   });
