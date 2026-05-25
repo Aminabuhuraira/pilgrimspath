@@ -315,6 +315,15 @@ function detectSceneKey(){
       if(ctx==='umrah-trim') return 'barber-umrah';
       return 'barber-hajj';
     }
+    // Jamarat rooftop is shared by step 9 (10th day) and step 13 (11th day) —
+    // must check context before falling through to the generic map.
+    if(/Jamarat rooftop/i.test(path)){
+      if(ctx==='11th-day') return 'jamarat-11th';
+      return 'jamarat-10th';
+    }
+    // Step 15 (12th-day Jamarat) is served from "jamarat base update 2" — not in the
+    // generic SCENE_PATH_MAP below, so it must be caught explicitly here.
+    if(/jamarat base update 2/i.test(path)) return 'jamarat-12th';
     for(var i=0;i<SCENE_PATH_MAP.length;i++){ if(SCENE_PATH_MAP[i].re.test(path)) return SCENE_PATH_MAP[i].key; }
   }catch(_){ }
   return null;
