@@ -895,8 +895,8 @@
             // Play Ihram part 1, then chain part 2 automatically when it ends
             if(window._voAudio){window._voAudio.pause();window._voAudio=null;}
             var _ov1=window.PPContent&&window.PPContent.byId('tawaf-initial','tw-guide-1');
-            var _f1=(_ov1&&_ov1.audio)||'2 English Ihram part 1.mp3';
-            var _f2=(_ov1&&_ov1.audioChain)||'3 English Ihram part 2 .mp3';
+            var _f1 = _ov1 ? _ov1.audio : '2 English Ihram part 1.mp3';
+            var _f2 = _ov1 ? _ov1.audioChain : '3 English Ihram part 2 .mp3';
             if(_f1){
                 var _u1=(window.PPContent&&window.PPContent.audioUrl(_f1))||('/Hajj%20voiceover%20english/English/'+encodeURIComponent(_f1));
                 var _a1=new Audio(_u1);
@@ -909,9 +909,10 @@
             // Step-3 voice-over no longer auto-plays. It is triggered by the
             // "Begin Your Tawaf" button (see ihramSkip wrapper below) so the
             // user controls when narration starts.
-            window._ihramStep2Audio = (function(){
+            (function(){
                 var _ov2=window.PPContent&&window.PPContent.byId('tawaf-initial','tw-guide-2');
-                return (_ov2&&_ov2.audio)||'4 English Ihram part 3.mp3';
+                window._ihramStep2Audio = _ov2 ? _ov2.audio : '4 English Ihram part 3.mp3';
+                window._ihramStep2AudioChain = _ov2 ? _ov2.audioChain : '';
             })();
         }
     }
@@ -921,8 +922,14 @@
         // upcoming panorama banner audio from _bannerChk.
         if(window._ppContAfterFired) return;
         var f = window._ihramStep2Audio;
+        var f2 = window._ihramStep2AudioChain;
         if(!f || typeof playVO!=='function') return;
-        playVO(f);
+        if(f2){
+            var _u=(window.PPContent&&window.PPContent.audioUrl(f))||('/Hajj%20voiceover%20english/English/'+encodeURIComponent(f));
+            var _a=new Audio(_u); window._voAudio=_a;
+            _a.onended=function(){ playVO(f2); };
+            _a.play().catch(function(){});
+        } else { playVO(f); }
     }
 
     function ihramBack() {
