@@ -173,9 +173,9 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overfl
 
 /* --- Fit-to-screen overrides (no page scroll) --- */
 html,body{height:100%;overflow:hidden}
-/* bottom:120px accounts for the ~100px scene nav rail on desktop (per overlay comment) */
-.scene-wrap{height:100vh;height:100dvh;overflow:hidden;padding:14px 10px 120px;align-items:flex-start;justify-content:center}
-.scene-card{width:100%;max-width:760px;max-height:calc(100vh - 134px);max-height:calc(100dvh - 134px);overflow-y:auto;overflow-x:hidden;padding:18px 22px;scrollbar-width:thin;scrollbar-color:#D4AF37 transparent}
+/* bottom:155px = 82px (button pos) + ~50px (button height) + 23px gap — clears rail+button */
+.scene-wrap{height:100vh;height:100dvh;overflow:hidden;padding:14px 10px 155px;align-items:flex-start;justify-content:center}
+.scene-card{width:100%;max-width:760px;max-height:calc(100vh - 169px);max-height:calc(100dvh - 169px);overflow-y:auto;overflow-x:hidden;padding:18px 22px;scrollbar-width:thin;scrollbar-color:#D4AF37 transparent}
 .scene-card,.scene-card *{word-wrap:break-word;overflow-wrap:break-word;min-width:0}
 .scene-card::-webkit-scrollbar{width:6px}
 .scene-card::-webkit-scrollbar-thumb{background:#D4AF37;border-radius:3px}
@@ -193,7 +193,7 @@ html,body{height:100%;overflow:hidden}
   .dua-arabic{font-size:1.05rem;line-height:1.5}
 }
 @media(max-height:580px){
-  .scene-wrap{padding:8px 8px 105px}
+  .scene-wrap{padding:8px 8px 130px}
   .scene-card{padding:10px 14px;border-radius:16px}
   .scene-title{font-size:1rem}
   .qurbani-scene{height:120px;margin-bottom:8px}

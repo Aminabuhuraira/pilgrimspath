@@ -119,6 +119,10 @@
       /* 2D scene-card pages: ensure card does not scroll under the rail (~100px on desktop) */
       '.scene-wrap{padding-bottom:120px !important;}',
       '.scene-card{max-height:calc(100dvh - 134px) !important;}',
+      /* Pages with a fixed continue button above the rail (button bottom=82px, height≈50px):
+         needs 155px clearance so card content never hides behind the button */
+      'body:has(#qurbaniContinue) .scene-wrap,body:has(#barberContinue) .scene-wrap,body:has(#umrahTrimContinue) .scene-wrap{padding-bottom:155px !important;}',
+      'body:has(#qurbaniContinue) .scene-card,body:has(#barberContinue) .scene-card,body:has(#umrahTrimContinue) .scene-card{max-height:calc(100dvh - 169px) !important;}',
       /* Scene-specific action buttons must clear the rail (~70px tall on desktop) */
       '#jamarThrowBtn,#minaContinue,#umrahTrimContinue,#qurbaniContinue,#barberContinue{bottom:82px !important;}',
       '#jamarAimHint{bottom:calc(82px + 54px) !important;}',  /* aim hint above throw btn */
