@@ -906,29 +906,33 @@
             } else if(_f2){ playVO(_f2); }
         }
         if(ihramStep===2){
-            // Step-3 voice-over no longer auto-plays. It is triggered by the
-            // "Begin Your Tawaf" button (see ihramSkip wrapper below) so the
-            // user controls when narration starts.
+            // Reset the double-play guard so auto-play fires fresh each time
+            // the user arrives at Screen 3 (handles back/forward navigation).
+            window._ihramStep2VOStarted = false;
             (function(){
                 var _ov2=window.PPContent&&window.PPContent.byId('tawaf-initial','tw-guide-2');
                 window._ihramStep2Audio = _ov2 ? _ov2.audio : '4 English Ihram part 3.mp3';
                 window._ihramStep2AudioChain = _ov2 ? _ov2.audioChain : '';
             })();
+            ihramStep2PlayVO(); // auto-play when user lands on Screen 3
         }
     }
     function ihramStep2PlayVO(){
-        // Skip if JCM already played the button VO via continueAfter � avoids
+        // Skip if JCM already played the button VO via continueAfter — avoids
         // double-play and prevents a stale _voUnlockBound from blocking the
         // upcoming panorama banner audio from _bannerChk.
         if(window._ppContAfterFired) return;
+        // Prevent double-play: auto-play on landing + any subsequent button click
+        if(window._ihramStep2VOStarted) return;
+        window._ihramStep2VOStarted = true;
         var f = window._ihramStep2Audio;
         var f2 = window._ihramStep2AudioChain;
-        if(!f || typeof playVO!=='function') return;
+        if(!f || typeof playVO!=='function'){ window._ihramStep2VOStarted = false; return; }
         if(f2){
             var _u=(window.PPContent&&window.PPContent.audioUrl(f))||('/Hajj%20voiceover%20english/English/'+encodeURIComponent(f));
             var _a=new Audio(_u); window._voAudio=_a;
             _a.onended=function(){ playVO(f2); };
-            _a.play().catch(function(){});
+            _a.play().catch(function(){ window._ihramStep2VOStarted = false; }); // reset so button click can retry
         } else { playVO(f); }
     }
 
@@ -1321,6 +1325,19 @@ function hookTDV() {
   console.log('[Tawaf] banner hooks installed');
 }
 hookTDV();
+// When _fetchServerContent delivers fresher data it calls _ppGuideContentRefresh.
+// Extend it to also rebuild the panorama banner + audio maps so stale localStorage
+// data never causes wrong banners after the async server fetch resolves.
+(function(){
+  var _prev = window._ppGuideContentRefresh;
+  window._ppGuideContentRefresh = function(){
+    if(typeof _prev === 'function') _prev();
+    if(window.PPContent && window.PPContent.hasData){
+      _bannerMap = window.PPContent.bannerMapByPano(_sceneKey) || {};
+      _audioMap  = window.PPContent.audioMapByPano(_sceneKey)  || {};
+    }
+  };
+})();
 })();
 
 // Ensure pre-Tawaf onboarding screens are visible &mdash; but NOT for ifadha/farewell (no Ihram needed again).

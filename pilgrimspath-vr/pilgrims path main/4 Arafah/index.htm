@@ -160,6 +160,10 @@ var _arafahSeq = (window.PPContent && window.PPContent.hasData)
 // immediately so _fetchServerContent's async server fetch can't double-play it if
 // the admin later changes ar-seq-1 to a scene-load trigger on the server.
 if(_arafahSeq.length && _arafahSeq[0].audio){
+  // Claim the scene-load audio slot so _fetchServerContent can NEVER double-play
+  // even if the admin later changes ar-seq-1's trigger to 'scene-load' on the server.
+  // _ppSceneLoadFired prevents the !fired → fireSceneLoad() path in _fetchServerContent.
+  window._ppSceneLoadFired = true;
   window._ppSceneLoadAudioPlayed = true;
   window._welcomeVoStarted = true;
 }
