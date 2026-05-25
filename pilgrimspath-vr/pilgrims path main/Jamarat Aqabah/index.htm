@@ -28,18 +28,24 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <script src="/pilgrimspath-vr/vr-ambient-fix.js?v=1"></script>
-    <script src="lib/tdvplayer.js?v=1748304000000"></script>
-    <link rel="preload" href="locale/en.txt?v=1777125004366" as="fetch" crossorigin="anonymous"/>
-	<link rel="preload" href="script.js?v=1777125004366" as="script"/>
-	<link rel="preload" href="media/panorama_691B217E_7C54_3E7A_41D3_35A255D72204_0/r/2/0_0.webp?v=1777125004366" as="image"/>
-	<link rel="preload" href="media/panorama_691B217E_7C54_3E7A_41D3_35A255D72204_0/l/2/0_0.webp?v=1777125004366" as="image"/>
-	<link rel="preload" href="media/panorama_691B217E_7C54_3E7A_41D3_35A255D72204_0/u/2/0_0.webp?v=1777125004366" as="image"/>
-	<link rel="preload" href="media/panorama_691B217E_7C54_3E7A_41D3_35A255D72204_0/d/2/0_0.webp?v=1777125004366" as="image"/>
-	<link rel="preload" href="media/panorama_691B217E_7C54_3E7A_41D3_35A255D72204_0/f/2/0_0.webp?v=1777125004366" as="image"/>
-	<link rel="preload" href="media/panorama_691B217E_7C54_3E7A_41D3_35A255D72204_0/b/2/0_0.webp?v=1777125004366" as="image"/>
+    <link rel="icon" type="image/png" sizes="512x512" href="/images/logo.png">
+    <title>jamarat Aqabah</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, width=device-width, viewport-fit=cover" data-tdv-general-scale="0.5"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <script src="lib/tdvplayer.js?v=1779722852165"></script>
+    <link rel="preload" href="locale/en.txt?v=1779722852165" as="fetch" crossorigin="anonymous"/>
+	<link rel="preload" href="script.js?v=1779722852165" as="script"/>
+	<link rel="preload" href="media/panorama_691BD7D8_7C54_C286_41D8_87DAB3A1DC93_0/r/2/0_0.webp?v=1779722852165" as="image"/>
+	<link rel="preload" href="media/panorama_691BD7D8_7C54_C286_41D8_87DAB3A1DC93_0/l/2/0_0.webp?v=1779722852165" as="image"/>
+	<link rel="preload" href="media/panorama_691BD7D8_7C54_C286_41D8_87DAB3A1DC93_0/u/2/0_0.webp?v=1779722852165" as="image"/>
+	<link rel="preload" href="media/panorama_691BD7D8_7C54_C286_41D8_87DAB3A1DC93_0/d/2/0_0.webp?v=1779722852165" as="image"/>
+	<link rel="preload" href="media/panorama_691BD7D8_7C54_C286_41D8_87DAB3A1DC93_0/f/2/0_0.webp?v=1779722852165" as="image"/>
+	<link rel="preload" href="media/panorama_691BD7D8_7C54_C286_41D8_87DAB3A1DC93_0/b/2/0_0.webp?v=1779722852165" as="image"/>
 	<meta name="description" content="Virtual Tour"/>
 	<meta name="theme-color" content="#FFFFFF"/>
-    <script src="script.js?v=1777125004366"></script>
+    <script src="script.js?v=1779722852165"></script>
     <style type="text/css">
         html, body { height:100%; width:100%; height:100vh; width:100vw; margin:0; padding:0; overflow:hidden; }
         .fill-viewport { position:fixed; top:0; left:0; right:0; bottom:0; padding:0; margin:0; overflow: hidden; }
@@ -264,7 +270,9 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Jamarat Ro
 // are mapped to 'large' so any throw counts toward Aqabah.
 const JAMAR_PANORAMAS = {
   // Calibrated 2026-05-22 — only the facing panorama triggers the throw UI
-  'panorama_691B217E_7C54_3E7A_41D3_35A255D72204': 'large'
+  'panorama_691B217E_7C54_3E7A_41D3_35A255D72204': 'large',
+  // New 3DVista export initial panorama (visible hotspots update)
+  'panorama_691BD7D8_7C54_C286_41D8_87DAB3A1DC93': 'large'
 };
 
 // -- TARGET YAW for each pillar (degrees) --
@@ -824,7 +832,15 @@ function _showVoHint(){ return;
 function _hideVoHint(){ var h = document.getElementById('voHint'); if(h) h.remove(); }
 var _jbChk;
 (function(){
-var BANNERS_10TH={'panorama_691B217E_7C54_3E7A_41D3_35A255D72204':{
+var BANNERS_10TH={'panorama_691BD7D8_7C54_C286_41D8_87DAB3A1DC93':{
+  title:'\u{1f54b} 10th Day \u2014 Rami al-Jamrah al-\u02bbAqabah',
+  html:'<p class="bb">It is the morning of the 10th of Dhul-Hijj\u0101h \u2014 <strong>Yawm an-Nahr</strong>. After leaving Muzdalifah you arrive at Mina to perform the first stoning of Hajj.</p>'+
+  '<p class="bb"><strong>Today only one pillar is stoned:</strong> Jamrah al-\u02bbAqabah (the largest). You will throw <strong>seven pebbles</strong>, one at a time, with each throw saying:</p>'+
+  '<p class="ba">Bismill\u0101h, All\u0101hu Akbar.</p>'+
+  '<p class="bt">In the name of Allah, Allah is the Greatest.</p>'+
+  '<div class="sep"></div>'+
+  '<p class="bb">Turn until the screen glows green and the pillar is in view, then tap <strong>Throw Stone</strong>. After the seventh throw you will continue to the Qurbani (sacrifice).</p>'
+},'panorama_691B217E_7C54_3E7A_41D3_35A255D72204':{
   title:'\u{1f54b} 10th Day \u2014 Rami al-Jamrah al-\u02bbAqabah',
   html:'<p class="bb">It is the morning of the 10th of Dhul-Hijjah \u2014 <strong>Yawm an-Nahr</strong>. After leaving Muzdalifah you arrive at Mina to perform the first stoning of Hajj.</p>'+
   '<p class="bb"><strong>Today only one pillar is stoned:</strong> Jamrah al-\u02bbAqabah (the largest). You will throw <strong>seven pebbles</strong>, one at a time, with each throw saying:</p>'+
@@ -856,7 +872,7 @@ var BANNERS_13TH={
 };
 var journeyContext=new URL(window.location).searchParams.get('context')||'10th-day';
 var BANNERS=journeyContext==='11th-day'?BANNERS_11TH:(journeyContext==='12th-day'?BANNERS_12TH:(journeyContext==='13th-day'?BANNERS_13TH:BANNERS_10TH));
-var _jVoMap={'10th-day':{'panorama_691B217E_7C54_3E7A_41D3_35A255D72204':'English Day 10 Yawn An Nahr 1.mp3','panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':'English Day 10 Yawn An Nahr 1.mp3'},'11th-day':{'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':'English Day 11- dhul hijja.mp3'},'12th-day':{'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':'English Day 13 dhul hijjah.mp3'},'13th-day':{'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':'English Day 13 dhul hijjah.mp3'}};
+var _jVoMap={'10th-day':{'panorama_691BD7D8_7C54_C286_41D8_87DAB3A1DC93':'English Day 10 Yawn An Nahr 1.mp3','panorama_691B217E_7C54_3E7A_41D3_35A255D72204':'English Day 10 Yawn An Nahr 1.mp3','panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':'English Day 10 Yawn An Nahr 1.mp3'},'11th-day':{'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':'English Day 11- dhul hijja.mp3'},'12th-day':{'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':'English Day 13 dhul hijjah.mp3'},'13th-day':{'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1':'English Day 13 dhul hijjah.mp3'}};
 var _jVoCtx=_jVoMap[journeyContext]||{};
 if(window.PPContent && window.PPContent.hasData){
   var _jSk = journeyContext==='11th-day'?'jamarat-11th':(journeyContext==='12th-day'||journeyContext==='13th-day')?'jamarat-12th':'jamarat-10th';
@@ -869,7 +885,7 @@ var shown={};
 _jbChk=function(id){var b=BANNERS[id];if(!b||shown[id])return;shown[id]=true;if(b.title||b.html)openBanner(b.title,b.html,b.template,b.position);
 if(_jVoCtx[id])playVO(_jVoCtx[id]);
 };
-setTimeout(function(){_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},2500);
+setTimeout(function(){_jbChk('panorama_691BD7D8_7C54_C286_41D8_87DAB3A1DC93');_jbChk('panorama_691B217E_7C54_3E7A_41D3_35A255D72204');},2500);
 // Rebuild BANNERS/_jVoCtx and re-fire for current pano when server data arrives.
 (function(){
   var _prev = window._ppGuideContentRefresh;
