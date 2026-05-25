@@ -355,7 +355,7 @@ if(IS_TENT_MODE){
   // pill which appears after a short interaction window.
   shown[TENT_PANO] = true;
   _landingShown[TENT_PANO] = true;
-  setTimeout(function(){ if(typeof _showMinaDoneBtn === 'function') _showMinaDoneBtn(); }, 6000);
+  setTimeout(function(){ if(typeof _showMinaEndModal === 'function') _showMinaEndModal(); }, 6000);
 } else {
   setTimeout(function(){var k=Object.keys(_bannerMap);if(k.length)chk(k[0]);},2500);
 }

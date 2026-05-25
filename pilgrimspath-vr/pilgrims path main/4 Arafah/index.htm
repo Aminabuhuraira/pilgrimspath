@@ -178,7 +178,7 @@ if(_arafahSeq.length && _arafahSeq[0].audio){
 // already handles the intro banner. Hook _showArafahDoneBtn onto its close callback
 // so the journey continues correctly when the user dismisses the intro.
 if(!_arafahSeq.length && window.PPContent && window.PPContent.hasData){
-  window.__ppSceneBannerAfterClose = function(){ _showArafahDoneBtn(); };
+  window.__ppSceneBannerAfterClose = function(){ _showArafahEndModal(); };
 }
 function _showArafahIntro(){
   // Refresh _arafahSeq from latest PPContent — if server data has already arrived
@@ -192,7 +192,7 @@ function _showArafahIntro(){
     // No sequence banners: scene-load banner is handled by fireSceneLoad.
     // Ensure _showArafahDoneBtn is hooked in case this fires before the init block above.
     if(!window.__ppSceneBannerAfterClose)
-      window.__ppSceneBannerAfterClose = function(){ _showArafahDoneBtn(); };
+      window.__ppSceneBannerAfterClose = function(){ _showArafahEndModal(); };
     return;
   }
   // Block JCL's fireSceneLoad / ppPlayVOAuto from double-firing after async
@@ -209,7 +209,7 @@ function _showArafahIntro(){
     btn.textContent='Continue \u25b8';
     btn.onclick=function(){
       _bannerPager.index=_bannerPager.pages.length;dismissBanner();
-      _showArafahDoneBtn();
+      _showArafahEndModal();
     };
   },50);
 }
@@ -331,7 +331,7 @@ hookTDV();
       // If server has no sequence banners, ensure fireSceneLoad's 'Continue' button
       // chains into _showArafahDoneBtn via __ppSceneBannerAfterClose.
       if(!_arafahSeq.length && !window.__ppSceneBannerAfterClose){
-        window.__ppSceneBannerAfterClose = function(){ _showArafahDoneBtn(); };
+        window.__ppSceneBannerAfterClose = function(){ _showArafahEndModal(); };
       }
     }
   };
