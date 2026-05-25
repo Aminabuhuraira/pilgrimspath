@@ -173,9 +173,9 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overfl
 
 /* --- Fit-to-screen overrides (no page scroll) --- */
 html,body{height:100%;overflow:hidden}
-/* bottom:155px = 82px (button pos) + ~50px (button height) + 23px gap — clears rail+button */
-.scene-wrap{height:100vh;height:100dvh;overflow:hidden;padding:14px 10px 155px;align-items:flex-start;justify-content:center}
-.scene-card{width:100%;max-width:760px;max-height:calc(100vh - 169px);max-height:calc(100dvh - 169px);overflow-y:auto;overflow-x:hidden;padding:18px 22px;scrollbar-width:thin;scrollbar-color:#D4AF37 transparent}
+/* bottom:120px clears the ~100px scene nav rail */
+.scene-wrap{height:100vh;height:100dvh;overflow:hidden;padding:14px 10px 120px;align-items:flex-start;justify-content:center}
+.scene-card{width:100%;max-width:760px;max-height:calc(100vh - 134px);max-height:calc(100dvh - 134px);overflow-y:auto;overflow-x:hidden;padding:18px 22px;scrollbar-width:thin;scrollbar-color:#D4AF37 transparent}
 .scene-card,.scene-card *{word-wrap:break-word;overflow-wrap:break-word;min-width:0}
 .scene-card::-webkit-scrollbar{width:6px}
 .scene-card::-webkit-scrollbar-thumb{background:#D4AF37;border-radius:3px}
@@ -193,7 +193,7 @@ html,body{height:100%;overflow:hidden}
   .dua-arabic{font-size:1.05rem;line-height:1.5}
 }
 @media(max-height:580px){
-  .scene-wrap{padding:8px 8px 130px}
+  .scene-wrap{padding:8px 8px 105px}
   .scene-card{padding:10px 14px;border-radius:16px}
   .scene-title{font-size:1rem}
   .qurbani-scene{height:120px;margin-bottom:8px}
@@ -388,6 +388,10 @@ html,body{height:100%;overflow:hidden}
             <p class="dua-translit">"Bismillahi wallahu Akbar, Allahumma hadha minka wa lak"</p>
             <p class="dua-translation">"In the name of Allah, and Allah is the Greatest. O Allah, this is from You and for You."</p>
         </div>
+        <!-- Continue button — inside card so it scrolls with content -->
+        <div style="text-align:center;padding:24px 0 6px;">
+          <button id="qurbaniContinue" data-pp-button="qurbaniContinue"><span class="qcIcon">✂️</span> <span id="qurbaniContinueLabel">Continue to Halaq ▸</span></button>
+        </div>
     </div>
 </div>
 
@@ -405,19 +409,17 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
-<!-- --- Continue button --- -->
+<!-- Continue button CSS (button lives inside .scene-card above) -->
 <style>
-#qurbaniContinue{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:10005;
+#qurbaniContinue{display:inline-flex;align-items:center;gap:8px;
   background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;border:none;
   border-radius:999px;padding:14px 30px;font-size:15px;font-weight:700;letter-spacing:0.3px;
   font-family:'Poppins','DM Sans',Arial,sans-serif;cursor:pointer;
-  box-shadow:0 6px 24px rgba(201,168,76,0.55);transition:transform .15s,box-shadow .15s;
-  display:inline-flex;align-items:center;gap:8px;}
-#qurbaniContinue:hover{transform:translateX(-50%) scale(1.05);box-shadow:0 8px 30px rgba(201,168,76,0.7);}
+  box-shadow:0 6px 24px rgba(201,168,76,0.55);transition:transform .15s,box-shadow .15s;}
+#qurbaniContinue:hover{transform:scale(1.05);box-shadow:0 8px 30px rgba(201,168,76,0.7);}
 #qurbaniContinue .qcIcon{font-size:18px;}
-@media(max-width:480px){#qurbaniContinue{font-size:13px;padding:12px 22px;bottom:90px;}}
+@media(max-width:480px){#qurbaniContinue{font-size:13px;padding:12px 22px;}}
 </style>
-<button id="qurbaniContinue" data-pp-button="qurbaniContinue"><span class="qcIcon">✂️</span> <span id="qurbaniContinueLabel">Continue to Halaq ▸</span></button>
 <script>
 (function(){
   var btn = document.getElementById('qurbaniContinue');

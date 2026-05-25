@@ -119,19 +119,12 @@
       /* 2D scene-card pages: ensure card does not scroll under the rail (~100px on desktop) */
       '.scene-wrap{padding-bottom:120px !important;}',
       '.scene-card{max-height:calc(100dvh - 134px) !important;}',
-      /* Pages with a fixed continue button above the rail (button bottom=82px, height≈50px):
-         needs 155px clearance so card content never hides behind the button */
-      'body:has(#qurbaniContinue) .scene-wrap,body:has(#barberContinue) .scene-wrap,body:has(#umrahTrimContinue) .scene-wrap{padding-bottom:155px !important;}',
-      'body:has(#qurbaniContinue) .scene-card,body:has(#barberContinue) .scene-card,body:has(#umrahTrimContinue) .scene-card{max-height:calc(100dvh - 169px) !important;}',
       /* Scene-specific action buttons must clear the rail (~70px tall on desktop) */
-      '#jamarThrowBtn,#minaContinue,#umrahTrimContinue,#qurbaniContinue,#barberContinue{bottom:82px !important;}',
+      '#jamarThrowBtn,#minaContinue{bottom:82px !important;}',
       '#jamarAimHint{bottom:calc(82px + 54px) !important;}',  /* aim hint above throw btn */
       /* Push path-cue toast above the throw button so it is never obscured */
       'body:has(#jamarThrowBtn) #pathCueToast{bottom:150px !important;}',
       'body:has(#minaContinue) #pathCueToast{bottom:150px !important;}',
-      'body:has(#umrahTrimContinue) #pathCueToast{bottom:150px !important;}',
-      'body:has(#qurbaniContinue) #pathCueToast{bottom:150px !important;}',
-      'body:has(#barberContinue) #pathCueToast{bottom:150px !important;}',
       /* Next Stop button on desktop must clear the scene rail (~100px tall) */
       '@media(min-width:769px){#nextStopBtn{bottom:140px !important;}}',
       /* On mobile (≤768px) journey-nav.js already sets 168px which clears the rail */
@@ -157,10 +150,10 @@
         /* pebbleHUD on mobile — top-right below pause button, respect safe-area notch */
         '#pebbleHUD{top:calc(env(safe-area-inset-top,0px) + 74px) !important;right:16px !important;bottom:auto !important;}',  
         /* On mobile, action buttons need extra clearance for safe area + rail */
-        '#jamarThrowBtn,#minaContinue,#umrahTrimContinue,#qurbaniContinue,#barberContinue{bottom:calc(70px + env(safe-area-inset-bottom,0px)) !important;}',
+        '#jamarThrowBtn,#minaContinue{bottom:calc(70px + env(safe-area-inset-bottom,0px)) !important;}',
         '#jamarAimHint{bottom:calc(126px + env(safe-area-inset-bottom,0px)) !important;}',
         /* Mobile: ensure toast clears the action button + safe area */
-        'body:has(#jamarThrowBtn) #pathCueToast,body:has(#minaContinue) #pathCueToast,body:has(#umrahTrimContinue) #pathCueToast,body:has(#qurbaniContinue) #pathCueToast,body:has(#barberContinue) #pathCueToast{bottom:calc(130px + env(safe-area-inset-bottom,0px)) !important;}',
+        'body:has(#jamarThrowBtn) #pathCueToast,body:has(#minaContinue) #pathCueToast{bottom:calc(130px + env(safe-area-inset-bottom,0px)) !important;}',
         /* add safe-area-inset-bottom to rail inner so content isn\'t hidden under home bar */
         '#scnRailInner{padding-bottom:calc(5px + env(safe-area-inset-bottom,0px)) !important;}',
         'body.ppOverlayActive #scnRail,.ppOverlayActive #scnRail{display:none !important;opacity:0 !important;pointer-events:none !important;}',

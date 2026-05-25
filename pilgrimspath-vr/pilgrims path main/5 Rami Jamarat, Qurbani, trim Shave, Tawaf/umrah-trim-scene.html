@@ -21,12 +21,12 @@ fbq('init','1199634958501931');fbq('track','PageView');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overflow:hidden}
 
-.scene-wrap{position:relative;width:100%;height:100vh;height:100dvh;display:flex;align-items:flex-start;justify-content:center;background:#FFFFFF;overflow:hidden;padding:14px 10px 155px;}
+.scene-wrap{position:relative;width:100%;height:100vh;height:100dvh;display:flex;align-items:flex-start;justify-content:center;background:#FFFFFF;overflow:hidden;padding:14px 10px 120px;}
 .scene-bg{position:absolute;inset:0;overflow:hidden;opacity:0.03;pointer-events:none;}
 .scene-bg::before{content:'\ufdfd';position:absolute;font-size:180px;color:#1a1a2e;white-space:nowrap;animation:bgScroll 60s linear infinite;}
 @keyframes bgScroll{0%{transform:translateX(100%)}100%{transform:translateX(-200%)}}
 
-.scene-card{position:relative;z-index:2;width:100%;max-width:740px;max-height:calc(100vh - 169px);max-height:calc(100dvh - 169px);overflow-y:auto;overflow-x:hidden;padding:18px 22px;background:rgba(255,255,255,0.97);border-radius:24px;text-align:center;border:1.5px solid rgba(212,175,55,0.2);box-shadow:0 12px 48px rgba(0,0,0,0.06);opacity:0;animation:cardIn .6s .1s ease forwards;scrollbar-width:thin;scrollbar-color:#D4AF37 transparent;}
+.scene-card{position:relative;z-index:2;width:100%;max-width:740px;max-height:calc(100vh - 134px);max-height:calc(100dvh - 134px);overflow-y:auto;overflow-x:hidden;padding:18px 22px;background:rgba(255,255,255,0.97);border-radius:24px;text-align:center;border:1.5px solid rgba(212,175,55,0.2);box-shadow:0 12px 48px rgba(0,0,0,0.06);opacity:0;animation:cardIn .6s .1s ease forwards;scrollbar-width:thin;scrollbar-color:#D4AF37 transparent;}
 .scene-card,.scene-card *{word-wrap:break-word;overflow-wrap:break-word;min-width:0}
 .scene-card::-webkit-scrollbar{width:6px}
 .scene-card::-webkit-scrollbar-thumb{background:#D4AF37;border-radius:3px}
@@ -170,6 +170,10 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overfl
       <p class="dua-translit">"Allāhumma-ghfir lil-muḥalliqīna wal-muqaṣṣirīn"</p>
       <p class="dua-translation">"O Allah, forgive those who shave their heads and those who trim their hair."</p>
     </div>
+    <!-- Continue button — inside card so it scrolls with content -->
+    <div style="text-align:center;padding:24px 0 6px;">
+      <button id="umrahTrimContinue"><span style="font-size:18px;">🌙</span> <span>Continue: Rest &amp; Prepare ▸</span></button>
+    </div>
   </div>
 </div>
 
@@ -184,18 +188,16 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
-<!-- Continue button — fixed: Step 3 → Step 4 (Rest) -->
+<!-- Continue button CSS (button lives inside .scene-card above) -->
 <style>
-#umrahTrimContinue{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:10005;
+#umrahTrimContinue{display:inline-flex;align-items:center;gap:8px;
   background:linear-gradient(135deg,#22c55e,#15803d);color:#fff;border:none;
   border-radius:999px;padding:14px 30px;font-size:15px;font-weight:700;letter-spacing:.3px;
   font-family:'Poppins','DM Sans',Arial,sans-serif;cursor:pointer;
-  box-shadow:0 6px 24px rgba(34,197,94,.55);transition:transform .15s,box-shadow .15s;
-  display:inline-flex;align-items:center;gap:8px;}
-#umrahTrimContinue:hover{transform:translateX(-50%) scale(1.05);box-shadow:0 8px 30px rgba(34,197,94,.7);}
-@media(max-width:480px){#umrahTrimContinue{font-size:13px;padding:12px 22px;bottom:90px;}}
+  box-shadow:0 6px 24px rgba(34,197,94,.55);transition:transform .15s,box-shadow .15s;}
+#umrahTrimContinue:hover{transform:scale(1.05);box-shadow:0 8px 30px rgba(34,197,94,.7);}
+@media(max-width:480px){#umrahTrimContinue{font-size:13px;padding:12px 22px;}}
 </style>
-<button id="umrahTrimContinue"><span style="font-size:18px;">🌙</span> <span>Continue: Rest &amp; Prepare ▸</span></button>
 <script>
 (function(){
   var btn = document.getElementById('umrahTrimContinue');

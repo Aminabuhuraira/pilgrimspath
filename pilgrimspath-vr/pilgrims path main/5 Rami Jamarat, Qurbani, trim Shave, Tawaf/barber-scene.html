@@ -181,8 +181,8 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overfl
 /* --- Fit-to-screen overrides (no page scroll) --- */
 html,body{height:100%;overflow:hidden}
 /* bottom:155px = 82px (button pos) + ~50px (button height) + 23px gap — clears rail+button */
-.scene-wrap{height:100vh;height:100dvh;overflow:hidden;padding:14px 10px 155px;align-items:flex-start;justify-content:center}
-.scene-card{width:100%;max-width:740px;max-height:calc(100vh - 169px);max-height:calc(100dvh - 169px);overflow-y:auto;overflow-x:hidden;padding:18px 22px;scrollbar-width:thin;scrollbar-color:#D4AF37 transparent}
+.scene-wrap{height:100vh;height:100dvh;overflow:hidden;padding:14px 10px 120px;align-items:flex-start;justify-content:center}
+.scene-card{width:100%;max-width:740px;max-height:calc(100vh - 134px);max-height:calc(100dvh - 134px);overflow-y:auto;overflow-x:hidden;padding:18px 22px;scrollbar-width:thin;scrollbar-color:#D4AF37 transparent}
 .scene-card,.scene-card *{word-wrap:break-word;overflow-wrap:break-word;min-width:0}
 .scene-card::-webkit-scrollbar{width:6px}
 .scene-card::-webkit-scrollbar-thumb{background:#D4AF37;border-radius:3px}
@@ -212,7 +212,7 @@ html,body{height:100%;overflow:hidden}
   .info-note{padding:7px 14px;font-size:.74rem}
 }
 @media(max-height:580px){
-  .scene-wrap{padding:8px 8px 130px}
+  .scene-wrap{padding:8px 8px 105px}
   .scene-card{padding:10px 14px;border-radius:16px}
   .scene-title{font-size:1rem}
   .barber-scene{height:120px;margin-bottom:8px}
@@ -399,6 +399,10 @@ html,body{height:100%;overflow:hidden}
             <p class="dua-translit">"Allahumma-ghfir lil-muhalliqeena wal-muqassireen"</p>
             <p class="dua-translation">"O Allah, forgive those who shave their heads and those who trim their hair."</p>
         </div>
+        <!-- Continue button — inside card so it scrolls with content -->
+        <div style="text-align:center;padding:24px 0 6px;">
+          <button id="barberContinue" data-pp-button="barberContinue"><span class="bcIcon">🕋</span> <span id="barberContinueLabel">Continue to Tawaf al-Ifadah ▸</span></button>
+        </div>
     </div>
 </div>
 
@@ -416,19 +420,17 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
-<!-- --- Continue button (context-aware) --- -->
+<!-- Continue button CSS (button lives inside .scene-card above) -->
 <style>
-#barberContinue{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:10005;
+#barberContinue{display:inline-flex;align-items:center;gap:8px;
   background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;border:none;
   border-radius:999px;padding:14px 30px;font-size:15px;font-weight:700;letter-spacing:0.3px;
   font-family:'Poppins','DM Sans',Arial,sans-serif;cursor:pointer;
-  box-shadow:0 6px 24px rgba(201,168,76,0.55);transition:transform .15s,box-shadow .15s;
-  display:inline-flex;align-items:center;gap:8px;}
-#barberContinue:hover{transform:translateX(-50%) scale(1.05);box-shadow:0 8px 30px rgba(201,168,76,0.7);}
+  box-shadow:0 6px 24px rgba(201,168,76,0.55);transition:transform .15s,box-shadow .15s;}
+#barberContinue:hover{transform:scale(1.05);box-shadow:0 8px 30px rgba(201,168,76,0.7);}
 #barberContinue .bcIcon{font-size:18px;}
-@media(max-width:480px){#barberContinue{font-size:13px;padding:12px 22px;bottom:90px;}}
+@media(max-width:480px){#barberContinue{font-size:13px;padding:12px 22px;}}
 </style>
-<button id="barberContinue" data-pp-button="barberContinue"><span class="bcIcon">🕋</span> <span id="barberContinueLabel">Continue to Tawaf al-Ifadah ▸</span></button>
 <script>
 (function(){
   // This scene is now Step 11 (post-Hajj Halaq) ONLY. Step 3 lives in umrah-trim-scene.html.
