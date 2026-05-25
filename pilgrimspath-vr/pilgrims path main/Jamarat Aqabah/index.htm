@@ -551,8 +551,8 @@ function throwStone() {
             var _cctx=new URL(window.location).searchParams.get('context')||'';
             var _cSk=_cctx==='11th-day'?'jamarat-11th':(_cctx==='12th-day'||_cctx==='13th-day')?'jamarat-12th':null;
             var _cId=_cctx==='11th-day'?'jm11-complete':(_cctx==='12th-day'||_cctx==='13th-day')?'jm12-complete':null;
-            var _ovC=(_cSk&&_cId&&window.PPContent&&window.PPContent.byId(_cSk,_cId))||{};
-            var _cFile=_ovC.audio||(_cctx==='11th-day'?'English Day 11- dhul hijja 2.mp3':(_cctx==='12th-day'||_cctx==='13th-day'?'English Day 13 Dhul hijjah 2.mp3':null));
+            var _ovC=_cSk&&_cId&&window.PPContent&&window.PPContent.byId(_cSk,_cId);
+            var _cFile=_ovC ? _ovC.audio : (_cctx==='11th-day'?'English Day 11- dhul hijja 2.mp3':(_cctx==='12th-day'||_cctx==='13th-day'?'English Day 13 Dhul hijjah 2.mp3':null));
             if(_cFile)playVO(_cFile);
           }
         }

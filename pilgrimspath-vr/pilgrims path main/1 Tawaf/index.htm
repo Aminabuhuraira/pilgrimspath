@@ -868,7 +868,7 @@
                 window._welcomeVoStarted = true;
                 _hideVoHint && _hideVoHint();
                 var _ov0=window.PPContent&&window.PPContent.byId('tawaf-initial','tw-guide-0');
-                var _wf=(_ov0&&_ov0.audio)||'1 English Welcome Info.mp3';
+                var _wf=_ov0 ? _ov0.audio : '1 English Welcome Info.mp3';
                 if(_wf) playVO(_wf);
                 if(window._voAudio){
                     window._voAudio.addEventListener('ended', function(){ window._welcomeVoDone = true; }, { once: true });
@@ -1361,7 +1361,7 @@ hookTDV();
             // The button's ihramNext() will stop any in-progress audio and advance.
             window._welcomeVoStarted = true;
             var _ov=window.PPContent&&window.PPContent.byId('tawaf-initial','tw-guide-0');
-            var _wf=(_ov&&_ov.audio)||'1 English Welcome Info.mp3';
+            var _wf=_ov ? _ov.audio : '1 English Welcome Info.mp3';
             if(_wf){
                 playVO(_wf);
                 // When auto-played audio ends naturally, mark welcome as done
