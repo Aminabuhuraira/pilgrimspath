@@ -214,7 +214,10 @@ hookTDV();
       _bannerMap = window.PPContent.bannerMapByPano('safa-marwa') || {};
       _audioMap  = window.PPContent.audioMapByPano('safa-marwa')  || {};
     }
-    // Re-fire chk for currently-visible panorama in case it now matches a map entry
+    // Re-fire banner for the currently-visible panorama using CMS-authoritative data.
+    // Bypass chk() entirely to avoid re-incrementing the Sa'i lap counter on the
+    // same panorama. If stale localStorage data already showed a wrong banner,
+    // this replaces it with the correct CMS content.
     try{
       var t = TDV.PlayerAPI.getCurrentPlayer();
       var pl = t && t.mainPlayList;
@@ -223,7 +226,16 @@ hookTDV();
         var items = pl.get('items');
         if(items && items[idx]){
           var id = items[idx].get('media').get('id');
-          if(id && !shown[id]) chk(id);
+          if(id){
+            var _b  = _bannerMap[id];
+            var _vo = _audioMap[id];
+            if(_b || _vo){
+              delete shown[id]; _persistShown();
+              if(_b && (_b.title || _b.html)) openBanner(_b.title, _b.html, _b.template, _b.position);
+              if(_vo) playVO(_vo);
+              shown[id] = true; _persistShown();
+            }
+          }
         }
       }
     }catch(_){}
