@@ -162,6 +162,13 @@ function _hideVoHint(){ var h = document.getElementById('voHint'); if(h) h.remov
 var _arafahSeq = (window.PPContent && window.PPContent.hasData)
   ? (window.PPContent.bySequence('arafah-9th') || [])
   : [];
+// -- Panorama-triggered banners (e.g. ar-pano-congrats for 84B7F067) --------
+var _bannerMap = (window.PPContent && window.PPContent.hasData)
+  ? (window.PPContent.bannerMapByPano('arafah-9th') || {})
+  : {};
+var _audioMap  = (window.PPContent && window.PPContent.hasData)
+  ? (window.PPContent.audioMapByPano('arafah-9th')  || {})
+  : {};
 // If this scene has its own sequenced intro audio, claim the scene-load audio slot
 // immediately so _fetchServerContent's async server fetch can't double-play it if
 // the admin later changes ar-seq-1 to a scene-load trigger on the server.
@@ -316,6 +323,20 @@ function chk(id) {
       }
     }
   }
+  // Congrats panorama (84B7F067): show CMS banner if configured, surface Next Stop
+  if (id.indexOf('84B7F067') !== -1 && !shown[id]) {
+    shown[id] = true;
+    var _b = _bannerMap[id];
+    var _vo = _audioMap[id];
+    if (_b && (_b.title || _b.html)) {
+      openBanner(_b.title, _b.html, _b.template, _b.position);
+      if (_vo) playVO(_vo);
+    } else if (_vo) {
+      playVO(_vo);
+    }
+    window.journeyIsLastPanorama = true;
+    if (typeof showJourneyNextButton === 'function') { setTimeout(showJourneyNextButton, 300); }
+  }
 }
 function hookTDV(){if(typeof TDV==='undefined'||!TDV.Tour||!TDV.Tour.Script)return setTimeout(hookTDV,500);var o1=TDV.Tour.Script.setPlayListSelectedIndex;if(o1){TDV.Tour.Script.setPlayListSelectedIndex=function(a,b){try{var id=a.get('items')[b].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}catch(e){}return o1.apply(this,arguments);};}var o2=TDV.Tour.Script.setMainMediaByIndex;if(o2){TDV.Tour.Script.setMainMediaByIndex=function(a){try{var items=this.mainPlayList.get('items');if(a>=0&&a<items.length){var id=items[a].get('media').get('id');if(id!==lastId){lastId=id;chk(id);}}}catch(e){}return o2.apply(this,arguments);};}console.log('[Arafah] banner hooks installed');}
 hookTDV();
@@ -328,6 +349,8 @@ hookTDV();
     if(typeof _prevAR === 'function') _prevAR();
     if(window.PPContent && window.PPContent.hasData){
       _arafahSeq = window.PPContent.bySequence('arafah-9th') || [];
+      _bannerMap = window.PPContent.bannerMapByPano('arafah-9th') || {};
+      _audioMap  = window.PPContent.audioMapByPano('arafah-9th')  || {};
       // If server has no sequence banners, ensure fireSceneLoad's 'Continue' button
       // chains into _showArafahDoneBtn via __ppSceneBannerAfterClose.
       if(!_arafahSeq.length && !window.__ppSceneBannerAfterClose){

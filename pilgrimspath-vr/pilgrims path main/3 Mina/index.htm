@@ -220,7 +220,7 @@ function _minaFireBannerVO(id) {
   shown[id] = true;
   if (b && (b.title || b.html)) openBanner(b.title, b.html, b.template, b.position);
   if (vo) playVO(vo);
-  if (id === MINA_LANDING_8TH) {
+  if (id === MINA_LANDING_8TH || (id === TENT_PANO && !IS_TENT_MODE)) {
     window.journeyIsLastPanorama = true;
     if (typeof showJourneyNextButton === 'function') { setTimeout(showJourneyNextButton, 300); }
   }
