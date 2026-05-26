@@ -308,6 +308,19 @@ function triggerJourneyCompletion() {
   window._jamarCompletionFired = true;
   completeEl.style.display = 'none';
   window.journeyActivityComplete = true;
+  // Show completion banner + VO from CMS (admin-editable via scene 15 / jamarat-12th)
+  try {
+    var cov = window.PPContent && window.PPContent.byCompletion && window.PPContent.byCompletion('jamarat-12th');
+    if (cov) {
+      if ((cov.title || cov.html) && typeof openBanner === 'function') openBanner(cov.title, cov.html, cov.template, cov.position);
+      if (cov.audio && window.PPContent && window.PPContent.audioUrl) {
+        try { if (window._voAudio) { window._voAudio.pause(); window._voAudio = null; } } catch(_) {}
+        var a = new Audio(window.PPContent.audioUrl(cov.audio));
+        window._voAudio = a; window._voCurrentFile = cov.audio; window._welcomeVoStarted = true;
+        a.play().catch(function(){});
+      }
+    }
+  } catch(_) {}
   if (typeof showJourneyNextButton === 'function') {
     try { showJourneyNextButton(); } catch(e) {}
   }
