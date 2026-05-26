@@ -692,17 +692,32 @@
 
     // Reset journey progress
     function confirmResetProgress() {
-        if (!confirm('Reset all journey progress? This cannot be undone.')) return;
+        if (!confirm('Reset all journey progress? This will clear your progress on all devices and cannot be undone.')) return;
+        var keysToRemove = [
+            'journeyState','pp_quiz_scores','pp_quiz_enabled','pp_cert_awarded_at',
+            'pp_hajj_certified','pp_hajj_certified_name','pp_hajj_certified_date',
+            'pp_umrah_completed'
+        ];
+        try { keysToRemove.forEach(function(k){ localStorage.removeItem(k); }); } catch(e) {}
+        // Also reset on the server so _pullFromServer doesn't restore old progress
         try {
-            localStorage.removeItem('journeyState');
-            localStorage.removeItem('pp_quiz_scores');
-            localStorage.removeItem('pp_quiz_enabled');
-            localStorage.removeItem('pp_cert_awarded_at');
-            showToast('Journey progress reset', 2500);
-            loadProgressStats();
-        } catch(e) {
-            showToast('Failed to reset progress', 2500);
-        }
+            var _sbKey = 'sb-giftctxrqvlfekhzpcaa-auth-token';
+            var _raw = localStorage.getItem(_sbKey) || sessionStorage.getItem(_sbKey);
+            var _jwt = _raw ? (JSON.parse(_raw).access_token || null) : null;
+            if (_jwt) {
+                fetch('/api/user-progress', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _jwt },
+                    body: JSON.stringify({
+                        journey_state: { currentStep: 0, currentContext: '', completedSteps: [] },
+                        umrah_completed: false
+                    })
+                }).catch(function(){});
+            }
+        } catch(_) {}
+        showToast('Journey progress reset on all devices', 2500);
+        setTimeout(function(){ loadProgressStats(); }, 600);
     }
 
     // Dropdown toggle

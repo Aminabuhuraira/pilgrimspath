@@ -874,6 +874,8 @@ function loadQuizContent(cb){
   document.head.appendChild(s);
 }
 function _resolveCurrentQuizStep(){
+  // PRIORITY 0: retake-mode override (set by _retakeAllQuizzes to run each step in sequence)
+  if(typeof window._ppQuizStepOverride === 'number' && window._ppQuizStepOverride >= 1) return window._ppQuizStepOverride;
   // PRIORITY 1: explicit ?journey=N URL param (most reliable per-page indicator)
   try{
     var p = new URLSearchParams(window.location.search);
@@ -1228,6 +1230,7 @@ function initPauseMenu(){
         certBtn +
         '<button type="button" data-act="restart">↻  Restart Scene</button>' +
         '<button type="button" data-act="reset">↺  Reset Progress</button>' +
+        '<button type="button" data-act="reset-all" style="color:#c0392b;border-top:1px solid rgba(201,168,76,.15);margin-top:4px;padding-top:12px;">🗑  Reset Entire Experience</button>' +
         '<button type="button" data-act="exit">⏏  Exit to Dashboard</button>' +
       '</nav>' +
       '<footer class="ppMenuFoot">Pilgrim\'s Path · Hajj VR</footer>';
@@ -1346,6 +1349,30 @@ function initPauseMenu(){
       if(confirm('Reset your Hajj journey progress and return to the start?')){
         if(window.jm && jm.resetJourney) jm.resetJourney();
         else { try{ localStorage.removeItem('journeyState'); }catch(e){} window.location.href = '/hajj-vr.html'; }
+      }
+      return;
+    }
+    if(act==='reset-all'){
+      if(confirm('Reset your ENTIRE Hajj experience? This clears all journey progress, quiz scores, and certificate data permanently and cannot be undone.')){
+        var _allKeys = ['journeyState','pp_quiz_scores','pp_quiz_enabled','pp_cert_awarded_at',
+          'pp_hajj_certified','pp_hajj_certified_name','pp_hajj_certified_date',
+          'pp_rotation_frozen','pp_umrah_completed'];
+        _allKeys.forEach(function(k){ try{ localStorage.removeItem(k); }catch(_){} });
+        try{ sessionStorage.clear(); }catch(_){}
+        // Reset server-side state, then navigate
+        var _doNav = function(){ window.location.href = '/hajj-vr.html'; };
+        try{
+          var _sbKey = 'sb-giftctxrqvlfekhzpcaa-auth-token';
+          var _raw = localStorage.getItem(_sbKey) || sessionStorage.getItem(_sbKey);
+          var _jwt = _raw ? (JSON.parse(_raw).access_token || null) : null;
+          if(_jwt){
+            fetch('/api/user-progress',{
+              method:'POST', credentials:'include',
+              headers:{'Content-Type':'application/json','Authorization':'Bearer '+_jwt},
+              body:JSON.stringify({journey_state:{currentStep:0,currentContext:'',completedSteps:[]},umrah_completed:false})
+            }).then(_doNav).catch(_doNav);
+          } else { _doNav(); }
+        }catch(_){ _doNav(); }
       }
       return;
     }
@@ -1693,6 +1720,43 @@ function _drawCertificate(pilgrimName, dateStr) {
   return canvas;
 }
 
+// ── Retake All Quizzes ──
+// For users who've completed the journey but haven't earned their certificate
+// (or want to improve). Runs all 16 step quizzes in sequence without redoing the VR tour.
+function _retakeAllQuizzes(){
+  // Clear previous quiz scores and session dedup guards
+  try{ localStorage.removeItem('pp_quiz_scores'); }catch(_){}
+  try{
+    Object.keys(sessionStorage).forEach(function(k){
+      if(k.indexOf('pp_qshown_') === 0) sessionStorage.removeItem(k);
+    });
+  }catch(_){}
+  // Ensure quizzes are enabled
+  try{ localStorage.setItem('pp_quiz_enabled','1'); }catch(_){}
+  // Remove the completion overlay to free the screen
+  var _co = document.getElementById('journeyComplete');
+  if(_co && _co.parentNode) _co.parentNode.removeChild(_co);
+
+  var _steps = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
+  var _si = 0;
+  function _runNext(){
+    while(_si < _steps.length){
+      var _step = _steps[_si++];
+      var _pool = (window.PPQuiz && window.PPQuiz.questions && window.PPQuiz.questions[_step]) || null;
+      if(_pool && _pool.length > 0){
+        window._ppQuizStepOverride = _step;
+        try{ sessionStorage.removeItem('pp_qshown_' + _step); }catch(_){}
+        showQuizForCurrentStep(function(){ _runNext(); });
+        return;
+      }
+    }
+    // All steps done — reset override and show updated results
+    window._ppQuizStepOverride = undefined;
+    window.showJourneyComplete();
+  }
+  loadQuizContent(_runNext);
+}
+
 window.showJourneyComplete = function() {
   // Remove next button if exists
   const nextBtn = document.getElementById('nextStopBtn');
@@ -1743,7 +1807,7 @@ window.showJourneyComplete = function() {
       '</div>' +
       '<p style="font-size:13px;color:#6B5B4F;margin:6px 0 14px;">Retake the quizzes on each scene to improve your score.</p>' +
       '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:4px;">' +
-      '<a href="/hajj-vr.html" style="display:inline-flex;align-items:center;background:linear-gradient(135deg,#C9A227,#8B6914);color:#fff;border:none;border-radius:12px;padding:12px 24px;font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;box-shadow:0 4px 16px rgba(201,162,39,.3);">\uD83D\uDD04 Retry Quizzes</a>' +
+      '<button id="retakeAllQuizzesBtn" type="button" style="display:inline-flex;align-items:center;background:linear-gradient(135deg,#C9A227,#8B6914);color:#fff;border:none;border-radius:12px;padding:12px 24px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(201,162,39,.3);">\uD83D\uDCDD Retake All Quizzes</button>' +
       '<a href="/dashboard" style="display:inline-flex;align-items:center;background:#2C1810;color:#fff;border:none;border-radius:12px;padding:12px 24px;font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2);">\uD83D\uDCCA Go to Dashboard</a>' +
       '</div>' +
       '</div>';
@@ -1767,6 +1831,9 @@ window.showJourneyComplete = function() {
         link.click();
       });
     }
+  } else {
+    var retakeBtn = document.getElementById('retakeAllQuizzesBtn');
+    if(retakeBtn) retakeBtn.addEventListener('click', _retakeAllQuizzes);
   }
 };
 
