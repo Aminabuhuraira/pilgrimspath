@@ -159,11 +159,28 @@ function _showVoHint(){ return;
 function _hideVoHint(){ var h = document.getElementById('voHint'); if(h) h.remove(); }
 (function(){
 // -- Read banner + VO data from JCM (single source of truth) --------------
+// Use canonical panorama IDs (keyed by banner semantic ID) so that any admin
+// edits to the panorama field in the server CMS never break the scene.
 var _bannerMap = {};
 var _audioMap  = {};
+var _SM_CANON = {
+  'sm-pano-1': 'panorama_740A042A_7348_ED6D_41CA_00F715E5C1F1',
+  'sm-pano-2': 'panorama_740A504C_7348_2525_41D3_C8D1BB48BC81',
+  'sm-pano-3': 'panorama_77BBA118_7348_272D_41C8_26E405934981'
+};
+function _buildSMBannerMaps() {
+  _bannerMap = {};
+  _audioMap  = {};
+  Object.keys(_SM_CANON).forEach(function(banId) {
+    var panoId = _SM_CANON[banId];
+    var b = window.PPContent && window.PPContent.byId('safa-marwa', banId);
+    if (!b) return;
+    if (b.title || b.html) _bannerMap[panoId] = { title:b.title, html:b.html, template:b.template, position:b.position };
+    if (b.audio)           _audioMap[panoId]  = b.audio;
+  });
+}
 if (window.PPContent && window.PPContent.hasData) {
-  _bannerMap = window.PPContent.bannerMapByPano('safa-marwa') || {};
-  _audioMap  = window.PPContent.audioMapByPano('safa-marwa')  || {};
+  _buildSMBannerMaps();
 }
 
 // -- Deduplication ? persisted across same-session reloads -----------------
@@ -206,13 +223,14 @@ hookTDV();
 
 // Rebuild banner/audio maps after async server fetch resolves — prevents stale
 // localStorage from blocking panorama-triggered banners.
+// Always uses canonical panorama IDs (_buildSMBannerMaps) so that any admin
+// edits to the panorama field in the server CMS never break the scene.
 (function(){
   var _prev = window._ppGuideContentRefresh;
   window._ppGuideContentRefresh = function(){
     if(typeof _prev === 'function') _prev();
     if(window.PPContent && window.PPContent.hasData){
-      _bannerMap = window.PPContent.bannerMapByPano('safa-marwa') || {};
-      _audioMap  = window.PPContent.audioMapByPano('safa-marwa')  || {};
+      _buildSMBannerMaps();
     }
     // Re-fire banner for the currently-visible panorama using CMS-authoritative data.
     // Bypass chk() entirely to avoid re-incrementing the Sa'i lap counter on the
