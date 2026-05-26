@@ -795,6 +795,8 @@ function _ppMerge(){
   try{
     if(!window.PPContent || !window.PPContent.hasData) return;
     var oB=window.PPContent.bannerMapByPano('jamarat-12th')||{};
+    // CMS is authoritative: replace BANNERS entirely so deleted entries don't linger
+    Object.keys(BANNERS).forEach(function(k){ delete BANNERS[k]; });
     Object.keys(oB).forEach(function(k){ BANNERS[k]=oB[k]; });
     var oA=window.PPContent.audioMapByPano('jamarat-12th')||{};
     window._jb12VOMap=oA;
@@ -816,7 +818,7 @@ window.addEventListener('storage',function(e){if(e&&e.key==='pp_journey_content_
         var items = pl.get('items');
         if(items && items[idx]){
           var id = items[idx].get('media').get('id');
-          if(id && !shown[id] && typeof _jbChk==='function') _jbChk(id);
+          if(id){ delete shown[id]; if(typeof _jbChk==='function') _jbChk(id); }
         }
       }
     }catch(_){}
