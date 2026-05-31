@@ -63,11 +63,11 @@ app.use((req, res, next) => {
   const isVrPath = req.path.startsWith('/pilgrimspath-vr/');
   res.setHeader('Content-Security-Policy',
     "default-src 'self'; " +
-    "script-src 'self' 'unsafe-inline'" + (isVrPath ? " 'unsafe-eval'" : "") + " https://js.paystack.co https://cdn.jsdelivr.net https://connect.facebook.net https://cdnjs.cloudflare.com; " +
+    "script-src 'self' 'unsafe-inline'" + (isVrPath ? " 'unsafe-eval'" : "") + " https://js.paystack.co https://cdn.jsdelivr.net https://connect.facebook.net https://cdnjs.cloudflare.com https://assets.us.i.posthog.com; " +
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; " +
     "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; " +
     "img-src 'self' data: blob: https:; " +
-    "connect-src 'self' https://*.supabase.co https://api.paystack.co https://graph.facebook.com; " +
+    "connect-src 'self' https://*.supabase.co https://api.paystack.co https://graph.facebook.com https://us.i.posthog.com; " +
     "media-src 'self' blob:" + (isVrPath ? " data:" : "") + "; " +
     "worker-src blob:; " +
     "frame-src https://checkout.paystack.com https://www.youtube-nocookie.com https://www.youtube.com; " +
