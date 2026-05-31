@@ -1,5 +1,12 @@
 User-agent: *
 Allow: /
+# VR scene files require authentication — block crawlers to avoid 403/401 errors
+Disallow: /pilgrimspath-vr/
+Disallow: /journey/
+# Internal / private pages
+Disallow: /debug-vr.html
+Disallow: /JOURNEY_TEST.html
+Disallow: /index2.html
 
 # Sitemaps
 Sitemap: https://www.pilgrimspath.io/sitemap.xml
