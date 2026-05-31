@@ -1358,6 +1358,9 @@ function initPauseMenu(){
           'pp_hajj_certified','pp_hajj_certified_name','pp_hajj_certified_date',
           'pp_rotation_frozen','pp_umrah_completed'];
         _allKeys.forEach(function(k){ try{ localStorage.removeItem(k); }catch(_){} });
+        // Set a flag so _pullFromServer skips the server fetch on the next page load,
+        // preventing a race where the GET returns stale data before the POST below settles.
+        try{ localStorage.setItem('pp_just_reset','1'); }catch(_){}
         try{ sessionStorage.clear(); }catch(_){}
         // Reset server-side state, then navigate
         var _doNav = function(){ window.location.href = '/hajj-vr.html'; };

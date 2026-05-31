@@ -69,6 +69,15 @@ function _pushToServer(currentStep, currentContext, completedSteps) {
 // GET saved state from /api/user-progress and merge into localStorage + instance.
 // Calls onDone(didUpdate) when finished (true = server had newer/more progress).
 function _pullFromServer(instance, onDone) {
+  // If the user just reset, skip the server fetch so stale server data can't
+  // race back and restore old progress before the reset POST settles.
+  try {
+    if (localStorage.getItem('pp_just_reset')) {
+      localStorage.removeItem('pp_just_reset');
+      if (onDone) onDone(false);
+      return;
+    }
+  } catch(_) {}
   var jwt = _getJwt();
   if (!jwt) { if (onDone) onDone(false); return; }
   fetch('/api/user-progress', {
@@ -103,9 +112,11 @@ function _pullFromServer(instance, onDone) {
       didUpdate = true;
     }
 
-    // Always restore umrah_completed flag if server says it's done
+    // Sync umrah_completed flag both ways so a server-side reset clears it locally too
     if (data.umrah_completed) {
       try { localStorage.setItem('pp_umrah_completed', '1'); } catch (_) {}
+    } else {
+      try { localStorage.removeItem('pp_umrah_completed'); } catch (_) {}
     }
 
     if (onDone) onDone(didUpdate);

@@ -573,8 +573,29 @@ VR scenes too.
 This boolean lives in localStorage and is set by various HTML pages.  Rather
 than modifying every page, the sync layer:
 - Reads it from localStorage and includes it in every POST
-- Writes it back to localStorage (on any device) when `umrah_completed: true` is
-  returned from the server
+- Syncs it **bidirectionally** — sets it when the server says `true`, and
+  **removes it** from localStorage when the server says `false` (e.g. after a
+  reset). (Fixed: previously the flag was only written, never cleared.)
+
+### Reset Entire Experience — `pp_just_reset` Guard
+
+When the user triggers **Reset Entire Experience** (in-VR menu) or **Reset
+Progress** (profile page), the handler:
+
+1. Removes all progress keys from localStorage (`journeyState`, `pp_quiz_scores`,
+   `pp_cert_awarded_at`, `pp_hajj_certified*`, `pp_umrah_completed`, etc.)
+2. Sets `localStorage.setItem('pp_just_reset', '1')` — this key is **not** in
+   the cleared list so it survives the page navigation
+3. POSTs zeroed state to `/api/user-progress`
+4. Navigates away (after POST resolves)
+
+On the first `_pullFromServer()` call after the reset:
+- The function sees `pp_just_reset` → removes it → returns immediately (skips
+  the GET)
+- Prevents the race condition where `GET /api/user-progress` returns stale data
+  before the reset POST settles in the DB
+- Subsequent page loads call `_pullFromServer()` normally (flag is gone) and see
+  the server's already-zeroed state
 
 ### File Locations on the VPS
 
@@ -595,3 +616,72 @@ in `supabase-setup.sql`).  Also check `pm2 logs pilgrimspath` for errors from
 Open DevTools → Console.  You should see `[JourneyManager] Initialized` and the
 `jm:synced` event should fire ~1 second later.  If it doesn't, check the network
 tab for `/api/user-progress` — a 401 means the JWT wasn't found in storage.
+
+---
+
+## Scene-Level Fixes (VR `index.htm` files)
+
+These are permanent patches applied directly to specific 3DVista scene files.
+They correct behaviour that the CMS layer cannot configure.
+
+### Sa'i — Canonical Panorama IDs (`_buildSMBannerMaps`)
+
+**File**: `pilgrimspath-vr/pilgrims path main/2 Safa and Marwa/index.htm`
+
+**Problem**: `PPContent.bannerMapByPano()` / `audioMapByPano()` look up banners
+using the panorama IDs stored in `data/journey-content.json`.  If an admin ever
+edits or re-saves a banner in the JCM, the stored IDs can change and banners fire
+on the wrong panorama (or never fire at all).
+
+**Fix (commit 24377865)**: Added a `_SM_CANON` map of hardcoded canonical IDs:
+```js
+var _SM_CANON = {
+  'sm-pano-1': 'panorama_740A042A_7348_ED6D_41CA_00F715E5C1F1',
+  'sm-pano-2': 'panorama_740A504C_7348_2525_41D3_C8D1BB48BC81',
+  'sm-pano-3': 'panorama_77BBA118_7348_272D_41C8_26E405934981'
+};
+```
+`_buildSMBannerMaps()` uses `PPContent.byId()` (lookup by CMS `id` field, not
+panorama key) + the canonical IDs above to build `_bannerMap` / `_audioMap`.
+This makes Sa'i banner triggers immune to admin CMS edits.
+
+Called in both initial `boot()` setup and inside `_ppGuideContentRefresh`.
+
+---
+
+### Mina — 8th-Day Mode: Next Stop after Congrats Banner
+
+**File**: `pilgrimspath-vr/pilgrims path main/3 Mina/index.htm`
+
+**Problem**: In 8th-day mode the "Congratulations" banner fired on the tent
+panorama (`MINA_LANDING_8TH`) but `showJourneyNextButton` was only called when
+`id === MINA_LANDING_8TH`.  If 3DVista navigated to `TENT_PANO` (e.g. the user
+had previously visited the tent), the **Next Stop** button never appeared.
+
+**Fix (commit c133b9e0)**: Extended the `showJourneyNextButton` condition in
+`_minaFireBannerVO()`:
+```js
+// Before:
+if (id === MINA_LANDING_8TH) { showJourneyNextButton(); }
+// After:
+if (id === MINA_LANDING_8TH || (id === TENT_PANO && !IS_TENT_MODE)) { showJourneyNextButton(); }
+```
+
+---
+
+### Arafah — Congrats Panorama Handler (`ar-pano-congrats`)
+
+**File**: `pilgrimspath-vr/pilgrims path main/4 Arafah/index.htm`
+
+**Problem**: No `_bannerMap` / `_audioMap` existed for Arafah, so panorama-
+triggered banners (including the congratulations banner at `panorama_84B7F067`)
+never fired via `chk()`.
+
+**Fix (commit c133b9e0)**:
+- Added `_bannerMap` and `_audioMap` variables populated from
+  `PPContent.bannerMapByPano('arafah-9th')` / `audioMapByPano('arafah-9th')`
+- Added a dedicated `chk()` handler for panorama `84B7F067` (`ar-pano-congrats`):
+  - Displays the CMS congrats banner if configured
+  - Sets `journeyIsLastPanorama = true`
+  - Calls `showJourneyNextButton` so the journey can advance
+- `_ppGuideContentRefresh` now rebuilds both maps when content refreshes
