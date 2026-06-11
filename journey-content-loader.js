@@ -865,11 +865,11 @@ function _injectMobileBannerCSS(){
   s.textContent =
     '@media(max-width:520px){' +
       '#sceneBanner .sceneBannerBody{padding:28px 40px 18px !important;}' +
-      '#sceneBanner h3{font-size:21px !important;margin-bottom:10px !important;}' +
-      '#sceneBanner .bb{font-size:15px !important;line-height:1.4 !important;}' +
-      '#sceneBanner .ba{font-size:16px !important;line-height:1.38 !important;}' +
-      '#sceneBanner .bt{font-size:14px !important;line-height:1.37 !important;}' +
-      '#sceneBanner button{font-size:17px !important;padding:12px 22px !important;}' +
+      '#sceneBanner h3{font-size:26px !important;margin-bottom:12px !important;}' +
+      '#sceneBanner .bb{font-size:18px !important;line-height:1.4 !important;}' +
+      '#sceneBanner .ba{font-size:19px !important;line-height:1.38 !important;}' +
+      '#sceneBanner .bt{font-size:17px !important;line-height:1.37 !important;}' +
+      '#sceneBanner button{font-size:20px !important;padding:14px 26px !important;}' +
     '}';
   if(document.head) document.head.appendChild(s);
   else document.addEventListener('DOMContentLoaded', function(){ document.head.appendChild(s); });

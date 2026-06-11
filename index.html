@@ -86,8 +86,8 @@
                 <li><a href="/articles">Articles</a></li>
                 <li><a href="/faq">FAQ</a></li>
             </ul>
-            <button class="cta-btn nav-cta" onclick="window.location.href='login.html?tab=register'">
-                <span>Start Free Journey</span>
+            <button class="cta-btn nav-cta" onclick="window.location.href='/lp'">
+                <span>Start Your Journey</span>
                 <i class="fas fa-arrow-right"></i>
             </button>
             <a href="/login" class="nav-signin">Sign In</a>
@@ -108,7 +108,7 @@
             <li><a href="/vr-features" onclick="closeMobileMenu()">VR Features</a></li>
             <li><a href="/articles" onclick="closeMobileMenu()">Articles</a></li>
             <li><a href="/faq" onclick="closeMobileMenu()">FAQ</a></li>
-            <li><button class="cta-btn mobile-cta" onclick="window.location.href='login.html?tab=register'; closeMobileMenu();">Start Free Journey</button></li>
+            <li><button class="cta-btn mobile-cta" onclick="window.location.href='/lp'; closeMobileMenu();">Start Your Journey</button></li>
             <li><a href="/login" class="mobile-signin">Sign In</a></li>
         </ul>
     </div>
@@ -165,14 +165,52 @@
             <div class="vr-device-container">
                 <div class="vr-glow"></div>
                 <div class="kaaba-3d">
-                    <div class="kaaba-wrapper">
-                        <div class="kaaba-face front"></div>
-                        <div class="kaaba-face back"></div>
-                        <div class="kaaba-face left"></div>
-                        <div class="kaaba-face right"></div>
-                        <div class="kaaba-face top"></div>
-                        <div class="kaaba-band"></div>
-                    </div>
+                  <svg class="kaaba-svg" viewBox="0 0 160 192" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <linearGradient id="kbKiswah" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#7A5A0E"/>
+                        <stop offset="30%" stop-color="#C9A227"/>
+                        <stop offset="65%" stop-color="#D4AF37"/>
+                        <stop offset="100%" stop-color="#7A5A0E"/>
+                      </linearGradient>
+                      <radialGradient id="kbBase" cx="50%" cy="100%" r="55%">
+                        <stop offset="0%" stop-color="rgba(201,162,39,0.22)"/>
+                        <stop offset="100%" stop-color="rgba(201,162,39,0)"/>
+                      </radialGradient>
+                      <filter id="kbGlow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur"/>
+                        <feFlood flood-color="#C9A227" flood-opacity="0.3" result="color"/>
+                        <feComposite in="color" in2="blur" operator="in" result="shadow"/>
+                        <feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge>
+                      </filter>
+                    </defs>
+                    <!-- Base glow -->
+                    <ellipse cx="80" cy="184" rx="60" ry="7" fill="url(#kbBase)"/>
+                    <!-- Right face (isometric illusion) -->
+                    <polygon points="140,8 158,20 158,180 140,170" fill="#060606"/>
+                    <!-- Top face (isometric) -->
+                    <polygon points="22,8 80,0 158,8 80,16" fill="#0e0e0e"/>
+                    <!-- Main front body -->
+                    <rect x="22" y="8" width="118" height="162" fill="#0d0d0d"/>
+                    <!-- Kiswah band -->
+                    <rect x="22" y="56" width="118" height="38" fill="url(#kbKiswah)"/>
+                    <!-- Band top line -->
+                    <rect x="22" y="56" width="118" height="1" fill="rgba(255,230,120,0.5)"/>
+                    <!-- Band bottom line -->
+                    <rect x="22" y="93" width="118" height="1" fill="rgba(60,30,0,0.7)"/>
+                    <!-- Kiswah calligraphy -->
+                    <text x="81" y="79" text-anchor="middle" font-size="7.5" fill="rgba(12,7,0,0.45)" letter-spacing="7" font-family="serif">&#9670; &#9671; &#9670; &#9671; &#9670;</text>
+                    <!-- Door arch opening -->
+                    <path d="M57,107 Q57,98 70,98 L90,98 Q103,98 103,107 L103,170 L57,170 Z" fill="#0e0801"/>
+                    <!-- Door golden arch frame -->
+                    <path d="M55,107 Q55,95 70,95 L90,95 Q105,95 105,107 L105,172 L55,172 Z" fill="none" stroke="#C9A227" stroke-width="2"/>
+                    <!-- Door bottom frame line -->
+                    <line x1="55" y1="172" x2="105" y2="172" stroke="#C9A227" stroke-width="2"/>
+                    <!-- Door handle -->
+                    <circle cx="81" cy="137" r="2.5" fill="#C9A227" opacity="0.75"/>
+                    <!-- Outer border glow -->
+                    <rect x="22" y="8" width="118" height="162" fill="none" stroke="rgba(212,175,55,0.18)" stroke-width="1"/>
+                  </svg>
                 </div>
                 <div class="orbit-ring ring-1"></div>
                 <div class="orbit-ring ring-2"></div>
@@ -257,76 +295,6 @@
         </div>
     </section>
 
-    <!-- 360 Panorama Section -->
-    <section class="panorama-section" id="panorama">
-        <div class="container">
-            <div class="section-header light">
-                <span class="section-tag">Immersive Experience</span>
-                <h2 class="section-title">Step Into the <span class="highlight">Sacred Sanctuary</span></h2>
-                <p class="section-subtitle">
-                    Experience the breathtaking beauty of Masjid al-Haram in our interactive 360° panorama. 
-                    Drag to explore or let it guide you through this magnificent view.
-                </p>
-            </div>
-            <div class="panorama-container">
-                <div class="panorama-viewer" id="panoramaViewer">
-                    <div class="panorama-image" id="panoramaImage"></div>
-                    <div class="panorama-overlay">
-                        <div class="panorama-controls">
-                            <button class="control-btn" id="playPauseBtn" onclick="togglePanoramaRotation()">
-                                <i class="fas fa-pause"></i>
-                            </button>
-                            <button class="control-btn" onclick="toggleFullscreen()">
-                                <i class="fas fa-expand"></i>
-                            </button>
-                        </div>
-                        <div class="panorama-info">
-                            <div class="location-badge">
-                                <i class="fas fa-location-dot"></i>
-                                <span>Masjid al-Haram, Makkah</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panorama-hotspots">
-                        <div class="hotspot" style="left: 50%; top: 45%;" data-info="The Holy Kaaba - The most sacred site in Islam">
-                            <div class="hotspot-pulse"></div>
-                            <div class="hotspot-tooltip">The Holy Kaaba</div>
-                        </div>
-                        <div class="hotspot" style="left: 30%; top: 50%;" data-info="Maqam Ibrahim - Station of Prophet Ibrahim">
-                            <div class="hotspot-pulse"></div>
-                            <div class="hotspot-tooltip">Maqam Ibrahim</div>
-                        </div>
-                        <div class="hotspot" style="left: 70%; top: 48%;" data-info="Zamzam Well - Blessed water source">
-                            <div class="hotspot-pulse"></div>
-                            <div class="hotspot-tooltip">Zamzam Well</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="panorama-thumbnails">
-                    <div class="thumbnail active" data-panorama="kaaba">
-                        <img src="https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=200" alt="Kaaba">
-                        <span>Masjid al-Haram</span>
-                    </div>
-                    <div class="thumbnail" data-panorama="madinah">
-                        <img src="https://images.unsplash.com/photo-1542816417-0983c9c9ad53?w=200" alt="Madinah">
-                        <span>Al-Masjid an-Nabawi</span>
-                    </div>
-                    <div class="thumbnail" data-panorama="mina">
-                        <img src="https://images.unsplash.com/photo-1564769625673-cb690a0d5022?w=200" alt="Mina">
-                        <span>Mina Tents</span>
-                    </div>
-                    <div class="thumbnail" data-panorama="arafat">
-                        <img src="https://images.unsplash.com/photo-1565019001607-0dee94ca6dc2?w=200" alt="Arafat">
-                        <span>Mount Arafat</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="panorama-bg-elements">
-            <div class="glow-orb orb-1"></div>
-            <div class="glow-orb orb-2"></div>
-        </div>
-    </section>
 
     <!-- Ambassador Section -->
     <section class="ambassador-section" id="ambassador">
@@ -514,7 +482,7 @@
                     Whether Hajj 2026 is weeks away, years from now, or a dream you hold in your heart —
                     Makkah shouldn't have to wait. Walk every sacred site in 360° VR, learn every dua,
                     feel the presence of the Kaaba — tonight, from home.
-                    <strong>One-time $19 for lifetime access</strong>, or start free.
+                    <strong>One-time $19 for lifetime access</strong> — no subscriptions, no renewals.
                 </p>
                 <div class="cta-features">
                     <div class="cta-feature">
@@ -536,9 +504,9 @@
                         <i class="fas fa-arrow-right"></i>
                         <div class="btn-glow"></div>
                     </button>
-                    <button class="secondary-btn" onclick="window.location.href='/'" style="padding:16px 32px;border-radius:50px;">
-                        <i class="fas fa-play-circle"></i>
-                        <span>Try Free Preview</span>
+                    <button class="secondary-btn" onclick="window.location.href='/hajj-journey'" style="padding:16px 32px;border-radius:50px;">
+                        <i class="fas fa-book-open"></i>
+                        <span>Explore the Journey</span>
                     </button>
                 </div>
             </div>

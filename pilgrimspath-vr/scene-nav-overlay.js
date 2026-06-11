@@ -142,10 +142,10 @@
         '.scnGroupBracket::before{display:block;}',
         '.scnGroupItems{flex-direction:row;gap:4px;align-items:flex-start;width:auto;}',
         '.scnItem{padding:3px 3px;}',
-        '.scnCircleWrap{width:57px;height:57px;}',
-        '.scnCircle{font-size:26px;}',
-        '.scnBadge{min-width:22px;height:22px;font-size:12px;border-radius:12px;}',
-        '.scnItemName{font-size:12px;max-width:62px;}',
+        '.scnCircleWrap{width:70px;height:70px;}',
+      '.scnCircle{font-size:32px;}',
+      '.scnBadge{min-width:26px;height:26px;font-size:13px;border-radius:14px;}',
+      '.scnItemName{font-size:13px;max-width:72px;}'
         '.scnGroup{gap:2px;}',
         '#scnRailInner{gap:5px;}',
         /* HUDs stay above the bottom rail */
