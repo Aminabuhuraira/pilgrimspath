@@ -45,9 +45,21 @@
     .cert-earn-icon{width:48px;height:48px;border-radius:12px;background:rgba(201,162,39,.15);display:flex;align-items:center;justify-content:center;color:#C9A227;font-size:1.6rem;flex-shrink:0;}
     .cert-earn-body h3{margin:0 0 4px;font-size:.95rem;color:#2C1810;}
     .cert-earn-body p{margin:0 0 10px;font-size:.82rem;color:#5C4033;}
+    .cert-btn-row{display:flex;gap:10px;flex-wrap:wrap;}
     .cert-dl-btn{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#C9A227,#8B6914);color:#fff;border:none;border-radius:999px;padding:8px 20px;font-size:.82rem;font-weight:600;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 2px 10px rgba(201,162,39,.3);}
     .cert-dl-btn:hover{transform:scale(1.04);box-shadow:0 4px 16px rgba(201,162,39,.45);}
     .cert-dl-btn:active{transform:scale(.97);}
+    .cert-view-btn{display:inline-flex;align-items:center;gap:7px;background:transparent;color:#8B6914;border:1.5px solid #C9A227;border-radius:999px;padding:8px 20px;font-size:.82rem;font-weight:600;cursor:pointer;transition:transform .15s,background .15s,box-shadow .15s;}
+    .cert-view-btn:hover{background:rgba(201,162,39,.08);transform:scale(1.04);}
+    .cert-view-btn:active{transform:scale(.97);}
+    /* Certificate preview modal */
+    #certModal{position:fixed;inset:0;z-index:9000;background:rgba(20,12,4,.82);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;}
+    #certModal.open{display:flex;}
+    #certModalInner{background:#FFFDF7;border:2px solid #C9A84C;border-radius:18px;box-shadow:0 24px 60px rgba(0,0,0,.5);max-width:min(96vw,680px);width:100%;max-height:92vh;overflow-y:auto;padding:24px;box-sizing:border-box;}
+    #certModalInner h2{margin:0 0 16px;font-size:1.1rem;color:#3D2B1F;text-align:center;}
+    #certModalCanvas{width:100%;height:auto;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.15);display:block;}
+    #certModalActions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+    #certModalClose{position:absolute;top:12px;right:16px;background:transparent;border:none;font-size:24px;color:#8B6914;cursor:pointer;line-height:1;padding:4px;}
     </style>
     <!-- PostHog Analytics -->
     <script>
@@ -380,7 +392,10 @@
                 <div class="cert-earn-body">
                     <h3>Hajj Readiness Certificate</h3>
                     <p id="certEarnedMsg">You have completed the full Hajj preparation journey.</p>
-                    <button class="cert-dl-btn" id="certDlBtn"><i class="fas fa-download"></i> Download Certificate</button>
+                    <div class="cert-btn-row">
+                        <button class="cert-view-btn" id="certViewBtn"><i class="fas fa-eye"></i> View Certificate</button>
+                        <button class="cert-dl-btn" id="certDlBtn"><i class="fas fa-download"></i> Download</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -417,6 +432,17 @@
         </div>
     </main>
 
+    <!-- Certificate preview modal -->
+    <div id="certModal" role="dialog" aria-modal="true" aria-label="Hajj Readiness Certificate" style="position:fixed;">
+        <div id="certModalInner" style="position:relative;">
+            <button id="certModalClose" aria-label="Close">&times;</button>
+            <h2>🏆 Hajj Readiness Certificate</h2>
+            <canvas id="certModalCanvas"></canvas>
+            <div id="certModalActions">
+                <button class="cert-dl-btn" id="certModalDlBtn"><i class="fas fa-download"></i> Download Certificate</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Journey Navigation -->
     <script src="/journey-manager.js"></script>
@@ -977,50 +1003,88 @@
         var earned  = document.getElementById('certEarned');
         var msg     = document.getElementById('certEarnedMsg');
         var dlBtn   = document.getElementById('certDlBtn');
+        var viewBtn = document.getElementById('certViewBtn');
         if (!locked || !earned) return;
+
+        // ── Canvas drawing helper (shared by View and Download) ──
+        function drawCertCanvas(canvas){
+            var W = 960, H = 680;
+            canvas.width = W; canvas.height = H;
+            var ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#FDF6E3'; ctx.fillRect(0,0,W,H);
+            ctx.strokeStyle = '#C9A227'; ctx.lineWidth = 6;
+            ctx.strokeRect(14,14,W-28,H-28);
+            ctx.lineWidth = 1.5; ctx.strokeRect(26,26,W-52,H-52);
+            function corner(x,y,s,sy){ctx.save();ctx.translate(x,y);ctx.strokeStyle='#C9A227';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(s*10,sy*40);ctx.lineTo(s*10,sy*10);ctx.lineTo(s*40,sy*10);ctx.stroke();ctx.restore();}
+            corner(26,26,1,1);corner(W-26,26,-1,1);corner(26,H-26,1,-1);corner(W-26,H-26,-1,-1);
+            function hRule(y,a){var g=ctx.createLinearGradient(80,y,W-80,y);g.addColorStop(0,'rgba(201,162,39,0)');g.addColorStop(.3,'rgba(201,162,39,'+a+')');g.addColorStop(.7,'rgba(201,162,39,'+a+')');g.addColorStop(1,'rgba(201,162,39,0)');ctx.fillStyle=g;ctx.fillRect(80,y-1,W-160,2);}
+            ctx.font='52px serif';ctx.textAlign='center';ctx.fillText('\uD83D\uDD4B',W/2,110);
+            ctx.fillStyle='#8B6914';ctx.font='bold 36px Georgia,serif';ctx.fillText('Hajj Readiness Certificate',W/2,168);
+            hRule(190,.5);
+            ctx.fillStyle='#5C4033';ctx.font='italic 17px Georgia,serif';ctx.fillText('This certifies that',W/2,240);
+            ctx.fillStyle='#2C1810';ctx.font='bold 42px Georgia,serif';ctx.fillText(certName,W/2,308);
+            hRule(330,.4);
+            ctx.fillStyle='#5C4033';ctx.font='16px Georgia,serif';
+            ctx.fillText('has successfully completed the full virtual Hajj preparation journey',W/2,376);
+            ctx.fillText('on the Pilgrim\u2019s Path platform, covering all 16 rituals of Hajj.',W/2,402);
+            hRule(430,.35);
+            ctx.fillStyle='#7D5A45';ctx.font='14px Georgia,serif';
+            ctx.fillText('Date of Completion: '+(certDate||''),W/2,468);
+            ctx.fillStyle='#C9A227';ctx.font='22px serif';
+            ctx.fillText('\u062A\u0642\u0628\u0644 \u0627\u0644\u0644\u0647 \u0645\u0646\u0643 \u2014 May Allah accept from you',W/2,514);
+            ctx.fillStyle='#8B6914';ctx.font='bold 18px Georgia,serif';ctx.fillText('\uD83D\uDD4B\uFE0F Pilgrim\u2019s Path',W/2,574);
+            ctx.fillStyle='#7D5A45';ctx.font='12px Georgia,serif';ctx.fillText('pilgrimspath.io',W/2,594);
+            return canvas;
+        }
+
         if (certified) {
             locked.style.display = 'none';
             earned.style.display = 'flex';
             if (msg) msg.textContent = 'Completed on ' + (certDate || 'your Hajj journey') + '. Mabrook, ' + certName + '!';
+
+            // Download button
             if (dlBtn) {
                 dlBtn.addEventListener('click', function() {
-                    // Draw certificate on demand
-                    var W = 960, H = 680;
                     var canvas = document.createElement('canvas');
-                    canvas.width = W; canvas.height = H;
-                    var ctx = canvas.getContext('2d');
-                    // Background
-                    ctx.fillStyle = '#FDF6E3'; ctx.fillRect(0,0,W,H);
-                    // Gold border
-                    ctx.strokeStyle = '#C9A227'; ctx.lineWidth = 6;
-                    ctx.strokeRect(14,14,W-28,H-28);
-                    ctx.lineWidth = 1.5; ctx.strokeRect(26,26,W-52,H-52);
-                    // Corner marks
-                    function corner(x,y,s,sy){ctx.save();ctx.translate(x,y);ctx.strokeStyle='#C9A227';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(s*10,sy*40);ctx.lineTo(s*10,sy*10);ctx.lineTo(s*40,sy*10);ctx.stroke();ctx.restore();}
-                    corner(26,26,1,1);corner(W-26,26,-1,1);corner(26,H-26,1,-1);corner(W-26,H-26,-1,-1);
-                    function hRule(y,a){var g=ctx.createLinearGradient(80,y,W-80,y);g.addColorStop(0,'rgba(201,162,39,0)');g.addColorStop(.3,'rgba(201,162,39,'+a+')');g.addColorStop(.7,'rgba(201,162,39,'+a+')');g.addColorStop(1,'rgba(201,162,39,0)');ctx.fillStyle=g;ctx.fillRect(80,y-1,W-160,2);}
-                    ctx.font='52px serif';ctx.textAlign='center';ctx.fillText('\uD83D\uDD4B',W/2,110);
-                    ctx.fillStyle='#8B6914';ctx.font='bold 36px Georgia,serif';ctx.fillText('Hajj Readiness Certificate',W/2,168);
-                    hRule(190,.5);
-                    ctx.fillStyle='#5C4033';ctx.font='italic 17px Georgia,serif';ctx.fillText('This certifies that',W/2,240);
-                    ctx.fillStyle='#2C1810';ctx.font='bold 42px Georgia,serif';ctx.fillText(certName,W/2,308);
-                    hRule(330,.4);
-                    ctx.fillStyle='#5C4033';ctx.font='16px Georgia,serif';
-                    ctx.fillText('has successfully completed the full virtual Hajj preparation journey',W/2,376);
-                    ctx.fillText('on the Pilgrim\u2019s Path platform, covering all 16 rituals of Hajj.',W/2,402);
-                    hRule(430,.35);
-                    ctx.fillStyle='#7D5A45';ctx.font='14px Georgia,serif';
-                    ctx.fillText('Date of Completion: '+(certDate||''),W/2,468);
-                    ctx.fillStyle='#C9A227';ctx.font='22px serif';
-                    ctx.fillText('\u062A\u0642\u0628\u0644 \u0627\u0644\u0644\u0647 \u0645\u0646\u0643 \u2014 May Allah accept from you',W/2,514);
-                    ctx.fillStyle='#8B6914';ctx.font='bold 18px Georgia,serif';ctx.fillText('\uD83D\uDD4B\uFE0F Pilgrim\u2019s Path',W/2,574);
-                    ctx.fillStyle='#7D5A45';ctx.font='12px Georgia,serif';ctx.fillText('pilgrimspath.io',W/2,594);
+                    drawCertCanvas(canvas);
                     var link = document.createElement('a');
                     link.download = 'hajj-readiness-certificate.png';
                     link.href = canvas.toDataURL('image/png');
                     link.click();
                 });
             }
+
+            // View button — shows modal with certificate
+            var modal    = document.getElementById('certModal');
+            var modalCanvas = document.getElementById('certModalCanvas');
+            var modalClose  = document.getElementById('certModalClose');
+            var modalDlBtn  = document.getElementById('certModalDlBtn');
+
+            function openCertModal(){
+                if(!modal || !modalCanvas) return;
+                drawCertCanvas(modalCanvas);
+                modal.classList.add('open');
+                document.body.style.overflow = 'hidden';
+                // Wire download button inside modal
+                if(modalDlBtn){
+                    modalDlBtn.onclick = function(){
+                        var link = document.createElement('a');
+                        link.download = 'hajj-readiness-certificate.png';
+                        link.href = modalCanvas.toDataURL('image/png');
+                        link.click();
+                    };
+                }
+            }
+            function closeCertModal(){
+                if(!modal) return;
+                modal.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+
+            if (viewBtn) viewBtn.addEventListener('click', openCertModal);
+            if (modalClose) modalClose.addEventListener('click', closeCertModal);
+            if (modal) modal.addEventListener('click', function(e){ if(e.target === modal) closeCertModal(); });
+            document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeCertModal(); });
         }
     })();
     (function(){

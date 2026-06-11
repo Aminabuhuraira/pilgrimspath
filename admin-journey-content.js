@@ -372,7 +372,10 @@ var DEFAULT_DATA = {
           audio:{en:''} }),
         defB({ id:'tf-pano-4', trigger:'panorama', panorama:'panorama_8AC63E8D_9544_C601_41E0_0A05A67E5557', label:'Farewell completion', template:'sunrise-gold',
           text:{en:{title:'🎉 Hajj Complete — Mabrook!',body:'<p class="bb">As you have completed the Tawaf, exit Al-Masjid Al-Haram with your right foot and recite:</p><p class="ba" style="direction:rtl">بِسْمِ اللهِ وَالصَّلَاةُ وَالسَّلَامُ عَلَى رَسُولِ اللهِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ</p><p class="ba">Bismillahi wa s-salatu wa s-salamu \'ala rasulillah, Allahumma inni as\'aluka min fadlik.</p><p class="bt">\' In the name of Allah, and prayers and peace upon the Messenger of Allah. O Allah, I ask You for Your bounty.\'</p><p class="bb">Congratulations on completing your Hajj. May Allah accept this act of ibadah that you have performed.</p>'}},
-          audio:{en:'33 English Farewell 2.mp3'} })
+          audio:{en:'33 English Farewell 2.mp3'} }),
+        defB({ id:'tf-complete', trigger:'completion', label:'Hajj complete overlay (editable)', template:'sunrise-gold',
+          text:{en:{title:'🕋 Hajj Complete — May Allah Accept!',body:'<p>You have completed Tawaf al-Wida\u02bf, the farewell circumambulation.</p><p>Recite as you exit with your right foot:<br><em style="color:#8B6914">Bismillahi wa s-salatu wa s-salamu \u02bfala rasulillah, Allahumma inni as\u02bfaluka min fadlik.</em></p><p><em style="font-size:.85em;opacity:.75">\u2014 In the name of Allah, and prayers and peace upon the Messenger of Allah. O Allah, I ask You for Your bounty.</em></p><p><strong style="color:#22c55e">Congratulations on completing your Hajj. May Allah accept this act of \u02bfibadah.</strong></p>'}},
+          audio:{en:''} })
       ]}
   ]
 };

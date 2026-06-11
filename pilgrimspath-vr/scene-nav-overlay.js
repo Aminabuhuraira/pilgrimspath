@@ -142,19 +142,19 @@
         '.scnGroupBracket::before{display:block;}',
         '.scnGroupItems{flex-direction:row;gap:4px;align-items:flex-start;width:auto;}',
         '.scnItem{padding:3px 3px;}',
-        '.scnCircleWrap{width:38px;height:38px;}',
-        '.scnCircle{font-size:17px;}',
-        '.scnBadge{min-width:16px;height:16px;font-size:9px;border-radius:8px;}',
-        '.scnItemName{font-size:9px;max-width:44px;}',
+        '.scnCircleWrap{width:44px;height:44px;}',
+        '.scnCircle{font-size:20px;}',
+        '.scnBadge{min-width:17px;height:17px;font-size:9.5px;border-radius:9px;}',
+        '.scnItemName{font-size:9.5px;max-width:48px;}',
         /* HUDs stay above the bottom rail */
         '#muzdHud,#muzdPouch{left:auto !important;right:14px !important;transform:none !important;}',
         /* pebbleHUD on mobile — top-right below pause button, respect safe-area notch */
         '#pebbleHUD{top:calc(env(safe-area-inset-top,0px) + 74px) !important;right:16px !important;bottom:auto !important;}',  
         /* On mobile, action buttons need extra clearance for safe area + taller rail */
-        '#jamarThrowBtn,#minaContinue{bottom:calc(80px + env(safe-area-inset-bottom,0px)) !important;}',
-        '#jamarAimHint{bottom:calc(136px + env(safe-area-inset-bottom,0px)) !important;}',
+        '#jamarThrowBtn,#minaContinue{bottom:calc(90px + env(safe-area-inset-bottom,0px)) !important;}',
+        '#jamarAimHint{bottom:calc(146px + env(safe-area-inset-bottom,0px)) !important;}',
         /* Mobile: ensure toast clears the action button + safe area */
-        'body:has(#jamarThrowBtn) #pathCueToast,body:has(#minaContinue) #pathCueToast{bottom:calc(140px + env(safe-area-inset-bottom,0px)) !important;}',
+        'body:has(#jamarThrowBtn) #pathCueToast,body:has(#minaContinue) #pathCueToast{bottom:calc(150px + env(safe-area-inset-bottom,0px)) !important;}',
         /* add safe-area-inset-bottom to rail inner so content isn\'t hidden under home bar */
         '#scnRailInner{padding-bottom:calc(5px + env(safe-area-inset-bottom,0px)) !important;}',
         'body.ppOverlayActive #scnRail,.ppOverlayActive #scnRail{display:none !important;opacity:0 !important;pointer-events:none !important;}',
