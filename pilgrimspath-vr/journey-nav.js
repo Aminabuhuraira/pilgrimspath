@@ -390,12 +390,6 @@ body.ppMenuOpen #viewer { z-index: 99490 !important; }
   font-size: 12px; font-weight: 700; letter-spacing: .6px;
   color: #8B6914; text-transform: uppercase;
 }
-#ppQuizOverlay .ppQuizSkip {
-  background: transparent; border: none; color: #8B6914;
-  font-size: 13px; font-weight: 600; cursor: pointer; padding: 4px 8px;
-  border-radius: 6px;
-}
-#ppQuizOverlay .ppQuizSkip:hover { background: rgba(139,105,20,0.08); }
 #ppQuizOverlay .ppQuizBody {
   padding: 22px 22px 16px; overflow-y: auto; flex: 1;
 }
@@ -466,7 +460,6 @@ body.ppMenuOpen #viewer { z-index: 99490 !important; }
   #ppQuizOverlay .ppQuizScore { font-size: 44px; }
   #ppQuizOverlay .ppQuizSummary p { font-size: 15px; }
   #ppQuizOverlay .ppQuizBadge { font-size: 13px; }
-  #ppQuizOverlay .ppQuizSkip { font-size: 14px; }
   #ppQuizOverlay .ppQuizDot { width: 10px; height: 10px; }
 }
 
@@ -942,16 +935,14 @@ function showQuizForCurrentStep(onDone){
   var ov = document.createElement('div');
   ov.id = 'ppQuizOverlay';
   ov.innerHTML = '<div class="ppQuizCard">'+
-    '<header><span class="ppQuizBadge">Reflection \u2022 Step '+step+'</span>'+
-    '<button type="button" class="ppQuizSkip" aria-label="Skip">Skip \u203a</button></header>'+
-    '<div class="ppQuizBody"></div>'+
+    '<header><span class="ppQuizBadge">Reflection \u2022 Step '+step+'</span></header>'+    '<div class="ppQuizBody"></div>'+
     '<footer><div class="ppQuizDots"></div><button type="button" class="ppQuizPrimary">Next \u203a</button></footer>'+
     '</div>';
   _overlayRoot.appendChild(ov);
   var bodyEl = ov.querySelector('.ppQuizBody');
   var dotsEl = ov.querySelector('.ppQuizDots');
   var primary = ov.querySelector('.ppQuizPrimary');
-  var skipBtn = ov.querySelector('.ppQuizSkip');
+  var skipBtn = null; // quiz is mandatory — skip button removed
   var idx = 0, score = 0, picked = -1, revealed = false;
 
   function done(){
@@ -1035,7 +1026,7 @@ function showQuizForCurrentStep(onDone){
     }
     render();
   });
-  skipBtn.addEventListener('click', done);
+  // skipBtn is null (quiz mandatory) — no listener needed
   render();
 }
 

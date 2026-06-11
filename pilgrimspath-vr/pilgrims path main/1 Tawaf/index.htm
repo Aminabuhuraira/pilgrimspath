@@ -1508,6 +1508,9 @@ border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:point
       sessionStorage.removeItem(_lapKey);
       document.getElementById('tawafComplete').style.display='none';
       window.journeyIsLastPanorama=true;
+      // Suppress wrapCompletionTrigger banner — tawafComplete is the completion UI.
+      window._ppContAfterFired=true;
+      window.__ppSceneBannerAfterClose=null;
       if(typeof showJourneyNextButton==='function') showJourneyNextButton();
     };
   } else if(ctx==='farewell'){
@@ -1519,6 +1522,9 @@ border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:point
       document.getElementById('tawafComplete').style.display='none';
       window.journeyIsLastPanorama=true;
       window.journeyActivityComplete=true;
+      // Suppress wrapCompletionTrigger banner — tawafComplete is the completion UI.
+      window._ppContAfterFired=true;
+      window.__ppSceneBannerAfterClose=null;
       if(typeof showJourneyNextButton==='function') showJourneyNextButton();
       setTimeout(function(){ if(window.jm && typeof window.jm.goToNext==='function') window.jm.goToNext(); }, 100);
     };
