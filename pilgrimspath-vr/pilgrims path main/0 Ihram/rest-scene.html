@@ -91,7 +91,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overfl
       <p class="dua-translation">"Our Lord, give us in this world good and in the Hereafter good, and protect us from the punishment of the Fire." (Qur'an 2:201)</p>
     </div>
 
-    <button class="continue-btn" onclick="(function(){var inJ=new URL(window.location.href).searchParams.has('journey');if(inJ&&typeof window.jm!=='undefined'){window.jm.goToNext();}else{window.location.href='/journey/ihram/ihram-scene.html?journey=5&context=re-enter';}})()">
+    <button class="continue-btn" id="restContinueBtn">
       Continue: Re-enter Ihram for Hajj ▸
     </button>
   </div>
@@ -116,6 +116,26 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overfl
 <script src="../../journey-manager.js?v=3" defer></script>
 <script src="../../quiz-content.js?v=7" defer></script>
 <script src="../../journey-nav.js?v=39" defer></script>
+<script>
+(function(){
+  var btn = document.getElementById('restContinueBtn');
+  if(!btn) return;
+  btn.addEventListener('click', function(){
+    var nav = function(){
+      if(window.jm && typeof window.jm.goToNext === 'function'){
+        window.jm.goToNext();
+      } else {
+        window.location.href = '/journey/ihram/ihram-scene.html?journey=5&context=re-enter';
+      }
+    };
+    if(typeof window.proceedWithQuiz === 'function'){
+      window.proceedWithQuiz(nav);
+    } else {
+      nav();
+    }
+  });
+})();
+</script>
 
 <!-- Scene Navigation Overlay -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='rest';</script>
