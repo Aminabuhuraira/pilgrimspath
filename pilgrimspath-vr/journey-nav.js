@@ -458,8 +458,16 @@ body.ppMenuOpen #viewer { z-index: 99490 !important; }
 #ppQuizOverlay .ppQuizSummary p { margin: 0; font-size: 14px; color: #3D2B1F; }
 @media (max-width: 520px){
   #ppQuizOverlay .ppQuizCard { width: 96vw; }
-  #ppQuizOverlay .ppQuizBody h3 { font-size: 15px; }
-  #ppQuizOverlay .ppQuizOpt { font-size: 13px; padding: 10px 14px; }
+  #ppQuizOverlay .ppQuizBody { padding: 18px 16px 12px; }
+  #ppQuizOverlay .ppQuizBody h3 { font-size: 17px; line-height: 1.45; margin-bottom: 14px; }
+  #ppQuizOverlay .ppQuizOpt { font-size: 15px; padding: 13px 16px; border-radius: 14px; }
+  #ppQuizOverlay .ppQuizExplain { font-size: 14px; }
+  #ppQuizOverlay .ppQuizPrimary { font-size: 15px; padding: 11px 26px; }
+  #ppQuizOverlay .ppQuizScore { font-size: 44px; }
+  #ppQuizOverlay .ppQuizSummary p { font-size: 15px; }
+  #ppQuizOverlay .ppQuizBadge { font-size: 13px; }
+  #ppQuizOverlay .ppQuizSkip { font-size: 14px; }
+  #ppQuizOverlay .ppQuizDot { width: 10px; height: 10px; }
 }
 
 /* Journey Complete Overlay */
@@ -535,14 +543,14 @@ body.ppMenuOpen #viewer { z-index: 99490 !important; }
     right: 15px;
   }
 
-  #ppPauseBtn { width: 40px; height: 40px; top: 10px; right: 10px; }
-  .ppPauseIcon span { height: 14px; width: 4px; }
+  #ppPauseBtn { width: 46px; height: 46px; top: 10px; right: 10px; }
+  .ppPauseIcon span { height: 16px; width: 5px; }
 
   #nextStopBtn {
     bottom: 168px;
     right: 15px;
-    padding: 12px 20px;
-    font-size: 14px;
+    padding: 14px 22px;
+    font-size: 15px;
   }
 
   #journeyComplete > div {
@@ -661,6 +669,12 @@ body.ppMenuOpen #viewer { z-index: 99490 !important; }
 
   #sceneBanner .sceneBannerBody {
     padding: 24px 20px 18px !important;
+    font-size: 15px !important;
+    line-height: 1.55 !important;
+  }
+
+  #sceneBanner h3 {
+    font-size: clamp(18px, 5vw, 22px) !important;
   }
 
   #jamarGuide,
@@ -1030,7 +1044,10 @@ var _ppQuizBusy = false; // prevents duplicate quiz when button is tapped rapidl
 var _ppQuizShownSteps = {}; // tracks which steps have already shown a quiz this session
 window.proceedWithQuiz = function(after){
   if(!quizEnabled()){ after(); return; }
-  if(_ppQuizBusy || document.getElementById('ppQuizOverlay')){ return; }
+  // If quiz content is mid-load, retry in 150 ms so the user is never silently blocked.
+  if(_ppQuizBusy){ setTimeout(function(){ window.proceedWithQuiz(after); }, 150); return; }
+  // If a quiz overlay is already showing, do nothing — user must finish or skip it first.
+  if(document.getElementById('ppQuizOverlay')){ return; }
   var _quizStep = _resolveCurrentQuizStep();
   if(_quizStep && _ppQuizShownSteps[_quizStep]){ after(); return; } // already quizzed this step this session
   _ppQuizBusy = true;
@@ -1038,7 +1055,12 @@ window.proceedWithQuiz = function(after){
     _ppQuizBusy = false;
     if(document.getElementById('ppQuizOverlay')){ return; }
     if(_quizStep) _ppQuizShownSteps[_quizStep] = true;
-    showQuizForCurrentStep(after);
+    try{
+      showQuizForCurrentStep(after);
+    }catch(e){
+      console.warn('[Quiz] showQuizForCurrentStep threw:', e);
+      after(); // fall through so the journey can always advance
+    }
   });
 };
 

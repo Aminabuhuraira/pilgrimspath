@@ -114,14 +114,14 @@
       '.scnItem.scnActiveItem .scnItemName{color:#FFD98A;}',
       '.scnItem.scnDoneItem .scnItemName{color:#86efac;}',
       /* push other bottom-anchored UI up so they do not collide with the rail */
-      '#muzdHud,#muzdPouch{bottom:80px !important;}',
+      '#muzdHud,#muzdPouch{bottom:88px !important;}',
       /* pebbleHUD — no desktop override; scene already sets top:74px right:16px (below pause btn) */
-      /* 2D scene-card pages: ensure card does not scroll under the rail (~100px on desktop) */
-      '.scene-wrap{padding-bottom:120px !important;}',
-      '.scene-card{max-height:calc(100dvh - 134px) !important;}',
-      /* Scene-specific action buttons must clear the rail (~70px tall on desktop) */
-      '#jamarThrowBtn,#minaContinue{bottom:82px !important;}',
-      '#jamarAimHint{bottom:calc(82px + 54px) !important;}',  /* aim hint above throw btn */
+      /* 2D scene-card pages: ensure card does not scroll under the rail (~110px on desktop) */
+      '.scene-wrap{padding-bottom:130px !important;}',
+      '.scene-card{max-height:calc(100dvh - 144px) !important;}',
+      /* Scene-specific action buttons must clear the rail (~80px tall on desktop) */
+      '#jamarThrowBtn,#minaContinue{bottom:90px !important;}',
+      '#jamarAimHint{bottom:calc(90px + 54px) !important;}',  /* aim hint above throw btn */
       /* Push path-cue toast above the throw button so it is never obscured */
       'body:has(#jamarThrowBtn) #pathCueToast{bottom:150px !important;}',
       'body:has(#minaContinue) #pathCueToast{bottom:150px !important;}',
@@ -131,7 +131,7 @@
       /* ===== Mobile: bottom rail stays at bottom — compact items, horizontal scroll ===== */
       '@media(max-width:640px){',
         '#scnRailInner{gap:4px;padding:4px 6px 5px;}',
-        '.scnGroupLabel{font-size:7.5px;}',
+        '.scnGroupLabel{font-size:9px;}',
         /* reset bracket back to horizontal-top (undo any previous vertical override) */
         '.scnGroupBracket{height:8px;width:auto;align-self:unset;margin:0 4px 2px;',
           'min-height:unset;border-bottom:none;',
@@ -140,20 +140,21 @@
           'border-right:1.5px solid rgba(201,168,76,0.55);',
           'border-radius:8px 8px 0 0;}',
         '.scnGroupBracket::before{display:block;}',
-        '.scnGroupItems{flex-direction:row;gap:3px;align-items:flex-start;width:auto;}',
-        '.scnItem{padding:2px 2px;}',
-        '.scnCircleWrap{width:28px;height:28px;}',
-        '.scnCircle{font-size:13px;}',
-        '.scnItemName{font-size:7.5px;max-width:36px;}',
+        '.scnGroupItems{flex-direction:row;gap:4px;align-items:flex-start;width:auto;}',
+        '.scnItem{padding:3px 3px;}',
+        '.scnCircleWrap{width:38px;height:38px;}',
+        '.scnCircle{font-size:17px;}',
+        '.scnBadge{min-width:16px;height:16px;font-size:9px;border-radius:8px;}',
+        '.scnItemName{font-size:9px;max-width:44px;}',
         /* HUDs stay above the bottom rail */
         '#muzdHud,#muzdPouch{left:auto !important;right:14px !important;transform:none !important;}',
         /* pebbleHUD on mobile — top-right below pause button, respect safe-area notch */
         '#pebbleHUD{top:calc(env(safe-area-inset-top,0px) + 74px) !important;right:16px !important;bottom:auto !important;}',  
-        /* On mobile, action buttons need extra clearance for safe area + rail */
-        '#jamarThrowBtn,#minaContinue{bottom:calc(70px + env(safe-area-inset-bottom,0px)) !important;}',
-        '#jamarAimHint{bottom:calc(126px + env(safe-area-inset-bottom,0px)) !important;}',
+        /* On mobile, action buttons need extra clearance for safe area + taller rail */
+        '#jamarThrowBtn,#minaContinue{bottom:calc(80px + env(safe-area-inset-bottom,0px)) !important;}',
+        '#jamarAimHint{bottom:calc(136px + env(safe-area-inset-bottom,0px)) !important;}',
         /* Mobile: ensure toast clears the action button + safe area */
-        'body:has(#jamarThrowBtn) #pathCueToast,body:has(#minaContinue) #pathCueToast{bottom:calc(130px + env(safe-area-inset-bottom,0px)) !important;}',
+        'body:has(#jamarThrowBtn) #pathCueToast,body:has(#minaContinue) #pathCueToast{bottom:calc(140px + env(safe-area-inset-bottom,0px)) !important;}',
         /* add safe-area-inset-bottom to rail inner so content isn\'t hidden under home bar */
         '#scnRailInner{padding-bottom:calc(5px + env(safe-area-inset-bottom,0px)) !important;}',
         'body.ppOverlayActive #scnRail,.ppOverlayActive #scnRail{display:none !important;opacity:0 !important;pointer-events:none !important;}',
