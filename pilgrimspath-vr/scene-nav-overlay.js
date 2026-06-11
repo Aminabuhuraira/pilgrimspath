@@ -142,10 +142,12 @@
         '.scnGroupBracket::before{display:block;}',
         '.scnGroupItems{flex-direction:row;gap:4px;align-items:flex-start;width:auto;}',
         '.scnItem{padding:3px 3px;}',
-        '.scnCircleWrap{width:44px;height:44px;}',
-        '.scnCircle{font-size:20px;}',
-        '.scnBadge{min-width:17px;height:17px;font-size:9.5px;border-radius:9px;}',
-        '.scnItemName{font-size:9.5px;max-width:48px;}',
+        '.scnCircleWrap{width:57px;height:57px;}',
+        '.scnCircle{font-size:26px;}',
+        '.scnBadge{min-width:22px;height:22px;font-size:12px;border-radius:12px;}',
+        '.scnItemName{font-size:12px;max-width:62px;}',
+        '.scnGroup{gap:2px;}',
+        '#scnRailInner{gap:5px;}',
         /* HUDs stay above the bottom rail */
         '#muzdHud,#muzdPouch{left:auto !important;right:14px !important;transform:none !important;}',
         /* pebbleHUD on mobile — top-right below pause button, respect safe-area notch */

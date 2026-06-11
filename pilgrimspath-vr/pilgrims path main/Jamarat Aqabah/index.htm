@@ -943,6 +943,13 @@ setTimeout(function(){_jbChk('panorama_691BD7D8_7C54_C286_41D8_87DAB3A1DC93');_j
     'audio_846580F4_95BC_BA06_41C4_24AF98EA425A'
   ];
 
+  // Helper: check if step 9 was already completed in a prior journey session
+  function _ppStepDone(n){try{var s=JSON.parse(localStorage.getItem('journeyState')||'{}');var d=Array.isArray(s.completedSteps)?s.completedSteps:[];return d.indexOf(n)!==-1||(parseInt(s.currentStep,10)||0)>n;}catch(e){return false;}}
+
+  // On return visits, reset sessionStorage so the user can explore freely
+  // without the completion modal auto-showing before they've done anything.
+  if(_ppStepDone(9)){ try{ sessionStorage.removeItem('jamarState'); }catch(_){} }
+
   // Tell journey-nav this scene requires an activity (7 throws) before "Next Stop"
   window.journeyRequiresActivity = true;
   window.journeyActivityLabel = 'Throw all 7 stones at Jamrah al-\u02bbAqabah';
@@ -1051,6 +1058,7 @@ setTimeout(function(){_jbChk('panorama_691BD7D8_7C54_C286_41D8_87DAB3A1DC93');_j
     if(done) return;
     if(typeof jamarState!=='undefined' && jamarState && jamarState.large>=7){
       done=true;
+      if(_ppStepDone(9)) return; // returning visitor — don't auto-show completion modal
       window.journeyActivityComplete = true;
       if(typeof showJourneyNextButton==='function'){ try{ showJourneyNextButton(); }catch(e){} }
       var el=document.getElementById('jamarComplete');
@@ -1145,7 +1153,7 @@ setTimeout(function(){_jbChk('panorama_691BD7D8_7C54_C286_41D8_87DAB3A1DC93');_j
 <script src="../../journey-nav.js?v=39" defer></script>
 <!-- --- Scene Navigation Overlay --- -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='jamarat-10th';</script>
-<script src="../../scene-nav-overlay.js?v=15" defer></script>
+<script src="../../scene-nav-overlay.js?v=16" defer></script>
 
 </body>
 </html>

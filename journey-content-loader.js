@@ -857,8 +857,27 @@ function fireSceneLoad(){
 }
 
 /* ─── DOM-ready bootstrap ─── */
+function _injectMobileBannerCSS(){
+  if(document.getElementById('ppMobileBannerCss')) return;
+  var s = document.createElement('style');
+  s.id = 'ppMobileBannerCss';
+  // Increase #sceneBanner text and button sizes by ~30% on small screens
+  s.textContent =
+    '@media(max-width:520px){' +
+      '#sceneBanner .sceneBannerBody{padding:28px 40px 18px !important;}' +
+      '#sceneBanner h3{font-size:21px !important;margin-bottom:10px !important;}' +
+      '#sceneBanner .bb{font-size:15px !important;line-height:1.4 !important;}' +
+      '#sceneBanner .ba{font-size:16px !important;line-height:1.38 !important;}' +
+      '#sceneBanner .bt{font-size:14px !important;line-height:1.37 !important;}' +
+      '#sceneBanner button{font-size:17px !important;padding:12px 22px !important;}' +
+    '}';
+  if(document.head) document.head.appendChild(s);
+  else document.addEventListener('DOMContentLoaded', function(){ document.head.appendChild(s); });
+}
+
 function boot(){
   injectLangSwitcher();
+  _injectMobileBannerCSS();
   // Determine scene audio mode: 'auto' (default) fires VO on load;
   // 'click' defers to the first-interaction handler below.
   var _bootKey = detectSceneKey();

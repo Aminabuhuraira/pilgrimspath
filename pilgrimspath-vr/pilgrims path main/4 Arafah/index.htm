@@ -237,6 +237,7 @@ function _showArafahDoneBtn(){
   document.body.appendChild(b);
 }
 function _showArafahEndModal(){
+  if(_ppStepDone(7)) return; // don't show Keep Exploring modal on return visits
   var prev=document.getElementById('arafahEndModal'); if(prev) prev.remove();
   var bd=document.createElement('div'); bd.id='arafahEndBackdrop';
   bd.style.cssText='position:fixed;inset:0;z-index:10006;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);';
@@ -411,6 +412,6 @@ if(typeof fbq!=="undefined"){fbq("track","ViewContent",{content_name:"Arafah VR 
 <script src="../../../meta-capi.js" defer></script>
 <!-- --- Scene Navigation Overlay --- -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='arafah';</script>
-<script src="../../scene-nav-overlay.js?v=15" defer></script>
+<script src="../../scene-nav-overlay.js?v=16" defer></script>
 </body>
 </html>
