@@ -1064,8 +1064,14 @@ window.proceedWithQuiz = function(after){
 // ── Hajj Readiness Certificate modal ───────────────────────────────────────
 function showHajjReadinessCertificate(){
   try{
-    var u = (typeof readUser==='function') ? readUser() : {};
-    var name = u.name || (u.email ? u.email.split('@')[0] : 'Pilgrim');
+    // readUser() is a local inside initPauseMenu — not in scope here.
+    // Read directly from localStorage, same priority order used everywhere else.
+    var name = localStorage.getItem('pp_user_display_name') ||
+               localStorage.getItem('pp_lead_name') ||
+               (function(){
+                 var e = localStorage.getItem('pp_lead_email');
+                 return e ? e.split('@')[0] : 'Valued Pilgrim';
+               })();
     var s = quizAggregateScore();
     var dateStr = new Date().toLocaleDateString(undefined, { year:'numeric', month:'long', day:'numeric' });
     var existing = document.getElementById('ppCertOverlay'); if(existing) existing.remove();
