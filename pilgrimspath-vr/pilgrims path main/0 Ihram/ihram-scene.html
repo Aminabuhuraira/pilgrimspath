@@ -188,9 +188,8 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overfl
   var btn = document.getElementById('continueBtn');
   btn.textContent = s.btn;
   btn.onclick = function(){
-    // Use journey-manager when in journey mode, otherwise follow hardcoded next URL
-    var inJourney = new URL(window.location.href).searchParams.has('journey');
-    if(inJourney && typeof window.jm !== 'undefined') {
+    // Use journey-manager when available (journey URL may not include ?journey= param)
+    if(typeof window.jm !== 'undefined' && typeof window.jm.goToNext === 'function') {
       window.jm.goToNext();
     } else {
       window.location.href = s.next;
@@ -202,7 +201,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:#FFFFFF;overfl
 <!-- Journey Navigation -->
 <script src="../../journey-manager.js?v=3" defer></script>
 <script src="../../quiz-content.js?v=7" defer></script>
-<script src="../../journey-nav.js?v=38" defer></script>
+<script src="../../journey-nav.js?v=39" defer></script>
 
 <!-- Scene Navigation Overlay -->
 <script>window._sceneNavBase='../';window._sceneNavCurrent='ihram';</script>

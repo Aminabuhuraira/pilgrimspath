@@ -43,7 +43,7 @@
     <script src="script.js?v=1779277379415"></script>
     <script src="../../journey-manager.js?v=6" defer></script>
     <script src="../../quiz-content.js?v=7" defer></script>
-<script src="../../journey-nav.js?v=38" defer></script>
+<script src="../../journey-nav.js?v=39" defer></script>
     <style type="text/css">
         html, body { height:100%; width:100%; height:100vh; width:100vw; margin:0; padding:0; overflow:hidden; }
         .fill-viewport { position:fixed; top:0; left:0; right:0; bottom:0; padding:0; margin:0; overflow: hidden; }
@@ -1291,6 +1291,14 @@ function chk(id, idx) {
     var _lapsKey = 'tawafLaps_' + journeyContext;
     var _laps = parseInt(sessionStorage.getItem(_lapsKey) || '0', 10);
     if (_laps < 7) return;
+  }
+  // Gate: suppress "Tawaf al-Ifadha/Farewell Complete" panorama banner (8AF67A73)
+  // before 7 laps — this banner fires too early during intermediate laps and causes
+  // the completion VO to play twice. Only allow after laps reach 7.
+  if ((journeyContext === 'farewell' || journeyContext === 'ifadha') && id.indexOf('8AF67A73') !== -1) {
+    var _lapsKey2 = 'tawafLaps_' + journeyContext;
+    var _laps2 = parseInt(sessionStorage.getItem(_lapsKey2) || '0', 10);
+    if (_laps2 < 7) return;
   }
 
   // Gate: Ihram guide still visible
