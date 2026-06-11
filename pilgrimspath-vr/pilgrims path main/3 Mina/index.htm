@@ -204,6 +204,8 @@ if (window.PPContent && window.PPContent.hasData) {
 
 var TENT_PANO = 'panorama_72AD4A6A_7C54_4D9A_41DC_AA69EFBD3C52';
 var IS_TENT_MODE = (journeyContext === 'tents-11th' || journeyContext === 'tents-12th' || journeyContext === 'tents-13th');
+// Helper: was this step already completed?
+function _ppStepDone(n){try{var s=JSON.parse(localStorage.getItem('journeyState')||'{}');var d=Array.isArray(s.completedSteps)?s.completedSteps:[];return d.indexOf(n)!==-1||(parseInt(s.currentStep,10)||0)>n;}catch(e){return false;}}
 var shown = {}, lastId = '';
 var _landingShown = {};   // tracks whether the landing prompt has fired per pano
 
@@ -221,8 +223,10 @@ function _minaFireBannerVO(id) {
   if (b && (b.title || b.html)) openBanner(b.title, b.html, b.template, b.position);
   if (vo) playVO(vo);
   if (id === MINA_LANDING_8TH || (id === TENT_PANO && !IS_TENT_MODE)) {
-    window.journeyIsLastPanorama = true;
-    if (typeof showJourneyNextButton === 'function') { setTimeout(showJourneyNextButton, 300); }
+    if (!_ppStepDone(14)) {
+      window.journeyIsLastPanorama = true;
+      if (typeof showJourneyNextButton === 'function') { setTimeout(showJourneyNextButton, 300); }
+    }
   }
 }
 
@@ -247,7 +251,7 @@ function chk(id) {
 
   // Show landing prompt first for the designated panoramas
   var lpCfg = MINA_LANDING_PANOS[id];
-  if (lpCfg && !_landingShown[id] && typeof window.ppShowLandingPrompt === 'function') {
+  if (lpCfg && !_landingShown[id] && !_ppStepDone(14) && typeof window.ppShowLandingPrompt === 'function') {
     _landingShown[id] = true;
     window.ppShowLandingPrompt({
       icon: lpCfg.icon,
@@ -274,6 +278,7 @@ function chk(id) {
 }
 
 function _showMinaDoneBtn(){
+  if(_ppStepDone(14)) return; // step already completed on a prior visit
   if(document.getElementById('minaDoneBtn')) return;
   var b=document.createElement('button');
   b.id='minaDoneBtn';

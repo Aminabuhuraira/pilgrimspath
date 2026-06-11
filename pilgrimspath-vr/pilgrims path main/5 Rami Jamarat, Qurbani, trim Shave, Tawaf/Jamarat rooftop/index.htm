@@ -868,6 +868,8 @@ if (window.PPContent && window.PPContent.hasData) {
 }
 
 var shown = {};
+// Helper: was this step already completed on a previous session?
+function _ppStepDone(n){try{var s=JSON.parse(localStorage.getItem('journeyState')||'{}');var d=Array.isArray(s.completedSteps)?s.completedSteps:[];return d.indexOf(n)!==-1||(parseInt(s.currentStep,10)||0)>n;}catch(e){return false;}}
 _jbChk = function(id) {
   if (shown[id]) return;
   var b  = _bannerMap[id];
@@ -876,10 +878,10 @@ _jbChk = function(id) {
   shown[id] = true;
   if (b && (b.title || b.html)) openBanner(b.title, b.html, b.template, b.position);
   if (vo) playVO(vo);
-  // Signal journey nav that the entry overview panorama has been seen
+  // Surface the Next-Stop button on the entry panorama only if step not yet done
   if (id === 'panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1') {
     window.journeyActivityComplete = true;
-    if (typeof showJourneyNextButton === 'function') { setTimeout(showJourneyNextButton, 300); }
+    if (!_ppStepDone(9) && typeof showJourneyNextButton === 'function') { setTimeout(showJourneyNextButton, 300); }
   }
 };
 setTimeout(function(){_jbChk('panorama_6B19BBC3_7C55_C28B_41C0_A1D9ED0027F1');},2500);
