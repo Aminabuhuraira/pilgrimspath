@@ -1533,8 +1533,15 @@ border-radius:12px;padding:10px 24px;font-size:14px;font-weight:600;cursor:point
       // Suppress wrapCompletionTrigger banner — tawafComplete is the completion UI.
       window._ppContAfterFired=true;
       window.__ppSceneBannerAfterClose=null;
-      if(typeof showJourneyNextButton==='function') showJourneyNextButton();
-      setTimeout(function(){ if(window.jm && typeof window.jm.goToNext==='function') window.jm.goToNext(); }, 100);
+      // Show quiz for step 16 before triggering journey completion.
+      var proceed = function(){
+        if(window.jm && typeof window.jm.goToNext==='function') window.jm.goToNext();
+      };
+      if(typeof window.proceedWithQuiz==='function'){
+        window.proceedWithQuiz(proceed);
+      } else {
+        setTimeout(proceed, 100);
+      }
     };
   } else {
     nextBtn.textContent="Next: Sa'i ?";

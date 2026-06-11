@@ -865,11 +865,17 @@ function quizTotalAvailable(){
 }
 function certificateEarned(){
   var s = quizAggregateScore();
-  // Earn the cert once the user has answered at least 60% of all available
-  // questions AND scored 60% on what they answered.
-  var avail = quizTotalAvailable();
-  var coverage = avail ? (s.totalQuestions / avail) : 0;
-  return s.percent >= 60 && coverage >= 0.6;
+  // Earn the cert once the user has scored 60%+ on answered questions
+  // AND has completed quizzes on at least 60% of the 16 journey steps.
+  // Coverage is step-based (steps answered / 16) — not question-based —
+  // because questionsPerSession=2 makes question-based coverage unreachable.
+  var stepsAnswered = 0;
+  try{
+    var all = JSON.parse(localStorage.getItem('pp_quiz_scores') || '{}');
+    stepsAnswered = Object.keys(all).filter(function(k){ return all[k] && all[k].total > 0; }).length;
+  }catch(e){}
+  var stepCoverage = stepsAnswered / 16;
+  return s.percent >= 60 && stepCoverage >= 0.6;
 }
 try{ window.quizAggregateScore = quizAggregateScore; window.certificateEarned = certificateEarned; }catch(e){}
 function loadQuizContent(cb){

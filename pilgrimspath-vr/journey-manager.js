@@ -215,6 +215,12 @@ class JourneyManager {
       // Do not call proceedWithQuiz here — it would show a second set of questions.
       this.goToStep(this.currentStep + 1);
     } else if(this.currentStep === HAJJ_JOURNEY.length){
+      // Mark the final step (16) as completed so the dashboard reflects it.
+      if(!Array.isArray(this.completedSteps)) this.completedSteps = [];
+      if(this.completedSteps.indexOf(this.currentStep) === -1){
+        this.completedSteps.push(this.currentStep);
+      }
+      this.saveState();
       // Journey complete - show completion banner
       if(typeof window.showJourneyComplete === 'function'){
         window.showJourneyComplete();
